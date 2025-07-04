@@ -30,7 +30,7 @@ class FormConfig {
     // Define qué niveles educativos se mostrarán en el formulario
     // Si hay solo uno activo, se auto-selecciona y oculta el campo
     LEVEL_ACADEMIC: [
-      { code: 'PREG', name: 'Pregrado' }, // ✅ Programas de pregrado
+      //{ code: 'PREG', name: 'Pregrado' }, // ✅ Programas de pregrado
       //{ code: 'GRAD', name: 'Posgrado' },       // ❌ Desactivado - Maestrías y Doctorados
       //{ code: 'ECLE', name: 'Eclesiástico' },   // ❌ Desactivado - Programas eclesiásticos
       //{ code: 'ETDH', name: 'Técnico' },        // ❌ Desactivado - Programas técnicos
@@ -81,6 +81,7 @@ class FormConfig {
       //"document",          // Ocultar número de documento
       //"email",             // Ocultar correo electrónico
       //"phone",             // Ocultar teléfono
+      //"phone_code",        // Ocultar prefijo telefónico
       //"country",           // Ocultar país
       //"department",        // Ocultar departamento
       //"city",              // Ocultar ciudad
@@ -89,7 +90,7 @@ class FormConfig {
       //"academic_level",    // Ocultar nivel académico de interés
       //"faculty",           // Ocultar facultad de interés
       //"program",           // Ocultar programa de interés
-      //"period",            // Ocultar periodo esperado de ingreso
+      //"admission_period",  // Ocultar periodo esperado de ingreso
     ],
 
     // ============================================
@@ -380,6 +381,7 @@ class FieldRemovalManager {
       document: 'document',
       email: 'email',
       phone: 'phone',
+      phone_code: 'phone_code',
       country: 'country',
       department: 'department',
       city: 'city',
@@ -388,7 +390,7 @@ class FieldRemovalManager {
       academic_level: 'academic_level',
       faculty: 'faculty',
       program: 'program',
-      period: 'admission_period'
+      admission_period: 'admission_period'
     }
   }
 
@@ -421,7 +423,28 @@ class FieldRemovalManager {
       return
     }
 
-    // Encontrar el contenedor del campo
+    // Para algunos campos, ocultar directamente en lugar de buscar contenedor
+    if (fieldName === 'academic_level' || fieldName === 'faculty' || fieldName === 'program' || fieldName === 'admission_period') {
+      element.style.display = 'none'
+      element.removeAttribute('required')
+      
+      // Ocultar mensaje de error asociado
+      const errorElement = document.getElementById(`error_${fieldId}`)
+      if (errorElement) {
+        errorElement.style.display = 'none'
+      }
+      
+      console.log(`✅ Campo "${fieldName}" ocultado directamente`)
+      
+      // Configurar valor por defecto
+      this.setFieldDefault(element, fieldName)
+      
+      // Actualizar estado del formulario
+      this.updateFormState(fieldName, element.value)
+      return
+    }
+
+    // Para otros campos, buscar contenedor
     const container = this.findFieldContainer(element)
 
     if (container) {
@@ -515,6 +538,7 @@ class FieldRemovalManager {
       document: 'document',
       email: 'email',
       phone: 'phone',
+      phone_code: 'phone_code',
       country: 'country',
       department: 'department',
       city: 'city',
@@ -523,7 +547,7 @@ class FieldRemovalManager {
       academic_level: 'academic_level',
       faculty: 'faculty',
       program: 'program',
-      period: 'admission_period'
+      admission_period: 'admission_period'
     }
 
     const formField = formFieldMapping[fieldName]
@@ -1057,34 +1081,61 @@ function initializeAcademicLevel() {
   if (!academicLevelSelect) return
 
   const levels = FormConfig.PERSONALIZATION.LEVEL_ACADEMIC
+  console.log(`🎓 Inicializando nivel académico con ${levels.length} opciones:`, levels)
 
   if (levels.length === 1) {
-    // Solo una opción: ocultar el campo y preseleccionar
-    hideAndSelectSingle(academicLevelSelect, levels[0].code)
+    // Solo una opción: ocultar el campo pero mantenerlo funcional
+    academicLevelSelect.style.display = 'none'
+    
+    // Limpiar y establecer la única opción
+    academicLevelSelect.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = levels[0].code
+    option.textContent = levels[0].name
+    option.selected = true
+    academicLevelSelect.appendChild(option)
+    
+    // IMPORTANTE: Mantener habilitado y required para validación
+    academicLevelSelect.disabled = false
+    academicLevelSelect.required = true
+    
+    // Actualizar estado inmediatamente
     formData.academic_level = levels[0].code
-    console.log(`🔧 Campo nivel académico configurado automáticamente: ${levels[0].name}`)
+    errors.academic_level = false
+    
+    console.log(`🔧 Campo nivel académico configurado automáticamente y oculto: ${levels[0].name}`)
     
     // Si el tipo ya es aspirante, cargar facultades
     if (formData.type_attendee === 'Aspirante') {
       setTimeout(() => loadFaculties(levels[0].code), 100)
     }
   } else if (levels.length === 0) {
-    // Sin opciones: ocultar campo
-    const academicLevelRow = academicLevelSelect.closest('.form-group')
-    if (academicLevelRow) {
-      academicLevelRow.style.display = 'none'
-    }
+    // Sin opciones: ocultar campo y deshabilitar
+    academicLevelSelect.style.display = 'none'
     academicLevelSelect.disabled = true
     academicLevelSelect.required = false
+    
+    const errorElement = document.getElementById('error_academic_level')
+    if (errorElement) {
+      errorElement.style.display = 'none'
+    }
+    
+    console.log('❌ No hay niveles académicos configurados - campo oculto')
   } else {
     // Múltiples opciones: mostrar el select normalmente
+    academicLevelSelect.style.display = 'block'
     academicLevelSelect.innerHTML = '<option value="">*Nivel académico de interés</option>'
+    
     levels.forEach(level => {
       const option = document.createElement('option')
       option.value = level.code
       option.textContent = level.name
       academicLevelSelect.appendChild(option)
     })
+    
+    academicLevelSelect.disabled = false
+    academicLevelSelect.required = true
+    
     console.log(`📋 Select de nivel académico inicializado con ${levels.length} opciones`)
   }
 }
@@ -1097,42 +1148,177 @@ function handleTypeAttendeeChange() {
   const periodElement = document.getElementById('admission_period')
 
   formData.type_attendee = typeAttendeeSelect.value
+  const isAspirant = formData.type_attendee === 'Aspirante'
+  
+  console.log(`🎓 Tipo de asistente: "${formData.type_attendee}" - Es aspirante: ${isAspirant}`)
 
-  if (formData.type_attendee === 'Aspirante') {
-    // Show academic fields for applicants
-    if (academicLevelElement) {
-      academicLevelElement.style.display = 'block'
-      academicLevelElement.setAttribute('required', 'required')
+  if (isAspirant) {
+    console.log('✅ Configurando campos académicos para aspirante')
+    
+    // Verificar configuración de niveles académicos
+    const levels = FormConfig.PERSONALIZATION.LEVEL_ACADEMIC
+    
+    if (levels.length === 1) {
+      // Un solo nivel: mantener oculto pero funcional
+      if (academicLevelElement) {
+        academicLevelElement.style.display = 'none'
+        
+        // Asegurar que el valor esté configurado correctamente
+        if (!academicLevelElement.value || academicLevelElement.value === '') {
+          academicLevelElement.innerHTML = ''
+          const option = document.createElement('option')
+          option.value = levels[0].code
+          option.textContent = levels[0].name
+          option.selected = true
+          academicLevelElement.appendChild(option)
+        }
+        
+        // IMPORTANTE: Mantener required para validación
+        academicLevelElement.disabled = false
+        academicLevelElement.required = true
+        
+        formData.academic_level = levels[0].code
+        errors.academic_level = false
+        
+        console.log('🔧 Nivel académico único configurado correctamente')
+        
+        // Cargar facultades automáticamente
+        setTimeout(() => loadFaculties(levels[0].code), 100)
+      }
+    } else if (levels.length > 1) {
+      // Múltiples niveles: mostrar select
+      if (academicLevelElement) {
+        academicLevelElement.style.display = 'block'
+        academicLevelElement.disabled = false
+        academicLevelElement.required = true
+        academicLevelElement.classList.remove('error')
+      }
+    }
+    
+    // Mostrar otros campos académicos según corresponda
+    showAcademicFieldsIfNeeded()
+    
+    // Reset valores de campos dependientes
+    resetDependentAcademicFields()
+    
+    // Si ya hay un nivel académico configurado, cargar facultades
+    const currentLevel = formData.academic_level || (academicLevelElement && academicLevelElement.value)
+    if (currentLevel && currentLevel !== '') {
+      console.log(`🔄 Cargando facultades para nivel: ${currentLevel}`)
+      setTimeout(() => loadFaculties(currentLevel), 100)
     }
   } else {
-    // Hide academic fields for non-applicants
+    console.log('❌ Ocultando campos académicos para no-aspirante')
+    
+    // Ocultar todos los campos académicos
     if (academicLevelElement) {
       academicLevelElement.style.display = 'none'
-      academicLevelElement.removeAttribute('required')
+      academicLevelElement.disabled = true
+      academicLevelElement.required = false
       academicLevelElement.value = ''
       formData.academic_level = ''
     }
     if (facultyElement) {
       facultyElement.style.display = 'none'
-      facultyElement.removeAttribute('required')
+      facultyElement.disabled = true
+      facultyElement.required = false
       facultyElement.value = ''
       formData.faculty = ''
     }
     if (programElement) {
       programElement.style.display = 'none'
-      programElement.removeAttribute('required')
+      programElement.disabled = true
+      programElement.required = false
       programElement.value = ''
       formData.program = ''
     }
     if (periodElement) {
       periodElement.style.display = 'none'
-      periodElement.removeAttribute('required')
+      periodElement.disabled = true
+      periodElement.required = false
       periodElement.value = ''
       formData.admission_period = ''
     }
+    
+    // Establecer valores por defecto para no-aspirantes
+    setNonAspirantDefaults()
   }
 
   deleteInvalid('type_attendee')
+}
+
+// ============================================
+// FUNCIONES AUXILIARES PARA CAMPOS ACADÉMICOS
+// ============================================
+
+function showAcademicFieldsIfNeeded() {
+  const academicLevel = formData.academic_level
+  const faculty = formData.faculty
+  const program = formData.program
+
+  // Mostrar facultad si hay nivel académico
+  if (academicLevel) {
+    const facultyElement = document.getElementById('faculty')
+    if (facultyElement) {
+      facultyElement.style.display = 'block'
+      facultyElement.disabled = false
+      facultyElement.required = true
+    }
+  }
+
+  // Mostrar programa si hay facultad
+  if (faculty) {
+    const programElement = document.getElementById('program')
+    if (programElement) {
+      programElement.style.display = 'block'
+      programElement.disabled = false
+      programElement.required = true
+    }
+  }
+
+  // Mostrar período si hay programa
+  if (program) {
+    const periodElement = document.getElementById('admission_period')
+    if (periodElement) {
+      periodElement.style.display = 'block'
+      periodElement.disabled = false
+      periodElement.required = true
+    }
+  }
+}
+
+function resetDependentAcademicFields() {
+  // Solo resetear campos dependientes, no el nivel académico
+  const dependentFields = ['faculty', 'program', 'admission_period']
+  
+  dependentFields.forEach(fieldName => {
+    formData[fieldName] = ''
+    errors[fieldName] = false
+    
+    const element = document.getElementById(fieldName)
+    if (element) {
+      element.value = ''
+      element.classList.remove('error')
+    }
+  })
+  
+  console.log('🔄 Campos académicos dependientes reseteados')
+}
+
+function setNonAspirantDefaults() {
+  const defaults = {
+    academic_level: 'PREG',
+    faculty: 'NOAP',
+    program: 'NOAP',
+    admission_period: '2025-1'
+  }
+  
+  Object.entries(defaults).forEach(([field, value]) => {
+    formData[field] = value
+    errors[field] = false
+  })
+  
+  console.log('🔧 Valores por defecto establecidos para no-aspirante:', defaults)
 }
 
 function handleAcademicLevelChange() {
@@ -1155,12 +1341,32 @@ function loadFaculties(academicLevel) {
   const facultySelect = document.getElementById('faculty')
   if (!facultySelect || !programas) return
 
+  console.log(`🔄 Cargando facultades para nivel: ${academicLevel}`)
+  console.log('📊 Datos de programas disponibles:', programas)
+
   // Check if programas has the expected structure
   let levelPrograms = []
   
   if (programas[academicLevel]) {
     // Structure: programas.PREG, programas.GRAD, etc.
-    const facultyKeys = Object.keys(programas[academicLevel])
+    let facultyKeys = Object.keys(programas[academicLevel])
+    
+    // Apply faculty filter if configured and not empty
+    const { FACULTY } = FormConfig.PERSONALIZATION
+    if (FACULTY && FACULTY.length > 0) {
+      facultyKeys = facultyKeys.filter(faculty => FACULTY.includes(faculty))
+      console.log(`🔍 Filtro de facultades aplicado. Facultades filtradas:`, facultyKeys)
+    } else {
+      console.log(`📋 Sin filtro de facultades. Mostrando todas las facultades disponibles:`, facultyKeys)
+    }
+    
+    if (facultyKeys.length === 0) {
+      console.warn(`❌ No hay facultades disponibles después del filtro para nivel: ${academicLevel}`)
+      hideFacultyField()
+      return
+    }
+
+    facultySelect.innerHTML = '<option value="">*Facultad de interés</option>'
     facultyKeys.forEach(facultyKey => {
       const option = document.createElement('option')
       option.value = facultyKey
@@ -1168,11 +1374,10 @@ function loadFaculties(academicLevel) {
       facultySelect.appendChild(option)
     })
     
-    if (facultyKeys.length > 0) {
-      facultySelect.style.display = 'block'
-      facultySelect.setAttribute('required', 'required')
-      return
-    }
+    facultySelect.style.display = 'block'
+    facultySelect.setAttribute('required', 'required')
+    console.log(`✅ ${facultyKeys.length} facultades cargadas en el select`)
+    return
   } else if (Array.isArray(programas)) {
     // Structure: array of programs with codigo_nivel property
     levelPrograms = programas.filter(program => program.codigo_nivel === academicLevel)
