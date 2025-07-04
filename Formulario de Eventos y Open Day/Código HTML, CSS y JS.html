@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario de Eventos y Open Day</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="form-card">
+      <form id="form_inscription" action="#" method="POST" novalidate aria-label="Formulario de contacto">
+        
+        <!-- Información del participante -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" id="first_name" name="first_name" maxlength="40" required />
+            <div class="error_text" id="error_first_name" style="display: none;">Completa este campo</div>
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" id="last_name" name="last_name" maxlength="80" required />
+            <div class="error_text" id="error_last_name" style="display: none;">Completa este campo</div>
+          </div>
+        </div>
+        
+        <!-- Documento de identidad -->
+        <div class="document-row">
+          <div class="document-type-field">
+            <select id="type_doc" name="00N5G00000WmhsT" required>
+              <option value="">*Tipo de documento</option>
+              <option value="CC">Cédula Ciudadanía</option>
+              <option value="CE">Cédula Extranjería</option>
+              <option value="PA">Pasaporte</option>
+              <option value="TI">Tarjeta Identidad</option>
+            </select>
+            <div class="error_text" id="error_type_doc" style="display: none;">Selecciona un tipo de documento</div>
+          </div>
+          <div class="document-number-field">
+            <input type="text" placeholder="*Número de documento" id="document" name="00N5G00000WmhsR" maxlength="255" required />
+            <div class="error_text" id="error_document" style="display: none;">Ingresa un número de documento válido</div>
+          </div>
+        </div>
+        
+        <!-- Email -->
+        <input type="email" placeholder="*Email" id="email" name="email" maxlength="80" required />
+        <div class="error_text" id="error_email" style="display: none;">Ingresa un correo electrónico válido</div>
+        
+        <!-- Phone row -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select id="phone_code" name="00NJw000002mzb7" required>
+              <option value="">(+) Indicativo</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            <div class="error_text" id="error_phone_code" style="display: none;">Selecciona un prefijo</div>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" id="phone" name="mobile" minlength="8" maxlength="15" required />
+            <div class="error_text" id="error_phone" style="display: none;">Ingresa un número de teléfono válido</div>
+          </div>
+        </div>
+        
+        <!-- Ubicación -->
+        <select id="country" name="00N5G00000WmhvJ" required>
+          <option value="">*País de residencia</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_country" style="display: none;">Selecciona un país</div>
+        
+        <select id="department" name="00N5G00000WmhvX" style="display: none;">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_department" style="display: none;">Selecciona un departamento</div>
+        
+        <select id="city" name="00N5G00000WmhvO" style="display: none;">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_city" style="display: none;">Selecciona una ciudad</div>
+        
+        <!-- Día de asistencia -->
+        <select id="attendance_day" name="00NJw000004iulj" required>
+          <option value="">*Día de asistencia</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_attendance_day" style="display: none;">Selecciona un día de asistencia</div>
+        
+        <!-- Tipo de asistente -->
+        <select id="type_attendee" name="00NJw000001J3g6" required>
+          <option value="">*Tipo de asistente</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_type_attendee" style="display: none;">Selecciona un tipo de asistente</div>
+        
+        <!-- Nivel académico -->
+        <select id="academic_level" name="academic_level" required>
+          <option value="">*Nivel académico de interés</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_academic_level" style="display: none;">Selecciona un nivel académico de interés</div>
+        
+        <!-- Facultad -->
+        <select id="faculty" name="Facultad" style="display: none;">
+          <option value="">*Facultad de interés</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_faculty" style="display: none;">Selecciona una facultad de interés</div>
+        
+        <!-- Programa -->
+        <select id="program" name="00N5G00000WmhvV" style="display: none;">
+          <option value="">*Programa de interés</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_program" style="display: none;">Selecciona un programa de interés</div>
+        
+        <!-- Período de ingreso -->
+        <select id="admission_period" name="00N5G00000WmhvI" style="display: none;">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+        <div class="error_text" id="error_admission_period" style="display: none;">Selecciona un periodo de interés</div>
+        
+        <!-- Autorización de datos -->
+        <div style="margin-top: 20px;">
+          <p style="color: #666;">¿Autorizas el tratamiento de tus datos personales de acuerdo con la <a href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html" style="color: #4d7fcb;" target="_blank">autorización de privacidad</a>?</p>
+          
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="autorizacion_si" name="00N5G00000WmhvF" value="1">
+              <label for="autorizacion_si" style="color: #333; margin-left: 5px;">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="autorizacion_no" name="00N5G00000WmhvF" value="0">
+              <label for="autorizacion_no" style="color: #333; margin-left: 5px;">No</label>
+            </div>
+          </div>
+          
+          <div class="error_text" id="error_authorization_data" style="display: none; margin-top: 10px;">
+            La Pontificia Universidad Javeriana requiere de tu autorización para el tratamiento de tus datos personales para continuar con el presente proceso, sin la autorización legalmente no podemos darte continuidad al mismo.
+          </div>
+        </div>
+
+        <button type="submit" id="submit_btn" disabled style="margin-top: 20px;">Inscríbete ahora</button>
+        
+        <div id="successMsg" style="border: 2px solid green; background-color: lightgrey; padding: 10px; border-radius: 5px; display: none; margin-top: 10px;">
+          Gracias por tu mensaje. Ha sido enviado.
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+  
+</body>
+</html>
