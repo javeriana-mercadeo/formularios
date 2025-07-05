@@ -658,6 +658,11 @@ async function getPeriodos() {
  const data = await loadData(FormConfig.URLS.DATA_SOURCES.PERIODS);
  if (data) {
   periodos = data;
+  console.log('✅ Períodos cargados:', periodos);
+  console.log('📊 Estructura detectada:', Array.isArray(periodos) ? 'Array' : 'Object');
+  if (!Array.isArray(periodos)) {
+   console.log('🎯 Niveles disponibles:', Object.keys(periodos));
+  }
  }
 }
 
@@ -851,6 +856,7 @@ function handleTypeAttendeeChange() {
 
     // Cargar facultades y períodos con delay para permitir actualización del DOM
     setTimeout(() => {
+     console.log(`🚀 Auto-cargando facultades y períodos para: ${singleLevel.code}`);
      loadFaculties(singleLevel.code);
      loadPeriods(singleLevel.code);
     }, 100);
@@ -892,9 +898,11 @@ function handleAcademicLevelChange() {
  formData.academic_level = academicLevelSelect.value;
 
  if (formData.academic_level) {
+  console.log(`🎯 Nivel académico cambiado a: ${formData.academic_level}`);
   loadFaculties(formData.academic_level);
   loadPeriods(formData.academic_level);
  } else {
+  console.log('❌ Sin nivel académico seleccionado, ocultando campos');
   hideFacultyField();
   hideProgramField();
   hidePeriodField();
@@ -970,16 +978,43 @@ function loadFaculties(academicLevel) {
 }
 
 function loadPeriods(academicLevel) {
+ console.log(`🔄 Cargando períodos para nivel: ${academicLevel}`);
+ 
  const periodSelect = document.getElementById("admission_period");
- if (!periodSelect || !periodos) return;
+ if (!periodSelect || !periodos) {
+  console.log('❌ No se encontró periodSelect o periodos están vacíos');
+  return;
+ }
 
- const levelPeriods = periodos.filter(
-  (period) =>
-   period.nivel_academico === academicLevel ||
-   period.nivel_academico === "TODOS"
- );
+ // Handle both array format (legacy) and object format (current API)
+ let levelPeriods = [];
+ 
+ if (Array.isArray(periodos)) {
+  console.log('📋 Usando formato array (legacy)');
+  // Legacy array format
+  levelPeriods = periodos.filter(
+   (period) =>
+    period.nivel_academico === academicLevel ||
+    period.nivel_academico === "TODOS"
+  );
+ } else if (periodos[academicLevel]) {
+  console.log(`📋 Usando formato objeto para nivel: ${academicLevel}`);
+  // Current object format from API
+  const periodsForLevel = periodos[academicLevel];
+  console.log('📊 Períodos encontrados:', periodsForLevel);
+  levelPeriods = Object.entries(periodsForLevel).map(([nombre, codigo]) => ({
+   codigo: codigo,
+   nombre: nombre
+  }));
+ } else {
+  console.log(`❌ No se encontraron períodos para nivel: ${academicLevel}`);
+  console.log('🔍 Niveles disponibles:', Object.keys(periodos));
+ }
+
+ console.log(`📈 Total de períodos procesados: ${levelPeriods.length}`);
 
  if (levelPeriods.length === 0) {
+  console.log('❌ Sin períodos disponibles, ocultando campo');
   hidePeriodField();
   return;
  }
@@ -995,6 +1030,7 @@ function loadPeriods(academicLevel) {
 
  periodSelect.style.display = "block";
  periodSelect.setAttribute("required", "required");
+ console.log('✅ Campo de períodos mostrado correctamente');
 }
 
 function handleFacultyChange() {
