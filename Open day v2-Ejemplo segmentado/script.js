@@ -18,9 +18,9 @@ class FormConfig {
   // Define qué opciones aparecerán en el campo "Tipo de asistente"
   // Comentar con "//" las opciones que NO quieres mostrar
   TYPE_ATTENDEE: [
-   //"Aspirante", // ✅ Activo - Personas interesadas en estudiar
+   "Aspirante", // ✅ Activo - Personas interesadas en estudiar
    "Padre de familia y/o acudiente", // ✅ Activo - Familiares de aspirantes
-   //"Docente y/o psicoorientador",    // ❌ Desactivado - Personal educativo
+   "Docente y/o psicoorientador", // ❌ Desactivado - Personal educativo
    //"Visitante PUJ",                  // ❌ Desactivado - Visitantes externos
    //"Administrativo PUJ",             // ❌ Desactivado - Personal administrativo
   ],
@@ -30,8 +30,8 @@ class FormConfig {
   // Si hay solo uno activo, se auto-selecciona y oculta el campo
   LEVEL_ACADEMIC: [
    //{ code: "PREG", name: "Pregrado" }, // ✅ Programas de pregrado
-   //{ code: "GRAD", name: "Posgrado" },       // ✅ Maestrías y Doctorados
-   //{ code: "ECLE", name: "Eclesiástico" },   // ✅ Programas eclesiásticos
+   //{ code: "GRAD", name: "Posgrado" }, // ✅ Maestrías y Doctorados
+   //{ code: "ECLE", name: "Eclesiástico" }, // ✅ Programas eclesiásticos
    //{ code: "ETDH", name: "Técnico" },        // ✅ Programas técnicos
   ],
 
