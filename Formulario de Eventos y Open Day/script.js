@@ -19,7 +19,7 @@ class FormConfig {
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
    "Aspirante",
-   "Padre de familia y/o acudiente",
+   //"Padre de familia y/o acudiente",
    //'Docente y/o psicoorientador',
    //'Visitante PUJ',
    //'Administrativo PUJ'
@@ -31,7 +31,7 @@ class FormConfig {
   // NIVELES ACADÉMICOS DISPONIBLES
   LEVEL_ACADEMIC: [
    //{ code: "PREG", name: "Pregrado" },
-   //{ code: "GRAD", name: "Posgrado" },
+   { code: "GRAD", name: "Posgrado" },
    //{ code: "ECLE", name: "Eclesiástico" },
    //{ code: "ETDH", name: "Técnico" },
   ],
@@ -760,7 +760,7 @@ function initializeTypeAttendee() {
   typeAttendeeSelect.appendChild(option);
  });
 
- // Auto-select if only one type available
+ // Seleccionar automáticamente si solo hay un tipo disponible
  autoSelectSingleTypeAttendee();
 }
 
@@ -818,6 +818,7 @@ function initializeAcademicLevel() {
  });
 }
 
+
 function handleTypeAttendeeChange() {
  const typeAttendeeSelect = document.getElementById("type_attendee");
  const academicLevelElement = document.getElementById("academic_level");
@@ -832,6 +833,28 @@ function handleTypeAttendeeChange() {
   if (academicLevelElement) {
    academicLevelElement.style.display = "block";
    academicLevelElement.setAttribute("required", "required");
+
+   // Check if we can auto-select academic level immediately
+   const availableLevels = FormConfig.PERSONALIZATION.LEVEL_ACADEMIC;
+   if (availableLevels.length === 1) {
+    const singleLevel = availableLevels[0];
+
+    // Auto-seleccionar el nivel
+    academicLevelElement.value = singleLevel.code;
+    formData.academic_level = singleLevel.code;
+
+    // Ocultar el campo ya que solo hay una opción
+    academicLevelElement.style.display = "none";
+    academicLevelElement.removeAttribute("required");
+
+    console.log(`✅ Nivel académico auto-seleccionado: ${singleLevel.name}`);
+
+    // Cargar facultades y períodos con delay para permitir actualización del DOM
+    setTimeout(() => {
+     loadFaculties(singleLevel.code);
+     loadPeriods(singleLevel.code);
+    }, 100);
+   }
   }
  } else {
   // Hide academic fields for non-applicants
@@ -1210,16 +1233,19 @@ function validateForm(e) {
 
 function setupEventListeners() {
  // Name fields
- document.getElementById("first_name").addEventListener("input", (e) => {
-  const cleaned = cleanText(e.target.value);
-  e.target.value = cleaned;
-  formData.first_name = cleaned;
-  deleteInvalid("first_name");
- });
+ const firstNameElement = document.getElementById("first_name");
+ if (firstNameElement) {
+  firstNameElement.addEventListener("input", (e) => {
+   const cleaned = cleanText(e.target.value);
+   e.target.value = cleaned;
+   formData.first_name = cleaned;
+   deleteInvalid("first_name");
+  });
 
- document.getElementById("first_name").addEventListener("blur", (e) => {
-  Validators.validateField(e.target);
- });
+  firstNameElement.addEventListener("blur", (e) => {
+   Validators.validateField(e.target);
+  });
+ }
 
  document.getElementById("last_name").addEventListener("input", (e) => {
   const cleaned = cleanText(e.target.value);
