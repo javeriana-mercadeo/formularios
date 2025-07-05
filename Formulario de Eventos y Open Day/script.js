@@ -30,7 +30,7 @@ class FormConfig {
 
   // NIVELES ACADÉMICOS DISPONIBLES
   LEVEL_ACADEMIC: [
-   { code: "PREG", name: "Pregrado" },
+   //{ code: "PREG", name: "Pregrado" },
    //{ code: "GRAD", name: "Posgrado" },
    //{ code: "ECLE", name: "Eclesiástico" },
    //{ code: "ETDH", name: "Técnico" },
@@ -408,7 +408,7 @@ function isValidEmail(email) {
 }
 
 // ============================================
-// SISTEMA DE VALIDACIÓN ROBUSTO
+// SISTEMA DE VALIDACIÓN
 // ============================================
 
 const Validators = {
@@ -759,6 +759,36 @@ function initializeTypeAttendee() {
   option.textContent = type;
   typeAttendeeSelect.appendChild(option);
  });
+
+ // Auto-select if only one type available
+ autoSelectSingleTypeAttendee();
+}
+
+/**
+ * Auto-selecciona el tipo de asistente si solo hay uno disponible
+ */
+function autoSelectSingleTypeAttendee() {
+ const typeAttendeeElement = document.getElementById("type_attendee");
+ if (!typeAttendeeElement) return;
+
+ const availableTypes = FormConfig.PERSONALIZATION.TYPE_ATTENDEE;
+
+ // Si hay exactamente un tipo disponible
+ if (availableTypes.length === 1) {
+  const singleType = availableTypes[0];
+
+  // Auto-seleccionar el tipo
+  typeAttendeeElement.value = singleType;
+  formData.type_attendee = singleType;
+
+  // Ocultar el campo ya que solo hay una opción
+  typeAttendeeElement.style.display = "none";
+
+  // Ejecutar la lógica de cambio para mostrar campos dependientes
+  handleTypeAttendeeChange();
+
+  console.log(`✅ Tipo de asistente auto-seleccionado: ${singleType}`);
+ }
 }
 
 function initializeAttendanceDay() {
@@ -1075,8 +1105,16 @@ function validateInputs() {
   }
  }
 
- // Add event fields
- requiredFields.push("type_attendee", "attendance_day");
+ // Add event fields (only if visible)
+ const typeAttendeeElement = document.getElementById("type_attendee");
+ if (typeAttendeeElement && typeAttendeeElement.style.display !== "none") {
+  requiredFields.push("type_attendee");
+ }
+
+ const attendanceDayElement = document.getElementById("attendance_day");
+ if (attendanceDayElement && attendanceDayElement.style.display !== "none") {
+  requiredFields.push("attendance_day");
+ }
 
  // Add academic fields if applicable
  if (formData.type_attendee === "Aspirante") {
