@@ -16,6 +16,9 @@ class FormConfig {
   // Código de campaña para seguimiento
   CAMPAIGN: "EVENTOS_OPEN_DAY",
 
+  // NOMBRE DEL EVENTO
+  EVENT_NAME: "",
+
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
    "Aspirante",
@@ -215,6 +218,9 @@ class FormConfig {
   const form = document.getElementById("form_inscription");
   if (!form) return;
 
+  // Limpiar campos ocultos previos para evitar duplicación al cambiar de modo
+  this.cleanupHiddenFields();
+
   // Campos ocultos necesarios para Salesforce
   const hiddenFields = [
    { name: "oid", value: "00Df4000003l8Bf" },
@@ -228,6 +234,10 @@ class FormConfig {
    },
    { name: "lead_source", value: "Landing Pages" },
    { name: "company", value: "NA" },
+   { 
+    name: this.getFieldId("NOMBRE_EVENTO"), 
+    value: "" 
+   },
   ];
 
   hiddenFields.forEach((field) => {
@@ -236,10 +246,56 @@ class FormConfig {
     input = document.createElement("input");
     input.type = "hidden";
     input.name = field.name;
+    input.id = field.name === this.getFieldId("NOMBRE_EVENTO") ? "nevento" : "";
     form.appendChild(input);
    }
    input.value = field.value;
   });
+ }
+
+ /**
+  * Limpia los campos ocultos específicos para evitar duplicación al cambiar de modo
+  */
+ static cleanupHiddenFields() {
+  const form = document.getElementById("form_inscription");
+  if (!form) return;
+
+  // Lista de campos que pueden duplicarse al cambiar de modo
+  const fieldsToClean = [
+   // NOMBRE_EVENTO en ambos modos
+   this.FIELD_MAPPING.NOMBRE_EVENTO.test,
+   this.FIELD_MAPPING.NOMBRE_EVENTO.prod,
+   // Otros campos críticos
+   "oid",
+   "debug",
+   "debugEmail"
+  ];
+
+  fieldsToClean.forEach(fieldName => {
+   const existingField = form.querySelector(`input[name="${fieldName}"]`);
+   if (existingField) {
+    existingField.remove();
+   }
+  });
+
+  // También limpiar por ID para el campo nevento
+  const existingEventField = form.querySelector(`input#nevento`);
+  if (existingEventField) {
+   existingEventField.remove();
+  }
+ }
+
+ /**
+  * Configura el nombre del evento desde parámetros URL o valor directo
+  * @param {string} eventName - Nombre del evento
+  */
+ static setEventName(eventName) {
+  const eventField = document.getElementById("nevento") || 
+                     document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
+  if (eventField) {
+   eventField.value = eventName;
+   console.log(`✅ Nombre del evento configurado: ${eventName}`);
+  }
  }
 
  /**
@@ -290,9 +346,19 @@ class FormConfig {
  static toggleDebugMode(debugMode) {
   this.PERSONALIZATION.DEBUG_MODE = debugMode;
 
+  // Preservar el valor actual del nombre del evento antes del cambio
+  const currentEventField = document.getElementById("nevento") || 
+                           document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
+  const currentEventValue = currentEventField ? currentEventField.value : "";
+
   // Reconfigurar formulario
   this.configureForm();
   this.updateFieldIds();
+
+  // Restaurar el nombre del evento después del cambio de modo
+  if (currentEventValue) {
+   this.setEventName(currentEventValue);
+  }
 
   console.log(`Modo cambiado a: ${debugMode ? "TEST" : "PRODUCCIÓN"}`);
 
@@ -327,10 +393,12 @@ class FormConfig {
   */
  static setTestMode() {
   this.toggleDebugMode(true);
+  return "Modo TEST activado";
  }
 
  static setProductionMode() {
   this.toggleDebugMode(false);
+  return "Modo PRODUCCIÓN activado";
  }
 }
 
@@ -366,6 +434,8 @@ let formData = {
  program: "",
  admission_period: "",
  authorization_data: "",
+ // Event data
+ nevento: "",
 };
 
 // Error tracking
@@ -1471,6 +1541,28 @@ function setupEventListeners() {
 }
 
 // ============================================
+// MANEJO DE PARÁMETROS URL
+// ============================================
+
+/**
+ * Obtiene y procesa parámetros de la URL para configurar el evento
+ */
+function getParametersFromURL() {
+ const urlParams = new URLSearchParams(window.location.search);
+ 
+ // Obtener nombre del evento desde URL
+ const eventName = urlParams.get('nevento') || urlParams.get('evento') || '';
+ if (eventName) {
+  formData.nevento = eventName;
+  FormConfig.setEventName(eventName);
+ }
+ 
+ console.log('🌐 Parámetros URL procesados:', {
+  nevento: formData.nevento
+ });
+}
+
+// ============================================
 // INICIALIZACIÓN
 // ============================================
 
@@ -1494,6 +1586,14 @@ async function initForm() {
   // Configure form based on environment
   FormConfig.configureForm();
   FormConfig.updateFieldIds();
+
+  // Get URL parameters for event configuration
+  getParametersFromURL();
+
+  // Set event name from configuration if specified
+  if (FormConfig.PERSONALIZATION.EVENT_NAME) {
+   FormConfig.setEventName(FormConfig.PERSONALIZATION.EVENT_NAME);
+  }
 
   // Setup event listeners
   setupEventListeners();
