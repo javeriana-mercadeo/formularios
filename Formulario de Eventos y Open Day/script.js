@@ -17,7 +17,10 @@ class FormConfig {
   CAMPAIGN: "EVENTOS_OPEN_DAY",
 
   // NOMBRE DEL EVENTO
-  EVENT_NAME: "",
+  EVENT_NAME: "Eventos Open Day 2025 Prueba",
+
+  // FECHA DEL EVENTO
+  EVENT_DATE: "14 de noviembre de 2025",
 
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
@@ -238,6 +241,10 @@ class FormConfig {
     name: this.getFieldId("NOMBRE_EVENTO"), 
     value: "" 
    },
+   { 
+    name: this.getFieldId("FECHA_EVENTO"), 
+    value: "" 
+   },
   ];
 
   hiddenFields.forEach((field) => {
@@ -246,7 +253,13 @@ class FormConfig {
     input = document.createElement("input");
     input.type = "hidden";
     input.name = field.name;
-    input.id = field.name === this.getFieldId("NOMBRE_EVENTO") ? "nevento" : "";
+    if (field.name === this.getFieldId("NOMBRE_EVENTO")) {
+     input.id = "nevento";
+    } else if (field.name === this.getFieldId("FECHA_EVENTO")) {
+     input.id = "fevento";
+    } else {
+     input.id = "";
+    }
     form.appendChild(input);
    }
    input.value = field.value;
@@ -265,6 +278,9 @@ class FormConfig {
    // NOMBRE_EVENTO en ambos modos
    this.FIELD_MAPPING.NOMBRE_EVENTO.test,
    this.FIELD_MAPPING.NOMBRE_EVENTO.prod,
+   // FECHA_EVENTO en ambos modos
+   this.FIELD_MAPPING.FECHA_EVENTO.test,
+   this.FIELD_MAPPING.FECHA_EVENTO.prod,
    // Otros campos críticos
    "oid",
    "debug",
@@ -278,10 +294,15 @@ class FormConfig {
    }
   });
 
-  // También limpiar por ID para el campo nevento
-  const existingEventField = form.querySelector(`input#nevento`);
-  if (existingEventField) {
-   existingEventField.remove();
+  // También limpiar por ID para los campos de evento
+  const existingEventNameField = form.querySelector(`input#nevento`);
+  if (existingEventNameField) {
+   existingEventNameField.remove();
+  }
+  
+  const existingEventDateField = form.querySelector(`input#fevento`);
+  if (existingEventDateField) {
+   existingEventDateField.remove();
   }
  }
 
@@ -295,6 +316,19 @@ class FormConfig {
   if (eventField) {
    eventField.value = eventName;
    console.log(`✅ Nombre del evento configurado: ${eventName}`);
+  }
+ }
+
+ /**
+  * Configura la fecha del evento desde parámetros URL o valor directo
+  * @param {string} eventDate - Fecha del evento
+  */
+ static setEventDate(eventDate) {
+  const eventDateField = document.getElementById("fevento") || 
+                          document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
+  if (eventDateField) {
+   eventDateField.value = eventDate;
+   console.log(`✅ Fecha del evento configurada: ${eventDate}`);
   }
  }
 
@@ -344,23 +378,39 @@ class FormConfig {
   * @param {boolean} debugMode - true para modo test, false para modo producción
   */
  static toggleDebugMode(debugMode) {
-  this.PERSONALIZATION.DEBUG_MODE = debugMode;
-
-  // Preservar el valor actual del nombre del evento antes del cambio
+  // Preservar los valores actuales de los campos de evento ANTES de cambiar el modo
   const currentEventField = document.getElementById("nevento") || 
                            document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
   const currentEventValue = currentEventField ? currentEventField.value : "";
+
+  const currentEventDateField = document.getElementById("fevento") || 
+                               document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
+  const currentEventDateValue = currentEventDateField ? currentEventDateField.value : "";
+
+  // Cambiar el modo
+  this.PERSONALIZATION.DEBUG_MODE = debugMode;
 
   // Reconfigurar formulario
   this.configureForm();
   this.updateFieldIds();
 
-  // Restaurar el nombre del evento después del cambio de modo
+  // Restaurar los valores de los campos de evento después del cambio de modo
   if (currentEventValue) {
    this.setEventName(currentEventValue);
   }
+  if (currentEventDateValue) {
+   this.setEventDate(currentEventDateValue);
+  }
 
-  console.log(`Modo cambiado a: ${debugMode ? "TEST" : "PRODUCCIÓN"}`);
+  console.log(`Modo cambiado a: ${this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"}`);
+  
+  // Log dinámico con el mismo formato que el inicial
+  console.log(
+   `%c🔧 Formulario ahora en modo: ${
+    this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"
+   }`,
+   "color: #2196F3; font-weight: bold;"
+  );
 
   // Mostrar notificación visual del cambio
   const notification = document.createElement("div");
@@ -436,6 +486,7 @@ let formData = {
  authorization_data: "",
  // Event data
  nevento: "",
+ fevento: "",
 };
 
 // Error tracking
@@ -1593,6 +1644,11 @@ async function initForm() {
   // Set event name from configuration if specified
   if (FormConfig.PERSONALIZATION.EVENT_NAME) {
    FormConfig.setEventName(FormConfig.PERSONALIZATION.EVENT_NAME);
+  }
+
+  // Set event date from configuration if specified
+  if (FormConfig.PERSONALIZATION.EVENT_DATE) {
+   FormConfig.setEventDate(FormConfig.PERSONALIZATION.EVENT_DATE);
   }
 
   // Setup event listeners
