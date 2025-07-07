@@ -31,6 +31,9 @@ class FormConfig {
   // MEDIO DE MARKETING
   MEDIUM: "Landing",
 
+  // UNIVERSIDAD
+  UNIVERSITY: "",
+
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
    "Aspirante",
@@ -155,6 +158,10 @@ class FormConfig {
    test: "00NO400000AIanI",
    prod: "00NJw000006f1BE",
   },
+  UNIVERSIDAD: {
+   test: "00NO400000B66Z3",
+   prod: "00NJw000006f1BG",
+  },
  };
 
  static URLS = {
@@ -255,6 +262,10 @@ class FormConfig {
     value: "" 
    },
    { 
+    name: this.getFieldId("UNIVERSIDAD"), 
+    value: "" 
+   },
+   { 
     name: this.getFieldId("FUENTE"), 
     value: "" 
    },
@@ -282,6 +293,8 @@ class FormConfig {
      input.id = "nevento";
     } else if (field.name === this.getFieldId("FECHA_EVENTO")) {
      input.id = "fevento";
+    } else if (field.name === this.getFieldId("UNIVERSIDAD")) {
+     input.id = "universidad";
     } else if (field.name === this.getFieldId("FUENTE")) {
      input.id = "fuente";
     } else if (field.name === this.getFieldId("SUBFUENTE")) {
@@ -314,6 +327,9 @@ class FormConfig {
    // FECHA_EVENTO en ambos modos
    this.FIELD_MAPPING.FECHA_EVENTO.test,
    this.FIELD_MAPPING.FECHA_EVENTO.prod,
+   // UNIVERSIDAD en ambos modos
+   this.FIELD_MAPPING.UNIVERSIDAD.test,
+   this.FIELD_MAPPING.UNIVERSIDAD.prod,
    // FUENTE en ambos modos
    this.FIELD_MAPPING.FUENTE.test,
    this.FIELD_MAPPING.FUENTE.prod,
@@ -348,6 +364,11 @@ class FormConfig {
   const existingEventDateField = form.querySelector(`input#fevento`);
   if (existingEventDateField) {
    existingEventDateField.remove();
+  }
+
+  const existingUniversityField = form.querySelector(`input#universidad`);
+  if (existingUniversityField) {
+   existingUniversityField.remove();
   }
 
   const existingSourceField = form.querySelector(`input#fuente`);
@@ -394,6 +415,19 @@ class FormConfig {
   if (eventDateField) {
    eventDateField.value = eventDate;
    console.log(`✅ Fecha del evento configurada: ${eventDate}`);
+  }
+ }
+
+ /**
+  * Configura la universidad
+  * @param {string} university - Universidad
+  */
+ static setUniversity(university) {
+  const universityField = document.getElementById("universidad") || 
+                          document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
+  if (universityField) {
+   universityField.value = university;
+   console.log(`✅ Universidad configurada: ${university}`);
   }
  }
 
@@ -504,6 +538,10 @@ class FormConfig {
                                document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
   const currentEventDateValue = currentEventDateField ? currentEventDateField.value : "";
 
+  const currentUniversityField = document.getElementById("universidad") || 
+                                document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
+  const currentUniversityValue = currentUniversityField ? currentUniversityField.value : "";
+
   const currentSourceField = document.getElementById("fuente") || 
                             document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
   const currentSourceValue = currentSourceField ? currentSourceField.value : "";
@@ -533,6 +571,9 @@ class FormConfig {
   }
   if (currentEventDateValue) {
    this.setEventDate(currentEventDateValue);
+  }
+  if (currentUniversityValue) {
+   this.setUniversity(currentUniversityValue);
   }
   if (currentSourceValue) {
    this.setSource(currentSourceValue);
@@ -632,6 +673,7 @@ let formData = {
  // Event data
  nevento: "",
  fevento: "",
+ universidad: "",
  fuente: "",
  subfuente: "",
  medio: "",
@@ -1798,6 +1840,11 @@ async function initForm() {
   // Set event date from configuration if specified
   if (FormConfig.PERSONALIZATION.EVENT_DATE) {
    FormConfig.setEventDate(FormConfig.PERSONALIZATION.EVENT_DATE);
+  }
+
+  // Set university from configuration if specified
+  if (FormConfig.PERSONALIZATION.UNIVERSITY) {
+   FormConfig.setUniversity(FormConfig.PERSONALIZATION.UNIVERSITY);
   }
 
   // Set source from configuration if specified
