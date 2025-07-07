@@ -34,6 +34,9 @@ class FormConfig {
   // UNIVERSIDAD
   UNIVERSITY: "",
 
+  // ARTÍCULO/CONTENIDO
+  ARTICLE: "",
+
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
    "Aspirante",
@@ -266,6 +269,10 @@ class FormConfig {
     value: "" 
    },
    { 
+    name: this.getFieldId("ARTICULO"), 
+    value: "" 
+   },
+   { 
     name: this.getFieldId("FUENTE"), 
     value: "" 
    },
@@ -295,6 +302,8 @@ class FormConfig {
      input.id = "fevento";
     } else if (field.name === this.getFieldId("UNIVERSIDAD")) {
      input.id = "universidad";
+    } else if (field.name === this.getFieldId("ARTICULO")) {
+     input.id = "articulo";
     } else if (field.name === this.getFieldId("FUENTE")) {
      input.id = "fuente";
     } else if (field.name === this.getFieldId("SUBFUENTE")) {
@@ -330,6 +339,9 @@ class FormConfig {
    // UNIVERSIDAD en ambos modos
    this.FIELD_MAPPING.UNIVERSIDAD.test,
    this.FIELD_MAPPING.UNIVERSIDAD.prod,
+   // ARTICULO en ambos modos
+   this.FIELD_MAPPING.ARTICULO.test,
+   this.FIELD_MAPPING.ARTICULO.prod,
    // FUENTE en ambos modos
    this.FIELD_MAPPING.FUENTE.test,
    this.FIELD_MAPPING.FUENTE.prod,
@@ -369,6 +381,11 @@ class FormConfig {
   const existingUniversityField = form.querySelector(`input#universidad`);
   if (existingUniversityField) {
    existingUniversityField.remove();
+  }
+
+  const existingArticleField = form.querySelector(`input#articulo`);
+  if (existingArticleField) {
+   existingArticleField.remove();
   }
 
   const existingSourceField = form.querySelector(`input#fuente`);
@@ -428,6 +445,19 @@ class FormConfig {
   if (universityField) {
    universityField.value = university;
    console.log(`✅ Universidad configurada: ${university}`);
+  }
+ }
+
+ /**
+  * Configura el artículo/contenido
+  * @param {string} article - Artículo/contenido
+  */
+ static setArticle(article) {
+  const articleField = document.getElementById("articulo") || 
+                       document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
+  if (articleField) {
+   articleField.value = article;
+   console.log(`✅ Artículo/contenido configurado: ${article}`);
   }
  }
 
@@ -542,6 +572,10 @@ class FormConfig {
                                 document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
   const currentUniversityValue = currentUniversityField ? currentUniversityField.value : "";
 
+  const currentArticleField = document.getElementById("articulo") || 
+                             document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
+  const currentArticleValue = currentArticleField ? currentArticleField.value : "";
+
   const currentSourceField = document.getElementById("fuente") || 
                             document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
   const currentSourceValue = currentSourceField ? currentSourceField.value : "";
@@ -574,6 +608,9 @@ class FormConfig {
   }
   if (currentUniversityValue) {
    this.setUniversity(currentUniversityValue);
+  }
+  if (currentArticleValue) {
+   this.setArticle(currentArticleValue);
   }
   if (currentSourceValue) {
    this.setSource(currentSourceValue);
@@ -674,6 +711,7 @@ let formData = {
  nevento: "",
  fevento: "",
  universidad: "",
+ articulo: "",
  fuente: "",
  subfuente: "",
  medio: "",
@@ -1845,6 +1883,11 @@ async function initForm() {
   // Set university from configuration if specified
   if (FormConfig.PERSONALIZATION.UNIVERSITY) {
    FormConfig.setUniversity(FormConfig.PERSONALIZATION.UNIVERSITY);
+  }
+
+  // Set article from configuration if specified
+  if (FormConfig.PERSONALIZATION.ARTICLE) {
+   FormConfig.setArticle(FormConfig.PERSONALIZATION.ARTICLE);
   }
 
   // Set source from configuration if specified
