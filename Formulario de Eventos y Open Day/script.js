@@ -14,13 +14,22 @@ class FormConfig {
   // ============================================
 
   // Código de campaña para seguimiento
-  CAMPAIGN: "EVENTOS_OPEN_DAY",
+  CAMPAIGN: "Mercadeo",
 
   // NOMBRE DEL EVENTO
   EVENT_NAME: "Eventos Open Day 2025 Prueba",
 
   // FECHA DEL EVENTO
   EVENT_DATE: "14 de noviembre de 2025",
+
+  // FUENTE DE SEGUIMIENTO
+  SOURCE: "Javeriana",
+
+  // SUB-FUENTE DE SEGUIMIENTO
+  SUB_SOURCE: "Organico",
+
+  // MEDIO DE MARKETING
+  MEDIUM: "Landing",
 
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
@@ -245,6 +254,22 @@ class FormConfig {
     name: this.getFieldId("FECHA_EVENTO"), 
     value: "" 
    },
+   { 
+    name: this.getFieldId("FUENTE"), 
+    value: "" 
+   },
+   { 
+    name: this.getFieldId("SUBFUENTE"), 
+    value: "" 
+   },
+   { 
+    name: this.getFieldId("MEDIO"), 
+    value: "" 
+   },
+   { 
+    name: this.getFieldId("CAMPANA"), 
+    value: "" 
+   },
   ];
 
   hiddenFields.forEach((field) => {
@@ -257,6 +282,14 @@ class FormConfig {
      input.id = "nevento";
     } else if (field.name === this.getFieldId("FECHA_EVENTO")) {
      input.id = "fevento";
+    } else if (field.name === this.getFieldId("FUENTE")) {
+     input.id = "fuente";
+    } else if (field.name === this.getFieldId("SUBFUENTE")) {
+     input.id = "subfuente";
+    } else if (field.name === this.getFieldId("MEDIO")) {
+     input.id = "medio";
+    } else if (field.name === this.getFieldId("CAMPANA")) {
+     input.id = "campana";
     } else {
      input.id = "";
     }
@@ -281,6 +314,18 @@ class FormConfig {
    // FECHA_EVENTO en ambos modos
    this.FIELD_MAPPING.FECHA_EVENTO.test,
    this.FIELD_MAPPING.FECHA_EVENTO.prod,
+   // FUENTE en ambos modos
+   this.FIELD_MAPPING.FUENTE.test,
+   this.FIELD_MAPPING.FUENTE.prod,
+   // SUBFUENTE en ambos modos
+   this.FIELD_MAPPING.SUBFUENTE.test,
+   this.FIELD_MAPPING.SUBFUENTE.prod,
+   // MEDIO en ambos modos
+   this.FIELD_MAPPING.MEDIO.test,
+   this.FIELD_MAPPING.MEDIO.prod,
+   // CAMPANA en ambos modos
+   this.FIELD_MAPPING.CAMPANA.test,
+   this.FIELD_MAPPING.CAMPANA.prod,
    // Otros campos críticos
    "oid",
    "debug",
@@ -303,6 +348,26 @@ class FormConfig {
   const existingEventDateField = form.querySelector(`input#fevento`);
   if (existingEventDateField) {
    existingEventDateField.remove();
+  }
+
+  const existingSourceField = form.querySelector(`input#fuente`);
+  if (existingSourceField) {
+   existingSourceField.remove();
+  }
+
+  const existingSubSourceField = form.querySelector(`input#subfuente`);
+  if (existingSubSourceField) {
+   existingSubSourceField.remove();
+  }
+
+  const existingMediumField = form.querySelector(`input#medio`);
+  if (existingMediumField) {
+   existingMediumField.remove();
+  }
+
+  const existingCampaignField = form.querySelector(`input#campana`);
+  if (existingCampaignField) {
+   existingCampaignField.remove();
   }
  }
 
@@ -329,6 +394,58 @@ class FormConfig {
   if (eventDateField) {
    eventDateField.value = eventDate;
    console.log(`✅ Fecha del evento configurada: ${eventDate}`);
+  }
+ }
+
+ /**
+  * Configura la fuente de seguimiento desde parámetros URL o valor directo
+  * @param {string} source - Fuente de seguimiento
+  */
+ static setSource(source) {
+  const sourceField = document.getElementById("fuente") || 
+                      document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
+  if (sourceField) {
+   sourceField.value = source;
+   console.log(`✅ Fuente de seguimiento configurada: ${source}`);
+  }
+ }
+
+ /**
+  * Configura la sub-fuente de seguimiento
+  * @param {string} subSource - Sub-fuente de seguimiento
+  */
+ static setSubSource(subSource) {
+  const subSourceField = document.getElementById("subfuente") || 
+                         document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
+  if (subSourceField) {
+   subSourceField.value = subSource;
+   console.log(`✅ Sub-fuente de seguimiento configurada: ${subSource}`);
+  }
+ }
+
+ /**
+  * Configura el medio de marketing
+  * @param {string} medium - Medio de marketing
+  */
+ static setMedium(medium) {
+  const mediumField = document.getElementById("medio") || 
+                      document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
+  if (mediumField) {
+   mediumField.value = medium;
+   console.log(`✅ Medio de marketing configurado: ${medium}`);
+  }
+ }
+
+ /**
+  * Configura la campaña de marketing
+  * @param {string} campaign - Campaña de marketing
+  */
+ static setCampaign(campaign) {
+  const campaignField = document.getElementById("campana") || 
+                        document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
+  if (campaignField) {
+   campaignField.value = campaign;
+   console.log(`✅ Campaña de marketing configurada: ${campaign}`);
   }
  }
 
@@ -387,6 +504,22 @@ class FormConfig {
                                document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
   const currentEventDateValue = currentEventDateField ? currentEventDateField.value : "";
 
+  const currentSourceField = document.getElementById("fuente") || 
+                            document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
+  const currentSourceValue = currentSourceField ? currentSourceField.value : "";
+
+  const currentSubSourceField = document.getElementById("subfuente") || 
+                               document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
+  const currentSubSourceValue = currentSubSourceField ? currentSubSourceField.value : "";
+
+  const currentMediumField = document.getElementById("medio") || 
+                            document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
+  const currentMediumValue = currentMediumField ? currentMediumField.value : "";
+
+  const currentCampaignField = document.getElementById("campana") || 
+                              document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
+  const currentCampaignValue = currentCampaignField ? currentCampaignField.value : "";
+
   // Cambiar el modo
   this.PERSONALIZATION.DEBUG_MODE = debugMode;
 
@@ -400,6 +533,18 @@ class FormConfig {
   }
   if (currentEventDateValue) {
    this.setEventDate(currentEventDateValue);
+  }
+  if (currentSourceValue) {
+   this.setSource(currentSourceValue);
+  }
+  if (currentSubSourceValue) {
+   this.setSubSource(currentSubSourceValue);
+  }
+  if (currentMediumValue) {
+   this.setMedium(currentMediumValue);
+  }
+  if (currentCampaignValue) {
+   this.setCampaign(currentCampaignValue);
   }
 
   console.log(`Modo cambiado a: ${this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"}`);
@@ -487,6 +632,10 @@ let formData = {
  // Event data
  nevento: "",
  fevento: "",
+ fuente: "",
+ subfuente: "",
+ medio: "",
+ campana: "",
 };
 
 // Error tracking
@@ -1649,6 +1798,26 @@ async function initForm() {
   // Set event date from configuration if specified
   if (FormConfig.PERSONALIZATION.EVENT_DATE) {
    FormConfig.setEventDate(FormConfig.PERSONALIZATION.EVENT_DATE);
+  }
+
+  // Set source from configuration if specified
+  if (FormConfig.PERSONALIZATION.SOURCE) {
+   FormConfig.setSource(FormConfig.PERSONALIZATION.SOURCE);
+  }
+
+  // Set sub-source from configuration if specified
+  if (FormConfig.PERSONALIZATION.SUB_SOURCE) {
+   FormConfig.setSubSource(FormConfig.PERSONALIZATION.SUB_SOURCE);
+  }
+
+  // Set medium from configuration if specified
+  if (FormConfig.PERSONALIZATION.MEDIUM) {
+   FormConfig.setMedium(FormConfig.PERSONALIZATION.MEDIUM);
+  }
+
+  // Set campaign from configuration if specified
+  if (FormConfig.PERSONALIZATION.CAMPAIGN) {
+   FormConfig.setCampaign(FormConfig.PERSONALIZATION.CAMPAIGN);
   }
 
   // Setup event listeners
