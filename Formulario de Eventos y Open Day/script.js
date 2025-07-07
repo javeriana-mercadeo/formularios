@@ -266,45 +266,45 @@ class FormConfig {
    },
    { name: "lead_source", value: "Landing Pages" },
    { name: "company", value: "NA" },
-   { 
-    name: this.getFieldId("NOMBRE_EVENTO"), 
-    value: "" 
+   {
+    name: this.getFieldId("NOMBRE_EVENTO"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("FECHA_EVENTO"), 
-    value: "" 
+   {
+    name: this.getFieldId("FECHA_EVENTO"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("UNIVERSIDAD"), 
-    value: "" 
+   {
+    name: this.getFieldId("UNIVERSIDAD"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("ARTICULO"), 
-    value: "" 
+   {
+    name: this.getFieldId("ARTICULO"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("EMPRESA_CONVENIO"), 
-    value: "" 
+   {
+    name: this.getFieldId("EMPRESA_CONVENIO"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("FUENTE"), 
-    value: "" 
+   {
+    name: this.getFieldId("FUENTE"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("SUBFUENTE"), 
-    value: "" 
+   {
+    name: this.getFieldId("SUBFUENTE"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("MEDIO"), 
-    value: "" 
+   {
+    name: this.getFieldId("MEDIO"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("CAMPANA"), 
-    value: "" 
+   {
+    name: this.getFieldId("CAMPANA"),
+    value: "",
    },
-   { 
-    name: this.getFieldId("NIVEL_ACADEMICO"), 
-    value: "" 
+   {
+    name: this.getFieldId("NIVEL_ACADEMICO"),
+    value: "",
    },
   ];
 
@@ -385,10 +385,10 @@ class FormConfig {
    // Otros campos críticos
    "oid",
    "debug",
-   "debugEmail"
+   "debugEmail",
   ];
 
-  fieldsToClean.forEach(fieldName => {
+  fieldsToClean.forEach((fieldName) => {
    const existingField = form.querySelector(`input[name="${fieldName}"]`);
    if (existingField) {
     existingField.remove();
@@ -400,7 +400,7 @@ class FormConfig {
   if (existingEventNameField) {
    existingEventNameField.remove();
   }
-  
+
   const existingEventDateField = form.querySelector(`input#fevento`);
   if (existingEventDateField) {
    existingEventDateField.remove();
@@ -441,7 +441,9 @@ class FormConfig {
    existingCampaignField.remove();
   }
 
-  const existingNivelAcademicoField = form.querySelector(`input#nivel-academico`);
+  const existingNivelAcademicoField = form.querySelector(
+   `input#nivel-academico`
+  );
   if (existingNivelAcademicoField) {
    existingNivelAcademicoField.remove();
   }
@@ -452,8 +454,9 @@ class FormConfig {
   * @param {string} eventName - Nombre del evento
   */
  static setEventName(eventName) {
-  const eventField = document.getElementById("nevento") || 
-                     document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
+  const eventField =
+   document.getElementById("nevento") ||
+   document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
   if (eventField) {
    eventField.value = eventName;
    console.log(`✅ Nombre del evento configurado: ${eventName}`);
@@ -465,8 +468,9 @@ class FormConfig {
   * @param {string} eventDate - Fecha del evento
   */
  static setEventDate(eventDate) {
-  const eventDateField = document.getElementById("fevento") || 
-                          document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
+  const eventDateField =
+   document.getElementById("fevento") ||
+   document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
   if (eventDateField) {
    eventDateField.value = eventDate;
    console.log(`✅ Fecha del evento configurada: ${eventDate}`);
@@ -478,8 +482,9 @@ class FormConfig {
   * @param {string} university - Universidad
   */
  static setUniversity(university) {
-  const universityField = document.getElementById("universidad") || 
-                          document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
+  const universityField =
+   document.getElementById("universidad") ||
+   document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
   if (universityField) {
    universityField.value = university;
    console.log(`✅ Universidad configurada: ${university}`);
@@ -491,8 +496,9 @@ class FormConfig {
   * @param {string} article - Artículo/contenido
   */
  static setArticle(article) {
-  const articleField = document.getElementById("articulo") || 
-                       document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
+  const articleField =
+   document.getElementById("articulo") ||
+   document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
   if (articleField) {
    articleField.value = article;
    console.log(`✅ Artículo/contenido configurado: ${article}`);
@@ -504,8 +510,11 @@ class FormConfig {
   * @param {string} company - Empresa de convenio
   */
  static setCompany(company) {
-  const companyField = document.getElementById("empresa-convenio") || 
-                       document.querySelector(`input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`);
+  const companyField =
+   document.getElementById("empresa-convenio") ||
+   document.querySelector(
+    `input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`
+   );
   if (companyField) {
    companyField.value = company;
    console.log(`✅ Empresa de convenio configurada: ${company}`);
@@ -517,8 +526,9 @@ class FormConfig {
   * @param {string} source - Fuente de seguimiento
   */
  static setSource(source) {
-  const sourceField = document.getElementById("fuente") || 
-                      document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
+  const sourceField =
+   document.getElementById("fuente") ||
+   document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
   if (sourceField) {
    sourceField.value = source;
    console.log(`✅ Fuente de seguimiento configurada: ${source}`);
@@ -530,8 +540,9 @@ class FormConfig {
   * @param {string} subSource - Sub-fuente de seguimiento
   */
  static setSubSource(subSource) {
-  const subSourceField = document.getElementById("subfuente") || 
-                         document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
+  const subSourceField =
+   document.getElementById("subfuente") ||
+   document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
   if (subSourceField) {
    subSourceField.value = subSource;
    console.log(`✅ Sub-fuente de seguimiento configurada: ${subSource}`);
@@ -543,8 +554,9 @@ class FormConfig {
   * @param {string} medium - Medio de marketing
   */
  static setMedium(medium) {
-  const mediumField = document.getElementById("medio") || 
-                      document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
+  const mediumField =
+   document.getElementById("medio") ||
+   document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
   if (mediumField) {
    mediumField.value = medium;
    console.log(`✅ Medio de marketing configurado: ${medium}`);
@@ -556,8 +568,9 @@ class FormConfig {
   * @param {string} campaign - Campaña de marketing
   */
  static setCampaign(campaign) {
-  const campaignField = document.getElementById("campana") || 
-                        document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
+  const campaignField =
+   document.getElementById("campana") ||
+   document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
   if (campaignField) {
    campaignField.value = campaign;
    console.log(`✅ Campaña de marketing configurada: ${campaign}`);
@@ -569,8 +582,11 @@ class FormConfig {
   * @param {string} academicLevel - Nivel académico
   */
  static setAcademicLevel(academicLevel) {
-  const academicLevelField = document.getElementById("nivel-academico") || 
-                             document.querySelector(`input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`);
+  const academicLevelField =
+   document.getElementById("nivel-academico") ||
+   document.querySelector(
+    `input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`
+   );
   if (academicLevelField) {
    academicLevelField.value = academicLevel;
    console.log(`✅ Nivel académico configurado: ${academicLevel}`);
@@ -625,41 +641,64 @@ class FormConfig {
   */
  static toggleDebugMode(debugMode) {
   // Preservar los valores actuales de los campos de evento ANTES de cambiar el modo
-  const currentEventField = document.getElementById("nevento") || 
-                           document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
+  const currentEventField =
+   document.getElementById("nevento") ||
+   document.querySelector(`input[name="${this.getFieldId("NOMBRE_EVENTO")}"]`);
   const currentEventValue = currentEventField ? currentEventField.value : "";
 
-  const currentEventDateField = document.getElementById("fevento") || 
-                               document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
-  const currentEventDateValue = currentEventDateField ? currentEventDateField.value : "";
+  const currentEventDateField =
+   document.getElementById("fevento") ||
+   document.querySelector(`input[name="${this.getFieldId("FECHA_EVENTO")}"]`);
+  const currentEventDateValue = currentEventDateField
+   ? currentEventDateField.value
+   : "";
 
-  const currentUniversityField = document.getElementById("universidad") || 
-                                document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
-  const currentUniversityValue = currentUniversityField ? currentUniversityField.value : "";
+  const currentUniversityField =
+   document.getElementById("universidad") ||
+   document.querySelector(`input[name="${this.getFieldId("UNIVERSIDAD")}"]`);
+  const currentUniversityValue = currentUniversityField
+   ? currentUniversityField.value
+   : "";
 
-  const currentArticleField = document.getElementById("articulo") || 
-                             document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
-  const currentArticleValue = currentArticleField ? currentArticleField.value : "";
+  const currentArticleField =
+   document.getElementById("articulo") ||
+   document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
+  const currentArticleValue = currentArticleField
+   ? currentArticleField.value
+   : "";
 
-  const currentCompanyField = document.getElementById("empresa-convenio") || 
-                             document.querySelector(`input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`);
-  const currentCompanyValue = currentCompanyField ? currentCompanyField.value : "";
+  const currentCompanyField =
+   document.getElementById("empresa-convenio") ||
+   document.querySelector(
+    `input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`
+   );
+  const currentCompanyValue = currentCompanyField
+   ? currentCompanyField.value
+   : "";
 
-  const currentSourceField = document.getElementById("fuente") || 
-                            document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
+  const currentSourceField =
+   document.getElementById("fuente") ||
+   document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
   const currentSourceValue = currentSourceField ? currentSourceField.value : "";
 
-  const currentSubSourceField = document.getElementById("subfuente") || 
-                               document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
-  const currentSubSourceValue = currentSubSourceField ? currentSubSourceField.value : "";
+  const currentSubSourceField =
+   document.getElementById("subfuente") ||
+   document.querySelector(`input[name="${this.getFieldId("SUBFUENTE")}"]`);
+  const currentSubSourceValue = currentSubSourceField
+   ? currentSubSourceField.value
+   : "";
 
-  const currentMediumField = document.getElementById("medio") || 
-                            document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
+  const currentMediumField =
+   document.getElementById("medio") ||
+   document.querySelector(`input[name="${this.getFieldId("MEDIO")}"]`);
   const currentMediumValue = currentMediumField ? currentMediumField.value : "";
 
-  const currentCampaignField = document.getElementById("campana") || 
-                              document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
-  const currentCampaignValue = currentCampaignField ? currentCampaignField.value : "";
+  const currentCampaignField =
+   document.getElementById("campana") ||
+   document.querySelector(`input[name="${this.getFieldId("CAMPANA")}"]`);
+  const currentCampaignValue = currentCampaignField
+   ? currentCampaignField.value
+   : "";
 
   // Cambiar el modo
   this.PERSONALIZATION.DEBUG_MODE = debugMode;
@@ -698,16 +737,23 @@ class FormConfig {
   }
 
   // Preservar el nivel académico actual
-  const currentAcademicLevelField = document.getElementById("nivel-academico") || 
-                                   document.querySelector(`input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`);
-  const currentAcademicLevelValue = currentAcademicLevelField ? currentAcademicLevelField.value : "";
+  const currentAcademicLevelField =
+   document.getElementById("nivel-academico") ||
+   document.querySelector(
+    `input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`
+   );
+  const currentAcademicLevelValue = currentAcademicLevelField
+   ? currentAcademicLevelField.value
+   : "";
 
   if (currentAcademicLevelValue) {
    this.setAcademicLevel(currentAcademicLevelValue);
   }
 
-  console.log(`Modo cambiado a: ${this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"}`);
-  
+  console.log(
+   `Modo cambiado a: ${this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"}`
+  );
+
   // Log dinámico con el mismo formato que el inicial
   console.log(
    `%c🔧 Formulario ahora en modo: ${
@@ -1090,10 +1136,13 @@ async function getPeriodos() {
  const data = await loadData(FormConfig.URLS.DATA_SOURCES.PERIODS);
  if (data) {
   periodos = data;
-  console.log('✅ Períodos cargados:', periodos);
-  console.log('📊 Estructura detectada:', Array.isArray(periodos) ? 'Array' : 'Object');
+  console.log("✅ Períodos cargados:", periodos);
+  console.log(
+   "📊 Estructura detectada:",
+   Array.isArray(periodos) ? "Array" : "Object"
+  );
   if (!Array.isArray(periodos)) {
-   console.log('🎯 Niveles disponibles:', Object.keys(periodos));
+   console.log("🎯 Niveles disponibles:", Object.keys(periodos));
   }
  }
 }
@@ -1255,7 +1304,6 @@ function initializeAcademicLevel() {
  });
 }
 
-
 function handleTypeAttendeeChange() {
  const typeAttendeeSelect = document.getElementById("type_attendee");
  const academicLevelElement = document.getElementById("academic_level");
@@ -1291,7 +1339,9 @@ function handleTypeAttendeeChange() {
 
     // Cargar facultades y períodos con delay para permitir actualización del DOM
     setTimeout(() => {
-     console.log(`🚀 Auto-cargando facultades y períodos para: ${singleLevel.code}`);
+     console.log(
+      `🚀 Auto-cargando facultades y períodos para: ${singleLevel.code}`
+     );
      loadFaculties(singleLevel.code);
      loadPeriods(singleLevel.code);
     }, 100);
@@ -1334,18 +1384,18 @@ function handleAcademicLevelChange() {
 
  if (formData.academic_level) {
   console.log(`🎯 Nivel académico cambiado a: ${formData.academic_level}`);
-  
+
   // Actualizar el campo oculto de Salesforce
   FormConfig.setAcademicLevel(formData.academic_level);
-  
+
   loadFaculties(formData.academic_level);
   loadPeriods(formData.academic_level);
  } else {
-  console.log('❌ Sin nivel académico seleccionado, ocultando campos');
-  
+  console.log("❌ Sin nivel académico seleccionado, ocultando campos");
+
   // Limpiar el campo oculto de Salesforce
   FormConfig.setAcademicLevel("");
-  
+
   hideFacultyField();
   hideProgramField();
   hidePeriodField();
@@ -1422,18 +1472,18 @@ function loadFaculties(academicLevel) {
 
 function loadPeriods(academicLevel) {
  console.log(`🔄 Cargando períodos para nivel: ${academicLevel}`);
- 
+
  const periodSelect = document.getElementById("admission_period");
  if (!periodSelect || !periodos) {
-  console.log('❌ No se encontró periodSelect o periodos están vacíos');
+  console.log("❌ No se encontró periodSelect o periodos están vacíos");
   return;
  }
 
  // Handle both array format (legacy) and object format (current API)
  let levelPeriods = [];
- 
+
  if (Array.isArray(periodos)) {
-  console.log('📋 Usando formato array (legacy)');
+  console.log("📋 Usando formato array (legacy)");
   // Legacy array format
   levelPeriods = periodos.filter(
    (period) =>
@@ -1444,20 +1494,20 @@ function loadPeriods(academicLevel) {
   console.log(`📋 Usando formato objeto para nivel: ${academicLevel}`);
   // Current object format from API
   const periodsForLevel = periodos[academicLevel];
-  console.log('📊 Períodos encontrados:', periodsForLevel);
+  console.log("📊 Períodos encontrados:", periodsForLevel);
   levelPeriods = Object.entries(periodsForLevel).map(([nombre, codigo]) => ({
    codigo: codigo,
-   nombre: nombre
+   nombre: nombre,
   }));
  } else {
   console.log(`❌ No se encontraron períodos para nivel: ${academicLevel}`);
-  console.log('🔍 Niveles disponibles:', Object.keys(periodos));
+  console.log("🔍 Niveles disponibles:", Object.keys(periodos));
  }
 
  console.log(`📈 Total de períodos procesados: ${levelPeriods.length}`);
 
  if (levelPeriods.length === 0) {
-  console.log('❌ Sin períodos disponibles, ocultando campo');
+  console.log("❌ Sin períodos disponibles, ocultando campo");
   hidePeriodField();
   return;
  }
@@ -1473,7 +1523,7 @@ function loadPeriods(academicLevel) {
 
  periodSelect.style.display = "block";
  periodSelect.setAttribute("required", "required");
- console.log('✅ Campo de períodos mostrado correctamente');
+ console.log("✅ Campo de períodos mostrado correctamente");
 }
 
 function handleFacultyChange() {
@@ -1922,16 +1972,16 @@ function setupEventListeners() {
  */
 function getParametersFromURL() {
  const urlParams = new URLSearchParams(window.location.search);
- 
+
  // Obtener nombre del evento desde URL
- const eventName = urlParams.get('nevento') || urlParams.get('evento') || '';
+ const eventName = urlParams.get("nevento") || urlParams.get("evento") || "";
  if (eventName) {
   formData.nevento = eventName;
   FormConfig.setEventName(eventName);
  }
- 
- console.log('🌐 Parámetros URL procesados:', {
-  nevento: formData.nevento
+
+ console.log("🌐 Parámetros URL procesados:", {
+  nevento: formData.nevento,
  });
 }
 
