@@ -1,6 +1,5 @@
 /**
  * Formulario de Eventos y Open Day - Pontificia Universidad Javeriana
- * Basado completamente en la arquitectura del formulario de posgrado
  * @version 5.0
  */
 
@@ -36,6 +35,9 @@ class FormConfig {
 
   // ARTÍCULO/CONTENIDO
   ARTICLE: "",
+
+  // EMPRESA DE CONVENIO
+  COMPANY: "",
 
   // TIPOS DE ASISTENTE
   TYPE_ATTENDEE: [
@@ -165,6 +167,14 @@ class FormConfig {
    test: "00NO400000B66Z3",
    prod: "00NJw000006f1BG",
   },
+  EMPRESA_CONVENIO: {
+   test: "00NO400000B68fh",
+   prod: "00NJw000006F1BC",
+  },
+  NIVEL_ACADEMICO: {
+   test: "nivelacademico",
+   prod: "nivelacademico",
+  },
  };
 
  static URLS = {
@@ -273,6 +283,10 @@ class FormConfig {
     value: "" 
    },
    { 
+    name: this.getFieldId("EMPRESA_CONVENIO"), 
+    value: "" 
+   },
+   { 
     name: this.getFieldId("FUENTE"), 
     value: "" 
    },
@@ -286,6 +300,10 @@ class FormConfig {
    },
    { 
     name: this.getFieldId("CAMPANA"), 
+    value: "" 
+   },
+   { 
+    name: this.getFieldId("NIVEL_ACADEMICO"), 
     value: "" 
    },
   ];
@@ -304,6 +322,8 @@ class FormConfig {
      input.id = "universidad";
     } else if (field.name === this.getFieldId("ARTICULO")) {
      input.id = "articulo";
+    } else if (field.name === this.getFieldId("EMPRESA_CONVENIO")) {
+     input.id = "empresa-convenio";
     } else if (field.name === this.getFieldId("FUENTE")) {
      input.id = "fuente";
     } else if (field.name === this.getFieldId("SUBFUENTE")) {
@@ -312,6 +332,8 @@ class FormConfig {
      input.id = "medio";
     } else if (field.name === this.getFieldId("CAMPANA")) {
      input.id = "campana";
+    } else if (field.name === this.getFieldId("NIVEL_ACADEMICO")) {
+     input.id = "nivel-academico";
     } else {
      input.id = "";
     }
@@ -342,6 +364,9 @@ class FormConfig {
    // ARTICULO en ambos modos
    this.FIELD_MAPPING.ARTICULO.test,
    this.FIELD_MAPPING.ARTICULO.prod,
+   // EMPRESA_CONVENIO en ambos modos
+   this.FIELD_MAPPING.EMPRESA_CONVENIO.test,
+   this.FIELD_MAPPING.EMPRESA_CONVENIO.prod,
    // FUENTE en ambos modos
    this.FIELD_MAPPING.FUENTE.test,
    this.FIELD_MAPPING.FUENTE.prod,
@@ -354,6 +379,9 @@ class FormConfig {
    // CAMPANA en ambos modos
    this.FIELD_MAPPING.CAMPANA.test,
    this.FIELD_MAPPING.CAMPANA.prod,
+   // NIVEL_ACADEMICO en ambos modos
+   this.FIELD_MAPPING.NIVEL_ACADEMICO.test,
+   this.FIELD_MAPPING.NIVEL_ACADEMICO.prod,
    // Otros campos críticos
    "oid",
    "debug",
@@ -388,6 +416,11 @@ class FormConfig {
    existingArticleField.remove();
   }
 
+  const existingCompanyField = form.querySelector(`input#empresa-convenio`);
+  if (existingCompanyField) {
+   existingCompanyField.remove();
+  }
+
   const existingSourceField = form.querySelector(`input#fuente`);
   if (existingSourceField) {
    existingSourceField.remove();
@@ -406,6 +439,11 @@ class FormConfig {
   const existingCampaignField = form.querySelector(`input#campana`);
   if (existingCampaignField) {
    existingCampaignField.remove();
+  }
+
+  const existingNivelAcademicoField = form.querySelector(`input#nivel-academico`);
+  if (existingNivelAcademicoField) {
+   existingNivelAcademicoField.remove();
   }
  }
 
@@ -462,6 +500,19 @@ class FormConfig {
  }
 
  /**
+  * Configura la empresa de convenio
+  * @param {string} company - Empresa de convenio
+  */
+ static setCompany(company) {
+  const companyField = document.getElementById("empresa-convenio") || 
+                       document.querySelector(`input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`);
+  if (companyField) {
+   companyField.value = company;
+   console.log(`✅ Empresa de convenio configurada: ${company}`);
+  }
+ }
+
+ /**
   * Configura la fuente de seguimiento desde parámetros URL o valor directo
   * @param {string} source - Fuente de seguimiento
   */
@@ -514,6 +565,19 @@ class FormConfig {
  }
 
  /**
+  * Configura el nivel académico
+  * @param {string} academicLevel - Nivel académico
+  */
+ static setAcademicLevel(academicLevel) {
+  const academicLevelField = document.getElementById("nivel-academico") || 
+                             document.querySelector(`input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`);
+  if (academicLevelField) {
+   academicLevelField.value = academicLevel;
+   console.log(`✅ Nivel académico configurado: ${academicLevel}`);
+  }
+ }
+
+ /**
   * Actualiza los IDs de los campos del formulario según el ambiente
   */
  static updateFieldIds() {
@@ -529,6 +593,7 @@ class FormConfig {
    program: "CODIGO_SAE",
    type_attendee: "TIPO_ASISTENTE",
    attendance_day: "DIA_ASISTENCIA",
+   academic_level: "NIVEL_ACADEMICO",
   };
 
   // Actualizar campos con name que cambia según ambiente
@@ -576,6 +641,10 @@ class FormConfig {
                              document.querySelector(`input[name="${this.getFieldId("ARTICULO")}"]`);
   const currentArticleValue = currentArticleField ? currentArticleField.value : "";
 
+  const currentCompanyField = document.getElementById("empresa-convenio") || 
+                             document.querySelector(`input[name="${this.getFieldId("EMPRESA_CONVENIO")}"]`);
+  const currentCompanyValue = currentCompanyField ? currentCompanyField.value : "";
+
   const currentSourceField = document.getElementById("fuente") || 
                             document.querySelector(`input[name="${this.getFieldId("FUENTE")}"]`);
   const currentSourceValue = currentSourceField ? currentSourceField.value : "";
@@ -612,6 +681,9 @@ class FormConfig {
   if (currentArticleValue) {
    this.setArticle(currentArticleValue);
   }
+  if (currentCompanyValue) {
+   this.setCompany(currentCompanyValue);
+  }
   if (currentSourceValue) {
    this.setSource(currentSourceValue);
   }
@@ -623,6 +695,15 @@ class FormConfig {
   }
   if (currentCampaignValue) {
    this.setCampaign(currentCampaignValue);
+  }
+
+  // Preservar el nivel académico actual
+  const currentAcademicLevelField = document.getElementById("nivel-academico") || 
+                                   document.querySelector(`input[name="${this.getFieldId("NIVEL_ACADEMICO")}"]`);
+  const currentAcademicLevelValue = currentAcademicLevelField ? currentAcademicLevelField.value : "";
+
+  if (currentAcademicLevelValue) {
+   this.setAcademicLevel(currentAcademicLevelValue);
   }
 
   console.log(`Modo cambiado a: ${this.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"}`);
@@ -712,6 +793,7 @@ let formData = {
  fevento: "",
  universidad: "",
  articulo: "",
+ empresaConvenio: "",
  fuente: "",
  subfuente: "",
  medio: "",
@@ -1198,6 +1280,9 @@ function handleTypeAttendeeChange() {
     academicLevelElement.value = singleLevel.code;
     formData.academic_level = singleLevel.code;
 
+    // Actualizar el campo oculto de Salesforce
+    FormConfig.setAcademicLevel(singleLevel.code);
+
     // Ocultar el campo ya que solo hay una opción
     academicLevelElement.style.display = "none";
     academicLevelElement.removeAttribute("required");
@@ -1249,10 +1334,18 @@ function handleAcademicLevelChange() {
 
  if (formData.academic_level) {
   console.log(`🎯 Nivel académico cambiado a: ${formData.academic_level}`);
+  
+  // Actualizar el campo oculto de Salesforce
+  FormConfig.setAcademicLevel(formData.academic_level);
+  
   loadFaculties(formData.academic_level);
   loadPeriods(formData.academic_level);
  } else {
   console.log('❌ Sin nivel académico seleccionado, ocultando campos');
+  
+  // Limpiar el campo oculto de Salesforce
+  FormConfig.setAcademicLevel("");
+  
   hideFacultyField();
   hideProgramField();
   hidePeriodField();
@@ -1888,6 +1981,11 @@ async function initForm() {
   // Set article from configuration if specified
   if (FormConfig.PERSONALIZATION.ARTICLE) {
    FormConfig.setArticle(FormConfig.PERSONALIZATION.ARTICLE);
+  }
+
+  // Set company from configuration if specified
+  if (FormConfig.PERSONALIZATION.COMPANY) {
+   FormConfig.setCompany(FormConfig.PERSONALIZATION.COMPANY);
   }
 
   // Set source from configuration if specified
