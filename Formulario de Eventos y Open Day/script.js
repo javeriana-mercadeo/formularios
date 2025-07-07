@@ -69,9 +69,9 @@ class FormConfig {
   REMOVE_FIELDS: [],
 
   // CONFIGURACIONES DE DESARROLLO Y DEBUG
-  DEV_MODE: false,
-  DEBUG_MODE: false,
-  EMAIL_DEBUG: "DesarrolladorDMPA@javeriana.edu.co",
+  DEV_MODE: true,
+  DEBUG_MODE: true,
+  EMAIL_DEBUG: "gavilanm-j@javeriana.edu.co",
 
   // CONFIGURACIÓN DE CACHÉ
   CACHE_ENABLED: false,
@@ -189,15 +189,18 @@ class FormConfig {
   },
 
   DATA_SOURCES: {
-   LOCATIONS:
-    "https://www.javeriana.edu.co/recursosdb/1372208/10609114/ubicaciones.json",
-   PREFIXES:
-    "https://www.javeriana.edu.co/recursosdb/1372208/10609114/codigos_pais.json",
-   PROGRAMS:
-    "https://www.javeriana.edu.co/recursosdb/1372208/10609114/programas.json",
-   PERIODS:
-    "https://www.javeriana.edu.co/recursosdb/1372208/10609114/periodos.json",
+    LOCATIONS: "../data/ubicaciones.json",
+    PREFIXES: "../data/codigos_pais.json",
+    PROGRAMS: "../data/programas.json",
+    PERIODS: "../data/periodos.json",
   },
+
+  /* DATA_SOURCES: {
+    LOCATIONS: "https://www.javeriana.edu.co/recursosdb/1372208/10609114/ubicaciones.json",
+    PREFIXES: "https://www.javeriana.edu.co/recursosdb/1372208/10609114/codigos_pais.json",
+    PROGRAMS: "https://www.javeriana.edu.co/recursosdb/1372208/10609114/programas.json",
+    PERIODS: "https://www.javeriana.edu.co/recursosdb/1372208/10609114/periodos.json",
+  }, */
  };
 
  // ============================================
@@ -1126,9 +1129,14 @@ async function getPrefijos() {
 }
 
 async function getProgramas() {
+ console.log(`🔄 Cargando programas desde: ${FormConfig.URLS.DATA_SOURCES.PROGRAMS}`);
  const data = await loadData(FormConfig.URLS.DATA_SOURCES.PROGRAMS);
  if (data) {
   programas = data;
+  console.log("✅ Programas cargados:", programas);
+  console.log("📊 Niveles disponibles:", Object.keys(programas));
+ } else {
+  console.error("❌ Error cargando programas");
  }
 }
 
@@ -1291,8 +1299,33 @@ function initializeAttendanceDay() {
 }
 
 function initializeAcademicLevel() {
- const academicLevelSelect = document.getElementById("academic_level");
- if (!academicLevelSelect) return;
+ let academicLevelSelect = document.getElementById("academic_level");
+ 
+ // Create the element if it doesn't exist
+ if (!academicLevelSelect) {
+  const form = document.getElementById("form_inscription");
+  const typeAttendeeElement = document.getElementById("type_attendee");
+  
+  if (!form || !typeAttendeeElement) return;
+  
+  // Create the academic level select
+  academicLevelSelect = document.createElement("select");
+  academicLevelSelect.id = "academic_level";
+  academicLevelSelect.name = FormConfig.getFieldId("NIVEL_ACADEMICO");
+  academicLevelSelect.style.display = "none";
+  academicLevelSelect.setAttribute("required", "required");
+  
+  // Create error div
+  const errorDiv = document.createElement("div");
+  errorDiv.className = "error_text";
+  errorDiv.id = "error_academic_level";
+  errorDiv.style.display = "none";
+  errorDiv.textContent = "Selecciona un nivel académico de interés";
+  
+  // Insert after type_attendee
+  typeAttendeeElement.parentNode.insertBefore(academicLevelSelect, typeAttendeeElement.nextSibling);
+  academicLevelSelect.parentNode.insertBefore(errorDiv, academicLevelSelect.nextSibling);
+ }
 
  academicLevelSelect.innerHTML =
   '<option value="">*Nivel académico de interés</option>';
@@ -1406,24 +1439,35 @@ function handleAcademicLevelChange() {
 
 function loadFaculties(academicLevel) {
  const facultySelect = document.getElementById("faculty");
- if (!facultySelect || !programas) return;
+ if (!facultySelect || !programas) {
+  console.log("❌ loadFaculties: Missing facultySelect or programas", {facultySelect: !!facultySelect, programas: !!programas});
+  return;
+ }
+
+ console.log(`🔄 Cargando facultades para nivel: ${academicLevel}`);
+ console.log("📊 Estructura de programas:", programas);
 
  // Check if programas has the expected structure
  let levelPrograms = [];
 
  if (programas[academicLevel]) {
   // Structure: programas.PREG, programas.GRAD, etc.
+  console.log(`✅ Encontrado nivel ${academicLevel} en programas`);
   const facultyKeys = Object.keys(programas[academicLevel]);
-  facultyKeys.forEach((facultyKey) => {
-   const option = document.createElement("option");
-   option.value = facultyKey;
-   option.textContent = facultyKey;
-   facultySelect.appendChild(option);
-  });
-
+  console.log(`📋 Facultades encontradas:`, facultyKeys);
+  
   if (facultyKeys.length > 0) {
+   facultySelect.innerHTML = '<option value="">*Facultad de interés</option>';
+   facultyKeys.forEach((facultyKey) => {
+    const option = document.createElement("option");
+    option.value = facultyKey;
+    option.textContent = facultyKey;
+    facultySelect.appendChild(option);
+   });
+
    facultySelect.style.display = "block";
    facultySelect.setAttribute("required", "required");
+   console.log("✅ Campo de facultades mostrado correctamente");
    return;
   }
  } else if (Array.isArray(programas)) {
@@ -1735,8 +1779,38 @@ function validateForm(e) {
   document.getElementById("submit_btn").disabled = true;
 
   if (FormConfig.PERSONALIZATION.DEV_MODE) {
-   console.log("Formulario válido - modo desarrollo");
-   console.log("Datos:", formData);
+   console.log("%c🔧 DEV_MODE: Formulario válido - modo desarrollo", "color: #2196F3; font-weight: bold;");
+   
+   // Detailed form data analysis
+   console.group("📋 Análisis detallado del formulario");
+   console.log("📊 Datos del formulario:", formData);
+   
+   // Form fields analysis
+   const form = document.getElementById("form_inscription");
+   const formDataObj = new FormData(form);
+   
+   console.log("📝 FormData completo:");
+   for (let [key, value] of formDataObj.entries()) {
+    console.log(`  ${key}: ${value}`);
+   }
+   
+   // Validate required fields
+   const requiredFields = ['first_name', 'last_name', 'email', 'type_doc', 'document', 'phone_code', 'phone', 'country', 'attendance_day', 'type_attendee'];
+   const missingFields = requiredFields.filter(field => !formData[field] || formData[field] === '');
+   
+   if (missingFields.length > 0) {
+    console.warn("⚠️ Campos requeridos faltantes:", missingFields);
+   } else {
+    console.log("✅ Todos los campos requeridos están completos");
+   }
+   
+   // Environment information
+   console.log("🔧 Información del ambiente:");
+   console.log(`  Modo actual: ${FormConfig.PERSONALIZATION.DEBUG_MODE ? 'TEST' : 'PRODUCCIÓN'}`);
+   console.log(`  URL Salesforce: ${FormConfig.getSalesforceUrl()}`);
+   console.log(`  Email debug: ${FormConfig.PERSONALIZATION.EMAIL_DEBUG}`);
+   
+   console.groupEnd();
 
    const successMsg = document.getElementById("successMsg");
    if (successMsg) {
@@ -1896,23 +1970,29 @@ function setupEventListeners() {
  });
 
  // Academic fields
- document.getElementById("academic_level").addEventListener("change", (e) => {
-  handleAcademicLevelChange();
-  Validators.validateField(e.target);
- });
+ const academicLevelElement = document.getElementById("academic_level");
+ if (academicLevelElement) {
+  academicLevelElement.addEventListener("change", (e) => {
+   handleAcademicLevelChange();
+   Validators.validateField(e.target);
+  });
 
- document.getElementById("academic_level").addEventListener("blur", (e) => {
-  Validators.validateField(e.target);
- });
+  academicLevelElement.addEventListener("blur", (e) => {
+   Validators.validateField(e.target);
+  });
+ }
 
- document.getElementById("faculty").addEventListener("change", (e) => {
-  handleFacultyChange();
-  Validators.validateField(e.target);
- });
+ const facultyElement = document.getElementById("faculty");
+ if (facultyElement) {
+  facultyElement.addEventListener("change", (e) => {
+   handleFacultyChange();
+   Validators.validateField(e.target);
+  });
 
- document.getElementById("faculty").addEventListener("blur", (e) => {
-  Validators.validateField(e.target);
- });
+  facultyElement.addEventListener("blur", (e) => {
+   Validators.validateField(e.target);
+  });
+ }
 
  document.getElementById("program").addEventListener("change", (e) => {
   formData.program = e.target.value;
@@ -2078,6 +2158,23 @@ window.toggleDebugMode = (mode) => FormConfig.toggleDebugMode(mode);
 window.getCurrentMode = () =>
  FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCTION";
 
+// Funciones adicionales para DEV_MODE
+window.toggleDevMode = (enabled) => {
+ FormConfig.PERSONALIZATION.DEV_MODE = enabled !== undefined ? enabled : !FormConfig.PERSONALIZATION.DEV_MODE;
+ console.log(`🔧 DEV_MODE ${FormConfig.PERSONALIZATION.DEV_MODE ? 'activado' : 'desactivado'}`);
+ return FormConfig.PERSONALIZATION.DEV_MODE;
+};
+
+window.getDevMode = () => FormConfig.PERSONALIZATION.DEV_MODE;
+
+window.showFormConfig = () => {
+ console.group("⚙️ Configuración actual del formulario");
+ console.log("🎯 Personalización:", FormConfig.PERSONALIZATION);
+ console.log("🔗 URLs:", FormConfig.URLS);
+ console.log("📝 Mapeo de campos:", FormConfig.FIELD_MAPPING);
+ console.groupEnd();
+};
+
 // Start initialization when DOM is ready
 document.addEventListener("DOMContentLoaded", initForm);
 
@@ -2087,6 +2184,10 @@ console.log(
   FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"
  }`,
  "color: #2196F3; font-weight: bold;"
+);
+console.log(
+ `%c🚀 DEV_MODE: ${FormConfig.PERSONALIZATION.DEV_MODE ? "ACTIVADO" : "DESACTIVADO"}`,
+ `color: ${FormConfig.PERSONALIZATION.DEV_MODE ? "#4CAF50" : "#FF5722"}; font-weight: bold;`
 );
 console.log("%c💡 Para cambiar el modo, usa:", "color: #666;");
 console.log(
@@ -2098,3 +2199,6 @@ console.log(
  "color: #4CAF50;"
 );
 console.log("%c   • getCurrentMode()    - Ver modo actual", "color: #2196F3;");
+console.log("%c   • toggleDevMode()     - Alternar DEV_MODE", "color: #9C27B0;");
+console.log("%c   • getDevMode()        - Ver estado DEV_MODE", "color: #9C27B0;");
+console.log("%c   • showFormConfig()    - Mostrar configuración", "color: #607D8B;");
