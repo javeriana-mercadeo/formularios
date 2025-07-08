@@ -31,8 +31,8 @@ class FormConfig {
    //'Administrativo PUJ'
   ],
 
-    // FECHA DEL EVENTO
-  EVENT_DATE: null,
+  // FECHA DEL EVENTO
+  EVENT_DATE: "14/11/2025",
 
   // DÍAS DE ASISTENCIA AL EVENTO
   ATTENDANCE_DAYS: ["Martes 14 de noviembre", "Miércoles 15 de noviembre"],
@@ -66,20 +66,20 @@ class FormConfig {
 
   // CONFIGURACIÓN DE UTM's
 
-    // Código de campaña para seguimiento
+  // Código de campaña para seguimiento
   CAMPAIGN: "MERCA_ENFER_ENFER",
 
   // ARTÍCULO/CONTENIDO
-  ARTICLE: "",
+  ARTICLE: "Articulo",
 
-    // FUENTE DE SEGUIMIENTO
-  SOURCE: "",
+  // FUENTE DE SEGUIMIENTO
+  SOURCE: "Fuente",
 
   // SUB-FUENTE DE SEGUIMIENTO
-  SUB_SOURCE: "",
+  SUB_SOURCE: "Subfuente",
 
   // MEDIO DE MARKETING
-  MEDIUM: "",
+  MEDIUM: "Medio",
  };
 
  // ============================================
@@ -192,11 +192,16 @@ class FormConfig {
     "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
   },
 
+  OID: {
+   test: "00D7j0000004eQD",
+   prod: "00Df4000003l8Bf",
+  },
+
   DATA_SOURCES: {
-    LOCATIONS: "../data/ubicaciones.json",
-    PREFIXES: "../data/codigos_pais.json",
-    PROGRAMS: "../data/programas.json",
-    PERIODS: "../data/periodos.json",
+   LOCATIONS: "../data/ubicaciones.json",
+   PREFIXES: "../data/codigos_pais.json",
+   PROGRAMS: "../data/programas.json",
+   PERIODS: "../data/periodos.json",
   },
 
   /* DATA_SOURCES: {
@@ -237,6 +242,16 @@ class FormConfig {
  }
 
  /**
+  * Obtiene el OID según el ambiente actual
+  * @returns {string} OID para el ambiente actual
+  */
+ static getOID() {
+  return this.PERSONALIZATION.DEBUG_MODE
+   ? this.URLS.OID.test
+   : this.URLS.OID.prod;
+ }
+
+ /**
   * Configura el formulario según el ambiente actual
   */
  static configureForm() {
@@ -262,7 +277,7 @@ class FormConfig {
 
   // Campos ocultos necesarios para Salesforce
   const hiddenFields = [
-   { name: "oid", value: "00Df4000003l8Bf" },
+   { name: "oid", value: this.getOID() },
    { name: "retURL", value: this.URLS.THANK_YOU },
    { name: "debug", value: this.PERSONALIZATION.DEBUG_MODE ? "1" : "0" },
    {
@@ -279,7 +294,7 @@ class FormConfig {
    },
    {
     name: this.getFieldId("FECHA_EVENTO"),
-    value: "",
+    value: this.PERSONALIZATION.EVENT_DATE || "",
    },
    {
     name: this.getFieldId("UNIVERSIDAD"),
@@ -303,7 +318,7 @@ class FormConfig {
    },
    {
     name: this.getFieldId("MEDIO"),
-    value: "",
+    value: this.PERSONALIZATION.MEDIUM || "",
    },
    {
     name: this.getFieldId("CAMPANA"),
@@ -1133,7 +1148,9 @@ async function getPrefijos() {
 }
 
 async function getProgramas() {
- console.log(`🔄 Cargando programas desde: ${FormConfig.URLS.DATA_SOURCES.PROGRAMS}`);
+ console.log(
+  `🔄 Cargando programas desde: ${FormConfig.URLS.DATA_SOURCES.PROGRAMS}`
+ );
  const data = await loadData(FormConfig.URLS.DATA_SOURCES.PROGRAMS);
  if (data) {
   programas = data;
@@ -1305,39 +1322,45 @@ function initializeAcademicLevel() {
  console.log("🔄 Inicializando nivel académico...");
  let academicLevelSelect = document.getElementById("academic_level");
  console.log("📍 Elemento academic_level existente:", !!academicLevelSelect);
- 
+
  // Create the element if it doesn't exist
  if (!academicLevelSelect) {
   console.log("🔧 Creando elemento academic_level...");
   const form = document.getElementById("form_inscription");
   const typeAttendeeElement = document.getElementById("type_attendee");
-  
+
   console.log("📋 Form encontrado:", !!form);
   console.log("📋 TypeAttendee encontrado:", !!typeAttendeeElement);
-  
+
   if (!form || !typeAttendeeElement) {
    console.log("❌ No se puede crear academic_level - faltan elementos padre");
    return;
   }
-  
+
   // Create the academic level select
   academicLevelSelect = document.createElement("select");
   academicLevelSelect.id = "academic_level";
   academicLevelSelect.name = FormConfig.getFieldId("NIVEL_ACADEMICO");
   academicLevelSelect.style.display = "none";
   academicLevelSelect.setAttribute("required", "required");
-  
+
   // Create error div
   const errorDiv = document.createElement("div");
   errorDiv.className = "error_text";
   errorDiv.id = "error_academic_level";
   errorDiv.style.display = "none";
   errorDiv.textContent = "Selecciona un nivel académico de interés";
-  
+
   // Insert after type_attendee
-  typeAttendeeElement.parentNode.insertBefore(academicLevelSelect, typeAttendeeElement.nextSibling);
-  academicLevelSelect.parentNode.insertBefore(errorDiv, academicLevelSelect.nextSibling);
-  
+  typeAttendeeElement.parentNode.insertBefore(
+   academicLevelSelect,
+   typeAttendeeElement.nextSibling
+  );
+  academicLevelSelect.parentNode.insertBefore(
+   errorDiv,
+   academicLevelSelect.nextSibling
+  );
+
   console.log("✅ Elemento academic_level creado e insertado en el DOM");
  } else {
   console.log("✅ Elemento academic_level ya existía");
@@ -1345,37 +1368,39 @@ function initializeAcademicLevel() {
 
  academicLevelSelect.innerHTML =
   '<option value="">*Nivel académico de interés</option>';
- 
+
  // Si no hay niveles configurados o el array está vacío, usar todos los niveles disponibles de los datos
  let levelsToShow = FormConfig.PERSONALIZATION.LEVEL_ACADEMIC;
- 
+
  if (!levelsToShow || levelsToShow.length === 0) {
-  console.log("📋 No hay niveles académicos configurados, usando todos los disponibles de los datos");
+  console.log(
+   "📋 No hay niveles académicos configurados, usando todos los disponibles de los datos"
+  );
   levelsToShow = [];
-  
+
   // Obtener todos los niveles disponibles de los datos de programas
-  if (programas && typeof programas === 'object') {
-   Object.keys(programas).forEach(levelCode => {
+  if (programas && typeof programas === "object") {
+   Object.keys(programas).forEach((levelCode) => {
     // Mapear códigos a nombres más amigables
     const levelNames = {
-     'PREG': 'Pregrado',
-     'GRAD': 'Posgrado', 
-     'ECLE': 'Eclesiástico',
-     'ETDH': 'Técnico'
+     PREG: "Pregrado",
+     GRAD: "Posgrado",
+     ECLE: "Eclesiástico",
+     ETDH: "Técnico",
     };
-    
+
     levelsToShow.push({
      code: levelCode,
-     name: levelNames[levelCode] || levelCode
+     name: levelNames[levelCode] || levelCode,
     });
    });
   }
-  
+
   console.log("✅ Niveles académicos auto-detectados:", levelsToShow);
  } else {
   console.log("📋 Usando niveles académicos configurados:", levelsToShow);
  }
- 
+
  levelsToShow.forEach((level) => {
   const option = document.createElement("option");
   option.value = level.code;
@@ -1407,7 +1432,7 @@ function handleTypeAttendeeChange() {
    const availableLevels = FormConfig.PERSONALIZATION.LEVEL_ACADEMIC;
    console.log("📋 Niveles académicos disponibles:", availableLevels);
    console.log("📊 Cantidad de niveles:", availableLevels.length);
-   
+
    if (availableLevels.length === 1) {
     console.log("🔄 Auto-seleccionando nivel único");
     const singleLevel = availableLevels[0];
@@ -1500,7 +1525,10 @@ function handleAcademicLevelChange() {
 function loadFaculties(academicLevel) {
  const facultySelect = document.getElementById("faculty");
  if (!facultySelect || !programas) {
-  console.log("❌ loadFaculties: Missing facultySelect or programas", {facultySelect: !!facultySelect, programas: !!programas});
+  console.log("❌ loadFaculties: Missing facultySelect or programas", {
+   facultySelect: !!facultySelect,
+   programas: !!programas,
+  });
   return;
  }
 
@@ -1515,7 +1543,7 @@ function loadFaculties(academicLevel) {
   console.log(`✅ Encontrado nivel ${academicLevel} en programas`);
   const facultyKeys = Object.keys(programas[academicLevel]);
   console.log(`📋 Facultades encontradas:`, facultyKeys);
-  
+
   if (facultyKeys.length > 0) {
    facultySelect.innerHTML = '<option value="">*Facultad de interés</option>';
    facultyKeys.forEach((facultyKey) => {
@@ -1839,37 +1867,57 @@ function validateForm(e) {
   document.getElementById("submit_btn").disabled = true;
 
   if (FormConfig.PERSONALIZATION.DEV_MODE) {
-   console.log("%c🔧 DEV_MODE: Formulario válido - modo desarrollo", "color: #2196F3; font-weight: bold;");
-   
+   console.log(
+    "%c🔧 DEV_MODE: Formulario válido - modo desarrollo",
+    "color: #2196F3; font-weight: bold;"
+   );
+
    // Detailed form data analysis
    console.group("📋 Análisis detallado del formulario");
    console.log("📊 Datos del formulario:", formData);
-   
+
    // Form fields analysis
    const form = document.getElementById("form_inscription");
    const formDataObj = new FormData(form);
-   
+
    console.log("📝 FormData completo:");
    for (let [key, value] of formDataObj.entries()) {
     console.log(`  ${key}: ${value}`);
    }
-   
+
    // Validate required fields
-   const requiredFields = ['first_name', 'last_name', 'email', 'type_doc', 'document', 'phone_code', 'phone', 'country', 'attendance_day', 'type_attendee'];
-   const missingFields = requiredFields.filter(field => !formData[field] || formData[field] === '');
-   
+   const requiredFields = [
+    "first_name",
+    "last_name",
+    "email",
+    "type_doc",
+    "document",
+    "phone_code",
+    "phone",
+    "country",
+    "attendance_day",
+    "type_attendee",
+   ];
+   const missingFields = requiredFields.filter(
+    (field) => !formData[field] || formData[field] === ""
+   );
+
    if (missingFields.length > 0) {
     console.warn("⚠️ Campos requeridos faltantes:", missingFields);
    } else {
     console.log("✅ Todos los campos requeridos están completos");
    }
-   
+
    // Environment information
    console.log("🔧 Información del ambiente:");
-   console.log(`  Modo actual: ${FormConfig.PERSONALIZATION.DEBUG_MODE ? 'TEST' : 'PRODUCCIÓN'}`);
+   console.log(
+    `  Modo actual: ${
+     FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PRODUCCIÓN"
+    }`
+   );
    console.log(`  URL Salesforce: ${FormConfig.getSalesforceUrl()}`);
    console.log(`  Email debug: ${FormConfig.PERSONALIZATION.EMAIL_DEBUG}`);
-   
+
    console.groupEnd();
 
    const successMsg = document.getElementById("successMsg");
@@ -2223,8 +2271,13 @@ window.getCurrentMode = () =>
 
 // Funciones adicionales para DEV_MODE
 window.toggleDevMode = (enabled) => {
- FormConfig.PERSONALIZATION.DEV_MODE = enabled !== undefined ? enabled : !FormConfig.PERSONALIZATION.DEV_MODE;
- console.log(`🔧 DEV_MODE ${FormConfig.PERSONALIZATION.DEV_MODE ? 'activado' : 'desactivado'}`);
+ FormConfig.PERSONALIZATION.DEV_MODE =
+  enabled !== undefined ? enabled : !FormConfig.PERSONALIZATION.DEV_MODE;
+ console.log(
+  `🔧 DEV_MODE ${
+   FormConfig.PERSONALIZATION.DEV_MODE ? "activado" : "desactivado"
+  }`
+ );
  return FormConfig.PERSONALIZATION.DEV_MODE;
 };
 
@@ -2238,46 +2291,45 @@ window.showFormConfig = () => {
  console.groupEnd();
 
  console.log(Date);
- 
 };
 
 window.showFieldMappingTable = () => {
  console.group("📋 Tabla de Mapeo de Campos - Sandbox vs Producción");
- 
+
  // Preparar datos para la tabla
  const tableData = [];
  Object.entries(FormConfig.FIELD_MAPPING).forEach(([fieldName, mapping]) => {
   // Obtener el valor actual del campo
   let currentValue = "";
   const activeFieldId = FormConfig.getFieldId(fieldName);
-  
+
   // Buscar el elemento por ID activo o por name
   let element = document.querySelector(`[name="${activeFieldId}"]`);
   if (!element) {
    // Intentar buscar por ID específicos conocidos
    const elementMappings = {
-    "NOMBRE_EVENTO": "nevento",
-    "FECHA_EVENTO": "fevento", 
-    "UNIVERSIDAD": "universidad",
-    "ARTICULO": "articulo",
-    "EMPRESA_CONVENIO": "empresa-convenio",
-    "FUENTE": "fuente",
-    "SUBFUENTE": "subfuente",
-    "MEDIO": "medio",
-    "CAMPANA": "campana",
-    "NIVEL_ACADEMICO": "nivel-academico"
+    NOMBRE_EVENTO: "nevento",
+    FECHA_EVENTO: "fevento",
+    UNIVERSIDAD: "universidad",
+    ARTICULO: "articulo",
+    EMPRESA_CONVENIO: "empresa-convenio",
+    FUENTE: "fuente",
+    SUBFUENTE: "subfuente",
+    MEDIO: "medio",
+    CAMPANA: "campana",
+    NIVEL_ACADEMICO: "nivel-academico",
    };
-   
+
    if (elementMappings[fieldName]) {
     element = document.getElementById(elementMappings[fieldName]);
    }
   }
-  
+
   if (element) {
    if (element.type === "radio") {
     // Para radio buttons, buscar el seleccionado
     const radioGroup = document.querySelectorAll(`[name="${activeFieldId}"]`);
-    const selectedRadio = Array.from(radioGroup).find(radio => radio.checked);
+    const selectedRadio = Array.from(radioGroup).find((radio) => radio.checked);
     currentValue = selectedRadio ? selectedRadio.value : "";
    } else {
     currentValue = element.value || "";
@@ -2285,28 +2337,34 @@ window.showFieldMappingTable = () => {
   } else {
    currentValue = "❌ No encontrado";
   }
-  
+
   tableData.push({
-   "Campo": fieldName,
+   Campo: fieldName,
    "ID Sandbox (TEST)": mapping.test,
    "ID Producción (PROD)": mapping.prod,
    "Modo Actual": FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST" : "PROD",
-   "Valor Actual": currentValue || "⚪ Vacío"
+   "Valor Actual": currentValue || "⚪ Vacío",
   });
  });
- 
+
  // Mostrar tabla
  console.table(tableData);
- 
+
  // Información adicional
- console.log(`🔧 Modo actual: ${FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST (Sandbox)" : "PRODUCCIÓN"}`);
- console.log(`📊 Total de campos mapeados: ${Object.keys(FormConfig.FIELD_MAPPING).length}`);
- 
+ console.log(
+  `🔧 Modo actual: ${
+   FormConfig.PERSONALIZATION.DEBUG_MODE ? "TEST (Sandbox)" : "PRODUCCIÓN"
+  }`
+ );
+ console.log(
+  `📊 Total de campos mapeados: ${Object.keys(FormConfig.FIELD_MAPPING).length}`
+ );
+
  // Mostrar también los valores de formData para comparación
  console.group("📄 Valores en formData (objeto JavaScript)");
  console.table(formData);
  console.groupEnd();
- 
+
  console.groupEnd();
 };
 
@@ -2321,8 +2379,12 @@ console.log(
  "color: #2196F3; font-weight: bold;"
 );
 console.log(
- `%c🚀 DEV_MODE: ${FormConfig.PERSONALIZATION.DEV_MODE ? "ACTIVADO" : "DESACTIVADO"}`,
- `color: ${FormConfig.PERSONALIZATION.DEV_MODE ? "#4CAF50" : "#FF5722"}; font-weight: bold;`
+ `%c🚀 DEV_MODE: ${
+  FormConfig.PERSONALIZATION.DEV_MODE ? "ACTIVADO" : "DESACTIVADO"
+ }`,
+ `color: ${
+  FormConfig.PERSONALIZATION.DEV_MODE ? "#4CAF50" : "#FF5722"
+ }; font-weight: bold;`
 );
 console.log("%c💡 Para cambiar el modo, usa:", "color: #666;");
 console.log(
@@ -2334,14 +2396,29 @@ console.log(
  "color: #4CAF50;"
 );
 console.log("%c   • getCurrentMode()    - Ver modo actual", "color: #2196F3;");
-console.log("%c   • toggleDevMode()     - Alternar DEV_MODE", "color: #9C27B0;");
-console.log("%c   • getDevMode()        - Ver estado DEV_MODE", "color: #9C27B0;");
-console.log("%c   • showFormConfig()    - Mostrar configuración", "color: #607D8B;");
-console.log("%c   • showFieldMappingTable() - Tabla de mapeo de campos", "color: #795548;");
+console.log(
+ "%c   • toggleDevMode()     - Alternar DEV_MODE",
+ "color: #9C27B0;"
+);
+console.log(
+ "%c   • getDevMode()        - Ver estado DEV_MODE",
+ "color: #9C27B0;"
+);
+console.log(
+ "%c   • showFormConfig()    - Mostrar configuración",
+ "color: #607D8B;"
+);
+console.log(
+ "%c   • showFieldMappingTable() - Tabla de mapeo de campos",
+ "color: #795548;"
+);
 
 // Mostrar tabla de campos automáticamente en DEV_MODE
 if (FormConfig.PERSONALIZATION.DEV_MODE) {
- console.log("%c🔧 DEV_MODE activado - Mostrando tabla de mapeo de campos:", "color: #FF9800; font-weight: bold;");
+ console.log(
+  "%c🔧 DEV_MODE activado - Mostrando tabla de mapeo de campos:",
+  "color: #FF9800; font-weight: bold;"
+ );
  setTimeout(() => {
   window.showFieldMappingTable();
  }, 1000);
