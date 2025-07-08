@@ -1,0 +1,103 @@
+/* Form elements styles */
+
+.form-card input,
+.form-card select {
+  border: none;
+  border-bottom: 1px solid #aaa;
+  padding: 10px 5px;
+  outline: none;
+  font-size: var(--font-size-paragraph);
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+  border-bottom: 1px solid var(--primary-light);
+  background: rgba(117, 155, 215, 0.02);
+  transition: all 0.3s ease;
+}
+
+.form-card input:hover:not(:focus),
+.form-card select:hover:not(:focus) {
+  border-bottom-color: #999;
+  transition: all 0.2s ease;
+}
+
+.form-card button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-heading);
+}
+
+.form-card button:hover {
+  background-color: var(--primary-hover);
+}
+
+.form-card button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.form-card label {
+  font-size: var(--font-size-paragraph);
+  color: #333;
+  margin-left: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.form-card label:hover {
+  color: var(--primary-color);
+}
+
+.form-card label.required::after {
+  content: ' *';
+  color: var(--danger-500);
+  font-weight: 600;
+}
+
+.form-card h5 {
+  color: var(--primary-color);
+  margin: 20px 0 10px 0;
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-medium);
+}
+
+.form-card p {
+  color: #666;
+  font-size: var(--font-size-paragraph);
+  margin-bottom: 10px;
+  line-height: var(--line-height-base);
+}
+
+.note {
+  margin-top: 15px;
+  font-size: var(--font-size-small);
+  color: #333;
+}
+
+.note a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .form-card input,
+  .form-card select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 5px;
+  }
+  
+  .form-card button {
+    padding: 15px;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo - Formulario Básico</title>
+</head>
+<body>
+    <h1>📝 Ejemplo: Formulario Básico</h1>
+    
+    <div class="info">
+        <p>Este es un ejemplo de formulario básico usando el sistema modular.</p>
+        <p><strong>Características:</strong></p>
+        <ul>
+            <li>✅ Configuración mínima</li>
+            <li>✅ Estilos automáticos</li>
+            <li>✅ Validación incluida</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Registro de Evento</h2>
+            
+            <form id="form_inscription">
+                <div class="name-row">
+                    <div class="name-field">
+                        <input type="text" placeholder="*Nombre(s)" id="first_name" name="first_name" required>
+                        <div class="error_text" id="error_first_name"></div>
+                    </div>
+                    <div class="name-field">
+                        <input type="text" placeholder="*Apellidos" id="last_name" name="last_name" required>
+                        <div class="error_text" id="error_last_name"></div>
+                    </div>
+                </div>
+
+                <input type="email" placeholder="*Email" id="email" name="email" required>
+                <div class="error_text" id="error_email"></div>
+
+                <div class="phone-row">
+                    <div class="prefix-field">
+                        <select id="phone_code" name="phone_code" required>
+                            <option value="">(+) Indicativo</option>
+                        </select>
+                        <div class="error_text" id="error_phone_code"></div>
+                    </div>
+                    <div class="mobile-field">
+                        <input type="text" placeholder="*Teléfono" id="phone" name="phone" required>
+                        <div class="error_text" id="error_phone"></div>
+                    </div>
+                </div>
+
+                <select id="country" name="country" required>
+                    <option value="">*País de residencia</option>
+                </select>
+                <div class="error_text" id="error_country"></div>
+
+                <select id="type_attendee" name="type_attendee" required>
+                    <option value="">*Tipo de asistente</option>
+                </select>
+                <div class="error_text" id="error_type_attendee"></div>
+
+                <div class="radio-inline-group">
+                    <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                    <div class="radio-option">
+                        <input type="radio" id="auth_yes" name="authorization_data" value="1">
+                        <label for="auth_yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="auth_no" name="authorization_data" value="0">
+                        <label for="auth_no">No</label>
+                    </div>
+                </div>
+                <div class="error_text" id="error_authorization_data"></div>
+
+                <button type="submit" id="submit_btn" disabled>Registrarme</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+
+        .info ul {
+            margin: 10px 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    </style>
+
+    <script type="module">
+        import { FormManager } from '../modules/FormManager.js';
+
+        // Configuración básica
+        const basicConfig = {
+            eventName: 'Evento Básico 2025',
+            eventDate: '15/03/2025',
+            university: 'Universidad Ejemplo',
+            
+            // Tipos de asistente
+            typeAttendee: [
+                'Aspirante',
+                'Padre de familia',
+                'Estudiante actual',
+                'Visitante'
+            ],
+
+            // Configuración de estilos
+            styles: {
+                enabled: true,
+                basePath: '../',
+                autoLoad: true,
+                customVariables: {
+                    'primary-color': '#2196f3',
+                    'primary-hover': '#1976d2'
+                }
+            },
+
+            // Configuración de logging
+            logging: {
+                enabled: true,
+                level: 'info',
+                prefix: 'BasicForm',
+                showTimestamp: false,
+                colors: true,
+                persistLogs: false
+            },
+
+            // Modo desarrollo para ver logs
+            debugMode: true,
+            devMode: true,
+
+            // Callbacks simples
+            callbacks: {
+                onFormLoad: (formManager) => {
+                    console.log('✅ Formulario básico cargado correctamente');
+                },
+
+                onFormSubmit: async (formData, formManager) => {
+                    console.log('📤 Enviando formulario básico:', formData);
+                    
+                    // Simulación de envío
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    console.log('✅ Formulario enviado con éxito');
+                    alert('¡Registro completado exitosamente!');
+                    
+                    return true;
+                }
+            }
+        };
+
+        // Inicializar formulario
+        const basicForm = new FormManager(basicConfig);
+        
+        try {
+            await basicForm.init();
+            console.log('🚀 Formulario básico inicializado');
+        } catch (error) {
+            console.error('❌ Error en formulario básico:', error);
+        }
+
+        // Hacer disponible globalmente para debugging
+        window.basicForm = basicForm;
+        
+        // Función helper para debugging
+        window.showFormData = () => {
+            console.log('📊 Datos actuales del formulario:', basicForm.getFormData());
+        };
+
+        // Funciones de control de logging
+        window.toggleLogging = () => {
+            basicForm.toggleLogging();
+            console.log('📝 Logging alternado');
+        };
+
+        window.setLogLevel = (level) => {
+            basicForm.setLogLevel(level);
+            console.log(`📝 Nivel de logging: ${level}`);
+        };
+    </script>
+</body>
+</html>
