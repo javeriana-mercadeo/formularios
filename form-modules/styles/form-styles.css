@@ -1,19 +1,19 @@
 /* Main form styles - imports all modules */
 
 /* Base styles */
-@import url('./base.css');
+@import url("./base.css");
 
 /* Layout styles */
-@import url('./layout.css');
+@import url("./layout.css");
 
 /* Form elements */
-@import url('./form-elements.css');
+@import url("./form-elements.css");
 
 /* Validation styles */
-@import url('./validation.css');
+@import url("./validation.css");
 
 /* Form fields layouts */
-@import url('./form-fields.css');
+@import url("./form-fields.css");
 
 /* Custom theme variables that can be overridden */
 :root {
@@ -21,10 +21,10 @@
   --form-primary-color: var(--primary-color, #4d7fcb);
   --form-primary-hover: var(--primary-hover, #3f6fb5);
   --form-primary-light: var(--primary-light, #759bd7);
-  
+
   /* Form specific overrides */
   --form-background: white;
-  --form-shadow: 0 0 20px rgba(0,0,0,0.15);
+  --form-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   --form-border-radius: 16px;
   --form-max-width: 427px;
   --form-padding: 30px;

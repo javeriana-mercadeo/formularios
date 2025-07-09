@@ -15,7 +15,7 @@
 }
 
 .field-error::before {
-  content: '⚠ ';
+  content: "⚠ ";
   font-size: 11px;
   flex-shrink: 0;
 }
@@ -35,7 +35,7 @@
 }
 
 .error_text::before {
-  content: '⚠ ';
+  content: "⚠ ";
   font-size: 11px;
   flex-shrink: 0;
   color: var(--danger-500);
@@ -45,7 +45,7 @@
 .form-card input.error,
 .form-card select.error {
   border-bottom-color: var(--danger-500) !important;
-  background: rgba(var(--danger-rgb), .09) !important;
+  background: rgba(var(--danger-rgb), 0.09) !important;
 }
 
 /* Input Validated States */

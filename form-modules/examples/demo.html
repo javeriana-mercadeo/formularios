@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo - Sistema Modular de Formularios</title>
-    
+
     <!-- Demo page styles (not using the modular system for demo controls) -->
     <style>
       .demo-controls {
@@ -75,7 +75,10 @@
 
     <div class="demo-info">
       <h4>📋 Información del Demo</h4>
-      <p>Este formulario utiliza el sistema modular completo con CSS y JavaScript separados. Los estilos se cargan automáticamente desde <code>form-modules/styles/</code>.</p>
+      <p>
+        Este formulario utiliza el sistema modular completo con CSS y JavaScript separados. Los
+        estilos se cargan automáticamente desde <code>form-modules/styles/</code>.
+      </p>
       <p><strong>Características:</strong></p>
       <ul>
         <li>✅ CSS modular con importación automática</li>
@@ -111,7 +114,6 @@
     </div>
 
     <div class="container">
-
       <form id="form_inscription" method="POST" novalidate>
         <!-- Información del participante -->
         <div class="form-section">
@@ -317,27 +319,27 @@
         // Configuración de estilos modular
         styles: {
           enabled: true,
-          basePath: '../',
+          basePath: "../",
           autoLoad: true,
           includeTheme: false,
-          themePath: 'styles/themes/custom-theme.css',
+          themePath: "styles/themes/custom-theme.css",
           customVariables: {
-            'primary-color': '#4d7fcb',
-            'primary-hover': '#3f6fb5',
-            'form-max-width': '600px'
-          }
+            "primary-color": "#4d7fcb",
+            "primary-hover": "#3f6fb5",
+            "form-max-width": "600px",
+          },
         },
 
         // Configuración de logging
         logging: {
           enabled: true,
-          level: 'debug',
-          prefix: 'Demo',
+          level: "debug",
+          prefix: "Demo",
           showTimestamp: true,
           showLevel: true,
           colors: true,
           persistLogs: true,
-          maxLogs: 500
+          maxLogs: 500,
         },
 
         // Configuración de validación
@@ -456,99 +458,101 @@
         demoForm.updateConfig({
           styles: {
             ...demoForm.config.styles,
-            includeTheme: themeEnabled
-          }
+            includeTheme: themeEnabled,
+          },
         });
-        
+
         if (themeEnabled) {
           demoForm.loadStylesManually({ includeTheme: true });
         } else {
-          demoForm.styleLoader.removeStyles('form-theme');
+          demoForm.styleLoader.removeStyles("form-theme");
         }
-        
-        console.log(`🎨 Tema personalizado: ${themeEnabled ? 'ACTIVADO' : 'DESACTIVADO'}`);
+
+        console.log(`🎨 Tema personalizado: ${themeEnabled ? "ACTIVADO" : "DESACTIVADO"}`);
       };
 
       window.testCustomStyles = function () {
         const customVars = {
-          'primary-color': '#e91e63',
-          'primary-hover': '#c2185b',
-          'form-background': '#fce4ec',
-          'form-shadow': '0 8px 32px rgba(233, 30, 99, 0.2)',
-          'form-border-radius': '24px'
+          "primary-color": "#e91e63",
+          "primary-hover": "#c2185b",
+          "form-background": "#fce4ec",
+          "form-shadow": "0 8px 32px rgba(233, 30, 99, 0.2)",
+          "form-border-radius": "24px",
         };
 
         demoForm.applyCustomStyles(customVars);
-        console.log('🖌️ Estilos personalizados aplicados:', customVars);
+        console.log("🖌️ Estilos personalizados aplicados:", customVars);
       };
 
       // Funciones de control de logging
-      window.toggleLogging = function() {
+      window.toggleLogging = function () {
         demoForm.toggleLogging();
         const config = demoForm.getLoggingConfig();
-        console.log(`📝 Logging ${config.enabled ? 'HABILITADO' : 'DESHABILITADO'}`);
+        console.log(`📝 Logging ${config.enabled ? "HABILITADO" : "DESHABILITADO"}`);
       };
 
-      window.setLogLevel = function(level) {
+      window.setLogLevel = function (level) {
         demoForm.setLogLevel(level);
         console.log(`📝 Nivel de logging cambiado a: ${level}`);
       };
 
-      window.showLogs = function() {
+      window.showLogs = function () {
         const logs = demoForm.getLogs();
         const stats = demoForm.getLoggingStats();
-        
-        console.group('📋 Logs del Sistema');
-        console.log('📊 Estadísticas:', stats);
-        console.log('📝 Logs:', logs);
+
+        console.group("📋 Logs del Sistema");
+        console.log("📊 Estadísticas:", stats);
+        console.log("📝 Logs:", logs);
         console.groupEnd();
-        
+
         if (logs.length === 0) {
-          console.warn('No hay logs disponibles. Habilita la persistencia de logs primero.');
+          console.warn("No hay logs disponibles. Habilita la persistencia de logs primero.");
         }
       };
 
-      window.clearLogs = function() {
+      window.clearLogs = function () {
         demoForm.clearLogs();
-        console.log('🗑️ Logs limpiados');
+        console.log("🗑️ Logs limpiados");
       };
 
-      window.exportLogs = function() {
-        const jsonLogs = demoForm.exportLogs('json');
-        const csvLogs = demoForm.exportLogs('csv');
-        const txtLogs = demoForm.exportLogs('txt');
-        
-        console.group('💾 Logs Exportados');
-        console.log('📄 JSON:', jsonLogs);
-        console.log('📊 CSV:', csvLogs);
-        console.log('📝 TXT:', txtLogs);
+      window.exportLogs = function () {
+        const jsonLogs = demoForm.exportLogs("json");
+        const csvLogs = demoForm.exportLogs("csv");
+        const txtLogs = demoForm.exportLogs("txt");
+
+        console.group("💾 Logs Exportados");
+        console.log("📄 JSON:", jsonLogs);
+        console.log("📊 CSV:", csvLogs);
+        console.log("📝 TXT:", txtLogs);
         console.groupEnd();
-        
+
         // Crear archivo descargable
-        const blob = new Blob([jsonLogs], { type: 'application/json' });
+        const blob = new Blob([jsonLogs], { type: "application/json" });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = `form-logs-${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `form-logs-${new Date().toISOString().split("T")[0]}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        
-        console.log('📁 Archivo de logs descargado');
+
+        console.log("📁 Archivo de logs descargado");
       };
 
       let logPersistenceEnabled = true;
-      window.toggleLogPersistence = function() {
+      window.toggleLogPersistence = function () {
         logPersistenceEnabled = !logPersistenceEnabled;
         demoForm.setLogPersistence(logPersistenceEnabled, 500);
-        console.log(`💾 Persistencia de logs ${logPersistenceEnabled ? 'HABILITADA' : 'DESHABILITADA'}`);
+        console.log(
+          `💾 Persistencia de logs ${logPersistenceEnabled ? "HABILITADA" : "DESHABILITADA"}`
+        );
       };
 
       // Agregar listener para logs en tiempo real
       demoForm.addLogListener((logEntry) => {
         // Mostrar logs importantes en la interfaz
-        if (logEntry.level === 'error' || logEntry.level === 'warn') {
+        if (logEntry.level === "error" || logEntry.level === "warn") {
           // Aquí podrías mostrar notificaciones en la UI
           console.log(`🔔 Log importante: ${logEntry.message}`);
         }

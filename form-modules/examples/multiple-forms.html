@@ -1,549 +1,555 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ejemplo - Múltiples Formularios</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>📋 Ejemplo: Múltiples Formularios</h1>
-    
+
     <div class="info">
-        <p>Este ejemplo muestra cómo usar múltiples formularios independientes en la misma página.</p>
-        <p><strong>Características:</strong></p>
-        <ul>
-            <li>🔄 Múltiples instancias independientes</li>
-            <li>🎨 Estilos diferentes por formulario</li>
-            <li>⚙️ Configuraciones específicas</li>
-            <li>📊 Gestión independiente de datos</li>
-        </ul>
+      <p>Este ejemplo muestra cómo usar múltiples formularios independientes en la misma página.</p>
+      <p><strong>Características:</strong></p>
+      <ul>
+        <li>🔄 Múltiples instancias independientes</li>
+        <li>🎨 Estilos diferentes por formulario</li>
+        <li>⚙️ Configuraciones específicas</li>
+        <li>📊 Gestión independiente de datos</li>
+      </ul>
     </div>
 
     <div class="forms-container">
-        <!-- Formulario 1: Pregrado -->
-        <div class="form-section">
-            <h2>📚 Formulario de Pregrado</h2>
-            <div class="container">
-                <div class="form-card" id="pregrado-card">
-                    <form id="form_pregrado">
-                        <h3>Registro para Programas de Pregrado</h3>
-                        
-                        <input type="text" placeholder="*Nombre completo" id="pregrado_name" name="name" required>
-                        <div class="error_text" id="error_pregrado_name"></div>
+      <!-- Formulario 1: Pregrado -->
+      <div class="form-section">
+        <h2>📚 Formulario de Pregrado</h2>
+        <div class="container">
+          <div class="form-card" id="pregrado-card">
+            <form id="form_pregrado">
+              <h3>Registro para Programas de Pregrado</h3>
 
-                        <input type="email" placeholder="*Email" id="pregrado_email" name="email" required>
-                        <div class="error_text" id="error_pregrado_email"></div>
+              <input
+                type="text"
+                placeholder="*Nombre completo"
+                id="pregrado_name"
+                name="name"
+                required
+              />
+              <div class="error_text" id="error_pregrado_name"></div>
 
-                        <select id="pregrado_program" name="program" required>
-                            <option value="">*Programa de interés</option>
-                        </select>
-                        <div class="error_text" id="error_pregrado_program"></div>
+              <input type="email" placeholder="*Email" id="pregrado_email" name="email" required />
+              <div class="error_text" id="error_pregrado_email"></div>
 
-                        <select id="pregrado_attendee" name="type_attendee" required>
-                            <option value="">*Tipo de asistente</option>
-                        </select>
-                        <div class="error_text" id="error_pregrado_attendee"></div>
+              <select id="pregrado_program" name="program" required>
+                <option value="">*Programa de interés</option>
+              </select>
+              <div class="error_text" id="error_pregrado_program"></div>
 
-                        <div class="radio-inline-group">
-                            <p>¿Autorizas el tratamiento de datos?</p>
-                            <div class="radio-option">
-                                <input type="radio" id="pregrado_auth_yes" name="authorization_data" value="1">
-                                <label for="pregrado_auth_yes">Sí</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="pregrado_auth_no" name="authorization_data" value="0">
-                                <label for="pregrado_auth_no">No</label>
-                            </div>
-                        </div>
+              <select id="pregrado_attendee" name="type_attendee" required>
+                <option value="">*Tipo de asistente</option>
+              </select>
+              <div class="error_text" id="error_pregrado_attendee"></div>
 
-                        <button type="submit" id="pregrado_submit" disabled>Registrar en Pregrado</button>
-                    </form>
+              <div class="radio-inline-group">
+                <p>¿Autorizas el tratamiento de datos?</p>
+                <div class="radio-option">
+                  <input type="radio" id="pregrado_auth_yes" name="authorization_data" value="1" />
+                  <label for="pregrado_auth_yes">Sí</label>
                 </div>
-            </div>
-        </div>
-
-        <!-- Formulario 2: Posgrado -->
-        <div class="form-section">
-            <h2>🎓 Formulario de Posgrado</h2>
-            <div class="container">
-                <div class="form-card" id="posgrado-card">
-                    <form id="form_posgrado">
-                        <h3>Registro para Programas de Posgrado</h3>
-                        
-                        <input type="text" placeholder="*Nombre completo" id="posgrado_name" name="name" required>
-                        <div class="error_text" id="error_posgrado_name"></div>
-
-                        <input type="email" placeholder="*Email institucional" id="posgrado_email" name="email" required>
-                        <div class="error_text" id="error_posgrado_email"></div>
-
-                        <select id="posgrado_level" name="level" required>
-                            <option value="">*Nivel de posgrado</option>
-                        </select>
-                        <div class="error_text" id="error_posgrado_level"></div>
-
-                        <select id="posgrado_attendee" name="type_attendee" required>
-                            <option value="">*Tipo de asistente</option>
-                        </select>
-                        <div class="error_text" id="error_posgrado_attendee"></div>
-
-                        <div class="radio-inline-group">
-                            <p>¿Autorizas el tratamiento de datos?</p>
-                            <div class="radio-option">
-                                <input type="radio" id="posgrado_auth_yes" name="authorization_data" value="1">
-                                <label for="posgrado_auth_yes">Sí</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="posgrado_auth_no" name="authorization_data" value="0">
-                                <label for="posgrado_auth_no">No</label>
-                            </div>
-                        </div>
-
-                        <button type="submit" id="posgrado_submit" disabled>Registrar en Posgrado</button>
-                    </form>
+                <div class="radio-option">
+                  <input type="radio" id="pregrado_auth_no" name="authorization_data" value="0" />
+                  <label for="pregrado_auth_no">No</label>
                 </div>
-            </div>
+              </div>
+
+              <button type="submit" id="pregrado_submit" disabled>Registrar en Pregrado</button>
+            </form>
+          </div>
         </div>
+      </div>
 
-        <!-- Formulario 3: Eventos -->
-        <div class="form-section">
-            <h2>🎪 Formulario de Eventos</h2>
-            <div class="container">
-                <div class="form-card" id="eventos-card">
-                    <form id="form_eventos">
-                        <h3>Registro para Eventos Especiales</h3>
-                        
-                        <input type="text" placeholder="*Nombre completo" id="eventos_name" name="name" required>
-                        <div class="error_text" id="error_eventos_name"></div>
+      <!-- Formulario 2: Posgrado -->
+      <div class="form-section">
+        <h2>🎓 Formulario de Posgrado</h2>
+        <div class="container">
+          <div class="form-card" id="posgrado-card">
+            <form id="form_posgrado">
+              <h3>Registro para Programas de Posgrado</h3>
 
-                        <input type="email" placeholder="*Email" id="eventos_email" name="email" required>
-                        <div class="error_text" id="error_eventos_email"></div>
+              <input
+                type="text"
+                placeholder="*Nombre completo"
+                id="posgrado_name"
+                name="name"
+                required
+              />
+              <div class="error_text" id="error_posgrado_name"></div>
 
-                        <select id="eventos_type" name="event_type" required>
-                            <option value="">*Tipo de evento</option>
-                        </select>
-                        <div class="error_text" id="error_eventos_type"></div>
+              <input
+                type="email"
+                placeholder="*Email institucional"
+                id="posgrado_email"
+                name="email"
+                required
+              />
+              <div class="error_text" id="error_posgrado_email"></div>
 
-                        <select id="eventos_attendee" name="type_attendee" required>
-                            <option value="">*Tipo de asistente</option>
-                        </select>
-                        <div class="error_text" id="error_eventos_attendee"></div>
+              <select id="posgrado_level" name="level" required>
+                <option value="">*Nivel de posgrado</option>
+              </select>
+              <div class="error_text" id="error_posgrado_level"></div>
 
-                        <div class="radio-inline-group">
-                            <p>¿Autorizas el tratamiento de datos?</p>
-                            <div class="radio-option">
-                                <input type="radio" id="eventos_auth_yes" name="authorization_data" value="1">
-                                <label for="eventos_auth_yes">Sí</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="eventos_auth_no" name="authorization_data" value="0">
-                                <label for="eventos_auth_no">No</label>
-                            </div>
-                        </div>
+              <select id="posgrado_attendee" name="type_attendee" required>
+                <option value="">*Tipo de asistente</option>
+              </select>
+              <div class="error_text" id="error_posgrado_attendee"></div>
 
-                        <button type="submit" id="eventos_submit" disabled>Registrar en Evento</button>
-                    </form>
+              <div class="radio-inline-group">
+                <p>¿Autorizas el tratamiento de datos?</p>
+                <div class="radio-option">
+                  <input type="radio" id="posgrado_auth_yes" name="authorization_data" value="1" />
+                  <label for="posgrado_auth_yes">Sí</label>
                 </div>
-            </div>
+                <div class="radio-option">
+                  <input type="radio" id="posgrado_auth_no" name="authorization_data" value="0" />
+                  <label for="posgrado_auth_no">No</label>
+                </div>
+              </div>
+
+              <button type="submit" id="posgrado_submit" disabled>Registrar en Posgrado</button>
+            </form>
+          </div>
         </div>
+      </div>
+
+      <!-- Formulario 3: Eventos -->
+      <div class="form-section">
+        <h2>🎪 Formulario de Eventos</h2>
+        <div class="container">
+          <div class="form-card" id="eventos-card">
+            <form id="form_eventos">
+              <h3>Registro para Eventos Especiales</h3>
+
+              <input
+                type="text"
+                placeholder="*Nombre completo"
+                id="eventos_name"
+                name="name"
+                required
+              />
+              <div class="error_text" id="error_eventos_name"></div>
+
+              <input type="email" placeholder="*Email" id="eventos_email" name="email" required />
+              <div class="error_text" id="error_eventos_email"></div>
+
+              <select id="eventos_type" name="event_type" required>
+                <option value="">*Tipo de evento</option>
+              </select>
+              <div class="error_text" id="error_eventos_type"></div>
+
+              <select id="eventos_attendee" name="type_attendee" required>
+                <option value="">*Tipo de asistente</option>
+              </select>
+              <div class="error_text" id="error_eventos_attendee"></div>
+
+              <div class="radio-inline-group">
+                <p>¿Autorizas el tratamiento de datos?</p>
+                <div class="radio-option">
+                  <input type="radio" id="eventos_auth_yes" name="authorization_data" value="1" />
+                  <label for="eventos_auth_yes">Sí</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="eventos_auth_no" name="authorization_data" value="0" />
+                  <label for="eventos_auth_no">No</label>
+                </div>
+              </div>
+
+              <button type="submit" id="eventos_submit" disabled>Registrar en Evento</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="stats-section">
-        <h3>📊 Panel de Control</h3>
-        <button onclick="showAllStats()">Ver Estadísticas</button>
-        <button onclick="resetAllForms()">Limpiar Todos</button>
-        <button onclick="toggleDevMode()">Modo Desarrollo</button>
-        <button onclick="toggleAllLogging()">🔄 Logging Todos</button>
-        <button onclick="setAllLogLevel('debug')">🔍 Debug Todos</button>
-        <button onclick="setAllLogLevel('info')">ℹ️ Info Todos</button>
-        <button onclick="showAllLogs()">📋 Ver Logs</button>
+      <h3>📊 Panel de Control</h3>
+      <button onclick="showAllStats()">Ver Estadísticas</button>
+      <button onclick="resetAllForms()">Limpiar Todos</button>
+      <button onclick="toggleDevMode()">Modo Desarrollo</button>
+      <button onclick="toggleAllLogging()">🔄 Logging Todos</button>
+      <button onclick="setAllLogLevel('debug')">🔍 Debug Todos</button>
+      <button onclick="setAllLogLevel('info')">ℹ️ Info Todos</button>
+      <button onclick="showAllLogs()">📋 Ver Logs</button>
     </div>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f8f9fa;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8f9fa;
+      }
 
-        .info {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #f39c12;
-        }
+      .info {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #f39c12;
+      }
 
+      .forms-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .form-section {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-section h2 {
+        margin-top: 0;
+        color: #333;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+
+      #pregrado-card {
+        border-left: 4px solid #2196f3;
+      }
+
+      #posgrado-card {
+        border-left: 4px solid #4caf50;
+      }
+
+      #eventos-card {
+        border-left: 4px solid #ff9800;
+      }
+
+      .stats-section {
+        background: #e9ecef;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stats-section button {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .stats-section button:hover {
+        background: #545b62;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
         .forms-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+          grid-template-columns: 1fr;
         }
-
-        .form-section {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-section h2 {
-            margin-top: 0;
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        #pregrado-card {
-            border-left: 4px solid #2196f3;
-        }
-
-        #posgrado-card {
-            border-left: 4px solid #4caf50;
-        }
-
-        #eventos-card {
-            border-left: 4px solid #ff9800;
-        }
-
-        .stats-section {
-            background: #e9ecef;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stats-section button {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .stats-section button:hover {
-            background: #545b62;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .forms-container {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
 
     <script type="module">
-        import { FormManager } from '../modules/FormManager.js';
+      import { FormManager } from "../modules/FormManager.js";
 
-        // Configuración para Pregrado
-        const pregradoConfig = {
-            formSelector: '#form_pregrado',
-            eventName: 'Evento Pregrado 2025',
-            
-            typeAttendee: [
-                'Aspirante',
-                'Padre de familia',
-                'Bachiller',
-                'Estudiante de último año'
-            ],
+      // Configuración para Pregrado
+      const pregradoConfig = {
+        formSelector: "#form_pregrado",
+        eventName: "Evento Pregrado 2025",
 
-            // Opciones específicas de pregrado
-            customOptions: {
-                programs: [
-                    'Ingeniería de Sistemas',
-                    'Administración de Empresas',
-                    'Psicología',
-                    'Medicina',
-                    'Derecho'
-                ]
-            },
+        typeAttendee: ["Aspirante", "Padre de familia", "Bachiller", "Estudiante de último año"],
 
-            styles: {
-                enabled: true,
-                basePath: '../',
-                autoLoad: true,
-                customVariables: {
-                    'primary-color': '#2196f3',
-                    'primary-hover': '#1976d2'
-                }
-            },
+        // Opciones específicas de pregrado
+        customOptions: {
+          programs: [
+            "Ingeniería de Sistemas",
+            "Administración de Empresas",
+            "Psicología",
+            "Medicina",
+            "Derecho",
+          ],
+        },
 
-            logging: {
-                enabled: true,
-                level: 'info',
-                prefix: 'Pregrado',
-                colors: true,
-                persistLogs: true
-            },
+        styles: {
+          enabled: true,
+          basePath: "../",
+          autoLoad: true,
+          customVariables: {
+            "primary-color": "#2196f3",
+            "primary-hover": "#1976d2",
+          },
+        },
 
-            debugMode: true,
-            devMode: true,
+        logging: {
+          enabled: true,
+          level: "info",
+          prefix: "Pregrado",
+          colors: true,
+          persistLogs: true,
+        },
 
-            callbacks: {
-                onFormLoad: (fm) => {
-                    console.log('📚 Formulario Pregrado cargado');
-                    // Poblar select personalizado
-                    const programSelect = document.getElementById('pregrado_program');
-                    fm.config.customOptions.programs.forEach(program => {
-                        const option = document.createElement('option');
-                        option.value = program;
-                        option.textContent = program;
-                        programSelect.appendChild(option);
-                    });
-                },
-                onFormSubmit: async (data, fm) => {
-                    console.log('📚 Enviando registro de Pregrado:', data);
-                    await new Promise(r => setTimeout(r, 1000));
-                    alert('¡Registro de Pregrado completado!');
-                    return true;
-                }
-            }
-        };
+        debugMode: true,
+        devMode: true,
 
-        // Configuración para Posgrado
-        const posgradoConfig = {
-            formSelector: '#form_posgrado',
-            eventName: 'Evento Posgrado 2025',
-            
-            typeAttendee: [
-                'Profesional',
-                'Egresado',
-                'Empleado empresa',
-                'Docente'
-            ],
-
-            // Opciones específicas de posgrado
-            customOptions: {
-                levels: [
-                    'Especialización',
-                    'Maestría',
-                    'Doctorado',
-                    'Diplomado'
-                ]
-            },
-
-            styles: {
-                enabled: true,
-                basePath: '../',
-                autoLoad: true,
-                customVariables: {
-                    'primary-color': '#4caf50',
-                    'primary-hover': '#388e3c'
-                }
-            },
-
-            logging: {
-                enabled: true,
-                level: 'info',
-                prefix: 'Posgrado',
-                colors: true,
-                persistLogs: true
-            },
-
-            debugMode: true,
-            devMode: true,
-
-            callbacks: {
-                onFormLoad: (fm) => {
-                    console.log('🎓 Formulario Posgrado cargado');
-                    // Poblar select personalizado
-                    const levelSelect = document.getElementById('posgrado_level');
-                    fm.config.customOptions.levels.forEach(level => {
-                        const option = document.createElement('option');
-                        option.value = level;
-                        option.textContent = level;
-                        levelSelect.appendChild(option);
-                    });
-                },
-                onFormSubmit: async (data, fm) => {
-                    console.log('🎓 Enviando registro de Posgrado:', data);
-                    await new Promise(r => setTimeout(r, 1000));
-                    alert('¡Registro de Posgrado completado!');
-                    return true;
-                }
-            }
-        };
-
-        // Configuración para Eventos
-        const eventosConfig = {
-            formSelector: '#form_eventos',
-            eventName: 'Eventos Especiales 2025',
-            
-            typeAttendee: [
-                'Participante general',
-                'Ponente',
-                'Organizador',
-                'Patrocinador',
-                'Estudiante'
-            ],
-
-            // Opciones específicas de eventos
-            customOptions: {
-                eventTypes: [
-                    'Conferencia',
-                    'Workshop',
-                    'Seminario',
-                    'Congreso',
-                    'Feria',
-                    'Networking'
-                ]
-            },
-
-            styles: {
-                enabled: true,
-                basePath: '../',
-                autoLoad: true,
-                customVariables: {
-                    'primary-color': '#ff9800',
-                    'primary-hover': '#f57c00'
-                }
-            },
-
-            logging: {
-                enabled: true,
-                level: 'info',
-                prefix: 'Eventos',
-                colors: true,
-                persistLogs: true
-            },
-
-            debugMode: true,
-            devMode: true,
-
-            callbacks: {
-                onFormLoad: (fm) => {
-                    console.log('🎪 Formulario Eventos cargado');
-                    // Poblar select personalizado
-                    const typeSelect = document.getElementById('eventos_type');
-                    fm.config.customOptions.eventTypes.forEach(type => {
-                        const option = document.createElement('option');
-                        option.value = type;
-                        option.textContent = type;
-                        typeSelect.appendChild(option);
-                    });
-                },
-                onFormSubmit: async (data, fm) => {
-                    console.log('🎪 Enviando registro de Evento:', data);
-                    await new Promise(r => setTimeout(r, 1000));
-                    alert('¡Registro de Evento completado!');
-                    return true;
-                }
-            }
-        };
-
-        // Inicializar todos los formularios
-        const pregradoForm = new FormManager(pregradoConfig);
-        const posgradoForm = new FormManager(posgradoConfig);
-        const eventosForm = new FormManager(eventosConfig);
-
-        // Inicializar de forma secuencial para evitar conflictos
-        try {
-            await pregradoForm.init();
-            console.log('✅ Formulario Pregrado inicializado');
-
-            await posgradoForm.init();
-            console.log('✅ Formulario Posgrado inicializado');
-
-            await eventosForm.init();
-            console.log('✅ Formulario Eventos inicializado');
-
-            console.log('🚀 Todos los formularios inicializados correctamente');
-        } catch (error) {
-            console.error('❌ Error inicializando formularios:', error);
-        }
-
-        // Funciones globales para el panel de control
-        window.showAllStats = function() {
-            console.group('📊 Estadísticas de Todos los Formularios');
-            
-            console.log('📚 Pregrado:', {
-                config: pregradoForm.getConfig(),
-                data: pregradoForm.getFormData()
+        callbacks: {
+          onFormLoad: (fm) => {
+            console.log("📚 Formulario Pregrado cargado");
+            // Poblar select personalizado
+            const programSelect = document.getElementById("pregrado_program");
+            fm.config.customOptions.programs.forEach((program) => {
+              const option = document.createElement("option");
+              option.value = program;
+              option.textContent = program;
+              programSelect.appendChild(option);
             });
-            
-            console.log('🎓 Posgrado:', {
-                config: posgradoForm.getConfig(),
-                data: posgradoForm.getFormData()
+          },
+          onFormSubmit: async (data, fm) => {
+            console.log("📚 Enviando registro de Pregrado:", data);
+            await new Promise((r) => setTimeout(r, 1000));
+            alert("¡Registro de Pregrado completado!");
+            return true;
+          },
+        },
+      };
+
+      // Configuración para Posgrado
+      const posgradoConfig = {
+        formSelector: "#form_posgrado",
+        eventName: "Evento Posgrado 2025",
+
+        typeAttendee: ["Profesional", "Egresado", "Empleado empresa", "Docente"],
+
+        // Opciones específicas de posgrado
+        customOptions: {
+          levels: ["Especialización", "Maestría", "Doctorado", "Diplomado"],
+        },
+
+        styles: {
+          enabled: true,
+          basePath: "../",
+          autoLoad: true,
+          customVariables: {
+            "primary-color": "#4caf50",
+            "primary-hover": "#388e3c",
+          },
+        },
+
+        logging: {
+          enabled: true,
+          level: "info",
+          prefix: "Posgrado",
+          colors: true,
+          persistLogs: true,
+        },
+
+        debugMode: true,
+        devMode: true,
+
+        callbacks: {
+          onFormLoad: (fm) => {
+            console.log("🎓 Formulario Posgrado cargado");
+            // Poblar select personalizado
+            const levelSelect = document.getElementById("posgrado_level");
+            fm.config.customOptions.levels.forEach((level) => {
+              const option = document.createElement("option");
+              option.value = level;
+              option.textContent = level;
+              levelSelect.appendChild(option);
             });
-            
-            console.log('🎪 Eventos:', {
-                config: eventosForm.getConfig(),
-                data: eventosForm.getFormData()
+          },
+          onFormSubmit: async (data, fm) => {
+            console.log("🎓 Enviando registro de Posgrado:", data);
+            await new Promise((r) => setTimeout(r, 1000));
+            alert("¡Registro de Posgrado completado!");
+            return true;
+          },
+        },
+      };
+
+      // Configuración para Eventos
+      const eventosConfig = {
+        formSelector: "#form_eventos",
+        eventName: "Eventos Especiales 2025",
+
+        typeAttendee: [
+          "Participante general",
+          "Ponente",
+          "Organizador",
+          "Patrocinador",
+          "Estudiante",
+        ],
+
+        // Opciones específicas de eventos
+        customOptions: {
+          eventTypes: ["Conferencia", "Workshop", "Seminario", "Congreso", "Feria", "Networking"],
+        },
+
+        styles: {
+          enabled: true,
+          basePath: "../",
+          autoLoad: true,
+          customVariables: {
+            "primary-color": "#ff9800",
+            "primary-hover": "#f57c00",
+          },
+        },
+
+        logging: {
+          enabled: true,
+          level: "info",
+          prefix: "Eventos",
+          colors: true,
+          persistLogs: true,
+        },
+
+        debugMode: true,
+        devMode: true,
+
+        callbacks: {
+          onFormLoad: (fm) => {
+            console.log("🎪 Formulario Eventos cargado");
+            // Poblar select personalizado
+            const typeSelect = document.getElementById("eventos_type");
+            fm.config.customOptions.eventTypes.forEach((type) => {
+              const option = document.createElement("option");
+              option.value = type;
+              option.textContent = type;
+              typeSelect.appendChild(option);
             });
-            
-            console.groupEnd();
-        };
+          },
+          onFormSubmit: async (data, fm) => {
+            console.log("🎪 Enviando registro de Evento:", data);
+            await new Promise((r) => setTimeout(r, 1000));
+            alert("¡Registro de Evento completado!");
+            return true;
+          },
+        },
+      };
 
-        window.resetAllForms = function() {
-            pregradoForm.reset();
-            posgradoForm.reset();
-            eventosForm.reset();
-            console.log('🔄 Todos los formularios reiniciados');
-        };
+      // Inicializar todos los formularios
+      const pregradoForm = new FormManager(pregradoConfig);
+      const posgradoForm = new FormManager(posgradoConfig);
+      const eventosForm = new FormManager(eventosConfig);
 
-        let devModeEnabled = true;
-        window.toggleDevMode = function() {
-            devModeEnabled = !devModeEnabled;
-            
-            pregradoForm.setDevMode(devModeEnabled);
-            posgradoForm.setDevMode(devModeEnabled);
-            eventosForm.setDevMode(devModeEnabled);
-            
-            console.log(`🔧 Modo desarrollo ${devModeEnabled ? 'ACTIVADO' : 'DESACTIVADO'} en todos los formularios`);
-        };
+      // Inicializar de forma secuencial para evitar conflictos
+      try {
+        await pregradoForm.init();
+        console.log("✅ Formulario Pregrado inicializado");
 
-        // Hacer disponibles globalmente para debugging
-        window.pregradoForm = pregradoForm;
-        window.posgradoForm = posgradoForm;
-        window.eventosForm = eventosForm;
-        
-        window.allForms = [pregradoForm, posgradoForm, eventosForm];
+        await posgradoForm.init();
+        console.log("✅ Formulario Posgrado inicializado");
 
-        // Funciones de control de logging para todos los formularios
-        window.toggleAllLogging = function() {
-            window.allForms.forEach(form => {
-                form.toggleLogging();
-            });
-            console.log('🔄 Logging alternado en todos los formularios');
-        };
+        await eventosForm.init();
+        console.log("✅ Formulario Eventos inicializado");
 
-        window.setAllLogLevel = function(level) {
-            window.allForms.forEach(form => {
-                form.setLogLevel(level);
-            });
-            console.log(`📝 Nivel de logging ${level} aplicado a todos los formularios`);
-        };
+        console.log("🚀 Todos los formularios inicializados correctamente");
+      } catch (error) {
+        console.error("❌ Error inicializando formularios:", error);
+      }
 
-        window.showAllLogs = function() {
-            console.group('📋 Logs de Todos los Formularios');
-            
-            window.allForms.forEach((form, index) => {
-                const formNames = ['Pregrado', 'Posgrado', 'Eventos'];
-                const logs = form.getLogs();
-                const stats = form.getLoggingStats();
-                
-                console.group(`${formNames[index]} (${logs.length} logs)`);
-                console.log('📊 Estadísticas:', stats);
-                if (logs.length > 0) {
-                    console.log('📝 Logs:', logs);
-                } else {
-                    console.warn('No hay logs disponibles');
-                }
-                console.groupEnd();
-            });
-            
-            console.groupEnd();
-        };
+      // Funciones globales para el panel de control
+      window.showAllStats = function () {
+        console.group("📊 Estadísticas de Todos los Formularios");
+
+        console.log("📚 Pregrado:", {
+          config: pregradoForm.getConfig(),
+          data: pregradoForm.getFormData(),
+        });
+
+        console.log("🎓 Posgrado:", {
+          config: posgradoForm.getConfig(),
+          data: posgradoForm.getFormData(),
+        });
+
+        console.log("🎪 Eventos:", {
+          config: eventosForm.getConfig(),
+          data: eventosForm.getFormData(),
+        });
+
+        console.groupEnd();
+      };
+
+      window.resetAllForms = function () {
+        pregradoForm.reset();
+        posgradoForm.reset();
+        eventosForm.reset();
+        console.log("🔄 Todos los formularios reiniciados");
+      };
+
+      let devModeEnabled = true;
+      window.toggleDevMode = function () {
+        devModeEnabled = !devModeEnabled;
+
+        pregradoForm.setDevMode(devModeEnabled);
+        posgradoForm.setDevMode(devModeEnabled);
+        eventosForm.setDevMode(devModeEnabled);
+
+        console.log(
+          `🔧 Modo desarrollo ${
+            devModeEnabled ? "ACTIVADO" : "DESACTIVADO"
+          } en todos los formularios`
+        );
+      };
+
+      // Hacer disponibles globalmente para debugging
+      window.pregradoForm = pregradoForm;
+      window.posgradoForm = posgradoForm;
+      window.eventosForm = eventosForm;
+
+      window.allForms = [pregradoForm, posgradoForm, eventosForm];
+
+      // Funciones de control de logging para todos los formularios
+      window.toggleAllLogging = function () {
+        window.allForms.forEach((form) => {
+          form.toggleLogging();
+        });
+        console.log("🔄 Logging alternado en todos los formularios");
+      };
+
+      window.setAllLogLevel = function (level) {
+        window.allForms.forEach((form) => {
+          form.setLogLevel(level);
+        });
+        console.log(`📝 Nivel de logging ${level} aplicado a todos los formularios`);
+      };
+
+      window.showAllLogs = function () {
+        console.group("📋 Logs de Todos los Formularios");
+
+        window.allForms.forEach((form, index) => {
+          const formNames = ["Pregrado", "Posgrado", "Eventos"];
+          const logs = form.getLogs();
+          const stats = form.getLoggingStats();
+
+          console.group(`${formNames[index]} (${logs.length} logs)`);
+          console.log("📊 Estadísticas:", stats);
+          if (logs.length > 0) {
+            console.log("📝 Logs:", logs);
+          } else {
+            console.warn("No hay logs disponibles");
+          }
+          console.groupEnd();
+        });
+
+        console.groupEnd();
+      };
     </script>
-</body>
+  </body>
 </html>

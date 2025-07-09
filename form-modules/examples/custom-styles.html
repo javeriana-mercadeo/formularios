@@ -1,279 +1,287 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ejemplo - Estilos Personalizados</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🎨 Ejemplo: Estilos Personalizados</h1>
-    
+
     <div class="info">
-        <p>Este ejemplo muestra cómo personalizar completamente los estilos del formulario.</p>
-        <p><strong>Características:</strong></p>
-        <ul>
-            <li>🎨 Variables CSS personalizadas</li>
-            <li>🌈 Múltiples temas</li>
-            <li>✨ Transiciones y animaciones</li>
-            <li>📱 Responsive design</li>
-        </ul>
+      <p>Este ejemplo muestra cómo personalizar completamente los estilos del formulario.</p>
+      <p><strong>Características:</strong></p>
+      <ul>
+        <li>🎨 Variables CSS personalizadas</li>
+        <li>🌈 Múltiples temas</li>
+        <li>✨ Transiciones y animaciones</li>
+        <li>📱 Responsive design</li>
+      </ul>
     </div>
 
     <div class="theme-controls">
-        <h3>🎭 Controles de Tema</h3>
-        <button onclick="applyTheme('blue')">🔵 Tema Azul</button>
-        <button onclick="applyTheme('green')">🟢 Tema Verde</button>
-        <button onclick="applyTheme('purple')">🟣 Tema Morado</button>
-        <button onclick="applyTheme('dark')">⚫ Tema Oscuro</button>
-        <button onclick="applyTheme('gradient')">🌈 Tema Gradiente</button>
+      <h3>🎭 Controles de Tema</h3>
+      <button onclick="applyTheme('blue')">🔵 Tema Azul</button>
+      <button onclick="applyTheme('green')">🟢 Tema Verde</button>
+      <button onclick="applyTheme('purple')">🟣 Tema Morado</button>
+      <button onclick="applyTheme('dark')">⚫ Tema Oscuro</button>
+      <button onclick="applyTheme('gradient')">🌈 Tema Gradiente</button>
     </div>
 
     <div class="container">
-        <div class="form-card">
-            <h2>Formulario con Estilos Personalizados</h2>
-            
-            <form id="form_inscription">
-                <div class="name-row">
-                    <div class="name-field">
-                        <input type="text" placeholder="*Nombre(s)" id="first_name" name="first_name" required>
-                        <div class="error_text" id="error_first_name"></div>
-                    </div>
-                    <div class="name-field">
-                        <input type="text" placeholder="*Apellidos" id="last_name" name="last_name" required>
-                        <div class="error_text" id="error_last_name"></div>
-                    </div>
-                </div>
+      <div class="form-card">
+        <h2>Formulario con Estilos Personalizados</h2>
 
-                <input type="email" placeholder="*Email" id="email" name="email" required>
-                <div class="error_text" id="error_email"></div>
+        <form id="form_inscription">
+          <div class="name-row">
+            <div class="name-field">
+              <input
+                type="text"
+                placeholder="*Nombre(s)"
+                id="first_name"
+                name="first_name"
+                required
+              />
+              <div class="error_text" id="error_first_name"></div>
+            </div>
+            <div class="name-field">
+              <input
+                type="text"
+                placeholder="*Apellidos"
+                id="last_name"
+                name="last_name"
+                required
+              />
+              <div class="error_text" id="error_last_name"></div>
+            </div>
+          </div>
 
-                <select id="type_attendee" name="type_attendee" required>
-                    <option value="">*Tipo de asistente</option>
-                </select>
-                <div class="error_text" id="error_type_attendee"></div>
+          <input type="email" placeholder="*Email" id="email" name="email" required />
+          <div class="error_text" id="error_email"></div>
 
-                <div class="radio-inline-group">
-                    <p>¿Autorizas el tratamiento de tus datos personales?</p>
-                    <div class="radio-option">
-                        <input type="radio" id="auth_yes" name="authorization_data" value="1">
-                        <label for="auth_yes">Sí</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="auth_no" name="authorization_data" value="0">
-                        <label for="auth_no">No</label>
-                    </div>
-                </div>
-                <div class="error_text" id="error_authorization_data"></div>
+          <select id="type_attendee" name="type_attendee" required>
+            <option value="">*Tipo de asistente</option>
+          </select>
+          <div class="error_text" id="error_type_attendee"></div>
 
-                <button type="submit" id="submit_btn" disabled>Enviar con Estilo</button>
-            </form>
-        </div>
+          <div class="radio-inline-group">
+            <p>¿Autorizas el tratamiento de tus datos personales?</p>
+            <div class="radio-option">
+              <input type="radio" id="auth_yes" name="authorization_data" value="1" />
+              <label for="auth_yes">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no" name="authorization_data" value="0" />
+              <label for="auth_no">No</label>
+            </div>
+          </div>
+          <div class="error_text" id="error_authorization_data"></div>
+
+          <button type="submit" id="submit_btn" disabled>Enviar con Estilo</button>
+        </form>
+      </div>
     </div>
 
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
 
-        .info {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
+      .info {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
 
-        .theme-controls {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
+      .theme-controls {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
 
-        .theme-controls h3 {
-            margin-top: 0;
-            color: #333;
-        }
+      .theme-controls h3 {
+        margin-top: 0;
+        color: #333;
+      }
 
-        .theme-controls button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+      .theme-controls button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
 
-        .theme-controls button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
+      .theme-controls button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
 
-        h1 {
-            color: white;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
-        }
+      h1 {
+        color: white;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+      }
 
-        /* Animaciones personalizadas */
-        .form-card {
-            animation: slideInUp 0.6s ease-out;
-        }
+      /* Animaciones personalizadas */
+      .form-card {
+        animation: slideInUp 0.6s ease-out;
+      }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        /* Efecto hover para inputs */
-        .form-card input:hover,
-        .form-card select:hover {
-            transform: translateY(-1px);
-            transition: all 0.2s ease;
-        }
+      /* Efecto hover para inputs */
+      .form-card input:hover,
+      .form-card select:hover {
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+      }
     </style>
 
     <script type="module">
-        import { FormManager } from '../modules/FormManager.js';
+      import { FormManager } from "../modules/FormManager.js";
 
-        // Configuración con estilos personalizados
-        const customStylesConfig = {
-            eventName: 'Evento con Estilos Personalizados',
-            eventDate: '20/03/2025',
-            
-            typeAttendee: [
-                'Diseñador',
-                'Desarrollador',
-                'Product Manager',
-                'UX/UI Designer'
-            ],
+      // Configuración con estilos personalizados
+      const customStylesConfig = {
+        eventName: "Evento con Estilos Personalizados",
+        eventDate: "20/03/2025",
 
-            // Configuración de estilos avanzada
-            styles: {
-                enabled: true,
-                basePath: '../',
-                autoLoad: true,
-                customVariables: {
-                    'primary-color': '#667eea',
-                    'primary-hover': '#5a67d8',
-                    'form-background': 'rgba(255, 255, 255, 0.95)',
-                    'form-shadow': '0 20px 40px rgba(0, 0, 0, 0.1)',
-                    'form-border-radius': '20px',
-                    'form-max-width': '500px'
-                }
-            },
+        typeAttendee: ["Diseñador", "Desarrollador", "Product Manager", "UX/UI Designer"],
 
-            debugMode: true,
-            devMode: true,
+        // Configuración de estilos avanzada
+        styles: {
+          enabled: true,
+          basePath: "../",
+          autoLoad: true,
+          customVariables: {
+            "primary-color": "#667eea",
+            "primary-hover": "#5a67d8",
+            "form-background": "rgba(255, 255, 255, 0.95)",
+            "form-shadow": "0 20px 40px rgba(0, 0, 0, 0.1)",
+            "form-border-radius": "20px",
+            "form-max-width": "500px",
+          },
+        },
 
-            callbacks: {
-                onFormLoad: (formManager) => {
-                    console.log('🎨 Formulario con estilos personalizados cargado');
-                },
+        debugMode: true,
+        devMode: true,
 
-                onFormSubmit: async (formData, formManager) => {
-                    console.log('🚀 Enviando formulario estilizado:', formData);
-                    
-                    // Animación de envío
-                    const button = document.getElementById('submit_btn');
-                    button.textContent = 'Enviando...';
-                    button.style.background = 'linear-gradient(45deg, #ff6b6b, #feca57)';
-                    
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    button.textContent = '¡Enviado!';
-                    button.style.background = 'linear-gradient(45deg, #48cae4, #023e8a)';
-                    
-                    setTimeout(() => {
-                        button.textContent = 'Enviar con Estilo';
-                        formManager.applyCustomStyles({
-                            'primary-color': '#667eea'
-                        });
-                    }, 2000);
-                    
-                    return true;
-                }
-            }
-        };
+        callbacks: {
+          onFormLoad: (formManager) => {
+            console.log("🎨 Formulario con estilos personalizados cargado");
+          },
 
-        // Inicializar formulario
-        const customForm = new FormManager(customStylesConfig);
-        
-        try {
-            await customForm.init();
-            console.log('🎨 Formulario de estilos personalizados inicializado');
-        } catch (error) {
-            console.error('❌ Error en formulario de estilos:', error);
+          onFormSubmit: async (formData, formManager) => {
+            console.log("🚀 Enviando formulario estilizado:", formData);
+
+            // Animación de envío
+            const button = document.getElementById("submit_btn");
+            button.textContent = "Enviando...";
+            button.style.background = "linear-gradient(45deg, #ff6b6b, #feca57)";
+
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            button.textContent = "¡Enviado!";
+            button.style.background = "linear-gradient(45deg, #48cae4, #023e8a)";
+
+            setTimeout(() => {
+              button.textContent = "Enviar con Estilo";
+              formManager.applyCustomStyles({
+                "primary-color": "#667eea",
+              });
+            }, 2000);
+
+            return true;
+          },
+        },
+      };
+
+      // Inicializar formulario
+      const customForm = new FormManager(customStylesConfig);
+
+      try {
+        await customForm.init();
+        console.log("🎨 Formulario de estilos personalizados inicializado");
+      } catch (error) {
+        console.error("❌ Error en formulario de estilos:", error);
+      }
+
+      // Temas predefinidos
+      const themes = {
+        blue: {
+          "primary-color": "#2196f3",
+          "primary-hover": "#1976d2",
+          "form-background": "rgba(227, 242, 253, 0.95)",
+        },
+        green: {
+          "primary-color": "#4caf50",
+          "primary-hover": "#388e3c",
+          "form-background": "rgba(232, 245, 233, 0.95)",
+        },
+        purple: {
+          "primary-color": "#9c27b0",
+          "primary-hover": "#7b1fa2",
+          "form-background": "rgba(243, 229, 245, 0.95)",
+        },
+        dark: {
+          "primary-color": "#bb86fc",
+          "primary-hover": "#a374e8",
+          "form-background": "rgba(33, 33, 33, 0.95)",
+          "form-text-color": "#ffffff",
+        },
+        gradient: {
+          "primary-color": "#ff6b6b",
+          "primary-hover": "#ee5a52",
+          "form-background":
+            "linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 206, 84, 0.1))",
+          "form-shadow": "0 20px 40px rgba(255, 107, 107, 0.3)",
+        },
+      };
+
+      // Función para aplicar temas
+      window.applyTheme = function (themeName) {
+        if (themes[themeName]) {
+          customForm.applyCustomStyles(themes[themeName]);
+          console.log(`🎨 Tema ${themeName} aplicado`);
+
+          // Efecto visual
+          const formCard = document.querySelector(".form-card");
+          formCard.style.transform = "scale(0.98)";
+          setTimeout(() => {
+            formCard.style.transform = "scale(1)";
+          }, 150);
         }
+      };
 
-        // Temas predefinidos
-        const themes = {
-            blue: {
-                'primary-color': '#2196f3',
-                'primary-hover': '#1976d2',
-                'form-background': 'rgba(227, 242, 253, 0.95)'
-            },
-            green: {
-                'primary-color': '#4caf50',
-                'primary-hover': '#388e3c',
-                'form-background': 'rgba(232, 245, 233, 0.95)'
-            },
-            purple: {
-                'primary-color': '#9c27b0',
-                'primary-hover': '#7b1fa2',
-                'form-background': 'rgba(243, 229, 245, 0.95)'
-            },
-            dark: {
-                'primary-color': '#bb86fc',
-                'primary-hover': '#a374e8',
-                'form-background': 'rgba(33, 33, 33, 0.95)',
-                'form-text-color': '#ffffff'
-            },
-            gradient: {
-                'primary-color': '#ff6b6b',
-                'primary-hover': '#ee5a52',
-                'form-background': 'linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 206, 84, 0.1))',
-                'form-shadow': '0 20px 40px rgba(255, 107, 107, 0.3)'
-            }
-        };
-
-        // Función para aplicar temas
-        window.applyTheme = function(themeName) {
-            if (themes[themeName]) {
-                customForm.applyCustomStyles(themes[themeName]);
-                console.log(`🎨 Tema ${themeName} aplicado`);
-                
-                // Efecto visual
-                const formCard = document.querySelector('.form-card');
-                formCard.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    formCard.style.transform = 'scale(1)';
-                }, 150);
-            }
-        };
-
-        // Hacer disponible globalmente
-        window.customForm = customForm;
-        window.themes = themes;
+      // Hacer disponible globalmente
+      window.customForm = customForm;
+      window.themes = themes;
     </script>
-</body>
+  </body>
 </html>

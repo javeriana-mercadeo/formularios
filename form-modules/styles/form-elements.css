@@ -58,7 +58,7 @@
 }
 
 .form-card label.required::after {
-  content: ' *';
+  content: " *";
   color: var(--danger-500);
   font-weight: 600;
 }
@@ -95,7 +95,7 @@
     font-size: 16px; /* Prevents zoom on iOS */
     padding: 12px 5px;
   }
-  
+
   .form-card button {
     padding: 15px;
     font-size: 16px;

@@ -15,7 +15,7 @@
   padding: 30px;
   width: 100%;
   max-width: 427px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -32,7 +32,7 @@
     padding: 20px;
     min-height: 100vh;
   }
-  
+
   .form-card {
     width: 100%;
     max-width: 100%;
@@ -45,7 +45,7 @@
   .container {
     padding: 15px;
   }
-  
+
   .form-card {
     padding: 15px;
     border-radius: 12px;

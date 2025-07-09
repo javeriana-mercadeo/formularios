@@ -65,7 +65,7 @@
   padding: 0;
   margin: 10px 0;
   font-size: var(--font-size-paragraph);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-card ul li {

@@ -1,516 +1,532 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo - Sistema de Logging</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>📋 Demo: Sistema de Logging</h1>
-    
+
     <div class="info">
-        <p>Esta demo muestra las capacidades completas del sistema de logging del formulario.</p>
-        <p><strong>Características del Sistema de Logging:</strong></p>
-        <ul>
-            <li>📊 Múltiples niveles (error, warn, info, debug)</li>
-            <li>🎨 Colores y emojis para fácil identificación</li>
-            <li>⏰ Timestamps opcionales</li>
-            <li>💾 Persistencia configurable</li>
-            <li>📤 Exportación en múltiples formatos</li>
-            <li>🔄 Control en tiempo real</li>
-        </ul>
+      <p>Esta demo muestra las capacidades completas del sistema de logging del formulario.</p>
+      <p><strong>Características del Sistema de Logging:</strong></p>
+      <ul>
+        <li>📊 Múltiples niveles (error, warn, info, debug)</li>
+        <li>🎨 Colores y emojis para fácil identificación</li>
+        <li>⏰ Timestamps opcionales</li>
+        <li>💾 Persistencia configurable</li>
+        <li>📤 Exportación en múltiples formatos</li>
+        <li>🔄 Control en tiempo real</li>
+      </ul>
     </div>
 
     <div class="controls-grid">
-        <div class="control-section">
-            <h3>🔧 Control de Logging</h3>
-            <button onclick="toggleLogging()">🔄 Activar/Desactivar</button>
-            <button onclick="checkLoggingStatus()">📊 Ver Estado</button>
-            <button onclick="togglePersistence()">💾 Persistencia</button>
-        </div>
+      <div class="control-section">
+        <h3>🔧 Control de Logging</h3>
+        <button onclick="toggleLogging()">🔄 Activar/Desactivar</button>
+        <button onclick="checkLoggingStatus()">📊 Ver Estado</button>
+        <button onclick="togglePersistence()">💾 Persistencia</button>
+      </div>
 
-        <div class="control-section">
-            <h3>📈 Niveles de Logging</h3>
-            <button onclick="setLevel('error')">🔴 Solo Errores</button>
-            <button onclick="setLevel('warn')">🟡 Warnings+</button>
-            <button onclick="setLevel('info')">🔵 Info+</button>
-            <button onclick="setLevel('debug')">🔍 Debug (Todo)</button>
-        </div>
+      <div class="control-section">
+        <h3>📈 Niveles de Logging</h3>
+        <button onclick="setLevel('error')">🔴 Solo Errores</button>
+        <button onclick="setLevel('warn')">🟡 Warnings+</button>
+        <button onclick="setLevel('info')">🔵 Info+</button>
+        <button onclick="setLevel('debug')">🔍 Debug (Todo)</button>
+      </div>
 
-        <div class="control-section">
-            <h3>📝 Generar Logs</h3>
-            <button onclick="generateError()">❌ Generar Error</button>
-            <button onclick="generateWarning()">⚠️ Generar Warning</button>
-            <button onclick="generateInfo()">ℹ️ Generar Info</button>
-            <button onclick="generateDebug()">🔍 Generar Debug</button>
-        </div>
+      <div class="control-section">
+        <h3>📝 Generar Logs</h3>
+        <button onclick="generateError()">❌ Generar Error</button>
+        <button onclick="generateWarning()">⚠️ Generar Warning</button>
+        <button onclick="generateInfo()">ℹ️ Generar Info</button>
+        <button onclick="generateDebug()">🔍 Generar Debug</button>
+      </div>
 
-        <div class="control-section">
-            <h3>📤 Gestión de Logs</h3>
-            <button onclick="showLogs()">📋 Ver Logs</button>
-            <button onclick="showStats()">📊 Ver Estadísticas</button>
-            <button onclick="clearLogs()">🗑️ Limpiar Logs</button>
-            <button onclick="exportLogs()">💾 Exportar Logs</button>
-        </div>
+      <div class="control-section">
+        <h3>📤 Gestión de Logs</h3>
+        <button onclick="showLogs()">📋 Ver Logs</button>
+        <button onclick="showStats()">📊 Ver Estadísticas</button>
+        <button onclick="clearLogs()">🗑️ Limpiar Logs</button>
+        <button onclick="exportLogs()">💾 Exportar Logs</button>
+      </div>
 
-        <div class="control-section">
-            <h3>🎛️ Configuración</h3>
-            <button onclick="toggleTimestamp()">⏰ Timestamps</button>
-            <button onclick="toggleColors()">🎨 Colores</button>
-            <button onclick="toggleLevel()">🏷️ Mostrar Nivel</button>
-            <button onclick="changePrefix()">📝 Cambiar Prefijo</button>
-        </div>
+      <div class="control-section">
+        <h3>🎛️ Configuración</h3>
+        <button onclick="toggleTimestamp()">⏰ Timestamps</button>
+        <button onclick="toggleColors()">🎨 Colores</button>
+        <button onclick="toggleLevel()">🏷️ Mostrar Nivel</button>
+        <button onclick="changePrefix()">📝 Cambiar Prefijo</button>
+      </div>
 
-        <div class="control-section">
-            <h3>🔬 Pruebas Avanzadas</h3>
-            <button onclick="stressTest()">🚀 Prueba de Estrés</button>
-            <button onclick="testListener()">👂 Probar Listener</button>
-            <button onclick="testExport()">📤 Probar Exportación</button>
-            <button onclick="simulateFormActions()">🎯 Simular Acciones</button>
-        </div>
+      <div class="control-section">
+        <h3>🔬 Pruebas Avanzadas</h3>
+        <button onclick="stressTest()">🚀 Prueba de Estrés</button>
+        <button onclick="testListener()">👂 Probar Listener</button>
+        <button onclick="testExport()">📤 Probar Exportación</button>
+        <button onclick="simulateFormActions()">🎯 Simular Acciones</button>
+      </div>
     </div>
 
     <div class="container">
-        <div class="form-card">
-            <h2>Formulario de Prueba</h2>
-            <p>Usa este formulario para generar logs automáticamente</p>
-            
-            <form id="form_inscription">
-                <input type="text" placeholder="*Nombre" id="first_name" name="first_name" required>
-                <div class="error_text" id="error_first_name"></div>
+      <div class="form-card">
+        <h2>Formulario de Prueba</h2>
+        <p>Usa este formulario para generar logs automáticamente</p>
 
-                <input type="email" placeholder="*Email" id="email" name="email" required>
-                <div class="error_text" id="error_email"></div>
+        <form id="form_inscription">
+          <input type="text" placeholder="*Nombre" id="first_name" name="first_name" required />
+          <div class="error_text" id="error_first_name"></div>
 
-                <select id="type_attendee" name="type_attendee" required>
-                    <option value="">*Tipo de asistente</option>
-                </select>
-                <div class="error_text" id="error_type_attendee"></div>
+          <input type="email" placeholder="*Email" id="email" name="email" required />
+          <div class="error_text" id="error_email"></div>
 
-                <div class="radio-inline-group">
-                    <p>¿Autorizas el tratamiento de datos?</p>
-                    <div class="radio-option">
-                        <input type="radio" id="auth_yes" name="authorization_data" value="1">
-                        <label for="auth_yes">Sí</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="auth_no" name="authorization_data" value="0">
-                        <label for="auth_no">No</label>
-                    </div>
-                </div>
+          <select id="type_attendee" name="type_attendee" required>
+            <option value="">*Tipo de asistente</option>
+          </select>
+          <div class="error_text" id="error_type_attendee"></div>
 
-                <button type="submit" id="submit_btn" disabled>Enviar (Genera Logs)</button>
-            </form>
-        </div>
+          <div class="radio-inline-group">
+            <p>¿Autorizas el tratamiento de datos?</p>
+            <div class="radio-option">
+              <input type="radio" id="auth_yes" name="authorization_data" value="1" />
+              <label for="auth_yes">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no" name="authorization_data" value="0" />
+              <label for="auth_no">No</label>
+            </div>
+          </div>
+
+          <button type="submit" id="submit_btn" disabled>Enviar (Genera Logs)</button>
+        </form>
+      </div>
     </div>
 
     <div class="log-viewer">
-        <h3>📱 Visor de Logs en Tiempo Real</h3>
-        <div id="real-time-logs"></div>
-        <button onclick="clearViewer()">🗑️ Limpiar Visor</button>
+      <h3>📱 Visor de Logs en Tiempo Real</h3>
+      <div id="real-time-logs"></div>
+      <button onclick="clearViewer()">🗑️ Limpiar Visor</button>
     </div>
 
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+      }
 
-        .info {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #4caf50;
-        }
+      .info {
+        background: #e8f5e8;
+        border: 1px solid #4caf50;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #4caf50;
+      }
 
+      .controls-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .control-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #2196f3;
+      }
+
+      .control-section h3 {
+        margin-top: 0;
+        color: #2196f3;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+
+      .control-section button {
+        background: linear-gradient(135deg, #2196f3, #1976d2);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin: 4px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
+      }
+
+      .control-section button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+      }
+
+      .log-viewer {
+        background: #1e1e1e;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+        max-height: 400px;
+        overflow-y: auto;
+        font-family: "Courier New", monospace;
+      }
+
+      .log-viewer h3 {
+        margin-top: 0;
+        color: #4caf50;
+      }
+
+      #real-time-logs {
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .log-entry {
+        padding: 2px 0;
+        border-bottom: 1px solid #333;
+      }
+
+      .log-error {
+        color: #ff6b6b;
+      }
+      .log-warn {
+        color: #ffa726;
+      }
+      .log-info {
+        color: #42a5f5;
+      }
+      .log-debug {
+        color: #aaa;
+      }
+      .log-success {
+        color: #66bb6a;
+      }
+      .log-loading {
+        color: #29b6f6;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      @media (max-width: 768px) {
         .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+          grid-template-columns: 1fr;
         }
-
-        .control-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #2196f3;
-        }
-
-        .control-section h3 {
-            margin-top: 0;
-            color: #2196f3;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .control-section button {
-            background: linear-gradient(135deg, #2196f3, #1976d2);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            margin: 4px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
-        }
-
-        .control-section button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
-        }
-
-        .log-viewer {
-            background: #1e1e1e;
-            color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            max-height: 400px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-        }
-
-        .log-viewer h3 {
-            margin-top: 0;
-            color: #4caf50;
-        }
-
-        #real-time-logs {
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        .log-entry {
-            padding: 2px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .log-error { color: #ff6b6b; }
-        .log-warn { color: #ffa726; }
-        .log-info { color: #42a5f5; }
-        .log-debug { color: #aaa; }
-        .log-success { color: #66bb6a; }
-        .log-loading { color: #29b6f6; }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .controls-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
 
     <script type="module">
-        import { FormManager } from '../modules/FormManager.js';
+      import { FormManager } from "../modules/FormManager.js";
 
-        // Configuración con logging avanzado
-        const loggingConfig = {
-            eventName: 'Demo de Logging 2025',
-            
-            typeAttendee: [
-                'Desarrollador',
-                'Tester',
-                'Administrador',
-                'Usuario Final'
-            ],
+      // Configuración con logging avanzado
+      const loggingConfig = {
+        eventName: "Demo de Logging 2025",
 
-            // Configuración de logging muy detallada
-            logging: {
-                enabled: true,
-                level: 'debug',
-                prefix: 'LoggingDemo',
-                showTimestamp: true,
-                showLevel: true,
-                colors: true,
-                persistLogs: true,
-                maxLogs: 1000
-            },
+        typeAttendee: ["Desarrollador", "Tester", "Administrador", "Usuario Final"],
 
-            // Configuración de estilos
-            styles: {
-                enabled: true,
-                basePath: '../',
-                autoLoad: true,
-                customVariables: {
-                    'primary-color': '#2196f3',
-                    'primary-hover': '#1976d2'
-                }
-            },
+        // Configuración de logging muy detallada
+        logging: {
+          enabled: true,
+          level: "debug",
+          prefix: "LoggingDemo",
+          showTimestamp: true,
+          showLevel: true,
+          colors: true,
+          persistLogs: true,
+          maxLogs: 1000,
+        },
 
-            debugMode: true,
-            devMode: true,
+        // Configuración de estilos
+        styles: {
+          enabled: true,
+          basePath: "../",
+          autoLoad: true,
+          customVariables: {
+            "primary-color": "#2196f3",
+            "primary-hover": "#1976d2",
+          },
+        },
 
-            callbacks: {
-                onFormLoad: (formManager) => {
-                    formManager.logger.success('Demo de logging inicializado correctamente');
-                },
+        debugMode: true,
+        devMode: true,
 
-                onFormSubmit: async (formData, formManager) => {
-                    formManager.logger.info('Procesando envío de formulario...');
-                    formManager.logger.data('Datos del formulario:', formData);
-                    
-                    // Simular proceso
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    formManager.logger.success('Formulario enviado exitosamente');
-                    return true;
-                },
+        callbacks: {
+          onFormLoad: (formManager) => {
+            formManager.logger.success("Demo de logging inicializado correctamente");
+          },
 
-                onFieldChange: (fieldName, value, formManager) => {
-                    formManager.logger.debug(`Campo ${fieldName} cambió a: ${value}`);
-                }
-            }
-        };
+          onFormSubmit: async (formData, formManager) => {
+            formManager.logger.info("Procesando envío de formulario...");
+            formManager.logger.data("Datos del formulario:", formData);
 
-        // Inicializar formulario
-        const demoForm = new FormManager(loggingConfig);
-        
-        try {
-            await demoForm.init();
-        } catch (error) {
-            console.error('Error inicializando demo:', error);
+            // Simular proceso
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            formManager.logger.success("Formulario enviado exitosamente");
+            return true;
+          },
+
+          onFieldChange: (fieldName, value, formManager) => {
+            formManager.logger.debug(`Campo ${fieldName} cambió a: ${value}`);
+          },
+        },
+      };
+
+      // Inicializar formulario
+      const demoForm = new FormManager(loggingConfig);
+
+      try {
+        await demoForm.init();
+      } catch (error) {
+        console.error("Error inicializando demo:", error);
+      }
+
+      // Variables de estado
+      let persistenceEnabled = true;
+      let logListener = null;
+
+      // Configurar listener para logs en tiempo real
+      const realTimeLogsDiv = document.getElementById("real-time-logs");
+
+      logListener = (logEntry) => {
+        const logDiv = document.createElement("div");
+        logDiv.className = `log-entry log-${logEntry.level}`;
+        logDiv.textContent = logEntry.message;
+
+        realTimeLogsDiv.appendChild(logDiv);
+
+        // Mantener solo los últimos 50 logs en el visor
+        if (realTimeLogsDiv.children.length > 50) {
+          realTimeLogsDiv.removeChild(realTimeLogsDiv.firstChild);
         }
 
-        // Variables de estado
-        let persistenceEnabled = true;
-        let logListener = null;
+        // Auto-scroll al final
+        realTimeLogsDiv.scrollTop = realTimeLogsDiv.scrollHeight;
+      };
 
-        // Configurar listener para logs en tiempo real
-        const realTimeLogsDiv = document.getElementById('real-time-logs');
-        
-        logListener = (logEntry) => {
-            const logDiv = document.createElement('div');
-            logDiv.className = `log-entry log-${logEntry.level}`;
-            logDiv.textContent = logEntry.message;
-            
-            realTimeLogsDiv.appendChild(logDiv);
-            
-            // Mantener solo los últimos 50 logs en el visor
-            if (realTimeLogsDiv.children.length > 50) {
-                realTimeLogsDiv.removeChild(realTimeLogsDiv.firstChild);
-            }
-            
-            // Auto-scroll al final
-            realTimeLogsDiv.scrollTop = realTimeLogsDiv.scrollHeight;
+      demoForm.addLogListener(logListener);
+
+      // Funciones de control
+      window.toggleLogging = () => {
+        demoForm.toggleLogging();
+        const config = demoForm.getLoggingConfig();
+        console.log(`Logging ${config.enabled ? "HABILITADO" : "DESHABILITADO"}`);
+      };
+
+      window.checkLoggingStatus = () => {
+        const config = demoForm.getLoggingConfig();
+        const stats = demoForm.getLoggingStats();
+
+        console.group("📊 Estado del Logging");
+        console.log("Configuración:", config);
+        console.log("Estadísticas:", stats);
+        console.groupEnd();
+      };
+
+      window.togglePersistence = () => {
+        persistenceEnabled = !persistenceEnabled;
+        demoForm.setLogPersistence(persistenceEnabled, 1000);
+        console.log(`Persistencia ${persistenceEnabled ? "HABILITADA" : "DESHABILITADA"}`);
+      };
+
+      window.setLevel = (level) => {
+        demoForm.setLogLevel(level);
+        console.log(`Nivel de logging cambiado a: ${level}`);
+      };
+
+      // Funciones para generar logs
+      window.generateError = () => {
+        demoForm.logger.error("Este es un error de prueba", {
+          code: "TEST_ERROR",
+          timestamp: Date.now(),
+        });
+      };
+
+      window.generateWarning = () => {
+        demoForm.logger.warn("Este es un warning de prueba", {
+          type: "validation",
+          field: "email",
+        });
+      };
+
+      window.generateInfo = () => {
+        demoForm.logger.info("Este es un mensaje informativo", {
+          action: "user_action",
+          value: "test",
+        });
+      };
+
+      window.generateDebug = () => {
+        demoForm.logger.debug("Este es un mensaje de debug", { variable: "testVar", value: 123 });
+      };
+
+      window.showLogs = () => {
+        const logs = demoForm.getLogs();
+        console.group("📋 Logs del Sistema");
+        console.log(`Total de logs: ${logs.length}`);
+        logs.forEach((log, index) => {
+          console.log(`${index + 1}. [${log.level}] ${log.originalMessage}`, log.args);
+        });
+        console.groupEnd();
+      };
+
+      window.showStats = () => {
+        const stats = demoForm.getLoggingStats();
+        console.table(stats);
+      };
+
+      window.clearLogs = () => {
+        demoForm.clearLogs();
+        console.log("🗑️ Logs limpiados");
+      };
+
+      window.exportLogs = () => {
+        const jsonLogs = demoForm.exportLogs("json");
+        const csvLogs = demoForm.exportLogs("csv");
+
+        console.group("💾 Exportación de Logs");
+        console.log("JSON:", jsonLogs);
+        console.log("CSV:", csvLogs);
+        console.groupEnd();
+
+        // Descargar archivo
+        const blob = new Blob([jsonLogs], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `logging-demo-${new Date().toISOString().split("T")[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+
+      // Funciones de configuración
+      window.toggleTimestamp = () => {
+        const config = demoForm.getLoggingConfig();
+        demoForm.logger.config.showTimestamp = !config.showTimestamp;
+        console.log(`Timestamps ${config.showTimestamp ? "DESHABILITADOS" : "HABILITADOS"}`);
+      };
+
+      window.toggleColors = () => {
+        const config = demoForm.getLoggingConfig();
+        demoForm.logger.config.colors = !config.colors;
+        console.log(`Colores ${config.colors ? "DESHABILITADOS" : "HABILITADOS"}`);
+      };
+
+      window.toggleLevel = () => {
+        const config = demoForm.getLoggingConfig();
+        demoForm.logger.config.showLevel = !config.showLevel;
+        console.log(`Mostrar nivel ${config.showLevel ? "DESHABILITADO" : "HABILITADO"}`);
+      };
+
+      window.changePrefix = () => {
+        const prefixes = ["LoggingDemo", "TestForm", "DemoSystem", "FormLogger"];
+        const currentPrefix = demoForm.getLoggingConfig().prefix;
+        const newPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+
+        demoForm.logger.setPrefix(newPrefix);
+        console.log(`Prefijo cambiado de ${currentPrefix} a ${newPrefix}`);
+      };
+
+      // Funciones de pruebas avanzadas
+      window.stressTest = () => {
+        console.log("🚀 Iniciando prueba de estrés...");
+
+        for (let i = 0; i < 50; i++) {
+          setTimeout(() => {
+            const levels = ["error", "warn", "info", "debug"];
+            const level = levels[Math.floor(Math.random() * levels.length)];
+            demoForm.logger.log(level, `Mensaje de prueba ${i + 1}`, { iteration: i + 1 });
+          }, i * 100);
+        }
+      };
+
+      window.testListener = () => {
+        let testCount = 0;
+        const testListener = (logEntry) => {
+          testCount++;
+          if (testCount <= 5) {
+            console.log(`👂 Listener captó: ${logEntry.message}`);
+          }
+          if (testCount === 5) {
+            console.log("👂 Listener funcionando correctamente");
+            demoForm.logger.removeListener(testListener);
+          }
         };
 
-        demoForm.addLogListener(logListener);
+        demoForm.addLogListener(testListener);
 
-        // Funciones de control
-        window.toggleLogging = () => {
-            demoForm.toggleLogging();
-            const config = demoForm.getLoggingConfig();
-            console.log(`Logging ${config.enabled ? 'HABILITADO' : 'DESHABILITADO'}`);
-        };
+        // Generar logs de prueba
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            demoForm.logger.info(`Mensaje de prueba para listener ${i + 1}`);
+          }, i * 500);
+        }
+      };
 
-        window.checkLoggingStatus = () => {
-            const config = demoForm.getLoggingConfig();
-            const stats = demoForm.getLoggingStats();
-            
-            console.group('📊 Estado del Logging');
-            console.log('Configuración:', config);
-            console.log('Estadísticas:', stats);
-            console.groupEnd();
-        };
+      window.testExport = () => {
+        // Generar logs de prueba
+        demoForm.logger.error("Error de prueba para exportación");
+        demoForm.logger.warn("Warning de prueba para exportación");
+        demoForm.logger.info("Info de prueba para exportación");
+        demoForm.logger.debug("Debug de prueba para exportación");
 
-        window.togglePersistence = () => {
-            persistenceEnabled = !persistenceEnabled;
-            demoForm.setLogPersistence(persistenceEnabled, 1000);
-            console.log(`Persistencia ${persistenceEnabled ? 'HABILITADA' : 'DESHABILITADA'}`);
-        };
+        // Exportar en diferentes formatos
+        const json = demoForm.exportLogs("json");
+        const csv = demoForm.exportLogs("csv");
+        const txt = demoForm.exportLogs("txt");
 
-        window.setLevel = (level) => {
-            demoForm.setLogLevel(level);
-            console.log(`Nivel de logging cambiado a: ${level}`);
-        };
+        console.group("📤 Prueba de Exportación");
+        console.log("📄 JSON:", json);
+        console.log("📊 CSV:", csv);
+        console.log("📝 TXT:", txt);
+        console.groupEnd();
+      };
 
-        // Funciones para generar logs
-        window.generateError = () => {
-            demoForm.logger.error('Este es un error de prueba', { code: 'TEST_ERROR', timestamp: Date.now() });
-        };
+      window.simulateFormActions = () => {
+        console.log("🎯 Simulando acciones del formulario...");
 
-        window.generateWarning = () => {
-            demoForm.logger.warn('Este es un warning de prueba', { type: 'validation', field: 'email' });
-        };
+        // Simular carga de datos
+        demoForm.logger.loading("Cargando datos del formulario...");
 
-        window.generateInfo = () => {
-            demoForm.logger.info('Este es un mensaje informativo', { action: 'user_action', value: 'test' });
-        };
+        setTimeout(() => {
+          demoForm.logger.success("Datos cargados correctamente");
 
-        window.generateDebug = () => {
-            demoForm.logger.debug('Este es un mensaje de debug', { variable: 'testVar', value: 123 });
-        };
+          // Simular validación
+          demoForm.logger.info("Validando campos del formulario...");
 
-        window.showLogs = () => {
-            const logs = demoForm.getLogs();
-            console.group('📋 Logs del Sistema');
-            console.log(`Total de logs: ${logs.length}`);
-            logs.forEach((log, index) => {
-                console.log(`${index + 1}. [${log.level}] ${log.originalMessage}`, log.args);
-            });
-            console.groupEnd();
-        };
+          setTimeout(() => {
+            demoForm.logger.warn("Campo email requiere validación adicional");
 
-        window.showStats = () => {
-            const stats = demoForm.getLoggingStats();
-            console.table(stats);
-        };
-
-        window.clearLogs = () => {
-            demoForm.clearLogs();
-            console.log('🗑️ Logs limpiados');
-        };
-
-        window.exportLogs = () => {
-            const jsonLogs = demoForm.exportLogs('json');
-            const csvLogs = demoForm.exportLogs('csv');
-            
-            console.group('💾 Exportación de Logs');
-            console.log('JSON:', jsonLogs);
-            console.log('CSV:', csvLogs);
-            console.groupEnd();
-            
-            // Descargar archivo
-            const blob = new Blob([jsonLogs], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `logging-demo-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        };
-
-        // Funciones de configuración
-        window.toggleTimestamp = () => {
-            const config = demoForm.getLoggingConfig();
-            demoForm.logger.config.showTimestamp = !config.showTimestamp;
-            console.log(`Timestamps ${config.showTimestamp ? 'DESHABILITADOS' : 'HABILITADOS'}`);
-        };
-
-        window.toggleColors = () => {
-            const config = demoForm.getLoggingConfig();
-            demoForm.logger.config.colors = !config.colors;
-            console.log(`Colores ${config.colors ? 'DESHABILITADOS' : 'HABILITADOS'}`);
-        };
-
-        window.toggleLevel = () => {
-            const config = demoForm.getLoggingConfig();
-            demoForm.logger.config.showLevel = !config.showLevel;
-            console.log(`Mostrar nivel ${config.showLevel ? 'DESHABILITADO' : 'HABILITADO'}`);
-        };
-
-        window.changePrefix = () => {
-            const prefixes = ['LoggingDemo', 'TestForm', 'DemoSystem', 'FormLogger'];
-            const currentPrefix = demoForm.getLoggingConfig().prefix;
-            const newPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-            
-            demoForm.logger.setPrefix(newPrefix);
-            console.log(`Prefijo cambiado de ${currentPrefix} a ${newPrefix}`);
-        };
-
-        // Funciones de pruebas avanzadas
-        window.stressTest = () => {
-            console.log('🚀 Iniciando prueba de estrés...');
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const levels = ['error', 'warn', 'info', 'debug'];
-                    const level = levels[Math.floor(Math.random() * levels.length)];
-                    demoForm.logger.log(level, `Mensaje de prueba ${i + 1}`, { iteration: i + 1 });
-                }, i * 100);
-            }
-        };
-
-        window.testListener = () => {
-            let testCount = 0;
-            const testListener = (logEntry) => {
-                testCount++;
-                if (testCount <= 5) {
-                    console.log(`👂 Listener captó: ${logEntry.message}`);
-                }
-                if (testCount === 5) {
-                    console.log('👂 Listener funcionando correctamente');
-                    demoForm.logger.removeListener(testListener);
-                }
-            };
-            
-            demoForm.addLogListener(testListener);
-            
-            // Generar logs de prueba
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    demoForm.logger.info(`Mensaje de prueba para listener ${i + 1}`);
-                }, i * 500);
-            }
-        };
-
-        window.testExport = () => {
-            // Generar logs de prueba
-            demoForm.logger.error('Error de prueba para exportación');
-            demoForm.logger.warn('Warning de prueba para exportación');
-            demoForm.logger.info('Info de prueba para exportación');
-            demoForm.logger.debug('Debug de prueba para exportación');
-            
-            // Exportar en diferentes formatos
-            const json = demoForm.exportLogs('json');
-            const csv = demoForm.exportLogs('csv');
-            const txt = demoForm.exportLogs('txt');
-            
-            console.group('📤 Prueba de Exportación');
-            console.log('📄 JSON:', json);
-            console.log('📊 CSV:', csv);
-            console.log('📝 TXT:', txt);
-            console.groupEnd();
-        };
-
-        window.simulateFormActions = () => {
-            console.log('🎯 Simulando acciones del formulario...');
-            
-            // Simular carga de datos
-            demoForm.logger.loading('Cargando datos del formulario...');
-            
             setTimeout(() => {
-                demoForm.logger.success('Datos cargados correctamente');
-                
-                // Simular validación
-                demoForm.logger.info('Validando campos del formulario...');
-                
-                setTimeout(() => {
-                    demoForm.logger.warn('Campo email requiere validación adicional');
-                    
-                    setTimeout(() => {
-                        demoForm.logger.debug('Validación completada');
-                        demoForm.logger.success('Formulario listo para envío');
-                    }, 1000);
-                }, 1000);
+              demoForm.logger.debug("Validación completada");
+              demoForm.logger.success("Formulario listo para envío");
             }, 1000);
-        };
+          }, 1000);
+        }, 1000);
+      };
 
-        window.clearViewer = () => {
-            realTimeLogsDiv.innerHTML = '';
-        };
+      window.clearViewer = () => {
+        realTimeLogsDiv.innerHTML = "";
+      };
 
-        // Hacer disponible globalmente
-        window.demoForm = demoForm;
+      // Hacer disponible globalmente
+      window.demoForm = demoForm;
 
-        // Generar algunos logs iniciales
-        demoForm.logger.info('Demo de logging inicializada');
-        demoForm.logger.debug('Sistema listo para pruebas');
+      // Generar algunos logs iniciales
+      demoForm.logger.info("Demo de logging inicializada");
+      demoForm.logger.debug("Sistema listo para pruebas");
     </script>
-</body>
+  </body>
 </html>
