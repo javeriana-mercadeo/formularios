@@ -1,19 +1,19 @@
 /* Main form styles - imports all modules */
 
 /* Base styles */
-@import url("./base.css");
+@import "./base.css";
 
 /* Layout styles */
-@import url("./layout.css");
+@import "./layout.css";
 
 /* Form elements */
-@import url("./form-elements.css");
+@import "./form-elements.css";
 
 /* Validation styles */
-@import url("./validation.css");
+@import "./validation.css";
 
 /* Form fields layouts */
-@import url("./form-fields.css");
+@import "./form-fields.css";
 
 /* Custom theme variables that can be overridden */
 :root {

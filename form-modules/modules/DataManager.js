@@ -4,18 +4,101 @@
  * @version 1.0
  */
 
+import { Logger } from "./Logger.js";
+
+// Sistema de cache global compartido entre todas las instancias
+class GlobalDataCache {
+  constructor() {
+    this.cache = new Map();
+    this.loadingPromises = new Map();
+    this.cacheTimestamps = new Map();
+  }
+
+  static getInstance() {
+    if (!GlobalDataCache.instance) {
+      GlobalDataCache.instance = new GlobalDataCache();
+    }
+    return GlobalDataCache.instance;
+  }
+
+  isCacheValid(key, expirationHours) {
+    const timestamp = this.cacheTimestamps.get(key);
+    if (!timestamp) return false;
+    
+    const now = Date.now();
+    const expirationTime = timestamp + (expirationHours * 60 * 60 * 1000);
+    return now < expirationTime;
+  }
+
+  getCachedData(key, expirationHours) {
+    if (!this.isCacheValid(key, expirationHours)) {
+      this.cache.delete(key);
+      this.cacheTimestamps.delete(key);
+      return null;
+    }
+    return this.cache.get(key);
+  }
+
+  setCachedData(key, data) {
+    this.cache.set(key, data);
+    this.cacheTimestamps.set(key, Date.now());
+  }
+
+  getLoadingPromise(key) {
+    return this.loadingPromises.get(key);
+  }
+
+  setLoadingPromise(key, promise) {
+    this.loadingPromises.set(key, promise);
+    
+    // Limpiar la promesa cuando se complete
+    promise.finally(() => {
+      this.loadingPromises.delete(key);
+    });
+  }
+
+  clearCache() {
+    this.cache.clear();
+    this.cacheTimestamps.clear();
+    this.loadingPromises.clear();
+  }
+}
+
 export class DataManager {
-  constructor(dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
+  constructor(loggerConfig, dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
     this.dataUrls = {
-      locations: "../data/ubicaciones.json",
-      prefixes: "../data/codigos_pais.json",
-      programs: "../data/programas.json",
-      periods: "../data/periodos.json",
       ...dataUrls,
+    };
+
+    // URLs de fallback en orden de prioridad
+    this.fallbackUrls = {
+      locations: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/ubicaciones.json",
+        "https://cloud.cx.javeriana.edu.co/paises.json",
+        "../data/ubicaciones.json"
+      ],
+      prefixes: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/codigos_pais.json",
+        "https://cloud.cx.javeriana.edu.co/codigos_pais.Json",
+        "../data/codigos_pais.json"
+      ],
+      programs: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/programas.json",
+        "https://cloud.cx.javeriana.edu.co/Programas.json",
+        "../data/programas.json"
+      ],
+      periods: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/periodos.json",
+        "https://cloud.cx.javeriana.edu.co/periodos.json",
+        "../data/periodos.json"
+      ]
     };
 
     this.cacheEnabled = cacheEnabled;
     this.cacheExpirationHours = cacheExpirationHours;
+    
+    // Obtener instancia global del cache
+    this.globalCache = GlobalDataCache.getInstance();
 
     // Almacén de datos cargados
     this.data = {
@@ -24,6 +107,9 @@ export class DataManager {
       programs: null,
       periods: null,
     };
+
+    // Módulos
+    this.logger = new Logger(loggerConfig);
 
     // Estado de carga
     this.loadingPromises = {};
@@ -40,13 +126,13 @@ export class DataManager {
     if (this.cacheEnabled && cacheKey) {
       const cachedData = this.getCachedData(actualCacheKey);
       if (cachedData) {
-        console.log(`📦 Datos cargados desde caché: ${actualCacheKey}`);
+        this.logger.loading(`Cargando datos desde caché: ${actualCacheKey}`);
         return cachedData;
       }
     }
 
     try {
-      console.log(`🔄 Cargando datos desde: ${url}`);
+      this.logger.loading(`Cargando datos desde: ${url}`);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -60,12 +146,93 @@ export class DataManager {
         this.setCachedData(actualCacheKey, data);
       }
 
-      console.log(`✅ Datos cargados correctamente: ${url}`);
+      this.logger.success(`Datos cargados correctamente: ${url}`);
       return data;
     } catch (error) {
-      console.error(`❌ Error cargando datos desde ${url}:`, error);
+      this.logger.error(`Error cargando datos desde ${url}:`, error);
       throw error;
     }
+  }
+
+  /**
+   * Cargar datos con sistema de fallback en cascada y cache global compartido
+   */
+  async loadDataWithFallback(dataType, cacheKey = null) {
+    const actualCacheKey = cacheKey || dataType;
+
+    // Verificar si ya hay una carga en progreso (compartida entre instancias)
+    const existingPromise = this.globalCache.getLoadingPromise(actualCacheKey);
+    if (existingPromise) {
+      this.logger.loading(`Esperando carga en progreso compartida: ${actualCacheKey}`);
+      return await existingPromise;
+    }
+
+    // Verificar caché global si está habilitado
+    if (this.cacheEnabled && cacheKey) {
+      const cachedData = this.globalCache.getCachedData(actualCacheKey, this.cacheExpirationHours);
+      if (cachedData) {
+        this.logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
+        return cachedData;
+      }
+    }
+
+    // Crear promesa de carga y registrarla globalmente
+    const loadPromise = this._performDataLoad(dataType, actualCacheKey);
+    this.globalCache.setLoadingPromise(actualCacheKey, loadPromise);
+
+    return await loadPromise;
+  }
+
+  /**
+   * Realizar la carga real de datos (método privado)
+   */
+  async _performDataLoad(dataType, cacheKey) {
+    // Obtener URLs en orden: usuario, fallbacks
+    const urls = [];
+    
+    // Primero intentar con la URL del usuario si existe
+    if (this.dataUrls[dataType]) {
+      urls.push(this.dataUrls[dataType]);
+    }
+    
+    // Luego agregar las URLs de fallback
+    if (this.fallbackUrls[dataType]) {
+      urls.push(...this.fallbackUrls[dataType]);
+    }
+
+    // Eliminar duplicados manteniendo el orden
+    const uniqueUrls = [...new Set(urls)];
+
+    let lastError = null;
+
+    for (const url of uniqueUrls) {
+      try {
+        this.logger.loading(`Intentando cargar datos desde: ${url}`);
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Guardar en caché global si está habilitado
+        if (this.cacheEnabled && cacheKey) {
+          this.globalCache.setCachedData(cacheKey, data);
+        }
+
+        this.logger.success(`Datos cargados correctamente desde: ${url}`);
+        return data;
+      } catch (error) {
+        this.logger.warn(`Error cargando desde ${url}: ${error.message}`);
+        lastError = error;
+        continue;
+      }
+    }
+
+    // Si ninguna URL funcionó, lanzar el último error
+    this.logger.error(`Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`);
+    throw lastError || new Error(`No se pudieron cargar los datos de tipo '${dataType}'`);
   }
 
   /**
@@ -81,7 +248,7 @@ export class DataManager {
       return await this.loadingPromises.locations;
     }
 
-    this.loadingPromises.locations = this.loadData(this.dataUrls.locations, "locations");
+    this.loadingPromises.locations = this.loadDataWithFallback("locations", "locations");
 
     try {
       this.data.locations = await this.loadingPromises.locations;
@@ -103,7 +270,7 @@ export class DataManager {
       return await this.loadingPromises.prefixes;
     }
 
-    this.loadingPromises.prefixes = this.loadData(this.dataUrls.prefixes, "prefixes");
+    this.loadingPromises.prefixes = this.loadDataWithFallback("prefixes", "prefixes");
 
     try {
       const rawData = await this.loadingPromises.prefixes;
@@ -133,12 +300,10 @@ export class DataManager {
       return await this.loadingPromises.programs;
     }
 
-    this.loadingPromises.programs = this.loadData(this.dataUrls.programs, "programs");
+    this.loadingPromises.programs = this.loadDataWithFallback("programs", "programs");
 
     try {
       this.data.programs = await this.loadingPromises.programs;
-      console.log("📊 Programas cargados:", this.data.programs);
-      console.log("📋 Niveles disponibles:", Object.keys(this.data.programs));
       return this.data.programs;
     } finally {
       delete this.loadingPromises.programs;
@@ -157,17 +322,10 @@ export class DataManager {
       return await this.loadingPromises.periods;
     }
 
-    this.loadingPromises.periods = this.loadData(this.dataUrls.periods, "periods");
+    this.loadingPromises.periods = this.loadDataWithFallback("periods", "periods");
 
     try {
       this.data.periods = await this.loadingPromises.periods;
-      console.log("📅 Períodos cargados:", this.data.periods);
-      console.log("📊 Estructura:", Array.isArray(this.data.periods) ? "Array" : "Object");
-
-      if (!Array.isArray(this.data.periods)) {
-        console.log("🎯 Niveles disponibles:", Object.keys(this.data.periods));
-      }
-
       return this.data.periods;
     } finally {
       delete this.loadingPromises.periods;
@@ -179,7 +337,7 @@ export class DataManager {
    */
   async loadAll() {
     try {
-      console.log("🚀 Cargando todos los datos...");
+      this.logger.loading("Cargando todos los datos...");
 
       await Promise.all([
         this.loadLocations(),
@@ -189,9 +347,9 @@ export class DataManager {
       ]);
 
       this.isInitialized = true;
-      console.log("✅ Todos los datos cargados correctamente");
+      this.logger.success("Todos los datos cargados correctamente");
     } catch (error) {
-      console.error("❌ Error cargando datos:", error);
+      this.logger.error("Error cargando datos:", error);
       throw error;
     }
   }
@@ -475,7 +633,7 @@ export class DataManager {
 
       return data;
     } catch (error) {
-      console.error("Error al leer caché:", error);
+      this.logger.error("Error al leer caché:", error);
       return null;
     }
   }
@@ -491,7 +649,7 @@ export class DataManager {
 
       localStorage.setItem(`formData_${key}`, JSON.stringify(cacheItem));
     } catch (error) {
-      console.error("Error al guardar en caché:", error);
+      this.logger.error("Error al guardar en caché:", error);
     }
   }
 
@@ -505,7 +663,7 @@ export class DataManager {
       }
     });
 
-    console.log("🧹 Caché limpiado");
+    this.logger.info("🧹 Caché limpiado");
   }
 
   /**

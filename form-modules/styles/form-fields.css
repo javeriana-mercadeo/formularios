@@ -5,51 +5,51 @@
 /* ========================================== */
 
 /* Hidden field sections */
-#colegio_section,
-#programa_section,
-#periodo_section {
+[data-puj-form="section-colegio"],
+[data-puj-form="section-programa"],
+[data-puj-form="section-periodo"] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* All hidden field selects */
-#colegio_section select,
-#programa_section select,
-#periodo_section select,
-#nivelacademico {
+[data-puj-form="section-colegio"] select,
+[data-puj-form="section-programa"] select,
+[data-puj-form="section-periodo"] select,
+[data-puj-form="field-academic-level"] {
   width: 100% !important;
   box-sizing: border-box;
   margin-bottom: 5px;
 }
 
 /* College search input */
-#colegio_section input[type="text"],
-#searchTerm {
+[data-puj-form="section-colegio"] input[type="text"],
+[data-puj-form="field-search-term"] {
   width: 100% !important;
   box-sizing: border-box;
 }
 
 /* Error messages for hidden fields - full width */
-#error_nivelacademico,
-#error_facultad,
-#error_programa,
-#error_periodo_esperado,
-#error_colegio {
+[data-puj-form="error-academic-level"],
+[data-puj-form="error-faculty"],
+[data-puj-form="error-program"],
+[data-puj-form="error-admission-period"],
+[data-puj-form="error-college"] {
   width: 100%;
   box-sizing: border-box;
   margin-top: 5px;
 }
 
 /* College filter selects - ensure full width */
-#selectedDepartment,
-#selectedCity {
+[data-puj-form="field-selected-department"],
+[data-puj-form="field-selected-city"] {
   width: 100% !important;
   margin-bottom: 15px !important;
   box-sizing: border-box;
 }
 
 /* College list full width */
-#colegios_list {
+[data-puj-form="list-colleges"] {
   width: 100% !important;
   box-sizing: border-box;
 }

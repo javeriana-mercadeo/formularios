@@ -25,13 +25,18 @@
   font-size: 12px;
   color: var(--danger-500);
   margin-top: 6px;
-  display: flex;
+  display: none; /* Oculto por defecto */
   align-items: center;
   gap: 6px;
   padding: 4px 8px;
   background: rgba(var(--danger-rgb), 0.1);
   border-radius: 6px;
   animation: errorSlideIn 0.3s ease-out;
+}
+
+/* Solo mostrar cuando tiene contenido */
+.error_text:not(:empty) {
+  display: flex;
 }
 
 .error_text::before {
@@ -61,7 +66,7 @@
 }
 
 /* Success message */
-#successMsg {
+[data-puj-form="message-success"] {
   border: 2px solid green;
   background-color: lightgrey;
   padding: 10px;

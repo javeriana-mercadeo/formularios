@@ -9,8 +9,7 @@ El sistema modular de formularios ahora incluye **CSS modular** además de la fu
 ```
 form-modules/
 ├── modules/
-│   ├── FormManager.js        # Manager principal con integración CSS
-│   ├── StyleLoader.js        # Cargador de estilos
+│   ├── FormManager.js        # Manager principal 
 │   ├── ValidationModule.js   # Módulo de validación
 │   ├── DataManager.js        # Gestión de datos
 │   ├── APIService.js         # Servicios API
@@ -61,13 +60,19 @@ form-modules/
 </html>
 ```
 
-### 2. Formulario con Carga Automática de Estilos
+### 2. Formulario con JavaScript (Estilos CSS manuales)
 
 ```html
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Formulario con Carga Automática</title>
+    <title>Formulario con FormManager</title>
+    <!-- Cargar estilos CSS manualmente -->
+    <link rel="stylesheet" href="form-modules/styles/base.css">
+    <link rel="stylesheet" href="form-modules/styles/layout.css">
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
+    <link rel="stylesheet" href="form-modules/styles/validation.css">
   </head>
   <body>
     <div class="container">
@@ -82,11 +87,8 @@ form-modules/
       import { FormManager } from "./form-modules/modules/FormManager.js";
 
       const form = new FormManager({
-        styles: {
-          enabled: true,
-          basePath: "./form-modules/",
-          autoLoad: true,
-        },
+        eventName: "Mi Evento",
+        debugMode: true
       });
 
       await form.init();
@@ -101,33 +103,31 @@ form-modules/
 
 ```javascript
 const form = new FormManager({
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    autoLoad: true,
-    customVariables: {
-      "primary-color": "#e91e63",
-      "primary-hover": "#c2185b",
-      "form-background": "#f8f9fa",
-      "form-max-width": "500px",
-      "form-border-radius": "12px",
-    },
-  },
+  eventName: "Mi Evento"
+});
+
+await form.init();
+
+// Aplicar variables CSS personalizadas
+form.applyCustomVariables({
+  "primary-color": "#e91e63",
+  "primary-hover": "#c2185b", 
+  "form-background": "#f8f9fa",
+  "form-max-width": "500px",
+  "form-border-radius": "12px",
 });
 ```
 
 ### 2. Cargar Tema Personalizado
 
-```javascript
-const form = new FormManager({
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    autoLoad: true,
-    includeTheme: true,
-    themePath: "styles/themes/custom-theme.css",
-  },
-});
+```html
+<!-- Agregar tema personalizado en el HTML -->
+<link rel="stylesheet" href="form-modules/styles/base.css">
+<link rel="stylesheet" href="form-modules/styles/layout.css">
+<link rel="stylesheet" href="form-modules/styles/form-elements.css">
+<link rel="stylesheet" href="form-modules/styles/form-fields.css">
+<link rel="stylesheet" href="form-modules/styles/validation.css">
+<link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css">
 ```
 
 ### 3. Crear Tema Personalizado
@@ -154,44 +154,20 @@ const form = new FormManager({
 
 ## 🔧 Uso Avanzado
 
-### 1. Cargar Estilos Manualmente
+### 1. Aplicar Estilos Dinámicamente
 
 ```javascript
 const form = new FormManager({
-  styles: {
-    enabled: false, // Desactivar carga automática
-  },
+  eventName: "Mi Evento"
 });
 
 await form.init();
 
-// Cargar estilos específicos
-await form.loadStylesManually({
-  includeTheme: true,
-  themePath: "mi-tema-personalizado.css",
-});
-```
-
-### 2. Cargar Módulos CSS Específicos
-
-```javascript
-// Cargar solo módulos específicos
-await form.loadStyleModules(["base", "layout", "form-elements"]);
-```
-
-### 3. Aplicar Estilos Dinámicamente
-
-```javascript
 // Cambiar estilos en tiempo real
-form.applyCustomStyles({
+form.applyCustomVariables({
   "primary-color": "#ff6b6b",
   "form-background": "#fff5f5",
 });
-
-// Verificar si los estilos están cargados
-if (form.areStylesLoaded()) {
-  console.log("Estilos cargados correctamente");
-}
 ```
 
 ## 🎯 Casos de Uso Específicos
@@ -201,42 +177,29 @@ if (form.areStylesLoaded()) {
 ```javascript
 // Formulario 1 - Tema azul
 const form1 = new FormManager({
-  formSelector: "#form1",
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    customVariables: {
-      "primary-color": "#2196f3",
-      "primary-hover": "#1976d2",
-    },
-  },
+  formSelector: "#form1"
+});
+await form1.init();
+form1.applyCustomVariables({
+  "primary-color": "#2196f3",
+  "primary-hover": "#1976d2",
 });
 
 // Formulario 2 - Tema verde
 const form2 = new FormManager({
-  formSelector: "#form2",
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    customVariables: {
-      "primary-color": "#4caf50",
-      "primary-hover": "#388e3c",
-    },
-  },
+  formSelector: "#form2"
+});
+await form2.init();
+form2.applyCustomVariables({
+  "primary-color": "#4caf50", 
+  "primary-hover": "#388e3c",
 });
 ```
 
 ### 2. Formulario con Tema Dinámico
 
 ```javascript
-const form = new FormManager({
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    autoLoad: true,
-  },
-});
-
+const form = new FormManager();
 await form.init();
 
 // Función para cambiar tema
@@ -249,29 +212,22 @@ function changeTheme(themeName) {
     },
     light: {
       "primary-color": "#6200ee",
-      "form-background": "#ffffff",
+      "form-background": "#ffffff", 
       "form-text-color": "#000000",
     },
   };
 
-  form.applyCustomStyles(themes[themeName]);
+  form.applyCustomVariables(themes[themeName]);
 }
 ```
 
 ### 3. Integración con Frameworks CSS
 
-```javascript
-// Desactivar estilos del módulo para usar Framework externo
-const form = new FormManager({
-  styles: {
-    enabled: false,
-  },
-});
-
-await form.init();
-
-// Solo cargar estilos de layout y validación
-await form.loadStyleModules(["layout", "validation"]);
+```html
+<!-- Usar solo algunos módulos CSS con frameworks externos -->
+<link rel="stylesheet" href="bootstrap.css">
+<!-- Solo cargar validación del sistema modular -->
+<link rel="stylesheet" href="form-modules/styles/validation.css">
 ```
 
 ## 📱 Responsive Design
@@ -297,26 +253,15 @@ Los estilos incluyen responsive design automático:
 
 ## 🔍 Debugging y Desarrollo
 
-### 1. Verificar Estilos Cargados
+### 1. Verificar Formulario
 
 ```javascript
-// Obtener lista de estilos cargados
-const loadedStyles = form.getLoadedStyles();
-console.log("Estilos cargados:", loadedStyles);
+// Verificar estado del formulario
+console.log("Datos del formulario:", form.getFormData());
+console.log("Configuración:", form.getConfig());
 
-// Verificar si un estilo específico está cargado
-const isLoaded = form.styleLoader.isLoaded("styles/form-styles.css");
-console.log("Estilo principal cargado:", isLoaded);
-```
-
-### 2. Remover Estilos
-
-```javascript
-// Remover tema específico
-form.styleLoader.removeStyles("form-theme");
-
-// Limpiar tracking de estilos
-form.styleLoader.clearLoadedStyles();
+// Habilitar logs detallados
+form.setLogLevel("debug");
 ```
 
 ## 🎁 Ejemplos Completos
@@ -328,6 +273,13 @@ form.styleLoader.clearLoadedStyles();
 <html>
   <head>
     <title>Formulario de Eventos</title>
+    <!-- Cargar estilos CSS -->
+    <link rel="stylesheet" href="form-modules/styles/base.css">
+    <link rel="stylesheet" href="form-modules/styles/layout.css">
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
+    <link rel="stylesheet" href="form-modules/styles/validation.css">
+    <link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css">
   </head>
   <body>
     <div class="container">
@@ -342,26 +294,20 @@ form.styleLoader.clearLoadedStyles();
       import { FormManager } from "./form-modules/modules/FormManager.js";
 
       const eventForm = new FormManager({
-        eventName: "Open Day 2025",
+        eventName: "Open Day 2025", 
         eventDate: "15/03/2025",
-
-        styles: {
-          enabled: true,
-          basePath: "./form-modules/",
-          autoLoad: true,
-          includeTheme: true,
-          customVariables: {
-            "primary-color": "#6c5ce7",
-            "form-max-width": "600px",
-            "form-shadow": "0 10px 30px rgba(108, 92, 231, 0.2)",
-          },
-        },
-
         typeAttendee: ["Aspirante", "Padre de familia"],
         attendanceDays: ["Viernes 15", "Sábado 16"],
       });
 
       await eventForm.init();
+
+      // Aplicar estilos personalizados
+      eventForm.applyCustomVariables({
+        "primary-color": "#6c5ce7",
+        "form-max-width": "600px",
+        "form-shadow": "0 10px 30px rgba(108, 92, 231, 0.2)",
+      });
     </script>
   </body>
 </html>
@@ -374,6 +320,12 @@ form.styleLoader.clearLoadedStyles();
 <html>
   <head>
     <title>Formulario con Temas</title>
+    <!-- Cargar estilos CSS -->
+    <link rel="stylesheet" href="form-modules/styles/base.css">
+    <link rel="stylesheet" href="form-modules/styles/layout.css">
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
+    <link rel="stylesheet" href="form-modules/styles/validation.css">
   </head>
   <body>
     <div class="theme-controls">
@@ -393,14 +345,7 @@ form.styleLoader.clearLoadedStyles();
     <script type="module">
       import { FormManager } from "./form-modules/modules/FormManager.js";
 
-      const form = new FormManager({
-        styles: {
-          enabled: true,
-          basePath: "./form-modules/",
-          autoLoad: true,
-        },
-      });
-
+      const form = new FormManager();
       await form.init();
 
       window.changeTheme = function (theme) {
@@ -410,7 +355,7 @@ form.styleLoader.clearLoadedStyles();
           purple: { "primary-color": "#9c27b0", "primary-hover": "#7b1fa2" },
         };
 
-        form.applyCustomStyles(themes[theme]);
+        form.applyCustomVariables(themes[theme]);
       };
     </script>
   </body>
@@ -428,29 +373,28 @@ Para migrar desde CSS estático al sistema modular:
 <link rel="stylesheet" href="mi-formulario.css" />
 
 <!-- Después -->
-<!-- CSS se carga automáticamente -->
+<link rel="stylesheet" href="form-modules/styles/base.css">
+<link rel="stylesheet" href="form-modules/styles/layout.css">
+<link rel="stylesheet" href="form-modules/styles/form-elements.css">
+<link rel="stylesheet" href="form-modules/styles/form-fields.css">
+<link rel="stylesheet" href="form-modules/styles/validation.css">
 ```
 
 2. **Configurar el FormManager:**
 
 ```javascript
 const form = new FormManager({
-  styles: {
-    enabled: true,
-    basePath: "./form-modules/",
-    autoLoad: true,
-    customVariables: {
-      // Tus variables personalizadas aquí
-    },
-  },
+  eventName: "Mi Evento",
+  debugMode: true
 });
+await form.init();
 ```
 
 3. **Mantener tus personalizaciones:**
 
 ```javascript
 // Aplicar tus estilos personalizados
-form.applyCustomStyles({
+form.applyCustomVariables({
   "primary-color": "#tu-color",
   "form-background": "#tu-fondo",
 });

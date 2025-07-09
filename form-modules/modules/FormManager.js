@@ -8,7 +8,6 @@ import { ValidationModule } from "./ValidationModule.js";
 import { DataManager } from "./DataManager.js";
 import { APIService } from "./APIService.js";
 import { UIUtils } from "./UIUtils.js";
-import { StyleLoader } from "./StyleLoader.js";
 import { Logger } from "./Logger.js";
 
 export class FormManager {
@@ -87,7 +86,7 @@ export class FormManager {
         "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
 
       // Selector del formulario
-      formSelector: "#form_inscription",
+      formSelector: '[data-puj-form="main-form"]',
 
       // Configuración de validación
       validation: {
@@ -103,6 +102,8 @@ export class FormManager {
         includeTheme: false,
         themePath: "styles/themes/custom-theme.css",
         customVariables: {},
+        useCombined: false,
+        customFile: null,
       },
 
       // Configuración de logging
@@ -131,14 +132,18 @@ export class FormManager {
     // Instanciar módulos
     this.logger = new Logger(this.config.logging);
     this.validator = new ValidationModule();
-    this.dataManager = new DataManager(this.config.dataUrls, this.config.cacheEnabled);
+    this.dataManager = new DataManager(
+      this.config.logging,
+      this.config.dataUrls,
+      this.config.cacheEnabled
+    );
     this.apiService = new APIService(this.config);
-    this.ui = new UIUtils();
-    this.styleLoader = new StyleLoader();
+    this.ui = new UIUtils(this.config.logging);
 
     // Estado del formulario
     this.formData = {};
     this.errors = {};
+    this.touchedFields = new Set();
     this.isInitialized = false;
     this.isSubmitting = false;
 
@@ -155,10 +160,7 @@ export class FormManager {
     try {
       this.logger.loading("Inicializando FormManager...");
 
-      // Cargar estilos si está habilitado
-      if (this.config.styles.enabled && this.config.styles.autoLoad) {
-        await this.loadStyles();
-      }
+      // Los estilos ahora se cargan manualmente con <link> tags
 
       // Buscar el formulario
       this.formElement = document.querySelector(formSelector || this.config.formSelector);
@@ -185,6 +187,9 @@ export class FormManager {
       // Configurar validación
       this.setupValidation();
 
+      // Inicializar estado de errores
+      this.initializeErrorState();
+
       // Procesar parámetros URL
       this.processUrlParameters();
 
@@ -202,36 +207,18 @@ export class FormManager {
   }
 
   /**
-   * Cargar estilos del formulario
+   * Aplicar variables CSS personalizadas
+   * @param {Object} variables - Variables CSS a aplicar
    */
-  async loadStyles() {
-    try {
-      this.logger.loading("Cargando estilos del formulario...");
+  applyCustomVariables(variables) {
+    const root = document.documentElement;
 
-      // Configurar ruta base
-      this.styleLoader.setBasePath(this.config.styles.basePath);
-      this.logger.debug("Ruta base de estilos:", this.config.styles.basePath);
+    Object.entries(variables).forEach(([property, value]) => {
+      const cssProperty = property.startsWith("--") ? property : `--${property}`;
+      root.style.setProperty(cssProperty, value);
+    });
 
-      // Cargar estilos principales
-      await this.styleLoader.loadFormStyles({
-        includeTheme: this.config.styles.includeTheme,
-        themePath: this.config.styles.themePath,
-      });
-
-      // Aplicar variables CSS personalizadas
-      if (
-        this.config.styles.customVariables &&
-        Object.keys(this.config.styles.customVariables).length > 0
-      ) {
-        this.styleLoader.applyCustomVariables(this.config.styles.customVariables);
-        this.logger.debug("Variables CSS aplicadas:", this.config.styles.customVariables);
-      }
-
-      this.logger.success("Estilos cargados correctamente");
-    } catch (error) {
-      this.logger.warn("Error cargando estilos:", error);
-      // No bloquear la inicialización si los estilos fallan
-    }
+    this.logger.debug("Variables CSS aplicadas:", variables);
   }
 
   /**
@@ -327,19 +314,19 @@ export class FormManager {
    * Inicializar campos del formulario
    */
   initializeFields() {
-    console.log("🔧 Inicializando campos...");
+    this.logger.loading("🔧 Inicializando campos...");
 
     // Inicializar ubicaciones
     this.ui.populateCountries(this.dataManager.getLocations());
     this.ui.populatePrefixes(this.dataManager.getPrefixes());
 
     // Inicializar campos de evento
-    this.ui.populateSelect('[name="type_attendee"]', this.config.typeAttendee);
-    this.ui.populateSelect('[name="attendance_day"]', this.config.attendanceDays);
+    this.ui.populateSelect('[data-puj-form="field-type-attendee"]', this.config.typeAttendee);
+    this.ui.populateSelect('[data-puj-form="field-attendance-day"]', this.config.attendanceDays);
 
     // Inicializar nivel académico si está configurado
     if (this.config.academicLevels && this.config.academicLevels.length > 0) {
-      this.ui.populateSelect('[name="academic_level"]', this.config.academicLevels, "code", "name");
+      this.ui.populateSelect('[data-puj-form="field-academic-level"]', this.config.academicLevels, "code", "name");
     }
 
     // Auto-seleccionar si solo hay una opción
@@ -352,7 +339,7 @@ export class FormManager {
   autoSelectSingleOptions() {
     // Auto-seleccionar tipo de asistente si solo hay uno
     if (this.config.typeAttendee.length === 1) {
-      const element = this.formElement.querySelector('[name="type_attendee"]');
+      const element = this.formElement.querySelector('[data-puj-form="field-type-attendee"]');
       if (element) {
         element.value = this.config.typeAttendee[0];
         this.formData.type_attendee = this.config.typeAttendee[0];
@@ -363,7 +350,7 @@ export class FormManager {
 
     // Auto-seleccionar día de asistencia si solo hay uno
     if (this.config.attendanceDays.length === 1) {
-      const element = this.formElement.querySelector('[name="attendance_day"]');
+      const element = this.formElement.querySelector('[data-puj-form="field-attendance-day"]');
       if (element) {
         element.value = this.config.attendanceDays[0];
         this.formData.attendance_day = this.config.attendanceDays[0];
@@ -376,72 +363,72 @@ export class FormManager {
    * Configurar event listeners
    */
   setupEventListeners() {
-    console.log("🎯 Configurando event listeners...");
+    this.logger.info("🎯 Configurando event listeners...");
 
     // Campos de texto
-    this.ui.addInputListener(this.formElement, '[name="first_name"]', (value) => {
+    this.ui.addInputListener(this.formElement, '[data-puj-form="field-first-name"]', (value) => {
       this.formData.first_name = this.ui.cleanText(value);
       return this.formData.first_name;
     });
 
-    this.ui.addInputListener(this.formElement, '[name="last_name"]', (value) => {
+    this.ui.addInputListener(this.formElement, '[data-puj-form="field-last-name"]', (value) => {
       this.formData.last_name = this.ui.cleanText(value);
       return this.formData.last_name;
     });
 
-    this.ui.addInputListener(this.formElement, '[name="document"]', (value) => {
+    this.ui.addInputListener(this.formElement, '[data-puj-form="field-document-number"]', (value) => {
       this.formData.document = this.ui.cleanNumbers(value);
       return this.formData.document;
     });
 
-    this.ui.addInputListener(this.formElement, '[name="phone"]', (value) => {
+    this.ui.addInputListener(this.formElement, '[data-puj-form="field-phone"]', (value) => {
       this.formData.phone = this.ui.cleanNumbers(value);
       return this.formData.phone;
     });
 
     // Campos de selección
-    this.ui.addChangeListener(this.formElement, '[name="type_doc"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-document-type"]', (value) => {
       this.formData.type_doc = value;
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="email"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-email"]', (value) => {
       this.formData.email = value;
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="phone_code"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-phone-code"]', (value) => {
       this.formData.phone_code = value;
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="country"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-country"]', (value) => {
       this.handleCountryChange(value);
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="department"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-department"]', (value) => {
       this.handleDepartmentChange(value);
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="city"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-city"]', (value) => {
       this.formData.city = value;
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="type_attendee"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-type-attendee"]', (value) => {
       this.handleTypeAttendeeChange(value);
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="attendance_day"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-attendance-day"]', (value) => {
       this.formData.attendance_day = value;
     });
 
     // Campos académicos
-    this.ui.addChangeListener(this.formElement, '[name="academic_level"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-academic-level"]', (value) => {
       this.handleAcademicLevelChange(value);
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="faculty"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-faculty"]', (value) => {
       this.handleFacultyChange(value);
     });
 
-    this.ui.addChangeListener(this.formElement, '[name="program"]', (value) => {
+    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-program"]', (value) => {
       this.formData.program = value;
     });
 
@@ -469,25 +456,45 @@ export class FormManager {
 
     const fields = this.formElement.querySelectorAll("input, select");
     fields.forEach((field) => {
+      // Marcar campo como tocado cuando el usuario interactúa
+      field.addEventListener("focus", () => {
+        this.touchedFields.add(field.id || field.name);
+      });
+
       if (this.config.validation.showErrorsOnBlur) {
         field.addEventListener("blur", () => {
-          this.validateField(field);
+          // Solo validar si el campo ha sido tocado
+          if (this.touchedFields.has(field.id || field.name)) {
+            this.validateField(field);
+          }
         });
       }
     });
   }
 
   /**
+   * Inicializar estado de errores al cargar el formulario
+   */
+  initializeErrorState() {
+    // Usar el método del UIUtils para limpiar todos los errores
+    this.ui.clearAllErrors(this.formElement);
+  }
+
+  /**
    * Validar un campo específico
    */
-  validateField(field) {
+  validateField(field, forceShow = false) {
     const isValid = this.validator.validateField(field);
+    const fieldKey = field.name || field.id;
 
     if (!isValid) {
-      this.errors[field.name || field.id] = true;
-      this.ui.showFieldError(field, this.validator.getErrorMessage(field));
+      this.errors[fieldKey] = true;
+      // Solo mostrar error si el campo ha sido tocado o es validación forzada (submit)
+      if (forceShow || this.touchedFields.has(fieldKey)) {
+        this.ui.showFieldError(field, this.validator.getErrorMessage(field));
+      }
     } else {
-      this.errors[field.name || field.id] = false;
+      this.errors[fieldKey] = false;
       this.ui.hideFieldError(field);
     }
 
@@ -655,7 +662,8 @@ export class FormManager {
     let isValid = true;
 
     fields.forEach((field) => {
-      if (!this.validateField(field)) {
+      // Forzar mostrar errores durante validación completa (submit)
+      if (!this.validateField(field, true)) {
         isValid = false;
       }
     });
@@ -673,7 +681,7 @@ export class FormManager {
 
     // Validar formulario
     if (!this.validateForm()) {
-      console.log("❌ Formulario inválido");
+      this.logger.error("Formulario inválido");
       return;
     }
 
@@ -694,7 +702,7 @@ export class FormManager {
 
       // Modo desarrollo
       if (this.config.devMode) {
-        console.log("🔧 DEV_MODE: Datos del formulario:", this.formData);
+        this.logger.info("🔧 DEV_MODE: Datos del formulario:", this.formData);
         this.ui.showSuccessMessage("Formulario enviado correctamente (modo desarrollo)");
         return;
       }
@@ -702,7 +710,7 @@ export class FormManager {
       // Enviar formulario
       await this.apiService.submitForm(this.formElement, this.formData);
     } catch (error) {
-      console.error("❌ Error al enviar formulario:", error);
+      this.logger.error("Error al enviar formulario:", error);
 
       if (this.config.callbacks.onValidationError) {
         this.config.callbacks.onValidationError(error, this);
@@ -721,7 +729,7 @@ export class FormManager {
   setDebugMode(enabled) {
     this.config.debugMode = enabled;
     this.configureForm();
-    console.log(`🔧 Modo debug: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🔧 Modo debug: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
 
   /**
@@ -729,7 +737,7 @@ export class FormManager {
    */
   setDevMode(enabled) {
     this.config.devMode = enabled;
-    console.log(`🔧 Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🔧 Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
 
   /**
@@ -765,77 +773,16 @@ export class FormManager {
     this.formElement.reset();
     this.formData = {};
     this.errors = {};
+    this.touchedFields.clear(); // Limpiar campos tocados
     this.isSubmitting = false;
 
-    // Limpiar errores visuales
-    const errorElements = this.formElement.querySelectorAll(".error_text");
-    errorElements.forEach((el) => (el.style.display = "none"));
+    // Limpiar errores visuales usando UIUtils
+    this.ui.clearAllErrors(this.formElement);
 
     // Restablecer campos por defecto
     this.setInitialValues();
   }
 
-  /**
-   * Cargar estilos manualmente
-   * @param {Object} options - Opciones para cargar estilos
-   */
-  async loadStylesManually(options = {}) {
-    const styleOptions = { ...this.config.styles, ...options };
-
-    try {
-      await this.styleLoader.loadFormStyles({
-        includeTheme: styleOptions.includeTheme,
-        themePath: styleOptions.themePath,
-      });
-
-      if (styleOptions.customVariables && Object.keys(styleOptions.customVariables).length > 0) {
-        this.styleLoader.applyCustomVariables(styleOptions.customVariables);
-      }
-
-      console.log("✅ Estilos cargados manualmente");
-      return true;
-    } catch (error) {
-      console.error("❌ Error cargando estilos manualmente:", error);
-      return false;
-    }
-  }
-
-  /**
-   * Aplicar variables CSS personalizadas
-   * @param {Object} variables - Variables CSS a aplicar
-   */
-  applyCustomStyles(variables) {
-    this.styleLoader.applyCustomVariables(variables);
-  }
-
-  /**
-   * Cargar módulos CSS específicos
-   * @param {Array<string>} modules - Nombres de módulos a cargar
-   */
-  async loadStyleModules(modules) {
-    try {
-      await this.styleLoader.loadModules(modules);
-      console.log("✅ Módulos de estilos cargados:", modules);
-      return true;
-    } catch (error) {
-      console.error("❌ Error cargando módulos de estilos:", error);
-      return false;
-    }
-  }
-
-  /**
-   * Verificar si los estilos están cargados
-   */
-  areStylesLoaded() {
-    return this.styleLoader.isLoaded("styles/form-styles.css");
-  }
-
-  /**
-   * Obtener información de estilos cargados
-   */
-  getLoadedStyles() {
-    return this.styleLoader.getLoadedStyles();
-  }
 
   /**
    * Métodos de control de logging

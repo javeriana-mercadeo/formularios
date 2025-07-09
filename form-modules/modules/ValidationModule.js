@@ -5,7 +5,7 @@
  */
 
 export class ValidationModule {
-  constructor(config = {}) {
+  constructor(config = {}, loggerConfig = {}) {
     this.config = {
       // Configuración de validación
       minNameLength: 2,
@@ -34,6 +34,8 @@ export class ValidationModule {
 
       ...config,
     };
+
+    this.logger = new Logger(loggerConfig);
 
     // Mapeo de tipos de campo a reglas de validación
     this.fieldValidationMap = {
@@ -103,7 +105,7 @@ export class ValidationModule {
    * Validar un campo específico
    */
   validateField(fieldElement) {
-    const fieldId = fieldElement.id;
+    const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
     const value = fieldElement.value;
 
     // Obtener tipo de validación
@@ -138,7 +140,7 @@ export class ValidationModule {
    * Obtener mensaje de error para un campo
    */
   getErrorMessage(fieldElement) {
-    const fieldId = fieldElement.id;
+    const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
     const validationType = this.fieldValidationMap[fieldId];
 
     if (!validationType) {
@@ -155,10 +157,13 @@ export class ValidationModule {
     const results = {};
 
     fields.forEach((field) => {
-      const fieldElement = typeof field === "string" ? document.getElementById(field) : field;
+      const fieldElement = typeof field === "string" 
+        ? document.getElementById(field) || document.querySelector(`[data-puj-form="${field}"]`)
+        : field;
 
       if (fieldElement) {
-        results[fieldElement.id] = this.validateField(fieldElement);
+        const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
+        results[fieldId] = this.validateField(fieldElement);
       }
     });
 
@@ -179,12 +184,13 @@ export class ValidationModule {
 
     requiredFields.forEach((field) => {
       const isValid = this.validateField(field);
+      const fieldId = field.id || field.getAttribute('data-puj-form');
 
       if (isValid) {
-        results.validFields.push(field.id);
+        results.validFields.push(fieldId);
       } else {
-        results.invalidFields.push(field.id);
-        results.errors[field.id] = this.getErrorMessage(field);
+        results.invalidFields.push(fieldId);
+        results.errors[fieldId] = this.getErrorMessage(field);
         results.isValid = false;
       }
     });
@@ -218,8 +224,8 @@ export class ValidationModule {
 
     // Validar departamento y ciudad si el país es Colombia
     if (formData.country === "COL") {
-      const departmentElement = formElement.querySelector("#department");
-      const cityElement = formElement.querySelector("#city");
+      const departmentElement = formElement.querySelector('[data-puj-form="field-department"]');
+      const cityElement = formElement.querySelector('[data-puj-form="field-city"]');
 
       if (departmentElement && departmentElement.style.display !== "none") {
         if (!this.validateRequired(departmentElement.value)) {
@@ -241,7 +247,7 @@ export class ValidationModule {
       const academicFields = ["academic_level", "faculty", "program", "admission_period"];
 
       academicFields.forEach((fieldId) => {
-        const element = formElement.querySelector(`#${fieldId}`);
+        const element = formElement.querySelector(`[data-puj-form="field-${fieldId.replace('_', '-')}"]`);
 
         if (element && element.style.display !== "none") {
           if (!this.validateRequired(element.value)) {
@@ -294,7 +300,7 @@ export class ValidationModule {
   clearFieldError(fieldId) {
     // Este método será usado por el UI para limpiar errores visuales
     // La implementación específica dependerá del sistema de UI
-    console.log(`Limpiando error para campo: ${fieldId}`);
+    this.logger.info(`Limpiando error para campo: ${fieldId}`);
   }
 
   /**
@@ -303,7 +309,7 @@ export class ValidationModule {
   showFieldError(fieldId, message) {
     // Este método será usado por el UI para mostrar errores visuales
     // La implementación específica dependerá del sistema de UI
-    console.log(`Mostrando error para campo ${fieldId}: ${message}`);
+    this.logger.info(`Mostrando error para campo ${fieldId}: ${message}`);
   }
 
   /**

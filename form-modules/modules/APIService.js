@@ -21,29 +21,98 @@ export class APIService {
 
       // Mapeo de campos
       fieldMapping: {
-        TIPO_DOCUMENTO: { test: "00N7j000002BI3X", prod: "00N5G00000WmhsT" },
-        NUMERO_DOCUMENTO: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" },
-        PREFIJO_CELULAR: { test: "00NO4000002IUPh", prod: "00NJw000002mzb7" },
-        PAIS_RESIDENCIA: { test: "00N7j000002BY1c", prod: "00N5G00000WmhvJ" },
-        DEPARTAMENTO_RESIDENCIA: { test: "00N7j000002BY1h", prod: "00N5G00000WmhvX" },
-        CIUDAD_RESIDENCIA: { test: "00N7j000002BY1i", prod: "00N5G00000WmhvO" },
-        PERIODO_INGRESO: { test: "00N7j000002BY2L", prod: "00N5G00000WmhvI" },
-        FUENTE_AUTORIZACION: { test: "00N7j000002BY26", prod: "00N5G00000WmhvT" },
-        CODIGO_SAE: { test: "00N7j000002BI3p", prod: "00N5G00000WmhvV" },
-        TIPO_ASISTENTE: { test: "00NO40000000sTR", prod: "00NJw000001J3g6" },
-        DIA_ASISTENCIA: { test: "00NO4000007qrPB", prod: "00NJw000004iulj" },
-        ORIGEN_SOLICITUD: { test: "00NO40000002ZeP", prod: "00NJw000001J3HI" },
-        FUENTE: { test: "00N7j000002BKgW", prod: "00N5G00000WmhvW" },
-        SUBFUENTE: { test: "00N7j000002BKgb", prod: "00N5G00000WmhvZ" },
-        MEDIO: { test: "00NO40000001izt", prod: "00NJw000001J3g8" },
-        CAMPANA: { test: "00N7j000002BfKF", prod: "00N5G00000Wmi8X" },
-        AUTORIZACION_DATOS: { test: "00N7j000002BI3m", prod: "00N5G00000WmhvF" },
-        ARTICULO: { test: "00NO400000D2PVt", prod: "00NJw000006f1BB" },
-        NOMBRE_EVENTO: { test: "00NO400000AIAxR", prod: "00NJw000006f1BF" },
-        FECHA_EVENTO: { test: "00NO400000AIanI", prod: "00NJw000006f1BE" },
-        UNIVERSIDAD: { test: "00NO400000B66Z3", prod: "00NJw000006f1BG" },
-        EMPRESA_CONVENIO: { test: "00NO400000B68fh", prod: "00NJw000006F1BC" },
-        NIVEL_ACADEMICO: { test: "nivelacademico", prod: "nivelacademico" },
+        TIPO_DOCUMENTO: {
+          test: "00N7j000002BI3X",
+          prod: "00N5G00000WmhsT",
+        },
+        NUMERO_DOCUMENTO: {
+          test: "00N7j000002BI3V",
+          prod: "00N5G00000WmhsR",
+        },
+        PREFIJO_CELULAR: {
+          test: "00NO4000002IUPh",
+          prod: "00NJw000002mzb7",
+        },
+        PAIS_RESIDENCIA: {
+          test: "00N7j000002BY1c",
+          prod: "00N5G00000WmhvJ",
+        },
+        DEPARTAMENTO_RESIDENCIA: {
+          test: "00N7j000002BY1h",
+          prod: "00N5G00000WmhvX",
+        },
+        CIUDAD_RESIDENCIA: {
+          test: "00N7j000002BY1i",
+          prod: "00N5G00000WmhvO",
+        },
+        PERIODO_INGRESO: {
+          test: "00N7j000002BY2L",
+          prod: "00N5G00000WmhvI",
+        },
+        FUENTE_AUTORIZACION: {
+          test: "00N7j000002BY26",
+          prod: "00N5G00000WmhvT",
+        },
+        CODIGO_SAE: {
+          test: "00N7j000002BI3p",
+          prod: "00N5G00000WmhvV",
+        },
+        TIPO_ASISTENTE: {
+          test: "00NO40000000sTR",
+          prod: "00NJw000001J3g6",
+        },
+        DIA_ASISTENCIA: {
+          test: "00NO4000007qrPB",
+          prod: "00NJw000004iulj",
+        },
+        ORIGEN_SOLICITUD: {
+          test: "00NO40000002ZeP",
+          prod: "00NJw000001J3HI",
+        },
+        FUENTE: {
+          test: "00N7j000002BKgW",
+          prod: "00N5G00000WmhvW",
+        },
+        SUBFUENTE: {
+          test: "00N7j000002BKgb",
+          prod: "00N5G00000WmhvZ",
+        },
+        MEDIO: {
+          test: "00NO40000001izt",
+          prod: "00NJw000001J3g8",
+        },
+        CAMPANA: {
+          test: "00N7j000002BfKF",
+          prod: "00N5G00000Wmi8X",
+        },
+        AUTORIZACION_DATOS: {
+          test: "00N7j000002BI3m",
+          prod: "00N5G00000WmhvF",
+        },
+        ARTICULO: {
+          test: "00NO400000D2PVt",
+          prod: "00NJw000006f1BB",
+        },
+        NOMBRE_EVENTO: {
+          test: "00NO400000AIAxR",
+          prod: "00NJw000006f1BF",
+        },
+        FECHA_EVENTO: {
+          test: "00NO400000AIanI",
+          prod: "00NJw000006f1BE",
+        },
+        UNIVERSIDAD: {
+          test: "00NO400000B66Z3",
+          prod: "00NJw000006f1BG",
+        },
+        EMPRESA_CONVENIO: {
+          test: "00NO400000B68fh",
+          prod: "00NJw000006F1BC",
+        },
+        NIVEL_ACADEMICO: {
+          test: "nivelacademico",
+          prod: "nivelacademico",
+        },
       },
 
       // URLs de respuesta

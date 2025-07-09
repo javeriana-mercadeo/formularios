@@ -18,13 +18,13 @@ class Logger {
     };
 
     this.levels = {
-      error: { priority: 0, color: "#ff4444", emoji: "❌" },
-      warn: { priority: 1, color: "#ffaa00", emoji: "⚠️" },
-      info: { priority: 2, color: "#4444ff", emoji: "ℹ️" },
-      debug: { priority: 3, color: "#888888", emoji: "🔍" },
-      success: { priority: 2, color: "#44ff44", emoji: "✅" },
-      loading: { priority: 2, color: "#00aaff", emoji: "🔄" },
-      data: { priority: 3, color: "#aa44ff", emoji: "📊" },
+      error: { priority: 0, color: "#f5b5b0", emoji: "🔴" },
+      warn: { priority: 1, color: "#ffe08a", emoji: "🟠" },
+      info: { priority: 2, color: "#8dd1e1", emoji: "🔵" },
+      debug: { priority: 3, color: "#cfcfcf", emoji: "🟤" },
+      success: { priority: 2, color: "#a8e6a3", emoji: "🟢" },
+      loading: { priority: 2, color: "#b3d9ff", emoji: "⚪" },
+      data: { priority: 3, color: "#dab5e8", emoji: "⬛" },
     };
 
     this.logs = [];
@@ -56,23 +56,11 @@ class Logger {
     const timestamp = new Date().toISOString();
     const levelInfo = this.levels[level] || this.levels.info;
 
-    let formattedMessage = "";
-
-    if (this.config.showTimestamp) {
-      formattedMessage += `[${timestamp.split("T")[1].split(".")[0]}] `;
-    }
-
-    if (this.config.showLevel) {
-      formattedMessage += `${levelInfo.emoji} ${level.toUpperCase()} `;
-    }
-
-    formattedMessage += `[${this.config.prefix}] ${message}`;
-
     return {
-      timestamp,
-      level,
-      message: formattedMessage,
-      originalMessage: message,
+      timestamp: timestamp.split("T")[1].split(".")[0],
+      level: level.toUpperCase(),
+      origin: this.config.prefix,
+      message: message,
       args,
       color: levelInfo.color,
       emoji: levelInfo.emoji,
@@ -89,12 +77,45 @@ class Logger {
     if (!this.shouldLog(level)) return;
 
     const logEntry = this.formatMessage(level, message, ...args);
+    const callerInfo = this.getCallerInfo();
+    const logOrigin = callerInfo ? `(${callerInfo})` : "";
 
-    // Persistir log si está habilitado
+    const { timestamp, level: levelStr, origin, color, emoji } = logEntry;
+
+    const prefix = this.config.showTimestamp ? `[${timestamp}]` : "";
+
+    const levelTag = this.config.showLevel ? `${emoji} ${levelStr}` : "";
+
+    const originTag = origin ? `[${origin}]` : "";
+
+    const fullHeader = `${prefix} ${levelTag} ${originTag} ${logOrigin}`.trim();
+
+    if (this.config.colors && typeof window !== "undefined") {
+      // Errores y advertencias: todo el texto en color
+      if (level === "error" || level === "warn") {
+        console.log(
+          `%c${fullHeader} ${logEntry.message}`,
+          `color: ${color}; font-weight: bold;`,
+          ...args
+        );
+      } else {
+        // Solo header con color, mensaje en blanco
+        console.log(
+          `%c${fullHeader} %c${logEntry.message}`,
+          `color: ${color}; font-weight: bold;`,
+          `color: white; font-weight: normal;`,
+          ...args
+        );
+      }
+    } else {
+      // Sin colores
+      console.log(`${fullHeader} ${logEntry.message}`, ...args);
+    }
+
+    // Persistencia
     if (this.config.persistLogs) {
-      this.logs.push(logEntry);
+      this.logs.push({ ...logEntry, origin: callerInfo });
 
-      // Limitar número de logs
       if (this.logs.length > this.config.maxLogs) {
         this.logs.shift();
       }
@@ -103,17 +124,34 @@ class Logger {
     // Notificar listeners
     this.listeners.forEach((listener) => {
       try {
-        listener(logEntry);
+        listener({ ...logEntry, origin: callerInfo });
       } catch (error) {
         console.error("Error in log listener:", error);
       }
     });
+  }
 
-    // Mostrar en consola
-    if (this.config.colors && typeof window !== "undefined") {
-      console.log(`%c${logEntry.message}`, `color: ${logEntry.color}; font-weight: bold;`, ...args);
-    } else {
-      console.log(logEntry.message, ...args);
+  getCallerInfo() {
+    try {
+      const error = new Error();
+      const stack = error.stack.split("\n");
+
+      // Buscar la primera línea FUERA del logger
+      for (let i = 2; i < stack.length; i++) {
+        const line = stack[i];
+        if (!line.includes("Logger.js")) {
+          const match = line.match(/(?:at\s+)?(.*):(\d+):(\d+)/);
+          if (match) {
+            const [, file, lineNum, colNum] = match;
+            const fileName = file.split("/").pop();
+            return `${fileName}:${lineNum}:${colNum}`;
+          }
+        }
+      }
+
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 

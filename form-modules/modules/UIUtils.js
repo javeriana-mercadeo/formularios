@@ -5,7 +5,7 @@
  */
 
 export class UIUtils {
-  constructor() {
+  constructor(loggerConfig = {}) {
     // Configuración por defecto
     this.config = {
       errorClass: "error",
@@ -22,6 +22,8 @@ export class UIUtils {
       successText: "Enviado correctamente",
       errorText: "Error al procesar",
     };
+
+    this.logger = new Logger(loggerConfig);
   }
 
   /**
@@ -77,7 +79,7 @@ export class UIUtils {
     try {
       return context.querySelector(selector);
     } catch (error) {
-      console.error(`Error al buscar elemento: ${selector}`, error);
+      this.logger.error(`Error al buscar elemento: ${selector}`, error);
       return null;
     }
   }
@@ -89,7 +91,7 @@ export class UIUtils {
     try {
       return context.querySelectorAll(selector);
     } catch (error) {
-      console.error(`Error al buscar elementos: ${selector}`, error);
+      this.logger.error(`Error al buscar elementos: ${selector}`, error);
       return [];
     }
   }
@@ -194,7 +196,7 @@ export class UIUtils {
   populateCountries(locations) {
     if (!locations) return;
 
-    const countrySelect = this.findElement('[name="country"]');
+    const countrySelect = this.findElement('[data-puj-form="field-country"]');
     if (!countrySelect) return;
 
     // Limpiar opciones existentes
@@ -227,7 +229,7 @@ export class UIUtils {
   populatePrefixes(prefixes) {
     if (!prefixes) return;
 
-    const prefixSelect = this.findElement('[name="phone_code"]');
+    const prefixSelect = this.findElement('[data-puj-form="field-phone-code"]');
     if (!prefixSelect) return;
 
     // Limpiar opciones existentes
@@ -345,8 +347,13 @@ export class UIUtils {
     if (!fieldElement) return;
 
     const fieldId = fieldElement.id || fieldElement.name;
-    const errorElement =
+    let errorElement =
       this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
+
+    // Crear elemento de error si no existe
+    if (!errorElement) {
+      errorElement = this.createErrorElement(fieldElement);
+    }
 
     // Marcar campo como error
     fieldElement.classList.add(this.config.errorClass);
@@ -366,6 +373,66 @@ export class UIUtils {
         }, 10);
       }
     }
+  }
+
+  /**
+   * Crear elemento de error dinámicamente
+   */
+  createErrorElement(fieldElement) {
+    if (!fieldElement) return null;
+
+    const fieldId = fieldElement.id || fieldElement.name;
+    const errorId = `error_${fieldId}`;
+
+    // Verificar si ya existe
+    const existingError = document.getElementById(errorId);
+    if (existingError) return existingError;
+
+    // Crear elemento de error
+    const errorElement = document.createElement("div");
+    errorElement.id = errorId;
+    errorElement.className = "error_text";
+    errorElement.setAttribute("data-error-for", fieldId);
+    errorElement.style.display = "none";
+
+    // Encontrar dónde insertar el elemento
+    const insertionPoint = this.findErrorInsertionPoint(fieldElement);
+
+    if (insertionPoint.parent && insertionPoint.nextSibling) {
+      insertionPoint.parent.insertBefore(errorElement, insertionPoint.nextSibling);
+    } else if (insertionPoint.parent) {
+      insertionPoint.parent.appendChild(errorElement);
+    } else {
+      // Fallback: insertar después del campo
+      fieldElement.parentNode.insertBefore(errorElement, fieldElement.nextSibling);
+    }
+
+    return errorElement;
+  }
+
+  /**
+   * Encontrar el punto de inserción para el elemento de error
+   */
+  findErrorInsertionPoint(fieldElement) {
+    // Buscar contenedor padre más apropiado
+    const fieldContainer =
+      fieldElement.closest(
+        ".field-container, .form-group, .input-group, .name-field, .prefix-field, .mobile-field, .phone-row, .name-row"
+      ) || fieldElement.parentElement;
+
+    // Si el campo está en un contenedor específico, insertar al final de ese contenedor
+    if (fieldContainer !== fieldElement.parentElement) {
+      return {
+        parent: fieldContainer,
+        nextSibling: null,
+      };
+    }
+
+    // Caso por defecto: insertar después del campo
+    return {
+      parent: fieldElement.parentElement,
+      nextSibling: fieldElement.nextSibling,
+    };
   }
 
   /**
@@ -390,11 +457,51 @@ export class UIUtils {
 
         setTimeout(() => {
           errorElement.style.display = "none";
+          errorElement.textContent = ""; // Limpiar contenido
         }, this.config.animationDuration);
       } else {
         errorElement.style.display = "none";
+        errorElement.textContent = ""; // Limpiar contenido
       }
     }
+  }
+
+  /**
+   * Limpiar todos los errores del formulario
+   */
+  clearAllErrors(formElement) {
+    if (!formElement) return;
+
+    // Limpiar clases de error de todos los campos
+    const fields = formElement.querySelectorAll("input, select, textarea");
+    fields.forEach((field) => {
+      field.classList.remove(this.config.errorClass);
+      field.classList.remove(this.config.validClass);
+    });
+
+    // Ocultar y limpiar todos los elementos de error
+    const errorElements = formElement.querySelectorAll(".error_text");
+    errorElements.forEach((errorElement) => {
+      errorElement.style.display = "none";
+      errorElement.textContent = "";
+    });
+  }
+
+  /**
+   * Obtener o crear elemento de error para un campo
+   */
+  getOrCreateErrorElement(fieldElement) {
+    if (!fieldElement) return null;
+
+    const fieldId = fieldElement.id || fieldElement.name;
+    let errorElement =
+      this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
+
+    if (!errorElement) {
+      errorElement = this.createErrorElement(fieldElement);
+    }
+
+    return errorElement;
   }
 
   /**
@@ -402,7 +509,7 @@ export class UIUtils {
    */
   showSuccessMessage(message, container = null) {
     const targetContainer =
-      container || this.findElement("[data-success-msg]") || this.findElement("#successMsg");
+      container || this.findElement("[data-puj-form='message-success']") || this.findElement("[data-success-msg]");
 
     if (targetContainer) {
       targetContainer.textContent = message;
@@ -424,7 +531,7 @@ export class UIUtils {
    */
   hideSuccessMessage(container = null) {
     const targetContainer =
-      container || this.findElement("[data-success-msg]") || this.findElement("#successMsg");
+      container || this.findElement("[data-puj-form='message-success']") || this.findElement("[data-success-msg]");
 
     if (targetContainer) {
       this.hideElement(targetContainer);
