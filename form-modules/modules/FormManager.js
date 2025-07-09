@@ -326,7 +326,12 @@ export class FormManager {
 
     // Inicializar nivel académico si está configurado
     if (this.config.academicLevels && this.config.academicLevels.length > 0) {
-      this.ui.populateSelect('[data-puj-form="field-academic-level"]', this.config.academicLevels, "code", "name");
+      this.ui.populateSelect(
+        '[data-puj-form="field-academic-level"]',
+        this.config.academicLevels,
+        "code",
+        "name"
+      );
     }
 
     // Auto-seleccionar si solo hay una opción
@@ -376,10 +381,14 @@ export class FormManager {
       return this.formData.last_name;
     });
 
-    this.ui.addInputListener(this.formElement, '[data-puj-form="field-document-number"]', (value) => {
-      this.formData.document = this.ui.cleanNumbers(value);
-      return this.formData.document;
-    });
+    this.ui.addInputListener(
+      this.formElement,
+      '[data-puj-form="field-document-number"]',
+      (value) => {
+        this.formData.document = this.ui.cleanNumbers(value);
+        return this.formData.document;
+      }
+    );
 
     this.ui.addInputListener(this.formElement, '[data-puj-form="field-phone"]', (value) => {
       this.formData.phone = this.ui.cleanNumbers(value);
@@ -387,9 +396,13 @@ export class FormManager {
     });
 
     // Campos de selección
-    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-document-type"]', (value) => {
-      this.formData.type_doc = value;
-    });
+    this.ui.addChangeListener(
+      this.formElement,
+      '[data-puj-form="field-document-type"]',
+      (value) => {
+        this.formData.type_doc = value;
+      }
+    );
 
     this.ui.addChangeListener(this.formElement, '[data-puj-form="field-email"]', (value) => {
       this.formData.email = value;
@@ -411,18 +424,30 @@ export class FormManager {
       this.formData.city = value;
     });
 
-    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-type-attendee"]', (value) => {
-      this.handleTypeAttendeeChange(value);
-    });
+    this.ui.addChangeListener(
+      this.formElement,
+      '[data-puj-form="field-type-attendee"]',
+      (value) => {
+        this.handleTypeAttendeeChange(value);
+      }
+    );
 
-    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-attendance-day"]', (value) => {
-      this.formData.attendance_day = value;
-    });
+    this.ui.addChangeListener(
+      this.formElement,
+      '[data-puj-form="field-attendance-day"]',
+      (value) => {
+        this.formData.attendance_day = value;
+      }
+    );
 
     // Campos académicos
-    this.ui.addChangeListener(this.formElement, '[data-puj-form="field-academic-level"]', (value) => {
-      this.handleAcademicLevelChange(value);
-    });
+    this.ui.addChangeListener(
+      this.formElement,
+      '[data-puj-form="field-academic-level"]',
+      (value) => {
+        this.handleAcademicLevelChange(value);
+      }
+    );
 
     this.ui.addChangeListener(this.formElement, '[data-puj-form="field-faculty"]', (value) => {
       this.handleFacultyChange(value);
@@ -782,7 +807,6 @@ export class FormManager {
     // Restablecer campos por defecto
     this.setInitialValues();
   }
-
 
   /**
    * Métodos de control de logging
