@@ -53,7 +53,7 @@ const advancedConfig = {
   logging: {
     enabled: true,
     level: "debug",
-    prefix: "AdvancedForm",
+    prefix: "Formulario avanzado",
     colors: true,
     persistLogs: true,
     maxLogs: 1000,
@@ -95,168 +95,13 @@ const advancedConfig = {
   },
 };
 
-// Configuración básica
-const basicConfig = {
-  eventName: "Open Day Básico 2025",
-  eventDate: "15/03/2025",
-
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
-
-  formSelector: "#basic_form",
-
-  styles: {
-    enabled: true,
-    basePath: "../",
-    autoLoad: true,
-    useCombined: true,
-  },
-
-  validation: {
-    realTimeValidation: true,
-    showErrorsOnBlur: true,
-  },
-
-  logging: {
-    enabled: false,
-    level: "info",
-    prefix: "BasicForm",
-    colors: true,
-  },
-
-  debugMode: true,
-  devMode: true,
-
-  callbacks: {
-    onFormLoad: (formManager) => {
-      console.log("✅ Formulario básico cargado correctamente");
-      console.log("📝 Configuración:", formManager.getConfig());
-    },
-
-    onFormSubmit: async (formData, formManager) => {
-      console.log("📤 Enviando formulario básico:", formData);
-
-      // Simular envío exitoso
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert("¡Registro exitoso! (Modo demo)");
-
-      return true;
-    },
-  },
-};
-
-// Configuración personalizada
-const customConfig = {
-  eventName: "Open Day VIP 2025",
-  eventDate: "22/03/2025",
-  company: "Universidad Javeriana - VIP Experience",
-
-  typeAttendee: ["VIP", "Premium", "Elite"],
-
-  formSelector: "#custom_form",
-
-  styles: {
-    enabled: true,
-    basePath: "../",
-    autoLoad: true,
-    useCombined: true,
-    includeTheme: false,
-    customVariables: {
-      "primary-color": "#7c3aed",
-      "primary-hover": "#6d28d9",
-      "success-color": "#059669",
-      "border-radius": "12px",
-      "font-family": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-    },
-  },
-
-  validation: {
-    realTimeValidation: true,
-    showErrorsOnBlur: true,
-  },
-
-  logging: {
-    enabled: false,
-    level: "debug",
-    prefix: "CustomVIP",
-    colors: true,
-    persistLogs: true,
-    maxLogs: 1000,
-  },
-
-  debugMode: true,
-  devMode: true,
-
-  callbacks: {
-    onFormLoad: (formManager) => {
-      console.log("🎨 Formulario VIP cargado");
-
-      // Personalización visual avanzada
-      const form = document.querySelector("#custom_form");
-      if (form) {
-        form.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-        form.style.padding = "30px";
-        form.style.borderRadius = "15px";
-        form.style.boxShadow = "0 20px 40px rgba(0,0,0,0.1)";
-      }
-    },
-
-    onFormSubmit: async (formData, formManager) => {
-      console.log("🎯 Enviando formulario VIP:", formData);
-
-      // Validación VIP personalizada
-      if (formData.email && !formData.email.includes("vip")) {
-        console.warn("⚠️ Email no parece ser VIP");
-      }
-
-      // Simular proceso VIP
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      alert("🌟 ¡Registro VIP completado con éxito! (Modo demo)");
-
-      return true;
-    },
-
-    onFieldChange: (field, value, formManager) => {
-      if (field.name === "email" && value.includes("vip")) {
-        field.style.background = "linear-gradient(45deg, #ffd700, #ffed4e)";
-        field.style.border = "2px solid #ffd700";
-        console.log("🌟 Email VIP detectado!");
-      }
-    },
-
-    onValidationError: (error, formManager) => {
-      console.error("🚨 Error de validación VIP:", error);
-
-      // Notificación personalizada
-      const notification = document.createElement("div");
-      notification.textContent = "Por favor, completa todos los campos VIP";
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #ef4444;
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        z-index: 1000;
-        font-weight: 600;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      `;
-      document.body.appendChild(notification);
-
-      setTimeout(() => notification.remove(), 3000);
-    },
-  },
-};
-
 // ========================================
 // FUNCIONES DE GESTIÓN DE CÓDIGO Y TEMPLATES
 // ========================================
 
 // Almacenar configuraciones para mostrar código
 window.formConfigs = {
-  basic: basicConfig,
   advanced: advancedConfig,
-  custom: customConfig,
 };
 
 // Tabs activos
@@ -1165,17 +1010,9 @@ function initPageFunctionality() {
 // INICIALIZACIÓN
 // ========================================
 
-// Inicializar formulario básico
-const basicForm = new FormManager(basicConfig);
-window.basicForm = basicForm;
-
 // Inicializar formulario avanzado
 const advancedForm = new FormManager(advancedConfig);
 window.advancedForm = advancedForm;
-
-// Inicializar formulario personalizado
-const customForm = new FormManager(customConfig);
-window.customForm = customForm;
 
 // Inicializar funcionalidades de la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -1184,16 +1021,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Inicializar todos los formularios
 Promise.all([
-  basicForm.init().then(() => {
-    console.log("🚀 Formulario básico inicializado");
-  }),
-
   advancedForm.init().then(() => {
     console.log("⚙️ Formulario avanzado inicializado");
-  }),
-
-  customForm.init().then(() => {
-    console.log("🎨 Formulario personalizado inicializado");
   }),
 ])
   .then(() => {
@@ -1208,9 +1037,7 @@ Promise.all([
 
 // Exportar funciones para uso global
 export {
-  basicConfig,
   advancedConfig,
-  customConfig,
   templates,
   generateExampleHTML,
   generateExampleJS,

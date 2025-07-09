@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/form-styles.css" />
+  </head>
+  <body>
+    <form id="form-id">
+      <div class="name-row">
+        <div class="name-field">
+          <input
+            type="text"
+            placeholder="*Nombre(s)"
+            id="advanced_first_name"
+            name="first_name"
+            required
+          />
+        </div>
+        <div class="name-field">
+          <input
+            type="text"
+            placeholder="*Apellidos"
+            id="advanced_last_name"
+            name="last_name"
+            required
+          />
+        </div>
+      </div>
+
+      <select id="advanced_type_doc" name="type_doc" required>
+        <option value="">*Tipo de documento</option>
+        <option value="CC">Cédula de Ciudadanía</option>
+        <option value="CE">Cédula de Extranjería</option>
+        <option value="TI">Tarjeta de Identidad</option>
+        <option value="PP">Pasaporte</option>
+      </select>
+
+      <input
+        type="text"
+        placeholder="*Número de documento"
+        id="advanced_document"
+        name="document"
+        required
+      />
+
+      <input type="email" placeholder="*Email" id="advanced_email" name="email" required />
+
+      <div class="phone-row">
+        <div class="prefix-field">
+          <select id="advanced_phone_code" name="phone_code" required>
+            <option value="">(+) Indicativo</option>
+          </select>
+        </div>
+        <div class="mobile-field">
+          <input type="text" placeholder="*Teléfono" id="advanced_phone" name="phone" required />
+        </div>
+      </div>
+
+      <select id="advanced_country" name="country" required>
+        <option value="">*País de residencia</option>
+      </select>
+
+      <select id="advanced_department" name="department" style="display: none">
+        <option value="">*Departamento</option>
+      </select>
+
+      <select id="advanced_city" name="city" style="display: none">
+        <option value="">*Ciudad</option>
+      </select>
+
+      <select id="advanced_type_attendee" name="type_attendee" required>
+        <option value="">*Tipo de asistente</option>
+      </select>
+
+      <select id="advanced_attendance_day" name="attendance_day" required>
+        <option value="">*Día de asistencia</option>
+      </select>
+
+      <select id="advanced_academic_level" name="academic_level" style="display: none">
+        <option value="">*Nivel académico</option>
+      </select>
+
+      <select id="advanced_faculty" name="faculty" style="display: none">
+        <option value="">*Facultad</option>
+      </select>
+
+      <select id="advanced_program" name="program" style="display: none">
+        <option value="">*Programa</option>
+      </select>
+
+      <select id="advanced_admission_period" name="admission_period" style="display: none">
+        <option value="">*Período de admisión</option>
+      </select>
+
+      <div class="radio-inline-group">
+        <p>¿Autorizas el tratamiento de tus datos personales?</p>
+        <div class="radio-option">
+          <input type="radio" id="advanced_auth_yes" name="authorization_data" value="1" />
+          <label for="advanced_auth_yes">Sí</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="advanced_auth_no" name="authorization_data" value="0" />
+          <label for="advanced_auth_no">No</label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" disabled>
+        <span class="status-indicator status-ready"></span>
+        Registrarme al Evento
+      </button>
+    </form>
+
+    <script type="module">
+      import { FormManager } from "../modules/FormManager.js";
+      const form = new FormManager("form-id", {
+        logging: {
+          enabled: true,
+          level: "debug",
+          prefix: "Formulario avanzado",
+          colors: true,
+          persistLogs: true,
+          maxLogs: 1000,
+        },
+      });
+
+      form.init();
+    </script>
+  </body>
+</html>
