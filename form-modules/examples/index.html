@@ -291,186 +291,186 @@
                   </div>
                 </div>
                 <div class="gh-form-container">
-                  <form id="advanced_form">
-                    <!-- Información del participante -->
-                    <div class="name-row">
-                      <div class="name-field">
-                        <input
-                          type="text"
-                          placeholder="*Nombre(s)"
-                          data-puj-form="first_name"
-                          name="first_name"
-                          required
-                        />
-                      </div>
-                      <div class="name-field">
-                        <input
-                          type="text"
-                          placeholder="*Apellidos"
-                          data-puj-form="last_name"
-                          name="last_name"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <!-- Documento de identidad -->
-                    <div class="document-row">
-                      <div class="document-type-field">
-                        <select data-puj-form="type_doc" name="type_doc" required>
-                          <option value="">*Tipo de documento</option>
-                          <option value="CC">Cédula Ciudadanía</option>
-                          <option value="CE">Cédula Extranjería</option>
-                          <option value="PA">Pasaporte</option>
-                          <option value="TI">Tarjeta Identidad</option>
-                        </select>
-                      </div>
-                      <div class="document-number-field">
-                        <input
-                          type="text"
-                          placeholder="*Número de documento"
-                          data-puj-form="document"
-                          name="document"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <!-- Email -->
-                    <input
-                      type="email"
-                      placeholder="*Email"
-                      data-puj-form="email"
-                      name="email"
-                      maxlength="80"
-                      required
-                    />
-
-                    <!-- Phone row -->
-                    <div class="phone-row">
-                      <div class="prefix-field">
-                        <select data-puj-form="phone_code" name="phone_code" required>
-                          <option value="">(+) Indicativo</option>
-                          <!-- Options will be populated by JavaScript -->
-                        </select>
-                      </div>
-                      <div class="mobile-field">
-                        <input
-                          type="text"
-                          placeholder="*Teléfono celular"
-                          data-puj-form="phone"
-                          name="phone"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <!-- Ubicación -->
-                    <select data-puj-form="country" name="country" required>
-                      <option value="">*País de residencia</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <select data-puj-form="department" name="department" style="display: none">
-                      <option value="">*Selecciona el departamento</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <select data-puj-form="city" name="city" style="display: none">
-                      <option value="">*Selecciona la Ciudad</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Día de asistencia -->
-                    <select data-puj-form="attendance_day" name="attendance_day" required>
-                      <option value="">*Día de asistencia</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Tipo de asistente -->
-                    <select data-puj-form="type_attendee" name="type_attendee" required>
-                      <option value="">*Tipo de asistente</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Nivel académico se crea dinámicamente desde JS -->
-
-                    <select
-                      data-puj-form="academic_level"
-                      name="academic_level"
-                      style="display: none"
-                    >
-                      <option value="">*Nivel académico</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Facultad -->
-                    <select data-puj-form="faculty" name="Facultad" style="display: none">
-                      <option value="">*Facultad de interés</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Programa -->
-                    <select data-puj-form="program" name="program" style="display: none">
-                      <option value="">*Programa de interés</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Período de ingreso -->
-                    <select
-                      data-puj-form="admission_period"
-                      name="admission_period"
-                      style="display: none"
-                    >
-                      <option value="">*Periodo esperado de Ingreso de interés</option>
-                      <!-- Options will be populated by JavaScript -->
-                    </select>
-
-                    <!-- Autorización de datos -->
-                    <div>
-                      <p>
-                        ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
-                        <a
-                          href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
-                          target="_blank"
-                        >
-                          autorización de privacidad
-                        </a>
-                        ?
-                      </p>
-
-                      <div class="radio-inline-group">
-                        <div class="radio-option">
+                  <div class="form-card">
+                    <form class="advanced_form" novalidate aria-label="Formulario de contacto">
+                      <!-- Información del participante -->
+                      <div class="name-row">
+                        <div class="name-field">
                           <input
-                            type="radio"
-                            data-puj-form="autorizacion_si"
-                            name="authorization_data"
-                            value="1"
+                            type="text"
+                            placeholder="*Nombre(s)"
+                            data-puj-form="first_name"
+                            name="first_name"
+                            required
                           />
-                          <label for="autorizacion_si">Sí</label>
                         </div>
-                        <div class="radio-option">
+                        <div class="name-field">
                           <input
-                            type="radio"
-                            data-puj-form="autorizacion_no"
-                            name="authorization_data"
-                            value="0"
+                            type="text"
+                            placeholder="*Apellidos"
+                            data-puj-form="last_name"
+                            name="last_name"
+                            required
                           />
-                          <label for="autorizacion_no">No</label>
                         </div>
                       </div>
 
-                      <div class="error_text" id="error_authorization_data">
-                        La Pontificia Universidad Javeriana requiere de tu autorización para el
-                        tratamiento de tus datos personales para continuar con el presente proceso,
-                        sin la autorización legalmente no podemos darte continuidad al mismo.
+                      <!-- Documento de identidad -->
+                      <div class="document-row">
+                        <div class="document-type-field">
+                          <select data-puj-form="type_doc" name="type_doc" required>
+                            <option value="">*Tipo de documento</option>
+                            <option value="CC">Cédula Ciudadanía</option>
+                            <option value="CE">Cédula Extranjería</option>
+                            <option value="PA">Pasaporte</option>
+                            <option value="TI">Tarjeta Identidad</option>
+                          </select>
+                        </div>
+                        <div class="document-number-field">
+                          <input
+                            type="text"
+                            placeholder="*Número de documento"
+                            data-puj-form="document"
+                            name="document"
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <button type="submit" id="submit_btn" disabled style="margin-top: 20px">
-                      Inscríbete ahora
-                    </button>
-                  </form>
+                      <!-- Email -->
+                      <input
+                        type="email"
+                        placeholder="*Email"
+                        data-puj-form="email"
+                        name="email"
+                        maxlength="80"
+                        required
+                      />
+
+                      <!-- Phone row -->
+                      <div class="phone-row">
+                        <div class="prefix-field">
+                          <select data-puj-form="phone_code" name="phone_code" required>
+                            <option value="">(+) Indicativo</option>
+                            <!-- Options will be populated by JavaScript -->
+                          </select>
+                        </div>
+                        <div class="mobile-field">
+                          <input
+                            type="text"
+                            placeholder="*Teléfono celular"
+                            data-puj-form="phone"
+                            name="mobile"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Ubicación -->
+                      <select data-puj-form="country" name="country" required>
+                        <option value="">*País de residencia</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <select data-puj-form="department" name="department" style="display: none">
+                        <option value="">*Selecciona el departamento</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <select data-puj-form="city" name="city" style="display: none">
+                        <option value="">*Selecciona la Ciudad</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Día de asistencia -->
+                      <select data-puj-form="attendance_day" name="attendance_day" required>
+                        <option value="">*Día de asistencia</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Tipo de asistente -->
+                      <select data-puj-form="type_attendee" name="type_attendee" required>
+                        <option value="">*Tipo de asistente</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Nivel académico -->
+                      <select
+                        data-puj-form="academic_level"
+                        name="academic_level"
+                        style="display: none"
+                      >
+                        <option value="">*Nivel académico</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Facultad -->
+                      <select data-puj-form="faculty" name="Facultad" style="display: none">
+                        <option value="">*Facultad de interés</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Programa -->
+                      <select data-puj-form="program" name="program" style="display: none">
+                        <option value="">*Programa de interés</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Período de ingreso -->
+                      <select
+                        data-puj-form="admission_period"
+                        name="admission_period"
+                        style="display: none"
+                      >
+                        <option value="">*Periodo esperado de Ingreso de interés</option>
+                        <!-- Options will be populated by JavaScript -->
+                      </select>
+
+                      <!-- Autorización de datos -->
+                      <div>
+                        <p>
+                          ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
+                          <a
+                            href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+                            target="_blank"
+                          >
+                            autorización de privacidad
+                          </a>
+                          ?
+                        </p>
+
+                        <div class="radio-inline-group">
+                          <div class="radio-option">
+                            <input
+                              type="radio"
+                              data-puj-form="autorizacion_si"
+                              name="authorization_data"
+                              value="1"
+                            />
+                            <label for="autorizacion_si">Sí</label>
+                          </div>
+                          <div class="radio-option">
+                            <input
+                              type="radio"
+                              data-puj-form="autorizacion_no"
+                              name="authorization_data"
+                              value="0"
+                            />
+                            <label for="autorizacion_no">No</label>
+                          </div>
+                        </div>
+
+                        <div class="error_text" data-puj-form="error_auth">
+                          La Pontificia Universidad Javeriana requiere de tu autorización para el
+                          tratamiento de tus datos personales para continuar con el presente
+                          proceso, sin la autorización legalmente no podemos darte continuidad al
+                          mismo.
+                        </div>
+                      </div>
+
+                      <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
