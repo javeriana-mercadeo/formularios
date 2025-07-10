@@ -561,22 +561,24 @@ prodForm.init().catch(error => {
 // ========================================
 
 // Función para copiar template
-window.copyTemplate = function (templateKey) {
+window.copyTemplate = function (templateKey, buttonElement) {
   const template = templates[templateKey];
   if (template) {
     navigator.clipboard
       .writeText(template.trim())
       .then(() => {
         // Feedback visual
-        const button = event.target;
-        const originalText = button.innerHTML;
-        button.innerHTML = "✅ Copiado";
-        button.style.background = "rgba(16, 185, 129, 0.2)";
+        const button = buttonElement || document.querySelector(`[onclick*="copyTemplate('${templateKey}')"]`);
+        if (button) {
+          const originalText = button.innerHTML;
+          button.innerHTML = "✅ Copiado";
+          button.style.background = "rgba(16, 185, 129, 0.2)";
 
-        setTimeout(() => {
-          button.innerHTML = originalText;
-          button.style.background = "";
-        }, 2000);
+          setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = "";
+          }, 2000);
+        }
       })
       .catch((err) => {
         console.error("Error al copiar template:", err);
@@ -656,6 +658,450 @@ window.showTemplate = function (templateKey) {
       }
     });
   }
+};
+
+
+// Función para aplicar syntax highlighting seguro usando CSS
+function applySafeSyntaxHighlighting(preElement, code, language) {
+  // Agregar data attribute para el lenguaje
+  preElement.setAttribute('data-language', language);
+  
+  // Agregar estilos CSS si no existen
+  if (!document.getElementById('syntax-highlight-styles')) {
+    const style = document.createElement('style');
+    style.id = 'syntax-highlight-styles';
+    style.textContent = `
+      /* JavaScript */
+      pre[data-language="js"] .token-keyword { color: #8b5cf6; font-weight: 600; }
+      pre[data-language="js"] .token-string { color: #10b981; }
+      pre[data-language="js"] .token-comment { color: #6b7280; font-style: italic; }
+      pre[data-language="js"] .token-number { color: #f59e0b; }
+      pre[data-language="js"] .token-function { color: #3b82f6; font-weight: 500; }
+      pre[data-language="js"] .token-property { color: #ef4444; }
+      
+      /* HTML */
+      pre[data-language="html"] .token-tag { color: #8b5cf6; font-weight: 600; }
+      pre[data-language="html"] .token-attr-name { color: #ef4444; }
+      pre[data-language="html"] .token-attr-value { color: #10b981; }
+      
+      /* Config (JSON) */
+      pre[data-language="config"] .token-property { color: #ef4444; }
+      pre[data-language="config"] .token-string { color: #10b981; }
+      pre[data-language="config"] .token-number { color: #f59e0b; }
+      pre[data-language="config"] .token-boolean { color: #8b5cf6; font-weight: 600; }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // Aplicar tokenización segura línea por línea
+  const lines = code.split('\n');
+  const highlightedLines = lines.map(line => tokenizeLine(line, language));
+  
+  // Usar innerHTML solo después de procesar todas las líneas
+  preElement.innerHTML = highlightedLines.join('\n');
+}
+
+// Función para tokenizar una línea de código de forma segura
+function tokenizeLine(line, language) {
+  if (!line.trim()) return line; // Líneas vacías sin procesar
+  
+  let result = line;
+  
+  // Escapar HTML primero para seguridad
+  result = result
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  
+  switch(language) {
+    case 'js':
+      result = tokenizeJavaScript(result);
+      break;
+    case 'html':
+      result = tokenizeHTML(result);
+      break;
+    case 'config':
+      result = tokenizeJSON(result);
+      break;
+  }
+  
+  return result;
+}
+
+// Tokenizadores específicos por lenguaje
+function tokenizeJavaScript(line) {
+  // Keywords
+  const keywords = ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 
+                   'import', 'export', 'from', 'default', 'class', 'extends', 'new', 'this',
+                   'async', 'await', 'try', 'catch', 'finally', 'throw', 'true', 'false',
+                   'null', 'undefined', 'typeof', 'instanceof', 'in', 'of', 'delete'];
+  
+  keywords.forEach(keyword => {
+    const regex = new RegExp(`\\b(${keyword})\\b`, 'g');
+    line = line.replace(regex, '<span class="token-keyword">$1</span>');
+  });
+  
+  // Strings (solo si no están ya dentro de un span)
+  line = line.replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, (match, quote, content) => {
+    if (match.includes('<span')) return match; // Ya procesado
+    return `<span class="token-string">${quote}${content}${quote}</span>`;
+  });
+  
+  // Comments
+  line = line.replace(/\/\/(.*)$/, '<span class="token-comment">//$1</span>');
+  line = line.replace(/\/\*(.*?)\*\//, '<span class="token-comment">/*$1*/</span>');
+  
+  // Numbers
+  line = line.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="token-number">$1</span>');
+  
+  // Functions (word followed by parentheses)
+  line = line.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="token-function">$1</span>');
+  
+  // Properties (after dots)
+  line = line.replace(/\.([a-zA-Z_$][a-zA-Z0-9_$]*)/g, '.<span class="token-property">$1</span>');
+  
+  return line;
+}
+
+function tokenizeHTML(line) {
+  // HTML tags
+  line = line.replace(/&lt;(\/?[a-zA-Z][a-zA-Z0-9-]*)([^&]*?)&gt;/g, (match, tagName, attrs) => {
+    let result = `&lt;<span class="token-tag">${tagName}</span>`;
+    
+    // Attributes
+    if (attrs.trim()) {
+      attrs = attrs.replace(/\s+([a-zA-Z-]+)=([\"'])([^\"']*?)\2/g, 
+        ' <span class="token-attr-name">$1</span>=<span class="token-attr-value">$2$3$2</span>');
+      result += attrs;
+    }
+    
+    result += '<span class="token-tag">&gt;</span>';
+    return result;
+  });
+  
+  return line;
+}
+
+function tokenizeJSON(line) {
+  // Property names in quotes
+  line = line.replace(/"([^"]+)"(\s*:)/g, '<span class="token-property">"$1"</span>$2');
+  
+  // String values
+  line = line.replace(/:\s*"([^"]*)"/g, ': <span class="token-string">"$1"</span>');
+  
+  // Numbers
+  line = line.replace(/:\s*(\d+(?:\.\d+)?)/g, ': <span class="token-number">$1</span>');
+  
+  // Booleans
+  line = line.replace(/:\s*(true|false)/g, ': <span class="token-boolean">$1</span>');
+  
+  return line;
+}
+
+// Función para mostrar código en modal
+window.showCodeModal = function (example) {
+  const config = window.formConfigs[example];
+  if (!config) return;
+
+  const formId = `${example}_form`;
+  
+  // Crear modal
+  const modal = document.createElement("div");
+  modal.id = `code-modal-${example}`;
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  `;
+
+  const content = document.createElement("div");
+  
+  // Responsive sizing based on viewport
+  const isMobile = window.innerWidth <= 480;
+  const isTablet = window.innerWidth <= 768;
+  const isSmallDesktop = window.innerWidth <= 1024;
+
+  let modalWidth, modalHeight, modalMinWidth, modalPadding, borderRadius;
+
+  if (isMobile) {
+    modalWidth = '100vw';
+    modalHeight = '100vh';
+    modalMinWidth = '100vw';
+    modalPadding = '0';
+    borderRadius = '0';
+  } else if (isTablet) {
+    modalWidth = '95vw';
+    modalHeight = '95vh';
+    modalMinWidth = '320px';
+    modalPadding = '10px';
+    borderRadius = '8px';
+  } else if (isSmallDesktop) {
+    modalWidth = '90vw';
+    modalHeight = '90vh';
+    modalMinWidth = '700px';
+    modalPadding = '20px';
+    borderRadius = '12px';
+  } else {
+    modalWidth = '85vw';
+    modalHeight = '85vh';
+    modalMinWidth = '900px';
+    modalPadding = '20px';
+    borderRadius = '12px';
+  }
+
+  content.style.cssText = `
+    background: white;
+    color: #24292f;
+    border-radius: ${borderRadius};
+    width: ${modalWidth};
+    max-width: ${isMobile ? '100vw' : '1400px'};
+    min-width: ${modalMinWidth};
+    height: ${modalHeight};
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  `;
+
+  // Update modal padding
+  modal.style.padding = modalPadding;
+
+  // Header del modal
+  const header = document.createElement("div");
+  const headerPadding = isMobile ? '16px' : '20px 24px 16px';
+  const headerDirection = isMobile ? 'column' : 'row';
+  const headerAlign = isMobile ? 'flex-start' : 'center';
+  const headerGap = isMobile ? '12px' : '0';
+  
+  header.style.cssText = `
+    padding: ${headerPadding};
+    border-bottom: 1px solid #d0d7de;
+    display: flex;
+    flex-direction: ${headerDirection};
+    justify-content: space-between;
+    align-items: ${headerAlign};
+    background: #f6f8fa;
+    flex-shrink: 0;
+    gap: ${headerGap};
+  `;
+  
+  const titleSection = document.createElement("div");
+  const titleSize = isMobile ? '1rem' : '1.125rem';
+  const subtitleSize = isMobile ? '0.8rem' : '0.875rem';
+  
+  titleSection.innerHTML = `
+    <h3 style="margin: 0; color: #24292f; font-size: ${titleSize}; font-weight: 600; line-height: 1.2;">
+      ${isMobile ? 'Código de Ejemplo' : `Código de Ejemplo - ${config.eventName || 'Formulario'}`}
+    </h3>
+    <p style="margin: 4px 0 0; color: #656d76; font-size: ${subtitleSize};">
+      Configuración ${example}
+    </p>
+  `;
+
+  const closeButton = document.createElement("button");
+  const buttonPadding = isMobile ? '10px 14px' : '8px 12px';
+  const buttonFontSize = isMobile ? '0.9rem' : '0.875rem';
+  
+  closeButton.style.cssText = `
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: ${buttonPadding};
+    cursor: pointer;
+    font-size: ${buttonFontSize};
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+    ${isMobile ? 'align-self: flex-end;' : ''}
+  `;
+  closeButton.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/>
+    </svg>
+    ${isMobile ? '' : 'Cerrar'}
+  `;
+  closeButton.onmouseover = () => closeButton.style.backgroundColor = '#dc2626';
+  closeButton.onmouseout = () => closeButton.style.backgroundColor = '#ef4444';
+  closeButton.onclick = () => modal.remove();
+
+  header.appendChild(titleSection);
+  header.appendChild(closeButton);
+
+  // Tabs del modal
+  const tabsContainer = document.createElement("div");
+  tabsContainer.style.cssText = `
+    padding: 0 24px;
+    background: #f6f8fa;
+    border-bottom: 1px solid #d0d7de;
+    display: flex;
+    gap: 0;
+    flex-shrink: 0;
+  `;
+
+  const tabs = ['js', 'html', 'config'];
+  const tabLabels = { js: 'JavaScript', html: 'HTML', config: 'Config' };
+  
+  tabs.forEach((tabType, index) => {
+    const tab = document.createElement("button");
+    tab.className = `modal-code-tab ${index === 0 ? 'modal-code-tab-active' : ''}`;
+    tab.style.cssText = `
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: ${index === 0 ? '#0969da' : '#656d76'};
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-bottom: 2px solid ${index === 0 ? '#0969da' : 'transparent'};
+      transition: all 0.2s;
+    `;
+    tab.textContent = tabLabels[tabType];
+    tab.onclick = () => showModalCodeTab(example, tabType);
+    tabsContainer.appendChild(tab);
+  });
+
+  // Contenido del código
+  const codeContainer = document.createElement("div");
+  codeContainer.style.cssText = `
+    flex: 1;
+    overflow: auto;
+    position: relative;
+  `;
+
+  // Crear contenidos para cada tab
+  tabs.forEach((tabType, index) => {
+    const codeContent = document.createElement("div");
+    codeContent.id = `modal-${example}-${tabType}-code`;
+    codeContent.className = `modal-code-content ${index !== 0 ? 'modal-code-hidden' : ''}`;
+    codeContent.style.cssText = `
+      display: ${index === 0 ? 'block' : 'none'};
+      height: 100%;
+      position: relative;
+    `;
+
+    const pre = document.createElement("pre");
+    pre.id = `modal-${example}-${tabType}-content`;
+    pre.style.cssText = `
+      margin: 0;
+      padding: 24px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      overflow: auto;
+      height: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    `;
+    
+    // Generar contenido según el tipo
+    let content = '';
+    switch(tabType) {
+      case 'js':
+        content = generateExampleJS(config, formId);
+        break;
+      case 'html':
+        content = generateExampleHTML(formId);
+        break;
+      case 'config':
+        content = JSON.stringify(config, null, 2);
+        break;
+    }
+    
+    // Aplicar syntax highlighting seguro con CSS
+    applySafeSyntaxHighlighting(pre, content, tabType);
+
+    // Botón de copiar para cada tab
+    const copyButton = document.createElement("button");
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+      transition: background-color 0.2s;
+    `;
+    copyButton.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"/>
+        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"/>
+      </svg>
+      Copiar
+    `;
+    copyButton.onmouseover = () => copyButton.style.backgroundColor = '#e5e7eb';
+    copyButton.onmouseout = () => copyButton.style.backgroundColor = '#f3f4f6';
+    copyButton.onclick = () => copyModalCode(example, tabType, copyButton);
+
+    codeContent.appendChild(pre);
+    codeContent.appendChild(copyButton);
+    codeContainer.appendChild(codeContent);
+  });
+
+  content.appendChild(header);
+  content.appendChild(tabsContainer);
+  content.appendChild(codeContainer);
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+
+  // Desactivar scroll de la página
+  document.body.style.overflow = 'hidden';
+
+  // Función para restaurar scroll
+  const restoreBodyScroll = () => {
+    document.body.style.overflow = '';
+  };
+
+  // Cerrar con click fuera
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.remove();
+      restoreBodyScroll();
+    }
+  });
+
+  // Cerrar con ESC
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      restoreBodyScroll();
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+
+  // Actualizar el botón de cerrar para restaurar scroll
+  closeButton.onclick = () => {
+    modal.remove();
+    restoreBodyScroll();
+  };
+
+  // Guardar referencia para las funciones de tab
+  window.currentModalExample = example;
 };
 
 // ========================================
@@ -773,19 +1219,22 @@ function displayCode() {
     // JavaScript
     const jsElement = document.getElementById(`${example}-js-content`);
     if (jsElement) {
-      jsElement.textContent = generateExampleJS(config, formId);
+      const jsCode = generateExampleJS(config, formId);
+      applySafeSyntaxHighlighting(jsElement, jsCode, 'js');
     }
 
     // HTML
     const htmlElement = document.getElementById(`${example}-html-content`);
     if (htmlElement) {
-      htmlElement.textContent = generateExampleHTML(formId);
+      const htmlCode = generateExampleHTML(formId);
+      applySafeSyntaxHighlighting(htmlElement, htmlCode, 'html');
     }
 
     // Config
     const configElement = document.getElementById(`${example}-config-content`);
     if (configElement) {
-      configElement.textContent = JSON.stringify(config, null, 2);
+      const configCode = JSON.stringify(config, null, 2);
+      applySafeSyntaxHighlighting(configElement, configCode, 'config');
     }
   });
 }
@@ -862,7 +1311,80 @@ function initActiveSection() {
   window.addEventListener("load", updateActiveSection);
 }
 
-// Funcionalidad para tabs de código
+// Función para cambiar tabs en el modal
+window.showModalCodeTab = function (example, type) {
+  const modal = document.getElementById(`code-modal-${example}`);
+  if (!modal) return;
+
+  // Actualizar tabs visuales
+  const tabs = modal.querySelectorAll(".modal-code-tab");
+  tabs.forEach((tab) => {
+    tab.classList.remove("modal-code-tab-active");
+    tab.style.color = "#656d76";
+    tab.style.borderBottomColor = "transparent";
+  });
+
+  // Mapear tipos a labels de tabs para encontrar el correcto
+  const tabLabels = { js: 'JavaScript', html: 'HTML', config: 'Config' };
+  const targetLabel = tabLabels[type];
+  
+  // Encontrar y activar el tab correcto usando el label exacto
+  const targetTab = Array.from(tabs).find((tab) =>
+    tab.textContent.trim() === targetLabel
+  );
+  if (targetTab) {
+    targetTab.classList.add("modal-code-tab-active");
+    targetTab.style.color = "#0969da";
+    targetTab.style.borderBottomColor = "#0969da";
+  }
+
+  // Mostrar contenido correspondiente
+  ["js", "html", "config"].forEach((t) => {
+    const element = document.getElementById(`modal-${example}-${t}-code`);
+    if (element) {
+      element.style.display = t === type ? "block" : "none";
+    }
+  });
+
+  // Actualizar tab activo
+  window.activeTabs[example] = type;
+};
+
+// Función para copiar código del modal
+window.copyModalCode = function (example, type, buttonElement) {
+  const element = document.getElementById(`modal-${example}-${type}-content`);
+  
+  if (element) {
+    const text = element.textContent;
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        // Mostrar feedback visual
+        const button = buttonElement || document.querySelector(`#modal-${example}-${type}-code button`);
+        if (button) {
+          const originalHTML = button.innerHTML;
+          button.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 16A8 8 0 108 0a8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z"/>
+            </svg>
+            Copiado
+          `;
+          button.style.backgroundColor = '#10b981';
+
+          setTimeout(() => {
+            button.innerHTML = originalHTML;
+            button.style.backgroundColor = '#f3f4f6';
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error("Error al copiar:", err);
+        alert("Error al copiar el código");
+      });
+  }
+};
+
+// Funcionalidad para tabs de código (página principal - mantener por compatibilidad)
 function initCodeTabs() {
   // Actualizar función existente para usar las nuevas clases
   window.showCodeTab = function (example, type) {
@@ -873,9 +1395,13 @@ function initCodeTabs() {
     const tabs = parentSection.querySelectorAll(".gh-code-tab");
     tabs.forEach((tab) => tab.classList.remove("gh-code-tab-active"));
 
-    // Encontrar y activar el tab correcto
+    // Mapear tipos a labels de tabs para encontrar el correcto
+    const tabLabels = { js: 'JavaScript', html: 'HTML', config: 'Config' };
+    const targetLabel = tabLabels[type];
+    
+    // Encontrar y activar el tab correcto usando el label exacto
     const targetTab = Array.from(tabs).find((tab) =>
-      tab.textContent.toLowerCase().includes(type.toLowerCase())
+      tab.textContent.trim() === targetLabel
     );
     if (targetTab) {
       targetTab.classList.add("gh-code-tab-active");
@@ -897,7 +1423,7 @@ function initCodeTabs() {
 // Funcionalidad para botones de copy mejorada
 function initCopyButtons() {
   // Actualizar función existente para usar las nuevas clases
-  window.copyCode = function (example) {
+  window.copyCode = function (example, buttonElement) {
     const activeTab = window.activeTabs[example];
     const element = document.getElementById(`${example}-${activeTab}-content`);
 
@@ -907,7 +1433,7 @@ function initCopyButtons() {
         .writeText(text)
         .then(() => {
           // Mostrar feedback visual
-          const button = event.target.closest(".gh-copy-btn");
+          const button = buttonElement || document.querySelector(`.gh-copy-btn[onclick*="${example}"]`);
           if (button) {
             const originalHTML = button.innerHTML;
             button.innerHTML = `
@@ -959,7 +1485,6 @@ function initFooterLinks() {
 // Efectos adicionales para mejorar la experiencia
 function initUIEffects() {
   // Efecto de scroll en el header
-  let lastScrollY = window.scrollY;
   const header = document.querySelector(".gh-header");
 
   window.addEventListener("scroll", () => {
@@ -972,8 +1497,6 @@ function initUIEffects() {
       header.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
       header.style.boxShadow = "none";
     }
-
-    lastScrollY = currentScrollY;
   });
 
   // Efecto de hover en las cards

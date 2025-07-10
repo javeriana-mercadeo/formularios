@@ -986,6 +986,38 @@
   background-color: var(--color-canvas-default);
 }
 
+/* Layout de dos columnas para formulario con código */
+.gh-form-container.gh-form-with-code {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--space-6);
+  padding: 0;
+}
+
+.gh-form-left {
+  padding: var(--space-6);
+  background-color: var(--color-canvas-default);
+}
+
+.gh-form-right {
+  padding: var(--space-4);
+  background-color: var(--color-canvas-subtle);
+  border-left: 1px solid var(--color-border-default);
+}
+
+/* Responsive design para el layout de dos columnas */
+@media (max-width: 1024px) {
+  .gh-form-container.gh-form-with-code {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .gh-form-right {
+    border-left: none;
+    border-top: 1px solid var(--color-border-default);
+  }
+}
+
 .gh-example-footer {
   border-top: 1px solid var(--color-border-default);
   background-color: var(--color-canvas-subtle);
@@ -1020,8 +1052,14 @@
 }
 
 .gh-code-section {
+  display: block;
   border-top: 1px solid var(--color-border-default);
   background-color: var(--color-canvas-default);
+}
+
+/* Cuando está dentro del layout de código lateral, remover el border-top */
+.gh-form-right .gh-code-section {
+  border-top: none;
 }
 
 .gh-code-header {
@@ -1090,12 +1128,15 @@
 
 .gh-code-content {
   padding: var(--space-6);
-  background-color: var(--color-canvas-default);
+  background-color: #1f2937;
   font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', monospace;
   font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-fg-default);
+  line-height: var(--line-height-normal);
+  color: #d4d4d4;
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
+  border-radius: var(--radius-lg);
 }
 
 .gh-code-content pre {
