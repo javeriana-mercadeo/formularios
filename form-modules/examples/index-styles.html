@@ -9,7 +9,7 @@
   <body>
     <div class="container">
       <div class="form-card">
-        <form class="form_inscription" novalidate aria-label="Formulario de contacto">
+        <form id="form_inscription" novalidate aria-label="Formulario de contacto">
           <!-- Información del participante -->
           <div class="name-row">
             <div class="name-field">
@@ -183,8 +183,7 @@
 
     <script type="module">
       import { FormManager } from "../modules/FormManager.js";
-      const form = new FormManager({
-        formSelector: ".form_inscription",
+      const form = new FormManager("form_inscription", {
         logging: {
           enabled: true,
           level: "debug",
