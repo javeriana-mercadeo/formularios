@@ -20,9 +20,7 @@ const advancedConfig = {
   attendanceDays: ["Día 1 - Pregrado", "Día 2 - Posgrado", "Día 3 - Educación Continua"],
 
   academicLevels: [
-    { code: "pregrado", name: "Pregrado" },
-    { code: "posgrado", name: "Posgrado" },
-    { code: "educacion_continua", name: "Educación Continua" },
+    // Vacío para usar detección automática desde programas.json
   ],
 
   faculties: ["Ingeniería", "Ciencias", "Humanidades", "Ciencias Económicas y Administrativas"],
@@ -1011,7 +1009,7 @@ function initPageFunctionality() {
 // ========================================
 
 // Inicializar formulario avanzado
-const advancedForm = new FormManager(advancedConfig);
+const advancedForm = new FormManager("advanced_form", advancedConfig);
 window.advancedForm = advancedForm;
 
 // Inicializar funcionalidades de la página

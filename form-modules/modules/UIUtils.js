@@ -4,6 +4,8 @@
  * @version 1.0
  */
 
+import { Logger } from "./Logger.js";
+
 export class UIUtils {
   constructor(loggerConfig = {}) {
     // Configuración por defecto
@@ -23,7 +25,7 @@ export class UIUtils {
       errorText: "Error al procesar",
     };
 
-    this.logger = new Logger(loggerConfig);
+    this.logger = new Logger("UIUtils", loggerConfig);
   }
 
   /**
@@ -158,21 +160,115 @@ export class UIUtils {
   /**
    * Poblar select con opciones
    */
-  populateSelect(selector, options, valueKey = null, textKey = null) {
+  populateSelect(selector, options, valueKey = null, textKey = null, priorityItems = []) {
+    this.logger.info(`PopulateSelect - Iniciando con selector: ${selector}`);
+    this.logger.info(`PopulateSelect - Opciones recibidas:`, options);
+    this.logger.info(`PopulateSelect - ValueKey: ${valueKey}, TextKey: ${textKey}`);
+    
+    // Validar que options sea un array válido
+    if (!Array.isArray(options)) {
+      this.logger.error(`PopulateSelect - Las opciones deben ser un array, recibido:`, typeof options);
+      return;
+    }
+    
+    if (options.length === 0) {
+      this.logger.warn(`PopulateSelect - Array de opciones está vacío`);
+      return;
+    }
+
     const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
 
-    if (!selectElement) return;
+    if (!selectElement) {
+      this.logger.error(`PopulateSelect - No se encontró el elemento select con selector: ${selector}`);
+      return;
+    }
+
+    this.logger.info(`PopulateSelect - Elemento select encontrado:`, selectElement);
+    this.logger.info(`PopulateSelect - Selector usado: ${selector}`);
+    this.logger.info(`PopulateSelect - Opciones existentes antes de limpiar: ${selectElement.options.length}`);
 
     // Limpiar opciones existentes (excepto la primera que suele ser el placeholder)
     const firstOption = selectElement.querySelector("option");
+    this.logger.info(`PopulateSelect - Primera opción encontrada:`, firstOption);
+    
     selectElement.innerHTML = "";
+    this.logger.info(`PopulateSelect - Select limpiado, opciones restantes: ${selectElement.options.length}`);
 
     if (firstOption) {
       selectElement.appendChild(firstOption);
+      this.logger.info(`PopulateSelect - Primera opción restaurada, opciones actuales: ${selectElement.options.length}`);
     }
 
-    // Agregar nuevas opciones
+    // Separar opciones prioritarias y normales
+    const priorityOptions = [];
+    const normalOptions = [];
+    
     options.forEach((option) => {
+      let optionValue, optionText;
+      
+      if (typeof option === "string") {
+        optionValue = option;
+        optionText = option;
+      } else if (typeof option === "object" && option !== null) {
+        optionValue = valueKey ? option[valueKey] : option.value || option.code;
+        optionText = textKey ? option[textKey] : option.text || option.name || optionValue;
+      }
+      
+      // Evitar valores undefined o null
+      if (optionValue === undefined || optionValue === null || 
+          optionText === undefined || optionText === null ||
+          optionValue === "" || optionText === "") {
+        this.logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, { option, optionValue, optionText });
+        return; // Saltar esta opción
+      }
+      
+      
+      // Verificar si esta opción es prioritaria
+      const isPriority = priorityItems.some(priorityItem => {
+        if (typeof priorityItem === "string") {
+          return optionText.toLowerCase().includes(priorityItem.toLowerCase()) || 
+                 optionValue.toString().toLowerCase().includes(priorityItem.toLowerCase());
+        }
+        return false;
+      });
+      
+      if (isPriority) {
+        priorityOptions.push(option);
+      } else {
+        normalOptions.push(option);
+      }
+    });
+
+    // Agregar opciones prioritarias primero
+    this.logger.info(`PopulateSelect - Agregando ${priorityOptions.length} opciones prioritarias`);
+    let addedCount = 0;
+    
+    priorityOptions.forEach((option, index) => {
+      const optionElement = this.createElement("option");
+
+      if (typeof option === "string") {
+        optionElement.value = option;
+        optionElement.textContent = option;
+        this.logger.info(`PopulateSelect - Opción prioritaria string: value="${option}", text="${option}"`);
+      } else if (typeof option === "object") {
+        const value = valueKey ? option[valueKey] : option.value || option.code;
+        const text = textKey ? option[textKey] : option.text || option.name || value;
+
+        optionElement.value = value;
+        optionElement.textContent = text;
+        // Destacar opciones prioritarias
+        optionElement.style.fontWeight = "bold";
+        this.logger.info(`PopulateSelect - Opción prioritaria object: value="${value}", text="${text}"`);
+      }
+
+      selectElement.appendChild(optionElement);
+      addedCount++;
+    });
+    
+    // Agregar opciones normales después
+    this.logger.info(`PopulateSelect - Agregando ${normalOptions.length} opciones normales`);
+    
+    normalOptions.forEach((option, index) => {
       const optionElement = this.createElement("option");
 
       if (typeof option === "string") {
@@ -187,6 +283,26 @@ export class UIUtils {
       }
 
       selectElement.appendChild(optionElement);
+      addedCount++;
+    });
+
+    this.logger.info(`PopulateSelect - Completado. Opciones agregadas: ${addedCount}, Total opciones finales: ${selectElement.options.length}`);
+    this.logger.info(`PopulateSelect - Select final:`, selectElement);
+    this.logger.info(`PopulateSelect - Verificando visibilidad del select:`, {
+      display: selectElement.style.display,
+      visibility: selectElement.style.visibility,
+      opacity: selectElement.style.opacity,
+      offsetHeight: selectElement.offsetHeight,
+      offsetWidth: selectElement.offsetWidth,
+      clientHeight: selectElement.clientHeight,
+      clientWidth: selectElement.clientWidth
+    });
+
+    // Verificar que las opciones estén realmente en el DOM
+    const finalOptions = selectElement.querySelectorAll("option");
+    this.logger.info(`PopulateSelect - Opciones finales en DOM (querySelectorAll):`, finalOptions.length);
+    finalOptions.forEach((opt, idx) => {
+      this.logger.info(`PopulateSelect - Opción ${idx}: value="${opt.value}", text="${opt.textContent}"`);
     });
   }
 
@@ -196,28 +312,20 @@ export class UIUtils {
   populateCountries(locations) {
     if (!locations) return;
 
-    const countrySelect = this.findElement('[data-puj-form="field-country"]');
-    if (!countrySelect) return;
+    const countrySelect = this.findElement('[name="country"]');
+    if (!countrySelect) {
+      this.logger.error('No se encontró el elemento select con name="country"');
+      return;
+    }
 
-    // Limpiar opciones existentes
-    countrySelect.innerHTML = '<option value="">*País de residencia</option>';
+    // Convertir object locations a array para usar populateSelect
+    const countries = Object.entries(locations).map(([code, country]) => ({
+      codigo: code,
+      nombre: country.nombre
+    }));
 
-    Object.entries(locations).forEach(([code, country]) => {
-      const option = this.createElement(
-        "option",
-        {
-          value: code,
-        },
-        country.nombre
-      );
-
-      // Destacar Colombia
-      if (code === "COL") {
-        option.style.fontWeight = "700";
-      }
-
-      countrySelect.appendChild(option);
-    });
+    // Usar populateSelect con prioridad para Colombia
+    this.populateSelect('[name="country"]', countries, "codigo", "nombre", ["colombia"]);
 
     // Establecer Colombia como default
     countrySelect.value = "COL";
@@ -227,10 +335,18 @@ export class UIUtils {
    * Poblar select de prefijos telefónicos
    */
   populatePrefixes(prefixes) {
-    if (!prefixes) return;
+    if (!prefixes) {
+      this.logger.error('No se recibieron prefijos para poblar');
+      return;
+    }
 
-    const prefixSelect = this.findElement('[data-puj-form="field-phone-code"]');
-    if (!prefixSelect) return;
+    const prefixSelect = this.findElement('[name="phone_code"]');
+    if (!prefixSelect) {
+      this.logger.error('No se encontró el elemento select con name="phone_code"');
+      return;
+    }
+
+    this.logger.info('Poblando prefijos telefónicos:', prefixes.length);
 
     // Limpiar opciones existentes
     prefixSelect.innerHTML = '<option value="">(+) Indicativo</option>';
@@ -256,6 +372,7 @@ export class UIUtils {
 
     // Establecer Colombia como default (+57)
     prefixSelect.value = "57";
+    this.logger.info('Prefijo de Colombia (+57) establecido como predeterminado');
   }
 
   /**

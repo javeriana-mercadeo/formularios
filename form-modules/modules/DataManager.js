@@ -24,9 +24,9 @@ class GlobalDataCache {
   isCacheValid(key, expirationHours) {
     const timestamp = this.cacheTimestamps.get(key);
     if (!timestamp) return false;
-    
+
     const now = Date.now();
-    const expirationTime = timestamp + (expirationHours * 60 * 60 * 1000);
+    const expirationTime = timestamp + expirationHours * 60 * 60 * 1000;
     return now < expirationTime;
   }
 
@@ -50,7 +50,7 @@ class GlobalDataCache {
 
   setLoadingPromise(key, promise) {
     this.loadingPromises.set(key, promise);
-    
+
     // Limpiar la promesa cuando se complete
     promise.finally(() => {
       this.loadingPromises.delete(key);
@@ -75,28 +75,28 @@ export class DataManager {
       locations: [
         "https://www.javeriana.edu.co/recursosdb/1372208/10609114/ubicaciones.json",
         "https://cloud.cx.javeriana.edu.co/paises.json",
-        "../data/ubicaciones.json"
+        "../data/ubicaciones.json",
       ],
       prefixes: [
         "https://www.javeriana.edu.co/recursosdb/1372208/10609114/codigos_pais.json",
         "https://cloud.cx.javeriana.edu.co/codigos_pais.Json",
-        "../data/codigos_pais.json"
+        "../data/codigos_pais.json",
       ],
       programs: [
         "https://www.javeriana.edu.co/recursosdb/1372208/10609114/programas.json",
         "https://cloud.cx.javeriana.edu.co/Programas.json",
-        "../data/programas.json"
+        "../data/programas.json",
       ],
       periods: [
         "https://www.javeriana.edu.co/recursosdb/1372208/10609114/periodos.json",
         "https://cloud.cx.javeriana.edu.co/periodos.json",
-        "../data/periodos.json"
-      ]
+        "../data/periodos.json",
+      ],
     };
 
     this.cacheEnabled = cacheEnabled;
     this.cacheExpirationHours = cacheExpirationHours;
-    
+
     // Obtener instancia global del cache
     this.globalCache = GlobalDataCache.getInstance();
 
@@ -109,7 +109,7 @@ export class DataManager {
     };
 
     // Módulos
-    this.logger = new Logger(loggerConfig);
+    this.logger = new Logger("DataManager", loggerConfig);
 
     // Estado de carga
     this.loadingPromises = {};
@@ -157,8 +157,8 @@ export class DataManager {
   /**
    * Cargar datos con sistema de fallback en cascada y cache global compartido
    */
-  async loadDataWithFallback(dataType, cacheKey = null) {
-    const actualCacheKey = cacheKey || dataType;
+  async loadDataWithFallback(dataType) {
+    const actualCacheKey = dataType;
 
     // Verificar si ya hay una carga en progreso (compartida entre instancias)
     const existingPromise = this.globalCache.getLoadingPromise(actualCacheKey);
@@ -168,7 +168,7 @@ export class DataManager {
     }
 
     // Verificar caché global si está habilitado
-    if (this.cacheEnabled && cacheKey) {
+    if (this.cacheEnabled) {
       const cachedData = this.globalCache.getCachedData(actualCacheKey, this.cacheExpirationHours);
       if (cachedData) {
         this.logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
@@ -189,12 +189,12 @@ export class DataManager {
   async _performDataLoad(dataType, cacheKey) {
     // Obtener URLs en orden: usuario, fallbacks
     const urls = [];
-    
+
     // Primero intentar con la URL del usuario si existe
     if (this.dataUrls[dataType]) {
       urls.push(this.dataUrls[dataType]);
     }
-    
+
     // Luego agregar las URLs de fallback
     if (this.fallbackUrls[dataType]) {
       urls.push(...this.fallbackUrls[dataType]);
@@ -208,7 +208,7 @@ export class DataManager {
     for (const url of uniqueUrls) {
       try {
         this.logger.loading(`Intentando cargar datos desde: ${url}`);
-        
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -231,7 +231,9 @@ export class DataManager {
     }
 
     // Si ninguna URL funcionó, lanzar el último error
-    this.logger.error(`Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`);
+    this.logger.error(
+      `Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`
+    );
     throw lastError || new Error(`No se pudieron cargar los datos de tipo '${dataType}'`);
   }
 
@@ -248,7 +250,7 @@ export class DataManager {
       return await this.loadingPromises.locations;
     }
 
-    this.loadingPromises.locations = this.loadDataWithFallback("locations", "locations");
+    this.loadingPromises.locations = this.loadDataWithFallback("locations");
 
     try {
       this.data.locations = await this.loadingPromises.locations;
@@ -270,7 +272,7 @@ export class DataManager {
       return await this.loadingPromises.prefixes;
     }
 
-    this.loadingPromises.prefixes = this.loadDataWithFallback("prefixes", "prefixes");
+    this.loadingPromises.prefixes = this.loadDataWithFallback("prefixes");
 
     try {
       const rawData = await this.loadingPromises.prefixes;
@@ -300,7 +302,7 @@ export class DataManager {
       return await this.loadingPromises.programs;
     }
 
-    this.loadingPromises.programs = this.loadDataWithFallback("programs", "programs");
+    this.loadingPromises.programs = this.loadDataWithFallback("programs");
 
     try {
       this.data.programs = await this.loadingPromises.programs;
@@ -322,7 +324,7 @@ export class DataManager {
       return await this.loadingPromises.periods;
     }
 
-    this.loadingPromises.periods = this.loadDataWithFallback("periods", "periods");
+    this.loadingPromises.periods = this.loadDataWithFallback("periods");
 
     try {
       this.data.periods = await this.loadingPromises.periods;
@@ -348,6 +350,15 @@ export class DataManager {
 
       this.isInitialized = true;
       this.logger.success("Todos los datos cargados correctamente");
+      
+      // Debug: verificar datos cargados
+      this.logger.debug("Datos de programas cargados:", this.data.programs ? "✅" : "❌");
+      this.logger.debug("Datos de períodos cargados:", this.data.periods ? "✅" : "❌");
+      
+      if (this.data.programs) {
+        this.logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
+      }
+      
     } catch (error) {
       this.logger.error("Error cargando datos:", error);
       throw error;
@@ -412,9 +423,9 @@ export class DataManager {
   }
 
   /**
-   * Obtener programas académicos
+   * Obtener todos los programas académicos
    */
-  getPrograms() {
+  getAllPrograms() {
     return this.data.programs;
   }
 
@@ -422,7 +433,10 @@ export class DataManager {
    * Obtener niveles académicos disponibles
    */
   getAcademicLevels() {
-    if (!this.data.programs) return [];
+    if (!this.data.programs) {
+      this.logger.warn("No hay datos de programas cargados");
+      return [];
+    }
 
     const levelNames = {
       PREG: "Pregrado",
@@ -431,30 +445,42 @@ export class DataManager {
       ETDH: "Técnico",
     };
 
-    return Object.keys(this.data.programs).map((levelCode) => ({
+    const levels = Object.keys(this.data.programs).map((levelCode) => ({
       code: levelCode,
       name: levelNames[levelCode] || levelCode,
     }));
+
+    this.logger.debug("Niveles académicos detectados desde programas:", levels);
+    return levels;
   }
 
   /**
    * Obtener facultades por nivel académico
    */
   getFaculties(academicLevel) {
-    if (!this.data.programs || !this.data.programs[academicLevel]) return [];
+    if (!this.data.programs || !this.data.programs[academicLevel]) {
+      this.logger.warn(`No se encontraron programas para el nivel académico: ${academicLevel}`);
+      return [];
+    }
 
     const levelPrograms = this.data.programs[academicLevel];
+    this.logger.debug(`Estructura de datos para nivel ${academicLevel}:`, levelPrograms);
 
     // Verificar estructura de datos
     if (typeof levelPrograms === "object" && !Array.isArray(levelPrograms)) {
       // Estructura: programs.PREG.FACULTAD
-      return Object.keys(levelPrograms);
+      const faculties = Object.keys(levelPrograms);
+      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, faculties);
+      return faculties;
     } else if (Array.isArray(levelPrograms)) {
       // Estructura: array de programas con propiedad facultad
       const faculties = [...new Set(levelPrograms.map((program) => program.facultad))];
-      return faculties.filter((faculty) => faculty); // Filtrar valores vacíos
+      const filteredFaculties = faculties.filter((faculty) => faculty); // Filtrar valores vacíos
+      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, filteredFaculties);
+      return filteredFaculties;
     }
 
+    this.logger.warn(`Estructura de datos no reconocida para nivel ${academicLevel}`);
     return [];
   }
 
@@ -462,9 +488,38 @@ export class DataManager {
    * Obtener programas por nivel académico y facultad
    */
   getPrograms(academicLevel, faculty) {
-    if (!this.data.programs || !this.data.programs[academicLevel]) return [];
+    // Si no se proporcionan parámetros, retornar todos los programas
+    if (!academicLevel && !faculty) {
+      return this.getAllPrograms();
+    }
+
+    if (!this.data.programs) {
+      this.logger.warn(`No hay datos de programas cargados`);
+      return [];
+    }
+    
+    if (!this.data.programs[academicLevel]) {
+      this.logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
+      return [];
+    }
 
     const levelPrograms = this.data.programs[academicLevel];
+
+    // Si no se especifica facultad, retornar todos los programas del nivel
+    if (!faculty) {
+      if (Array.isArray(levelPrograms)) {
+        return levelPrograms;
+      } else {
+        // Si es un objeto con facultades, retornar todos los programas
+        const allPrograms = [];
+        Object.values(levelPrograms).forEach(facultyData => {
+          if (facultyData.Programas && Array.isArray(facultyData.Programas)) {
+            allPrograms.push(...facultyData.Programas);
+          }
+        });
+        return allPrograms;
+      }
+    }
 
     // Verificar estructura de datos
     if (levelPrograms[faculty] && levelPrograms[faculty].Programas) {
@@ -475,6 +530,7 @@ export class DataManager {
       return levelPrograms.filter((program) => program.facultad === faculty);
     }
 
+    this.logger.warn(`No se encontraron programas para facultad ${faculty}`);
     return [];
   }
 

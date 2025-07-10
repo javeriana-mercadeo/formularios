@@ -5,11 +5,11 @@
  */
 
 class Logger {
-  constructor(config = {}) {
+  constructor(eventName, config = {}) {
     this.config = {
       enabled: config.enabled !== undefined ? config.enabled : true,
       level: config.level || "info", // 'error', 'warn', 'info', 'debug'
-      prefix: config.prefix || "FormSystem",
+      prefix: eventName || "FormSystem",
       showTimestamp: config.showTimestamp !== undefined ? config.showTimestamp : true,
       showLevel: config.showLevel !== undefined ? config.showLevel : true,
       colors: config.colors !== undefined ? config.colors : true,
