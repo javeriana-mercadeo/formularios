@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="../styles/form-styles.css" />
   </head>
   <body>
-    <form id="form_inscription" novalidate aria-label="Formulario de contacto">
+    <div class="container">
+      <div class="form-card">
+        <form class="form_inscription" novalidate aria-label="Formulario de contacto">
       <!-- Información del participante -->
       <div class="name-row">
         <div class="name-field">
@@ -219,11 +221,14 @@
       >
         Gracias por tu mensaje. Ha sido enviado.
       </div>
-    </form>
+        </form>
+      </div>
+    </div>
 
     <script type="module">
       import { FormManager } from "../modules/FormManager.js";
-      const form = new FormManager("form_inscription", {
+      const form = new FormManager({
+        formSelector: ".form_inscription",
         logging: {
           enabled: true,
           level: "debug",
