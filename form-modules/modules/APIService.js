@@ -1,6 +1,13 @@
 /**
- * APIService - Maneja la comunicación con APIs y servicios externos
- * Principalmente para envío de datos a Salesforce
+ * APIService - Servicio de integración con APIs externas
+ * 
+ * Responsabilidades principales:
+ * - Gestionar envío de formularios a Salesforce Web-to-Lead
+ * - Mapear campos del formulario a campos de Salesforce
+ * - Manejar configuración de ambientes (test/producción)
+ * - Implementar reintentos y manejo de errores
+ * - Mantener historial de envíos para auditoría
+ * 
  * @version 1.0
  */
 
@@ -137,7 +144,9 @@ export class APIService {
   }
 
   /**
-   * Obtener ID de campo según el ambiente
+   * Obtener ID de campo de Salesforce según el ambiente actual
+   * @param {string} fieldKey - Clave del campo en el mapeo
+   * @returns {string} - ID de campo de Salesforce
    */
   getFieldId(fieldKey) {
     const mapping = this.config.fieldMapping[fieldKey];
@@ -150,7 +159,8 @@ export class APIService {
   }
 
   /**
-   * Obtener URL de Salesforce según el ambiente
+   * Obtener URL de endpoint de Salesforce para el ambiente
+   * @returns {string} - URL de Salesforce Web-to-Lead
    */
   getSalesforceUrl() {
     return this.config.debugMode
@@ -159,14 +169,18 @@ export class APIService {
   }
 
   /**
-   * Obtener OID según el ambiente
+   * Obtener Organization ID de Salesforce para el ambiente
+   * @returns {string} - OID de Salesforce
    */
   getOID() {
     return this.config.debugMode ? this.config.oids.test : this.config.oids.prod;
   }
 
   /**
-   * Preparar datos del formulario para envío
+   * Transformar datos del formulario al formato requerido por Salesforce
+   * Mapea campos locales a IDs de Salesforce y agrega metadatos
+   * @param {Object} formData - Datos del formulario
+   * @returns {FormData} - Datos preparados para envío
    */
   prepareFormData(formData) {
     const preparedData = new FormData();
@@ -211,16 +225,16 @@ export class APIService {
     });
 
     // Campos adicionales del evento
-    if (formData.nevento) {
-      preparedData.append(this.getFieldId("NOMBRE_EVENTO"), formData.nevento);
+    if (formData.event_name) {
+      preparedData.append(this.getFieldId("NOMBRE_EVENTO"), formData.event_name);
     }
 
-    if (formData.fevento) {
-      preparedData.append(this.getFieldId("FECHA_EVENTO"), formData.fevento);
+    if (formData.event_date) {
+      preparedData.append(this.getFieldId("FECHA_EVENTO"), formData.event_date);
     }
 
-    if (formData.universidad) {
-      preparedData.append(this.getFieldId("UNIVERSIDAD"), formData.universidad);
+    if (formData.university) {
+      preparedData.append(this.getFieldId("UNIVERSIDAD"), formData.university);
     }
 
     if (formData.articulo) {
@@ -231,27 +245,30 @@ export class APIService {
       preparedData.append(this.getFieldId("EMPRESA_CONVENIO"), formData.empresaConvenio);
     }
 
-    if (formData.fuente) {
-      preparedData.append(this.getFieldId("FUENTE"), formData.fuente);
+    if (formData.source) {
+      preparedData.append(this.getFieldId("FUENTE"), formData.source);
     }
 
     if (formData.subfuente) {
       preparedData.append(this.getFieldId("SUBFUENTE"), formData.subfuente);
     }
 
-    if (formData.medio) {
-      preparedData.append(this.getFieldId("MEDIO"), formData.medio);
+    if (formData.medium) {
+      preparedData.append(this.getFieldId("MEDIO"), formData.medium);
     }
 
-    if (formData.campana) {
-      preparedData.append(this.getFieldId("CAMPANA"), formData.campana);
+    if (formData.campaign) {
+      preparedData.append(this.getFieldId("CAMPANA"), formData.campaign);
     }
 
     return preparedData;
   }
 
   /**
-   * Enviar formulario a Salesforce
+   * Enviar formulario completo a Salesforce con manejo de errores
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @param {Object} formData - Datos a enviar
+   * @returns {Promise} - Promesa con resultado del envío
    */
   async submitForm(formElement, formData) {
     if (this.isSubmitting) {
@@ -305,7 +322,10 @@ export class APIService {
   }
 
   /**
-   * Enviar con reintentos
+   * Ejecutar envío con lógica de reintentos automáticos
+   * @param {FormData} formData - Datos a enviar
+   * @param {number} attempt - Número de intento actual
+   * @returns {Promise} - Promesa con resultado del envío
    */
   async submitWithRetry(formData, attempt = 1) {
     try {
@@ -324,7 +344,9 @@ export class APIService {
   }
 
   /**
-   * Realizar envío individual
+   * Ejecutar una sola petición HTTP a Salesforce
+   * @param {FormData} formData - Datos a enviar
+   * @returns {Promise} - Promesa con respuesta HTTP
    */
   async performSubmit(formData) {
     const url = this.getSalesforceUrl();
@@ -361,7 +383,8 @@ export class APIService {
   }
 
   /**
-   * Enviar usando formulario HTML nativo (fallback)
+   * Método de respaldo: envío tradicional con submit del formulario
+   * @param {HTMLElement} formElement - Formulario a enviar
    */
   submitFormNative(formElement) {
     if (!formElement) {
@@ -378,7 +401,9 @@ export class APIService {
   }
 
   /**
-   * Validar configuración de API
+   * Verificar que la configuración de API esté completa
+   * @returns {boolean} - True si la configuración es válida
+   * @throws {Error} - Si hay errores de configuración
    */
   validateConfig() {
     const errors = [];
@@ -403,7 +428,8 @@ export class APIService {
   }
 
   /**
-   * Probar conexión con Salesforce
+   * Ejecutar prueba de conectividad con Salesforce
+   * @returns {Promise} - Promesa con resultado de la prueba
    */
   async testConnection() {
     try {
@@ -423,21 +449,23 @@ export class APIService {
   }
 
   /**
-   * Obtener historial de envíos
+   * Recuperar historial completo de envíos realizados
+   * @returns {Array} - Lista de envíos con timestamps y resultados
    */
   getSubmitHistory() {
     return [...this.submitHistory];
   }
 
   /**
-   * Limpiar historial de envíos
+   * Borrar todo el historial de envíos almacenado
    */
   clearSubmitHistory() {
     this.submitHistory = [];
   }
 
   /**
-   * Obtener estadísticas de envíos
+   * Calcular estadísticas de éxito/fallo de envíos
+   * @returns {Object} - Estadísticas con totales y tasas de éxito
    */
   getSubmitStats() {
     const total = this.submitHistory.length;
@@ -453,7 +481,9 @@ export class APIService {
   }
 
   /**
-   * Configurar modo debug
+   * Activar/desactivar modo de depuración
+   * @param {boolean} enabled - Si activar el modo debug
+   * @param {string} debugEmail - Email para recibir copias de debug
    */
   setDebugMode(enabled, debugEmail = "") {
     this.config.debugMode = enabled;
@@ -466,21 +496,26 @@ export class APIService {
   }
 
   /**
-   * Actualizar configuración
+   * Actualizar configuración del servicio API
+   * @param {Object} newConfig - Nueva configuración a aplicar
    */
   updateConfig(newConfig) {
     this.config = { ...this.config, ...newConfig };
   }
 
   /**
-   * Obtener configuración actual
+   * Recuperar copia de la configuración actual
+   * @returns {Object} - Configuración completa del servicio
    */
   getConfig() {
     return { ...this.config };
   }
 
   /**
-   * Agregar mapeo de campo personalizado
+   * Añadir nuevo mapeo de campo para Salesforce
+   * @param {string} fieldKey - Clave del campo local
+   * @param {string} testId - ID de Salesforce para ambiente de prueba
+   * @param {string} prodId - ID de Salesforce para ambiente de producción
    */
   addFieldMapping(fieldKey, testId, prodId) {
     this.config.fieldMapping[fieldKey] = {
@@ -490,14 +525,16 @@ export class APIService {
   }
 
   /**
-   * Remover mapeo de campo
+   * Eliminar mapeo de campo existente
+   * @param {string} fieldKey - Clave del campo a remover
    */
   removeFieldMapping(fieldKey) {
     delete this.config.fieldMapping[fieldKey];
   }
 
   /**
-   * Obtener información del ambiente actual
+   * Recuperar información detallada del ambiente de ejecución
+   * @returns {Object} - Información del ambiente (URLs, OIDs, etc.)
    */
   getEnvironmentInfo() {
     return {
@@ -510,14 +547,17 @@ export class APIService {
   }
 
   /**
-   * Exportar configuración
+   * Exportar configuración actual a formato JSON
+   * @returns {string} - Configuración en formato JSON
    */
   exportConfig() {
     return JSON.stringify(this.config, null, 2);
   }
 
   /**
-   * Importar configuración
+   * Importar configuración desde JSON
+   * @param {string} configJson - Configuración en formato JSON
+   * @throws {Error} - Si el JSON es inválido
    */
   importConfig(configJson) {
     try {

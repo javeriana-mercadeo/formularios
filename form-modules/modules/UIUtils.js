@@ -1,6 +1,13 @@
 /**
- * UIUtils - Utilidades para manipulación del DOM y gestión de interfaz
- * Maneja la creación, modificación y gestión de elementos del formulario
+ * UIUtils - Utilidades para manipulación del DOM e interfaz de usuario
+ * 
+ * Responsabilidades:
+ * - Manipulación segura de elementos DOM
+ * - Gestión de errores visuales y mensajes
+ * - Poblado dinámico de campos select
+ * - Manejo de animaciones y transiciones
+ * - Utilidades de validación y limpieza de datos
+ * 
  * @version 1.0
  */
 
@@ -29,21 +36,27 @@ export class UIUtils {
   }
 
   /**
-   * Limpiar texto (solo letras y espacios)
+   * Limpiar texto para permitir solo letras, espacios y acentos
+   * @param {string} text - Texto a limpiar
+   * @returns {string} - Texto limpio
    */
   cleanText(text) {
     return text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, "");
   }
 
   /**
-   * Limpiar números (solo dígitos y espacios)
+   * Limpiar texto para permitir solo números y espacios
+   * @param {string} text - Texto a limpiar
+   * @returns {string} - Solo números
    */
   cleanNumbers(text) {
     return text.replace(/[^0-9 ]/g, "");
   }
 
   /**
-   * Validar formato de email
+   * Verificar si un email tiene formato válido
+   * @param {string} email - Email a validar
+   * @returns {boolean} - True si es válido
    */
   isValidEmail(email) {
     const regex =
@@ -52,7 +65,11 @@ export class UIUtils {
   }
 
   /**
-   * Crear elemento HTML
+   * Crear elemento HTML con atributos y contenido
+   * @param {string} tag - Etiqueta HTML
+   * @param {Object} attributes - Atributos del elemento
+   * @param {string} content - Contenido de texto
+   * @returns {HTMLElement} - Elemento creado
    */
   createElement(tag, attributes = {}, content = "") {
     const element = document.createElement(tag);
@@ -75,7 +92,10 @@ export class UIUtils {
   }
 
   /**
-   * Buscar elemento con manejo de errores
+   * Buscar elemento en el DOM con manejo seguro de errores
+   * @param {string} selector - Selector CSS
+   * @param {HTMLElement} context - Contexto de búsqueda
+   * @returns {HTMLElement|null} - Elemento encontrado o null
    */
   findElement(selector, context = document) {
     try {
@@ -87,7 +107,10 @@ export class UIUtils {
   }
 
   /**
-   * Buscar múltiples elementos
+   * Buscar múltiples elementos con manejo de errores
+   * @param {string} selector - Selector CSS
+   * @param {HTMLElement} context - Contexto de búsqueda
+   * @returns {NodeList} - Lista de elementos encontrados
    */
   findElements(selector, context = document) {
     try {
@@ -99,7 +122,9 @@ export class UIUtils {
   }
 
   /**
-   * Mostrar elemento
+   * Mostrar elemento con animación opcional
+   * @param {HTMLElement} element - Elemento a mostrar
+   * @param {string} display - Tipo de display CSS
    */
   showElement(element, display = "block") {
     if (!element) return;
@@ -118,7 +143,8 @@ export class UIUtils {
   }
 
   /**
-   * Ocultar elemento
+   * Ocultar elemento con animación opcional
+   * @param {HTMLElement} element - Elemento a ocultar
    */
   hideElement(element) {
     if (!element) return;
@@ -138,7 +164,9 @@ export class UIUtils {
   }
 
   /**
-   * Alternar visibilidad de elemento
+   * Alternar visibilidad de un elemento
+   * @param {HTMLElement} element - Elemento a alternar
+   * @param {boolean|null} show - Forzar mostrar/ocultar
    */
   toggleElement(element, show = null) {
     if (!element) return;
@@ -158,54 +186,42 @@ export class UIUtils {
   }
 
   /**
-   * Poblar select con opciones
+   * Poblar elemento select con opciones dinámicamente
+   * Incluye manejo de prioridades y validación de datos
+   * @param {string|HTMLElement} selector - Selector o elemento
+   * @param {Array} options - Opciones a agregar
+   * @param {string} valueKey - Clave para el valor
+   * @param {string} textKey - Clave para el texto
+   * @param {Array} priorityItems - Items prioritarios
    */
   populateSelect(selector, options, valueKey = null, textKey = null, priorityItems = []) {
-    this.logger.info(`PopulateSelect - Iniciando con selector: ${selector}`);
-    this.logger.info(`PopulateSelect - Opciones recibidas:`, options);
-    this.logger.info(`PopulateSelect - ValueKey: ${valueKey}, TextKey: ${textKey}`);
-    
-    // Validar que options sea un array válido
-    if (!Array.isArray(options)) {
-      this.logger.error(`PopulateSelect - Las opciones deben ser un array, recibido:`, typeof options);
-      return;
-    }
-    
-    if (options.length === 0) {
-      this.logger.warn(`PopulateSelect - Array de opciones está vacío`);
+    // Validar que las opciones sean un array válido
+    if (!this._validateOptionsArray(options)) {
       return;
     }
 
     const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
 
     if (!selectElement) {
-      this.logger.error(`PopulateSelect - No se encontró el elemento select con selector: ${selector}`);
+      this.logger.error(
+        `PopulateSelect - No se encontró el elemento select con selector: ${selector}`
+      );
       return;
     }
 
-    this.logger.info(`PopulateSelect - Elemento select encontrado:`, selectElement);
-    this.logger.info(`PopulateSelect - Selector usado: ${selector}`);
-    this.logger.info(`PopulateSelect - Opciones existentes antes de limpiar: ${selectElement.options.length}`);
-
     // Limpiar opciones existentes (excepto la primera que suele ser el placeholder)
     const firstOption = selectElement.querySelector("option");
-    this.logger.info(`PopulateSelect - Primera opción encontrada:`, firstOption);
-    
     selectElement.innerHTML = "";
-    this.logger.info(`PopulateSelect - Select limpiado, opciones restantes: ${selectElement.options.length}`);
 
-    if (firstOption) {
-      selectElement.appendChild(firstOption);
-      this.logger.info(`PopulateSelect - Primera opción restaurada, opciones actuales: ${selectElement.options.length}`);
-    }
+    if (firstOption) selectElement.appendChild(firstOption);
 
     // Separar opciones prioritarias y normales
     const priorityOptions = [];
     const normalOptions = [];
-    
+
     options.forEach((option) => {
       let optionValue, optionText;
-      
+
       if (typeof option === "string") {
         optionValue = option;
         optionText = option;
@@ -213,25 +229,35 @@ export class UIUtils {
         optionValue = valueKey ? option[valueKey] : option.value || option.code;
         optionText = textKey ? option[textKey] : option.text || option.name || optionValue;
       }
-      
+
       // Evitar valores undefined o null
-      if (optionValue === undefined || optionValue === null || 
-          optionText === undefined || optionText === null ||
-          optionValue === "" || optionText === "") {
-        this.logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, { option, optionValue, optionText });
+      if (
+        optionValue === undefined ||
+        optionValue === null ||
+        optionText === undefined ||
+        optionText === null ||
+        optionValue === "" ||
+        optionText === ""
+      ) {
+        this.logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, {
+          option,
+          optionValue,
+          optionText,
+        });
         return; // Saltar esta opción
       }
-      
-      
+
       // Verificar si esta opción es prioritaria
-      const isPriority = priorityItems.some(priorityItem => {
+      const isPriority = priorityItems.some((priorityItem) => {
         if (typeof priorityItem === "string") {
-          return optionText.toLowerCase().includes(priorityItem.toLowerCase()) || 
-                 optionValue.toString().toLowerCase().includes(priorityItem.toLowerCase());
+          return (
+            optionText.toLowerCase().includes(priorityItem.toLowerCase()) ||
+            optionValue.toString().toLowerCase().includes(priorityItem.toLowerCase())
+          );
         }
         return false;
       });
-      
+
       if (isPriority) {
         priorityOptions.push(option);
       } else {
@@ -240,16 +266,14 @@ export class UIUtils {
     });
 
     // Agregar opciones prioritarias primero
-    this.logger.info(`PopulateSelect - Agregando ${priorityOptions.length} opciones prioritarias`);
     let addedCount = 0;
-    
+
     priorityOptions.forEach((option, index) => {
       const optionElement = this.createElement("option");
 
       if (typeof option === "string") {
         optionElement.value = option;
         optionElement.textContent = option;
-        this.logger.info(`PopulateSelect - Opción prioritaria string: value="${option}", text="${option}"`);
       } else if (typeof option === "object") {
         const value = valueKey ? option[valueKey] : option.value || option.code;
         const text = textKey ? option[textKey] : option.text || option.name || value;
@@ -258,16 +282,12 @@ export class UIUtils {
         optionElement.textContent = text;
         // Destacar opciones prioritarias
         optionElement.style.fontWeight = "bold";
-        this.logger.info(`PopulateSelect - Opción prioritaria object: value="${value}", text="${text}"`);
       }
 
       selectElement.appendChild(optionElement);
-      addedCount++;
+        addedCount++;
     });
-    
-    // Agregar opciones normales después
-    this.logger.info(`PopulateSelect - Agregando ${normalOptions.length} opciones normales`);
-    
+
     normalOptions.forEach((option, index) => {
       const optionElement = this.createElement("option");
 
@@ -283,31 +303,13 @@ export class UIUtils {
       }
 
       selectElement.appendChild(optionElement);
-      addedCount++;
-    });
-
-    this.logger.info(`PopulateSelect - Completado. Opciones agregadas: ${addedCount}, Total opciones finales: ${selectElement.options.length}`);
-    this.logger.info(`PopulateSelect - Select final:`, selectElement);
-    this.logger.info(`PopulateSelect - Verificando visibilidad del select:`, {
-      display: selectElement.style.display,
-      visibility: selectElement.style.visibility,
-      opacity: selectElement.style.opacity,
-      offsetHeight: selectElement.offsetHeight,
-      offsetWidth: selectElement.offsetWidth,
-      clientHeight: selectElement.clientHeight,
-      clientWidth: selectElement.clientWidth
-    });
-
-    // Verificar que las opciones estén realmente en el DOM
-    const finalOptions = selectElement.querySelectorAll("option");
-    this.logger.info(`PopulateSelect - Opciones finales en DOM (querySelectorAll):`, finalOptions.length);
-    finalOptions.forEach((opt, idx) => {
-      this.logger.info(`PopulateSelect - Opción ${idx}: value="${opt.value}", text="${opt.textContent}"`);
+        addedCount++;
     });
   }
 
   /**
-   * Poblar select de países
+   * Poblar select de países con Colombia como prioridad
+   * @param {Object} locations - Datos de ubicaciones
    */
   populateCountries(locations) {
     if (!locations) return;
@@ -321,7 +323,7 @@ export class UIUtils {
     // Convertir object locations a array para usar populateSelect
     const countries = Object.entries(locations).map(([code, country]) => ({
       codigo: code,
-      nombre: country.nombre
+      nombre: country.nombre,
     }));
 
     // Usar populateSelect con prioridad para Colombia
@@ -332,11 +334,12 @@ export class UIUtils {
   }
 
   /**
-   * Poblar select de prefijos telefónicos
+   * Poblar select de prefijos telefónicos con Colombia como prioridad
+   * @param {Array} prefixes - Lista de prefijos telefónicos
    */
   populatePrefixes(prefixes) {
     if (!prefixes) {
-      this.logger.error('No se recibieron prefijos para poblar');
+      this.logger.error("No se recibieron prefijos para poblar");
       return;
     }
 
@@ -346,7 +349,7 @@ export class UIUtils {
       return;
     }
 
-    this.logger.info('Poblando prefijos telefónicos:', prefixes.length);
+    this.logger.info("Poblando prefijos telefónicos:", prefixes.length);
 
     // Limpiar opciones existentes
     prefixSelect.innerHTML = '<option value="">(+) Indicativo</option>';
@@ -372,11 +375,13 @@ export class UIUtils {
 
     // Establecer Colombia como default (+57)
     prefixSelect.value = "57";
-    this.logger.info('Prefijo de Colombia (+57) establecido como predeterminado');
+    this.logger.info("Prefijo de Colombia (+57) establecido como predeterminado");
   }
 
   /**
-   * Crear campo de nivel académico dinámicamente
+   * Crear campo de nivel académico de forma dinámica
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @returns {HTMLElement|null} - Elemento creado o existente
    */
   createAcademicLevelField(formElement) {
     const typeAttendeeElement = formElement.querySelector('[name="type_attendee"]');
@@ -417,7 +422,12 @@ export class UIUtils {
   }
 
   /**
-   * Agregar campo oculto
+   * Añadir campo oculto al formulario
+   * @param {HTMLElement} formElement - Formulario destino
+   * @param {string} name - Nombre del campo
+   * @param {string} value - Valor inicial
+   * @param {string} id - ID opcional del campo
+   * @returns {HTMLElement|null} - Campo creado
    */
   addHiddenField(formElement, name, value = "", id = "") {
     if (!formElement) return null;
@@ -443,7 +453,11 @@ export class UIUtils {
   }
 
   /**
-   * Establecer valor de campo oculto
+   * Establecer valor de un campo oculto existente
+   * @param {HTMLElement} formElement - Formulario contenedor
+   * @param {string} name - Nombre del campo
+   * @param {string} value - Nuevo valor
+   * @returns {boolean} - True si se estableció correctamente
    */
   setHiddenFieldValue(formElement, name, value) {
     const field =
@@ -458,7 +472,9 @@ export class UIUtils {
   }
 
   /**
-   * Mostrar error en campo
+   * Mostrar mensaje de error para un campo específico
+   * @param {HTMLElement} fieldElement - Campo con error
+   * @param {string} message - Mensaje de error a mostrar
    */
   showFieldError(fieldElement, message) {
     if (!fieldElement) return;
@@ -493,7 +509,9 @@ export class UIUtils {
   }
 
   /**
-   * Crear elemento de error dinámicamente
+   * Crear elemento de error de forma dinámica si no existe
+   * @param {HTMLElement} fieldElement - Campo para el error
+   * @returns {HTMLElement|null} - Elemento de error creado
    */
   createErrorElement(fieldElement) {
     if (!fieldElement) return null;
@@ -528,7 +546,9 @@ export class UIUtils {
   }
 
   /**
-   * Encontrar el punto de inserción para el elemento de error
+   * Determinar la mejor ubicación para insertar el mensaje de error
+   * @param {HTMLElement} fieldElement - Campo de referencia
+   * @returns {Object} - Información de inserción
    */
   findErrorInsertionPoint(fieldElement) {
     // Buscar contenedor padre más apropiado
@@ -553,7 +573,8 @@ export class UIUtils {
   }
 
   /**
-   * Ocultar error en campo
+   * Ocultar mensaje de error de un campo
+   * @param {HTMLElement} fieldElement - Campo a limpiar
    */
   hideFieldError(fieldElement) {
     if (!fieldElement) return;
@@ -584,7 +605,8 @@ export class UIUtils {
   }
 
   /**
-   * Limpiar todos los errores del formulario
+   * Limpiar todos los mensajes de error del formulario
+   * @param {HTMLElement} formElement - Formulario a limpiar
    */
   clearAllErrors(formElement) {
     if (!formElement) return;
@@ -600,12 +622,18 @@ export class UIUtils {
     const errorElements = formElement.querySelectorAll(".error_text");
     errorElements.forEach((errorElement) => {
       errorElement.style.display = "none";
-      errorElement.textContent = "";
+      
+      // No limpiar contenido de elementos con data-puj-form que tienen contenido predefinido
+      if (!errorElement.hasAttribute('data-puj-form')) {
+        errorElement.textContent = "";
+      }
     });
   }
 
   /**
-   * Obtener o crear elemento de error para un campo
+   * Obtener elemento de error existente o crear uno nuevo
+   * @param {HTMLElement} fieldElement - Campo de referencia
+   * @returns {HTMLElement|null} - Elemento de error
    */
   getOrCreateErrorElement(fieldElement) {
     if (!fieldElement) return null;
@@ -622,11 +650,15 @@ export class UIUtils {
   }
 
   /**
-   * Mostrar mensaje de éxito
+   * Mostrar mensaje de éxito en el contenedor apropiado
+   * @param {string} message - Mensaje a mostrar
+   * @param {HTMLElement} container - Contenedor específico (opcional)
    */
   showSuccessMessage(message, container = null) {
     const targetContainer =
-      container || this.findElement("[data-puj-form='message-success']") || this.findElement("[data-success-msg]");
+      container ||
+      this.findElement("[data-puj-form='message-success']") ||
+      this.findElement("[data-success-msg]");
 
     if (targetContainer) {
       targetContainer.textContent = message;
@@ -644,11 +676,14 @@ export class UIUtils {
   }
 
   /**
-   * Ocultar mensaje de éxito
+   * Ocultar mensaje de éxito del contenedor
+   * @param {HTMLElement} container - Contenedor específico (opcional)
    */
   hideSuccessMessage(container = null) {
     const targetContainer =
-      container || this.findElement("[data-puj-form='message-success']") || this.findElement("[data-success-msg]");
+      container ||
+      this.findElement("[data-puj-form='message-success']") ||
+      this.findElement("[data-success-msg]");
 
     if (targetContainer) {
       this.hideElement(targetContainer);
@@ -656,7 +691,11 @@ export class UIUtils {
   }
 
   /**
-   * Agregar event listener para input con limpieza
+   * Añadir listener de input con función de limpieza automática
+   * @param {HTMLElement} formElement - Formulario contenedor
+   * @param {string} selector - Selector del campo
+   * @param {Function} cleanFunction - Función de limpieza
+   * @returns {HTMLElement|null} - Elemento configurado
    */
   addInputListener(formElement, selector, cleanFunction) {
     const element = formElement.querySelector(selector);
@@ -675,7 +714,11 @@ export class UIUtils {
   }
 
   /**
-   * Agregar event listener para change
+   * Añadir listener de cambio para un campo
+   * @param {HTMLElement} formElement - Formulario contenedor
+   * @param {string} selector - Selector del campo
+   * @param {Function} callback - Función callback
+   * @returns {HTMLElement|null} - Elemento configurado
    */
   addChangeListener(formElement, selector, callback) {
     const element = formElement.querySelector(selector);
@@ -694,7 +737,11 @@ export class UIUtils {
   }
 
   /**
-   * Agregar event listener para radio buttons
+   * Añadir listeners para grupo de radio buttons
+   * @param {HTMLElement} formElement - Formulario contenedor
+   * @param {string} name - Nombre del grupo de radios
+   * @param {Function} callback - Función callback
+   * @returns {NodeList} - Lista de radio buttons configurados
    */
   addRadioListener(formElement, name, callback) {
     const radioButtons = formElement.querySelectorAll(`input[type="radio"][name="${name}"]`);
@@ -711,7 +758,10 @@ export class UIUtils {
   }
 
   /**
-   * Validar y limpiar valor de campo
+   * Validar y limpiar el valor de un campo según su tipo
+   * @param {HTMLElement} field - Campo a procesar
+   * @param {string} type - Tipo de validación ('text', 'number', 'email')
+   * @returns {string} - Valor limpio
    */
   validateAndCleanField(field, type = "text") {
     if (!field) return "";
@@ -737,7 +787,8 @@ export class UIUtils {
   }
 
   /**
-   * Deshabilitar elemento
+   * Deshabilitar un elemento de formulario
+   * @param {HTMLElement} element - Elemento a deshabilitar
    */
   disableElement(element) {
     if (!element) return;
@@ -747,7 +798,8 @@ export class UIUtils {
   }
 
   /**
-   * Habilitar elemento
+   * Habilitar un elemento de formulario
+   * @param {HTMLElement} element - Elemento a habilitar
    */
   enableElement(element) {
     if (!element) return;
@@ -757,7 +809,9 @@ export class UIUtils {
   }
 
   /**
-   * Mostrar indicador de carga
+   * Mostrar indicador de carga en un elemento (generalmente botones)
+   * @param {HTMLElement} element - Elemento a modificar
+   * @param {string} text - Texto de carga personalizado
    */
   showLoadingIndicator(element, text = null) {
     if (!element) return;
@@ -774,7 +828,8 @@ export class UIUtils {
   }
 
   /**
-   * Ocultar indicador de carga
+   * Restaurar elemento quitando el indicador de carga
+   * @param {HTMLElement} element - Elemento a restaurar
    */
   hideLoadingIndicator(element) {
     if (!element) return;
@@ -912,14 +967,37 @@ export class UIUtils {
   }
 
   /**
-   * Actualizar configuración
+   * Validar que el array de opciones sea válido
+   * @param {Array} options - Opciones a validar
+   * @returns {boolean} - True si es válido
+   */
+  _validateOptionsArray(options) {
+    if (!Array.isArray(options)) {
+      this.logger.error(
+        `Las opciones deben ser un array, recibido: ${typeof options}`
+      );
+      return false;
+    }
+
+    if (options.length === 0) {
+      this.logger.warn(`Array de opciones está vacío`);
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Actualizar configuración del módulo
+   * @param {Object} newConfig - Nueva configuración
    */
   updateConfig(newConfig) {
     this.config = { ...this.config, ...newConfig };
   }
 
   /**
-   * Obtener configuración actual
+   * Obtener copia de la configuración actual
+   * @returns {Object} - Configuración actual
    */
   getConfig() {
     return { ...this.config };

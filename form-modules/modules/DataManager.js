@@ -351,10 +351,6 @@ export class DataManager {
       this.isInitialized = true;
       this.logger.success("Todos los datos cargados correctamente");
       
-      // Debug: verificar datos cargados
-      this.logger.debug("Datos de programas cargados:", this.data.programs ? "✅" : "❌");
-      this.logger.debug("Datos de períodos cargados:", this.data.periods ? "✅" : "❌");
-      
       if (this.data.programs) {
         this.logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
       }

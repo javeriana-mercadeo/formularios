@@ -282,228 +282,254 @@
                 <div class="gh-feature-tag">Logging completo</div>
               </div>
 
-              <div class="gh-form-demo">
-                <div class="gh-form-header">
-                  <h4 class="gh-form-title">Formulario de Ejemplo</h4>
-                  <div class="gh-form-status">
-                    <span class="gh-status-dot gh-status-ready"></span>
-                    <span class="gh-status-text">Listo</span>
-                  </div>
-                </div>
-                <div class="gh-form-container gh-form-with-code">
-                  <div class="gh-form-left">
-                    <div class="form-card">
-                    <form id="advanced_form" novalidate aria-label="Formulario de contacto">
-                      <!-- Información del participante -->
-                      <div class="name-row">
-                        <div class="name-field">
-                          <input
-                            type="text"
-                            placeholder="*Nombre(s)"
-                            data-puj-form="first_name"
-                            name="first_name"
-                            required
-                          />
-                        </div>
-                        <div class="name-field">
-                          <input
-                            type="text"
-                            placeholder="*Apellidos"
-                            data-puj-form="last_name"
-                            name="last_name"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <!-- Documento de identidad -->
-                      <div class="document-row">
-                        <div class="document-type-field">
-                          <select data-puj-form="type_doc" name="type_doc" required>
-                            <option value="">*Tipo de documento</option>
-                            <option value="CC">Cédula Ciudadanía</option>
-                            <option value="CE">Cédula Extranjería</option>
-                            <option value="PA">Pasaporte</option>
-                            <option value="TI">Tarjeta Identidad</option>
-                          </select>
-                        </div>
-                        <div class="document-number-field">
-                          <input
-                            type="text"
-                            placeholder="*Número de documento"
-                            data-puj-form="document"
-                            name="document"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <!-- Email -->
-                      <input
-                        type="email"
-                        placeholder="*Email"
-                        data-puj-form="email"
-                        name="email"
-                        maxlength="80"
-                        required
-                      />
-
-                      <!-- Phone row -->
-                      <div class="phone-row">
-                        <div class="prefix-field">
-                          <select data-puj-form="phone_code" name="phone_code" required>
-                            <option value="">(+) Indicativo</option>
-                            <!-- Options will be populated by JavaScript -->
-                          </select>
-                        </div>
-                        <div class="mobile-field">
-                          <input
-                            type="text"
-                            placeholder="*Teléfono celular"
-                            data-puj-form="phone"
-                            name="mobile"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <!-- Ubicación -->
-                      <select data-puj-form="country" name="country" required>
-                        <option value="">*País de residencia</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <select data-puj-form="department" name="department" style="display: none">
-                        <option value="">*Selecciona el departamento</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <select data-puj-form="city" name="city" style="display: none">
-                        <option value="">*Selecciona la Ciudad</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Día de asistencia -->
-                      <select data-puj-form="attendance_day" name="attendance_day" required>
-                        <option value="">*Día de asistencia</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Tipo de asistente -->
-                      <select data-puj-form="type_attendee" name="type_attendee" required>
-                        <option value="">*Tipo de asistente</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Nivel académico -->
-                      <select
-                        data-puj-form="academic_level"
-                        name="academic_level"
-                        style="display: none"
-                      >
-                        <option value="">*Nivel académico</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Facultad -->
-                      <select data-puj-form="faculty" name="Facultad" style="display: none">
-                        <option value="">*Facultad de interés</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Programa -->
-                      <select data-puj-form="program" name="program" style="display: none">
-                        <option value="">*Programa de interés</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Período de ingreso -->
-                      <select
-                        data-puj-form="admission_period"
-                        name="admission_period"
-                        style="display: none"
-                      >
-                        <option value="">*Periodo esperado de Ingreso de interés</option>
-                        <!-- Options will be populated by JavaScript -->
-                      </select>
-
-                      <!-- Autorización de datos -->
-                      <div>
-                        <p>
-                          ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
-                          <a
-                            href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
-                            target="_blank"
-                          >
-                            autorización de privacidad
-                          </a>
-                          ?
-                        </p>
-
-                        <div class="radio-inline-group">
-                          <div class="radio-option">
-                            <input
-                              type="radio"
-                              data-puj-form="autorizacion_si"
-                              name="authorization_data"
-                              value="1"
-                            />
-                            <label for="autorizacion_si">Sí</label>
-                          </div>
-                          <div class="radio-option">
-                            <input
-                              type="radio"
-                              data-puj-form="autorizacion_no"
-                              name="authorization_data"
-                              value="0"
-                            />
-                            <label for="autorizacion_no">No</label>
-                          </div>
-                        </div>
-
-                        <div class="error_text" data-puj-form="error_auth">
-                          La Pontificia Universidad Javeriana requiere de tu autorización para el
-                          tratamiento de tus datos personales para continuar con el presente
-                          proceso, sin la autorización legalmente no podemos darte continuidad al
-                          mismo.
-                        </div>
-                      </div>
-
-                      <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
-                    </form>
+              <div class="gh-form-and-code-container">
+                <div class="gh-form-demo">
+                  <div class="gh-form-title-section">
+                    <h4 class="gh-form-title">Formulario de Ejemplo</h4>
+                    <div class="gh-form-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
                     </div>
                   </div>
-                  
-                  <div class="gh-form-right">
-                    <div class="gh-code-section">
-                      <div class="gh-code-header">
-                        <h5 class="gh-code-title">Código de Ejemplo</h5>
-                        <div class="gh-code-tabs">
-                          <button
-                            class="gh-code-tab gh-code-tab-active"
-                            onclick="showCodeTab('advanced', 'js')"
-                          >
-                            JavaScript
-                          </button>
-                          <button class="gh-code-tab" onclick="showCodeTab('advanced', 'html')">
-                            HTML
-                          </button>
-                          <button class="gh-code-tab" onclick="showCodeTab('advanced', 'config')">
-                            Config
-                          </button>
+                  <div class="gh-form-actions-section">
+                    <div class="gh-form-actions">
+                      <button class="gh-action-tab" onclick="resetForm()">
+                        Limpiar
+                      </button>
+                      <button class="gh-action-tab" onclick="toggleDebugMode()">
+                        Debug
+                      </button>
+                      <button class="gh-action-tab" onclick="toggleDevMode()">
+                        Dev Mode
+                      </button>
+                      <button class="gh-action-tab" onclick="showFormData()">
+                        Ver Datos
+                      </button>
+                      <button class="gh-action-tab" onclick="showLogs()">
+                        Ver Logs
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-form-container">
+                    <div class="form-card">
+                      <form id="advanced_form" novalidate aria-label="Formulario de contacto">
+                        <!-- Información del participante -->
+                        <div class="name-row">
+                          <div class="name-field">
+                            <input
+                              type="text"
+                              placeholder="*Nombre(s)"
+                              data-puj-form="first_name"
+                              name="first_name"
+                              required
+                            />
+                          </div>
+                          <div class="name-field">
+                            <input
+                              type="text"
+                              placeholder="*Apellidos"
+                              data-puj-form="last_name"
+                              name="last_name"
+                              required
+                            />
+                          </div>
                         </div>
-                        <button class="gh-copy-btn" onclick="copyCode('advanced', this)">
-                          <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                            <path
-                              d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+
+                        <!-- Documento de identidad -->
+                        <div class="document-row">
+                          <div class="document-type-field">
+                            <select data-puj-form="type_doc" name="type_doc" required>
+                              <option value="">*Tipo de documento</option>
+                              <option value="CC">Cédula Ciudadanía</option>
+                              <option value="CE">Cédula Extranjería</option>
+                              <option value="PA">Pasaporte</option>
+                              <option value="TI">Tarjeta Identidad</option>
+                            </select>
+                          </div>
+                          <div class="document-number-field">
+                            <input
+                              type="text"
+                              placeholder="*Número de documento"
+                              data-puj-form="document"
+                              name="document"
+                              required
                             />
-                            <path
-                              d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          </div>
+                        </div>
+
+                        <!-- Email -->
+                        <input
+                          type="email"
+                          placeholder="*Email"
+                          data-puj-form="email"
+                          name="email"
+                          maxlength="80"
+                          required
+                        />
+
+                        <!-- Phone row -->
+                        <div class="phone-row">
+                          <div class="prefix-field">
+                            <select data-puj-form="phone_code" name="phone_code" required>
+                              <option value="">(+) Indicativo</option>
+                              <!-- Options will be populated by JavaScript -->
+                            </select>
+                          </div>
+                          <div class="mobile-field">
+                            <input
+                              type="text"
+                              placeholder="*Teléfono celular"
+                              data-puj-form="phone"
+                              name="phone"
+                              required
                             />
-                          </svg>
-                          Copiar
+                          </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <select data-puj-form="country" name="country" required>
+                          <option value="">*País de residencia</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <select data-puj-form="department" name="department" style="display: none">
+                          <option value="">*Selecciona el departamento</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <select data-puj-form="city" name="city" style="display: none">
+                          <option value="">*Selecciona la Ciudad</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Día de asistencia -->
+                        <select data-puj-form="attendance_day" name="attendance_day" required>
+                          <option value="">*Día de asistencia</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Tipo de asistente -->
+                        <select data-puj-form="type_attendee" name="type_attendee" required>
+                          <option value="">*Tipo de asistente</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Nivel académico -->
+                        <select
+                          data-puj-form="academic_level"
+                          name="academic_level"
+                          style="display: none"
+                        >
+                          <option value="">*Nivel académico</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Facultad -->
+                        <select data-puj-form="faculty" name="Facultad" style="display: none">
+                          <option value="">*Facultad de interés</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Programa -->
+                        <select data-puj-form="program" name="program" style="display: none">
+                          <option value="">*Programa de interés</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Período de ingreso -->
+                        <select
+                          data-puj-form="admission_period"
+                          name="admission_period"
+                          style="display: none"
+                        >
+                          <option value="">*Periodo esperado de Ingreso de interés</option>
+                          <!-- Options will be populated by JavaScript -->
+                        </select>
+
+                        <!-- Autorización de datos -->
+                        <div>
+                          <p>
+                            ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
+                            <a
+                              href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+                              target="_blank"
+                            >
+                              autorización de privacidad
+                            </a>
+                            ?
+                          </p>
+
+                          <div class="radio-inline-group">
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                data-puj-form="autorizacion_si"
+                                name="authorization_data"
+                                value="1"
+                              />
+                              <label for="autorizacion_si">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                data-puj-form="autorizacion_no"
+                                name="authorization_data"
+                                value="0"
+                              />
+                              <label for="autorizacion_no">No</label>
+                            </div>
+                          </div>
+
+                          <div class="error_text" data-puj-form="error_auth">
+                            La Pontificia Universidad Javeriana requiere de tu autorización para el
+                            tratamiento de tus datos personales para continuar con el presente
+                            proceso, sin la autorización legalmente no podemos darte continuidad al
+                            mismo.
+                          </div>
+                        </div>
+
+                        <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gh-code-demo">
+                  <div class="gh-code-title-section">
+                    <h4 class="gh-code-title">Código de Ejemplo</h4>
+                    <div class="gh-code-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-code-actions-section">
+                    <div class="gh-code-actions">
+                      <div class="gh-code-tabs">
+                        <button
+                          class="gh-code-tab gh-code-tab-active"
+                          onclick="showCodeTab('advanced', 'js')"
+                        >
+                          JavaScript
+                        </button>
+                        <button class="gh-code-tab" onclick="showCodeTab('advanced', 'html')">
+                          HTML
                         </button>
                       </div>
+                      <button class="gh-copy-btn" onclick="copyCode('advanced', this)">
+                        <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+                          <path
+                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+                          />
+                          <path
+                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-code-container">
+                    <div class="gh-code-section">
 
                       <div id="advanced-js-code" class="gh-code-content">
                         <pre id="advanced-js-content"></pre>
@@ -512,67 +538,37 @@
                       <div id="advanced-html-code" class="gh-code-content gh-code-hidden">
                         <pre id="advanced-html-content"></pre>
                       </div>
-
-                      <div id="advanced-config-code" class="gh-code-content gh-code-hidden">
-                        <pre id="advanced-config-content"></pre>
-                      </div>
                     </div>
                   </div>
                 </div>
-                
-                <div class="gh-example-footer">
-                  <div class="gh-example-controls">
-                    <button class="gh-control-btn" onclick="advancedForm.reset()">
-                      <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                          d="M1.5 5.25a.75.75 0 01.75-.75h12.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75zM1.5 8.25a.75.75 0 01.75-.75h12.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75zM1.5 11.25a.75.75 0 01.75-.75h12.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
-                        />
-                      </svg>
-                      Limpiar
-                    </button>
-                    <button
-                      class="gh-control-btn"
-                      onclick="advancedForm.setDebugMode(!advancedForm.config.debugMode)"
-                    >
-                      <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                          d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 01-1.484.211c-.04-.282-.163-.547-.37-.847a8.695 8.695 0 00-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.75.75 0 01-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75zM5.75 12h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 010-1.5zM6 15.25a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z"
-                        />
-                      </svg>
-                      Debug
-                    </button>
-                    <button
-                      class="gh-control-btn"
-                      onclick="advancedForm.setDevMode(!advancedForm.config.devMode)"
-                    >
-                      <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 4a4 4 0 100 8 4 4 0 000-8z" />
-                      </svg>
-                      Dev Mode
-                    </button>
-                    <button class="gh-control-btn" onclick="console.log(advancedForm.getFormData())">
-                      <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                          d="M1.5 1.75a.75.75 0 00-1.5 0v12.5c0 .414.336.75.75.75h14.5a.75.75 0 000-1.5H1.5V1.75zm14.28 2.53a.75.75 0 00-1.06-1.06L10 7.94 7.53 5.47a.75.75 0 00-1.06 0L3.22 8.72a.75.75 0 001.06 1.06L7 7.06l2.47 2.47a.75.75 0 001.06 0l5.25-5.25z"
-                        />
-                      </svg>
-                      Ver Datos
-                    </button>
-                    <button class="gh-control-btn" onclick="console.log(advancedForm.getLogs())">
-                      <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                          d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 01-1.484.211c-.04-.282-.163-.547-.37-.847a8.695 8.695 0 00-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.75.75 0 01-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75zM5.75 12h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 010-1.5zM6 15.25a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z"
-                        />
-                      </svg>
-                      Ver Logs
-                    </button>
-                  </div>
-                </div>
+              </div>
               </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Modal para mostrar resultados -->
+    <div id="results-modal" class="gh-modal gh-modal-hidden">
+      <div class="gh-modal-overlay" onclick="closeModal()"></div>
+      <div class="gh-modal-content">
+        <div class="gh-modal-header">
+          <h3 class="gh-modal-title" id="modal-title">Resultado</h3>
+          <button class="gh-modal-close" onclick="closeModal()">
+            <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="gh-modal-body">
+          <pre id="modal-content"></pre>
+        </div>
+        <div class="gh-modal-footer">
+          <button class="gh-btn gh-btn-primary" onclick="closeModal()">Cerrar</button>
+          <button class="gh-btn gh-btn-outline" onclick="copyModalContent()">Copiar</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Documentation Section -->
     <section class="gh-docs-section" id="docs">
@@ -1038,6 +1034,9 @@
         </div>
       </div>
     </footer>
+
+    <!-- Contenedor de notificaciones toast -->
+    <div id="toast-container" class="gh-toast-container"></div>
 
     <script type="module" src="examples.js"></script>
   </body>

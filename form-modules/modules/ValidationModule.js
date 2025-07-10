@@ -1,72 +1,149 @@
 /**
- * ValidationModule - Módulo de validación para formularios
- * Contiene todas las reglas de validación y lógica de verificación
+ * ValidationModule - Módulo centralizado de validación de formularios
+ * 
+ * Responsabilidades:
+ * - Definir reglas de validación para diferentes tipos de campos
+ * - Validar campos individuales y formularios completos
+ * - Gestionar mensajes de error personalizables
+ * - Manejar validación condicional según el contexto
+ * 
  * @version 1.0
  */
 
+import { Logger } from "./Logger.js";
+
 export class ValidationModule {
+  // Constantes para tipos de validación
+  static VALIDATION_TYPES = {
+    REQUIRED: "required",
+    NAME: "name",
+    EMAIL: "email",
+    PHONE: "phone",
+    DOCUMENT: "document"
+  };
+
+  // Constantes para nombres de campos
+  static FIELD_NAMES = {
+    PERSONAL: {
+      FIRST_NAME: "first_name",
+      LAST_NAME: "last_name",
+      EMAIL: "email",
+      PHONE: "phone",
+      DOCUMENT: "document",
+      TYPE_DOC: "type_doc",
+      PHONE_CODE: "phone_code"
+    },
+    LOCATION: {
+      COUNTRY: "country",
+      DEPARTMENT: "department",
+      CITY: "city"
+    },
+    EVENT: {
+      TYPE_ATTENDEE: "type_attendee",
+      ATTENDANCE_DAY: "attendance_day"
+    },
+    ACADEMIC: {
+      ACADEMIC_LEVEL: "academic_level",
+      FACULTY: "faculty",
+      PROGRAM: "program",
+      ADMISSION_PERIOD: "admission_period"
+    },
+    AUTHORIZATION: {
+      DATA_AUTHORIZATION: "authorization_data"
+    }
+  };
+
+  // Constantes para patrones de validación
+  static VALIDATION_PATTERNS = {
+    NAME: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+    EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    PHONE: /^[\d\s\-\+\(\)]+$/,
+    DOCUMENT: /^\d{6,12}$/
+  };
+
+  // Constantes de configuración por defecto
+  static DEFAULT_CONFIG = {
+    MIN_NAME_LENGTH: 2,
+    MIN_PHONE_LENGTH: 7,
+    MIN_DOCUMENT_LENGTH: 6,
+    MAX_DOCUMENT_LENGTH: 12
+  };
+
+  // Constantes para mensajes de error
+  static ERROR_MESSAGES = {
+    REQUIRED: "Este campo es obligatorio",
+    NAME: "Mínimo 2 caracteres, solo letras",
+    EMAIL: "Ingrese un correo electrónico válido",
+    PHONE: "Número de teléfono válido (mínimo 7 dígitos)",
+    DOCUMENT: "Solo números, entre 6 y 12 dígitos",
+    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales"
+  };
+
   constructor(config = {}, loggerConfig = {}) {
     this.config = {
       // Configuración de validación
-      minNameLength: 2,
-      minPhoneLength: 7,
-      minDocumentLength: 6,
-      maxDocumentLength: 12,
+      minNameLength: ValidationModule.DEFAULT_CONFIG.MIN_NAME_LENGTH,
+      minPhoneLength: ValidationModule.DEFAULT_CONFIG.MIN_PHONE_LENGTH,
+      minDocumentLength: ValidationModule.DEFAULT_CONFIG.MIN_DOCUMENT_LENGTH,
+      maxDocumentLength: ValidationModule.DEFAULT_CONFIG.MAX_DOCUMENT_LENGTH,
 
       // Patrones de validación
       patterns: {
-        name: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-        email:
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        phone: /^[\d\s\-\+\(\)]+$/,
-        document: /^\d{6,12}$/,
+        name: ValidationModule.VALIDATION_PATTERNS.NAME,
+        email: ValidationModule.VALIDATION_PATTERNS.EMAIL,
+        phone: ValidationModule.VALIDATION_PATTERNS.PHONE,
+        document: ValidationModule.VALIDATION_PATTERNS.DOCUMENT,
       },
 
       // Mensajes de error personalizables
       errorMessages: {
-        required: "Este campo es obligatorio",
-        name: "Mínimo 2 caracteres, solo letras",
-        email: "Ingrese un correo electrónico válido",
-        phone: "Número de teléfono válido (mínimo 7 dígitos)",
-        document: "Solo números, entre 6 y 12 dígitos",
-        authorization: "Debe autorizar el tratamiento de datos personales",
+        required: ValidationModule.ERROR_MESSAGES.REQUIRED,
+        name: ValidationModule.ERROR_MESSAGES.NAME,
+        email: ValidationModule.ERROR_MESSAGES.EMAIL,
+        phone: ValidationModule.ERROR_MESSAGES.PHONE,
+        document: ValidationModule.ERROR_MESSAGES.DOCUMENT,
+        authorization: ValidationModule.ERROR_MESSAGES.AUTHORIZATION,
       },
 
       ...config,
     };
 
-    this.logger = new Logger(loggerConfig);
+    this.logger = new Logger("ValidationModule", loggerConfig);
 
     // Mapeo de tipos de campo a reglas de validación
     this.fieldValidationMap = {
-      first_name: "name",
-      last_name: "name",
-      email: "email",
-      phone: "phone",
-      document: "document",
-      type_doc: "required",
-      phone_code: "required",
-      country: "required",
-      department: "required",
-      city: "required",
-      type_attendee: "required",
-      attendance_day: "required",
-      academic_level: "required",
-      faculty: "required",
-      program: "required",
-      admission_period: "required",
+      [ValidationModule.FIELD_NAMES.PERSONAL.FIRST_NAME]: ValidationModule.VALIDATION_TYPES.NAME,
+      [ValidationModule.FIELD_NAMES.PERSONAL.LAST_NAME]: ValidationModule.VALIDATION_TYPES.NAME,
+      [ValidationModule.FIELD_NAMES.PERSONAL.EMAIL]: ValidationModule.VALIDATION_TYPES.EMAIL,
+      [ValidationModule.FIELD_NAMES.PERSONAL.PHONE]: ValidationModule.VALIDATION_TYPES.PHONE,
+      [ValidationModule.FIELD_NAMES.PERSONAL.DOCUMENT]: ValidationModule.VALIDATION_TYPES.DOCUMENT,
+      [ValidationModule.FIELD_NAMES.PERSONAL.TYPE_DOC]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.PERSONAL.PHONE_CODE]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.LOCATION.COUNTRY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.LOCATION.CITY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.EVENT.TYPE_ATTENDEE]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.EVENT.ATTENDANCE_DAY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD]: ValidationModule.VALIDATION_TYPES.REQUIRED,
     };
   }
 
   /**
-   * Verificar si un valor es requerido y está presente
+   * Validar que un campo requerido tenga valor
+   * @param {string} value - Valor a validar
+   * @returns {boolean} - True si el valor es válido
    */
   validateRequired(value) {
     return value && value.trim().length > 0;
   }
 
   /**
-   * Validar nombre (solo letras y espacios, mínimo 2 caracteres)
+   * Validar formato de nombre (solo letras, espacios y acentos)
+   * @param {string} value - Nombre a validar
+   * @returns {boolean} - True si el formato es válido
    */
   validateName(value) {
     if (!value || value.trim().length < this.config.minNameLength) {
@@ -76,7 +153,9 @@ export class ValidationModule {
   }
 
   /**
-   * Validar email
+   * Validar formato de correo electrónico
+   * @param {string} value - Email a validar
+   * @returns {boolean} - True si el email es válido
    */
   validateEmail(value) {
     if (!value) return false;
@@ -84,7 +163,9 @@ export class ValidationModule {
   }
 
   /**
-   * Validar teléfono
+   * Validar formato de número telefónico
+   * @param {string} value - Número a validar
+   * @returns {boolean} - True si el teléfono es válido
    */
   validatePhone(value) {
     if (!value || value.trim().length < this.config.minPhoneLength) {
@@ -94,7 +175,9 @@ export class ValidationModule {
   }
 
   /**
-   * Validar documento
+   * Validar formato de documento de identidad
+   * @param {string} value - Documento a validar
+   * @returns {boolean} - True si el documento es válido
    */
   validateDocument(value) {
     if (!value) return false;
@@ -102,7 +185,9 @@ export class ValidationModule {
   }
 
   /**
-   * Validar un campo específico
+   * Validar un campo individual del formulario
+   * @param {HTMLElement} fieldElement - Elemento del campo a validar
+   * @returns {boolean} - True si el campo es válido
    */
   validateField(fieldElement) {
     const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
@@ -121,15 +206,15 @@ export class ValidationModule {
 
     // Aplicar validación según el tipo
     switch (validationType) {
-      case "name":
+      case ValidationModule.VALIDATION_TYPES.NAME:
         return this.validateName(value);
-      case "email":
+      case ValidationModule.VALIDATION_TYPES.EMAIL:
         return this.validateEmail(value);
-      case "phone":
+      case ValidationModule.VALIDATION_TYPES.PHONE:
         return this.validatePhone(value);
-      case "document":
+      case ValidationModule.VALIDATION_TYPES.DOCUMENT:
         return this.validateDocument(value);
-      case "required":
+      case ValidationModule.VALIDATION_TYPES.REQUIRED:
         return this.validateRequired(value);
       default:
         return true;
@@ -137,7 +222,9 @@ export class ValidationModule {
   }
 
   /**
-   * Obtener mensaje de error para un campo
+   * Obtener el mensaje de error apropiado para un campo
+   * @param {HTMLElement} fieldElement - Elemento del campo
+   * @returns {string} - Mensaje de error correspondiente
    */
   getErrorMessage(fieldElement) {
     const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
@@ -223,7 +310,7 @@ export class ValidationModule {
     };
 
     // Validar departamento y ciudad si el país es Colombia
-    if (formData.country === "COL") {
+    if (formData[ValidationModule.FIELD_NAMES.LOCATION.COUNTRY] === "COL") {
       const departmentElement = formElement.querySelector('[data-puj-form="field-department"]');
       const cityElement = formElement.querySelector('[data-puj-form="field-city"]');
 
@@ -243,8 +330,13 @@ export class ValidationModule {
     }
 
     // Validar campos académicos si el tipo de asistente es "Aspirante"
-    if (formData.type_attendee === "Aspirante") {
-      const academicFields = ["academic_level", "faculty", "program", "admission_period"];
+    if (formData[ValidationModule.FIELD_NAMES.EVENT.TYPE_ATTENDEE] === "Aspirante") {
+      const academicFields = [
+        ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL,
+        ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY,
+        ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM,
+        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD
+      ];
 
       academicFields.forEach((fieldId) => {
         const element = formElement.querySelector(`[data-puj-form="field-${fieldId.replace('_', '-')}"]`);
@@ -287,8 +379,8 @@ export class ValidationModule {
 
     // Agregar error de autorización si es necesario
     if (!authorizationValid) {
-      results.errors.authorization_data = this.config.errorMessages.authorization;
-      results.invalidFields.push("authorization_data");
+      results.errors[ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION] = this.config.errorMessages.authorization;
+      results.invalidFields.push(ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION);
     }
 
     return results;
@@ -344,15 +436,15 @@ export class ValidationModule {
    */
   validateValue(value, type) {
     switch (type) {
-      case "name":
+      case ValidationModule.VALIDATION_TYPES.NAME:
         return this.validateName(value);
-      case "email":
+      case ValidationModule.VALIDATION_TYPES.EMAIL:
         return this.validateEmail(value);
-      case "phone":
+      case ValidationModule.VALIDATION_TYPES.PHONE:
         return this.validatePhone(value);
-      case "document":
+      case ValidationModule.VALIDATION_TYPES.DOCUMENT:
         return this.validateDocument(value);
-      case "required":
+      case ValidationModule.VALIDATION_TYPES.REQUIRED:
         return this.validateRequired(value);
       default:
         return true;
@@ -384,14 +476,14 @@ export class ValidationModule {
 
     // Validar campos requeridos básicos
     const requiredFields = [
-      "first_name",
-      "last_name",
-      "type_doc",
-      "document",
-      "email",
-      "phone_code",
-      "phone",
-      "country",
+      ValidationModule.FIELD_NAMES.PERSONAL.FIRST_NAME,
+      ValidationModule.FIELD_NAMES.PERSONAL.LAST_NAME,
+      ValidationModule.FIELD_NAMES.PERSONAL.TYPE_DOC,
+      ValidationModule.FIELD_NAMES.PERSONAL.DOCUMENT,
+      ValidationModule.FIELD_NAMES.PERSONAL.EMAIL,
+      ValidationModule.FIELD_NAMES.PERSONAL.PHONE_CODE,
+      ValidationModule.FIELD_NAMES.PERSONAL.PHONE,
+      ValidationModule.FIELD_NAMES.LOCATION.COUNTRY,
     ];
 
     requiredFields.forEach((fieldId) => {
@@ -406,21 +498,26 @@ export class ValidationModule {
     });
 
     // Validar campos condicionales
-    if (formData.country === "COL") {
-      if (!this.validateRequired(formData.department)) {
+    if (formData[ValidationModule.FIELD_NAMES.LOCATION.COUNTRY] === "COL") {
+      if (!this.validateRequired(formData[ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT])) {
         results.isValid = false;
-        results.errors.department = this.config.errorMessages.required;
+        results.errors[ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT] = this.config.errorMessages.required;
       }
 
-      if (!this.validateRequired(formData.city)) {
+      if (!this.validateRequired(formData[ValidationModule.FIELD_NAMES.LOCATION.CITY])) {
         results.isValid = false;
-        results.errors.city = this.config.errorMessages.required;
+        results.errors[ValidationModule.FIELD_NAMES.LOCATION.CITY] = this.config.errorMessages.required;
       }
     }
 
     // Validar campos académicos si es aspirante
-    if (formData.type_attendee === "Aspirante") {
-      const academicFields = ["academic_level", "faculty", "program", "admission_period"];
+    if (formData[ValidationModule.FIELD_NAMES.EVENT.TYPE_ATTENDEE] === "Aspirante") {
+      const academicFields = [
+        ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL,
+        ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY,
+        ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM,
+        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD
+      ];
 
       academicFields.forEach((fieldId) => {
         if (!this.validateRequired(formData[fieldId])) {
@@ -431,9 +528,10 @@ export class ValidationModule {
     }
 
     // Validar autorización
-    if (!formData.authorization_data || formData.authorization_data !== "1") {
+    const authField = ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION;
+    if (!formData[authField] || formData[authField] !== "1") {
       results.isValid = false;
-      results.errors.authorization_data = this.config.errorMessages.authorization;
+      results.errors[authField] = this.config.errorMessages.authorization;
     }
 
     return results;
