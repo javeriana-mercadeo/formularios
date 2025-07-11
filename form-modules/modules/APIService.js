@@ -1,13 +1,13 @@
 /**
  * APIService - Servicio de integración con APIs externas
- * 
+ *
  * Responsabilidades principales:
  * - Gestionar envío de formularios a Salesforce Web-to-Lead
  * - Mapear campos del formulario a campos de Salesforce
  * - Manejar configuración de ambientes (test/producción)
  * - Implementar reintentos y manejo de errores
  * - Mantener historial de envíos para auditoría
- * 
+ *
  * @version 1.0
  */
 

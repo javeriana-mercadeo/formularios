@@ -19,20 +19,20 @@ export class FormStateManager {
       PHONE: "phone",
       COUNTRY: "country",
       DEPARTMENT: "department",
-      CITY: "city"
+      CITY: "city",
     },
     EVENT: {
       ATTENDANCE_DAY: "attendance_day",
-      ATTENDEE_TYPE: "type_attendee"
+      ATTENDEE_TYPE: "type_attendee",
     },
     ACADEMIC: {
       ACADEMIC_LEVEL: "academic_level",
       FACULTY: "faculty",
       PROGRAM: "program",
-      ADMISSION_PERIOD: "admission_period"
+      ADMISSION_PERIOD: "admission_period",
     },
     AUTHORIZATION: {
-      DATA_AUTHORIZATION: "authorization_data"
+      DATA_AUTHORIZATION: "authorization_data",
     },
     SALESFORCE_HIDDEN: {
       ORGANIZATION_ID: "oid",
@@ -40,7 +40,7 @@ export class FormStateManager {
       DEBUG: "debug",
       DEBUG_EMAIL: "debugEmail",
       LEAD_SOURCE: "lead_source",
-      COMPANY: "company"
+      COMPANY: "company",
     },
     EVENT_HIDDEN: {
       EVENT_NAME: "event_name",
@@ -48,8 +48,8 @@ export class FormStateManager {
       UNIVERSITY: "university",
       CAMPAIGN: "campaign",
       SOURCE: "source",
-      MEDIUM: "medium"
-    }
+      MEDIUM: "medium",
+    },
   };
 
   // UI field visibility constants
@@ -57,14 +57,14 @@ export class FormStateManager {
     VISIBILITY: {
       DEPARTMENT: "department",
       CITY: "city",
-      ACADEMIC_LEVEL: "academic_level", 
+      ACADEMIC_LEVEL: "academic_level",
       FACULTY: "faculty",
       PROGRAM: "program",
-      ADMISSION_PERIOD: "admission_period"
+      ADMISSION_PERIOD: "admission_period",
     },
     DISABLED: {
-      SUBMIT: "submit"
-    }
+      SUBMIT: "submit",
+    },
   };
 
   // Default values for form fields
@@ -72,15 +72,15 @@ export class FormStateManager {
     PHONE_CODE: "57", // Colombia by default
     COUNTRY: "COL", // Colombia by default
     LEAD_SOURCE: "Landing Pages",
-    COMPANY: "NA"
+    COMPANY: "NA",
   };
 
   constructor(loggerConfig = {}) {
     this.logger = new Logger("FormStateManager", loggerConfig);
-    
+
     // Initial form state
     this.state = this.getInitialState();
-    
+
     // UI state
     this.uiState = {
       fieldsVisible: {
@@ -117,7 +117,7 @@ export class FormStateManager {
   getInitialState() {
     const F = FormStateManager.FORM_FIELDS;
     const D = FormStateManager.DEFAULT_VALUES;
-    
+
     return {
       // Personal data
       [F.PERSONAL.FIRST_NAME]: "",
@@ -130,18 +130,18 @@ export class FormStateManager {
       [F.PERSONAL.COUNTRY]: D.COUNTRY,
       [F.PERSONAL.DEPARTMENT]: "",
       [F.PERSONAL.CITY]: "",
-      
+
       // Event data
       [F.EVENT.ATTENDANCE_DAY]: "",
       [F.EVENT.ATTENDEE_TYPE]: "",
-      
+
       // Academic data
       [F.ACADEMIC.ACADEMIC_LEVEL]: "",
       [F.ACADEMIC.FACULTY]: "",
       [F.ACADEMIC.PROGRAM]: "",
       [F.ACADEMIC.ADMISSION_PERIOD]: "",
       [F.AUTHORIZATION.DATA_AUTHORIZATION]: "",
-      
+
       // Hidden Salesforce fields
       [F.SALESFORCE_HIDDEN.ORGANIZATION_ID]: "",
       [F.SALESFORCE_HIDDEN.RETURN_URL]: "",
@@ -149,7 +149,7 @@ export class FormStateManager {
       [F.SALESFORCE_HIDDEN.DEBUG_EMAIL]: "",
       [F.SALESFORCE_HIDDEN.LEAD_SOURCE]: D.LEAD_SOURCE,
       [F.SALESFORCE_HIDDEN.COMPANY]: D.COMPANY,
-      
+
       // Hidden event fields
       [F.EVENT_HIDDEN.EVENT_NAME]: "",
       [F.EVENT_HIDDEN.EVENT_DATE]: "",
@@ -167,15 +167,15 @@ export class FormStateManager {
     if (this.state.hasOwnProperty(fieldName)) {
       const previousValue = this.state[fieldName];
       this.state[fieldName] = value;
-      
-      this.logger.debug(`Campo actualizado: ${fieldName}`, { 
-        previousValue, 
-        currentValue: value 
+
+      this.logger.debug(`Campo actualizado: ${fieldName}`, {
+        previousValue,
+        currentValue: value,
       });
-      
+
       return true;
     }
-    
+
     this.logger.warn(`Intento de actualizar campo inexistente: ${fieldName}`);
     return false;
   }
@@ -210,7 +210,7 @@ export class FormStateManager {
     this.state = this.getInitialState();
     this.clearValidationErrors();
     this.systemState.isSubmitting = false;
-    
+
     this.logger.info("Estado del formulario reseteado");
   }
 
@@ -290,7 +290,7 @@ export class FormStateManager {
   setFieldDisabled(fieldName, disabled) {
     if (this.uiState.fieldsDisabled.hasOwnProperty(fieldName)) {
       this.uiState.fieldsDisabled[fieldName] = disabled;
-      this.logger.debug(`Campo ${fieldName} ${disabled ? 'deshabilitado' : 'habilitado'}`);
+      this.logger.debug(`Campo ${fieldName} ${disabled ? "deshabilitado" : "habilitado"}`);
     }
   }
 
@@ -323,9 +323,11 @@ export class FormStateManager {
    */
   isReadyToSubmit() {
     const authField = FormStateManager.FORM_FIELDS.AUTHORIZATION.DATA_AUTHORIZATION;
-    return this.validationState.isValid && 
-           !this.systemState.isSubmitting && 
-           this.state[authField] === "1";
+    return (
+      this.validationState.isValid &&
+      !this.systemState.isSubmitting &&
+      this.state[authField] === "1"
+    );
   }
 
   /**
@@ -351,18 +353,18 @@ export class FormStateManager {
   validateState() {
     const F = FormStateManager.FORM_FIELDS;
     const requiredFields = [
-      F.PERSONAL.FIRST_NAME, 
-      F.PERSONAL.LAST_NAME, 
-      F.PERSONAL.EMAIL, 
-      F.PERSONAL.PHONE
+      F.PERSONAL.FIRST_NAME,
+      F.PERSONAL.LAST_NAME,
+      F.PERSONAL.EMAIL,
+      F.PERSONAL.PHONE,
     ];
-    const missingFields = requiredFields.filter(field => !this.state[field]);
-    
+    const missingFields = requiredFields.filter((field) => !this.state[field]);
+
     if (missingFields.length > 0) {
-      this.logger.warn(`Campos requeridos faltantes: ${missingFields.join(', ')}`);
+      this.logger.warn(`Campos requeridos faltantes: ${missingFields.join(", ")}`);
       return false;
     }
-    
+
     return true;
   }
 }

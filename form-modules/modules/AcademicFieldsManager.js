@@ -1,13 +1,13 @@
 /**
  * AcademicFieldsManager - Gestor especializado de campos académicos
- * 
+ *
  * Responsabilidades:
  * - Gestionar la visibilidad de campos académicos según el tipo de asistente
  * - Coordinar la carga dinámica de niveles, facultades y programas
  * - Aplicar filtros de configuración a los datos académicos
  * - Manejar auto-selección de campos cuando hay una sola opción
  * - Validar completitud de información académica para aspirantes
- * 
+ *
  * @version 1.0
  */
 
@@ -17,17 +17,17 @@ export class AcademicFieldsManager {
   // Constantes para tipos de campos académicos
   static FIELD_TYPES = {
     ACADEMIC_LEVEL: "academic_level",
-    FACULTY: "faculty", 
+    FACULTY: "faculty",
     PROGRAM: "program",
-    ADMISSION_PERIOD: "admission_period"
+    ADMISSION_PERIOD: "admission_period",
   };
 
   // Mapeo de selectores de campos
   static FIELD_SELECTORS = {
     ACADEMIC_LEVEL: "academicLevel",
     FACULTY: "faculty",
-    PROGRAM: "program", 
-    ADMISSION_PERIOD: "admissionPeriod"
+    PROGRAM: "program",
+    ADMISSION_PERIOD: "admissionPeriod",
   };
 
   // Mapeo de campos de estado
@@ -35,10 +35,19 @@ export class AcademicFieldsManager {
     VISIBILITY: "fieldsVisible",
     CURRENT_LEVEL: "currentLevel",
     CURRENT_FACULTY: "currentFaculty",
-    IS_VISIBLE: "isVisible"
+    IS_VISIBLE: "isVisible",
   };
 
-  constructor(formElement, stateManager, dataManager, ui, autoSelectManager, inputSelectors, config, loggerConfig = {}) {
+  constructor(
+    formElement,
+    stateManager,
+    dataManager,
+    ui,
+    autoSelectManager,
+    inputSelectors,
+    config,
+    loggerConfig = {}
+  ) {
     this.formElement = formElement;
     this.stateManager = stateManager;
     this.dataManager = dataManager;
@@ -47,7 +56,7 @@ export class AcademicFieldsManager {
     this.inputSelectors = inputSelectors;
     this.config = config;
     this.logger = new Logger("AcademicFieldsManager", loggerConfig);
-    
+
     // Academic fields internal state
     this.academicFieldsState = {
       [AcademicFieldsManager.STATE_FIELDS.IS_VISIBLE]: false,
@@ -56,7 +65,7 @@ export class AcademicFieldsManager {
       availableLevels: [],
       availableFaculties: [],
       availablePrograms: [],
-      availablePeriods: []
+      availablePeriods: [],
     };
   }
 
@@ -66,18 +75,18 @@ export class AcademicFieldsManager {
    */
   showAcademicFields() {
     this.logger.info("🎓 Mostrando campos académicos para aspirante");
-    
+
     const academicLevelElement = this.formElement.querySelector(
       this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL]
     );
-    
+
     if (!academicLevelElement) {
       this.ui.createAcademicLevelField(this.formElement);
     }
 
     // Load and populate academic levels
     this._loadAndPopulateAcademicLevels();
-    
+
     this.academicFieldsState[AcademicFieldsManager.STATE_FIELDS.IS_VISIBLE] = true;
   }
 
@@ -87,7 +96,7 @@ export class AcademicFieldsManager {
    */
   hideAcademicFields() {
     this.logger.info("👤 Ocultando campos académicos");
-    
+
     const fieldSelectors = [
       this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL],
       this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.FACULTY],
@@ -105,7 +114,7 @@ export class AcademicFieldsManager {
 
     // Clear academic data from state
     this._clearAcademicState();
-    
+
     this.academicFieldsState[AcademicFieldsManager.STATE_FIELDS.IS_VISIBLE] = false;
   }
 
@@ -123,9 +132,9 @@ export class AcademicFieldsManager {
       this._loadPeriodsForLevel(levelValue);
     } else {
       this._hideDependentFields([
-        AcademicFieldsManager.FIELD_TYPES.FACULTY, 
-        AcademicFieldsManager.FIELD_TYPES.PROGRAM, 
-        AcademicFieldsManager.FIELD_TYPES.ADMISSION_PERIOD
+        AcademicFieldsManager.FIELD_TYPES.FACULTY,
+        AcademicFieldsManager.FIELD_TYPES.PROGRAM,
+        AcademicFieldsManager.FIELD_TYPES.ADMISSION_PERIOD,
       ]);
     }
   }
@@ -151,7 +160,9 @@ export class AcademicFieldsManager {
    * Ejecuta las acciones necesarias cuando un campo se selecciona automáticamente
    */
   processAutoSelectedFields() {
-    const currentAcademicLevel = this.stateManager.getField(AcademicFieldsManager.FIELD_TYPES.ACADEMIC_LEVEL);
+    const currentAcademicLevel = this.stateManager.getField(
+      AcademicFieldsManager.FIELD_TYPES.ACADEMIC_LEVEL
+    );
     if (currentAcademicLevel) {
       this.logger.info(`🔄 Procesando nivel académico auto-seleccionado: ${currentAcademicLevel}`);
       this.handleAcademicLevelChange(currentAcademicLevel);
@@ -163,18 +174,20 @@ export class AcademicFieldsManager {
    * Puebla el select y maneja auto-selección si solo hay una opción
    */
   _loadAndPopulateAcademicLevels() {
-    const availableLevels = this.config.academicLevels.length > 0
-      ? this.config.academicLevels
-      : this.dataManager.getAcademicLevels();
+    const availableLevels =
+      this.config.academicLevels.length > 0
+        ? this.config.academicLevels
+        : this.dataManager.getAcademicLevels();
 
     this.academicFieldsState.availableLevels = availableLevels;
-    
-    const academicLevelSelector = this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL];
+
+    const academicLevelSelector =
+      this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL];
     this.ui.populateSelect(academicLevelSelector, availableLevels, "code", "name");
 
     // Auto-select if only one level available
     const wasAutoSelected = this.autoSelectManager.autoSelectAcademicLevel(availableLevels);
-    
+
     if (!wasAutoSelected) {
       const academicLevelElement = this.formElement.querySelector(academicLevelSelector);
       this.ui.showElement(academicLevelElement);
@@ -191,7 +204,7 @@ export class AcademicFieldsManager {
 
     // Aplicar filtro de facultades si está configurado
     if (this.config.faculties && this.config.faculties.length > 0) {
-      faculties = faculties.filter(faculty => this.config.faculties.includes(faculty));
+      faculties = faculties.filter((faculty) => this.config.faculties.includes(faculty));
       this.logger.info(
         `Facultades filtradas: ${faculties.length} de ${
           this.dataManager.getFaculties(academicLevel).length
@@ -200,13 +213,13 @@ export class AcademicFieldsManager {
     }
 
     this.academicFieldsState.availableFaculties = faculties;
-    
+
     const facultyElement = this.formElement.querySelector(this.inputSelectors.faculty);
     this.ui.populateSelect(this.inputSelectors.faculty, faculties);
 
     // Auto-seleccionar si solo hay una facultad
     const autoSelected = this.autoSelectManager.autoSelectFaculty(faculties);
-    
+
     if (!autoSelected) {
       this.ui.showElement(facultyElement);
       this.stateManager.setFieldVisibility("faculty", true);
@@ -224,7 +237,7 @@ export class AcademicFieldsManager {
 
     // Aplicar filtro de programas si está configurado
     if (this.config.programs && this.config.programs.length > 0) {
-      programs = programs.filter(program => {
+      programs = programs.filter((program) => {
         const programCode = program.Codigo || program.codigo || program;
         return this.config.programs.includes(programCode);
       });
@@ -243,7 +256,7 @@ export class AcademicFieldsManager {
 
     // Auto-seleccionar si solo hay un programa
     const autoSelected = this.autoSelectManager.autoSelectProgram(programs);
-    
+
     if (!autoSelected) {
       this.ui.showElement(programElement);
       this.stateManager.setFieldVisibility("program", true);
@@ -257,7 +270,7 @@ export class AcademicFieldsManager {
   _loadPeriodsForLevel(academicLevel) {
     const periods = this.dataManager.getPeriods(academicLevel);
     this.academicFieldsState.availablePeriods = periods;
-    
+
     this.ui.populateSelect(this.inputSelectors.admissionPeriod, periods, "codigo", "nombre");
     this.ui.showElement(this.formElement.querySelector(this.inputSelectors.admissionPeriod));
     this.stateManager.setFieldVisibility("admission_period", true);
@@ -268,7 +281,7 @@ export class AcademicFieldsManager {
    * @param {Array} fieldTypes - Tipos de campos a ocultar
    */
   _hideDependentFields(fieldTypes) {
-    fieldTypes.forEach(fieldType => {
+    fieldTypes.forEach((fieldType) => {
       const selector = this.inputSelectors[fieldType];
       if (selector) {
         const element = this.formElement.querySelector(selector);
@@ -284,10 +297,10 @@ export class AcademicFieldsManager {
    * Restablecer todos los valores y estado de campos académicos
    */
   _clearAcademicState() {
-    const academicFields = ['academic_level', 'faculty', 'program', 'admission_period'];
-    
-    academicFields.forEach(field => {
-      this.stateManager.updateField(field, '');
+    const academicFields = ["academic_level", "faculty", "program", "admission_period"];
+
+    academicFields.forEach((field) => {
+      this.stateManager.updateField(field, "");
     });
 
     // Limpiar estado interno
@@ -298,7 +311,7 @@ export class AcademicFieldsManager {
       availableLevels: [],
       availableFaculties: [],
       availablePrograms: [],
-      availablePeriods: []
+      availablePeriods: [],
     };
   }
 
@@ -318,11 +331,11 @@ export class AcademicFieldsManager {
     return {
       ...this.academicFieldsState,
       formData: {
-        academic_level: this.stateManager.getField('academic_level'),
-        faculty: this.stateManager.getField('faculty'),
-        program: this.stateManager.getField('program'),
-        admission_period: this.stateManager.getField('admission_period')
-      }
+        academic_level: this.stateManager.getField("academic_level"),
+        faculty: this.stateManager.getField("faculty"),
+        program: this.stateManager.getField("program"),
+        admission_period: this.stateManager.getField("admission_period"),
+      },
     };
   }
 
@@ -336,18 +349,18 @@ export class AcademicFieldsManager {
     }
 
     const errors = [];
-    const requiredFields = ['academic_level', 'faculty', 'program', 'admission_period'];
+    const requiredFields = ["academic_level", "faculty", "program", "admission_period"];
 
-    requiredFields.forEach(field => {
+    requiredFields.forEach((field) => {
       const value = this.stateManager.getField(field);
-      if (!value || value.trim() === '') {
+      if (!value || value.trim() === "") {
         errors.push(`${field} es requerido para aspirantes`);
       }
     });
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -359,12 +372,12 @@ export class AcademicFieldsManager {
     if (this.academicFieldsState.isVisible) {
       this.logger.info("🔄 Refrescando datos académicos");
       this._loadAndPopulateAcademicLevels();
-      
+
       if (this.academicFieldsState.currentLevel) {
         this._loadFacultiesForLevel(this.academicFieldsState.currentLevel);
         this._loadPeriodsForLevel(this.academicFieldsState.currentLevel);
       }
-      
+
       if (this.academicFieldsState.currentFaculty) {
         this._loadProgramsForFaculty(this.academicFieldsState.currentFaculty);
       }

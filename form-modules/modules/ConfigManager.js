@@ -15,37 +15,37 @@ export class ConfigManager {
       TEACHER: "Docente y/o psicoorientador",
       VISITOR: "Visitante PUJ",
       ADMINISTRATIVE: "Administrativo PUJ",
-      BUSINESS: "Empresario"
+      BUSINESS: "Empresario",
     },
     ACADEMIC_LEVELS: {
       UNDERGRADUATE: { code: "PREG", name: "Pregrado" },
       GRADUATE: { code: "GRAD", name: "Posgrado" },
       ECCLESIASTICAL: { code: "ECLE", name: "Eclesiástico" },
       TECHNICAL: { code: "ETDH", name: "Técnico" },
-      CONTINUING_EDUCATION: { code: "EDCO", name: "Educación Continua" }
-    }
+      CONTINUING_EDUCATION: { code: "EDCO", name: "Educación Continua" },
+    },
   };
 
   // Default URLs for external data sources
   static DEFAULT_URLS = {
     SALESFORCE: {
       TEST: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-      PROD: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8"
+      PROD: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
     },
     THANK_YOU: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
-    PRIVACY_POLICY: "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+    PRIVACY_POLICY: "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
   };
 
   // Default Organization IDs
   static DEFAULT_OIDS = {
     TEST: "00D7j0000004eQD",
-    PROD: "00Df4000003l8Bf"
+    PROD: "00Df4000003l8Bf",
   };
 
   // Default field mapping for Salesforce
   static DEFAULT_FIELD_MAPPING = {
     DOCUMENT_TYPE: { test: "00N7j000002BI3X", prod: "00N5G00000WmhsT" },
-    DOCUMENT_NUMBER: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" }
+    DOCUMENT_NUMBER: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" },
   };
 
   constructor(config = {}) {
@@ -174,7 +174,7 @@ export class ConfigManager {
     const result = { ...target };
 
     for (const key in source) {
-      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
         result[key] = this.deepMerge(target[key] || {}, source[key]);
       } else {
         result[key] = source[key];
@@ -216,13 +216,13 @@ export class ConfigManager {
    * Validar configuración requerida
    */
   validateConfig() {
-    const requiredFields = ['eventName', 'salesforceUrls', 'oids'];
-    const missingFields = requiredFields.filter(key => !this.config[key]);
-    
+    const requiredFields = ["eventName", "salesforceUrls", "oids"];
+    const missingFields = requiredFields.filter((key) => !this.config[key]);
+
     if (missingFields.length > 0) {
-      throw new Error(`Configuración requerida faltante: ${missingFields.join(', ')}`);
+      throw new Error(`Configuración requerida faltante: ${missingFields.join(", ")}`);
     }
-    
+
     return true;
   }
 
@@ -231,11 +231,13 @@ export class ConfigManager {
    */
   getEnvironmentConfig() {
     const isDebugMode = this.config.debugMode;
-    
+
     return {
-      salesforceUrl: isDebugMode ? this.config.salesforceUrls.test : this.config.salesforceUrls.prod,
+      salesforceUrl: isDebugMode
+        ? this.config.salesforceUrls.test
+        : this.config.salesforceUrls.prod,
       organizationId: isDebugMode ? this.config.oids.test : this.config.oids.prod,
-      environmentMode: isDebugMode ? 'TEST' : 'PRODUCTION'
+      environmentMode: isDebugMode ? "TEST" : "PRODUCTION",
     };
   }
 }

@@ -9,7 +9,7 @@ El sistema modular de formularios ahora incluye **CSS modular** además de la fu
 ```
 form-modules/
 ├── modules/
-│   ├── FormManager.js        # Manager principal 
+│   ├── FormManager.js        # Manager principal
 │   ├── ValidationModule.js   # Módulo de validación
 │   ├── DataManager.js        # Gestión de datos
 │   ├── APIService.js         # Servicios API
@@ -68,11 +68,11 @@ form-modules/
   <head>
     <title>Formulario con FormManager</title>
     <!-- Cargar estilos CSS manualmente -->
-    <link rel="stylesheet" href="form-modules/styles/base.css">
-    <link rel="stylesheet" href="form-modules/styles/layout.css">
-    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
-    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
-    <link rel="stylesheet" href="form-modules/styles/validation.css">
+    <link rel="stylesheet" href="form-modules/styles/base.css" />
+    <link rel="stylesheet" href="form-modules/styles/layout.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css" />
+    <link rel="stylesheet" href="form-modules/styles/validation.css" />
   </head>
   <body>
     <div class="container">
@@ -88,7 +88,7 @@ form-modules/
 
       const form = new FormManager({
         eventName: "Mi Evento",
-        debugMode: true
+        debugMode: true,
       });
 
       await form.init();
@@ -103,7 +103,7 @@ form-modules/
 
 ```javascript
 const form = new FormManager({
-  eventName: "Mi Evento"
+  eventName: "Mi Evento",
 });
 
 await form.init();
@@ -111,7 +111,7 @@ await form.init();
 // Aplicar variables CSS personalizadas
 form.applyCustomVariables({
   "primary-color": "#e91e63",
-  "primary-hover": "#c2185b", 
+  "primary-hover": "#c2185b",
   "form-background": "#f8f9fa",
   "form-max-width": "500px",
   "form-border-radius": "12px",
@@ -122,12 +122,12 @@ form.applyCustomVariables({
 
 ```html
 <!-- Agregar tema personalizado en el HTML -->
-<link rel="stylesheet" href="form-modules/styles/base.css">
-<link rel="stylesheet" href="form-modules/styles/layout.css">
-<link rel="stylesheet" href="form-modules/styles/form-elements.css">
-<link rel="stylesheet" href="form-modules/styles/form-fields.css">
-<link rel="stylesheet" href="form-modules/styles/validation.css">
-<link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css">
+<link rel="stylesheet" href="form-modules/styles/base.css" />
+<link rel="stylesheet" href="form-modules/styles/layout.css" />
+<link rel="stylesheet" href="form-modules/styles/form-elements.css" />
+<link rel="stylesheet" href="form-modules/styles/form-fields.css" />
+<link rel="stylesheet" href="form-modules/styles/validation.css" />
+<link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css" />
 ```
 
 ### 3. Crear Tema Personalizado
@@ -158,7 +158,7 @@ form.applyCustomVariables({
 
 ```javascript
 const form = new FormManager({
-  eventName: "Mi Evento"
+  eventName: "Mi Evento",
 });
 
 await form.init();
@@ -177,7 +177,7 @@ form.applyCustomVariables({
 ```javascript
 // Formulario 1 - Tema azul
 const form1 = new FormManager({
-  formSelector: "#form1"
+  formSelector: "#form1",
 });
 await form1.init();
 form1.applyCustomVariables({
@@ -187,11 +187,11 @@ form1.applyCustomVariables({
 
 // Formulario 2 - Tema verde
 const form2 = new FormManager({
-  formSelector: "#form2"
+  formSelector: "#form2",
 });
 await form2.init();
 form2.applyCustomVariables({
-  "primary-color": "#4caf50", 
+  "primary-color": "#4caf50",
   "primary-hover": "#388e3c",
 });
 ```
@@ -212,7 +212,7 @@ function changeTheme(themeName) {
     },
     light: {
       "primary-color": "#6200ee",
-      "form-background": "#ffffff", 
+      "form-background": "#ffffff",
       "form-text-color": "#000000",
     },
   };
@@ -225,9 +225,9 @@ function changeTheme(themeName) {
 
 ```html
 <!-- Usar solo algunos módulos CSS con frameworks externos -->
-<link rel="stylesheet" href="bootstrap.css">
+<link rel="stylesheet" href="bootstrap.css" />
 <!-- Solo cargar validación del sistema modular -->
-<link rel="stylesheet" href="form-modules/styles/validation.css">
+<link rel="stylesheet" href="form-modules/styles/validation.css" />
 ```
 
 ## 📱 Responsive Design
@@ -274,12 +274,12 @@ form.setLogLevel("debug");
   <head>
     <title>Formulario de Eventos</title>
     <!-- Cargar estilos CSS -->
-    <link rel="stylesheet" href="form-modules/styles/base.css">
-    <link rel="stylesheet" href="form-modules/styles/layout.css">
-    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
-    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
-    <link rel="stylesheet" href="form-modules/styles/validation.css">
-    <link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css">
+    <link rel="stylesheet" href="form-modules/styles/base.css" />
+    <link rel="stylesheet" href="form-modules/styles/layout.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css" />
+    <link rel="stylesheet" href="form-modules/styles/validation.css" />
+    <link rel="stylesheet" href="form-modules/styles/themes/custom-theme.css" />
   </head>
   <body>
     <div class="container">
@@ -294,7 +294,7 @@ form.setLogLevel("debug");
       import { FormManager } from "./form-modules/modules/FormManager.js";
 
       const eventForm = new FormManager({
-        eventName: "Open Day 2025", 
+        eventName: "Open Day 2025",
         eventDate: "15/03/2025",
         typeAttendee: ["Aspirante", "Padre de familia"],
         attendanceDays: ["Viernes 15", "Sábado 16"],
@@ -321,11 +321,11 @@ form.setLogLevel("debug");
   <head>
     <title>Formulario con Temas</title>
     <!-- Cargar estilos CSS -->
-    <link rel="stylesheet" href="form-modules/styles/base.css">
-    <link rel="stylesheet" href="form-modules/styles/layout.css">
-    <link rel="stylesheet" href="form-modules/styles/form-elements.css">
-    <link rel="stylesheet" href="form-modules/styles/form-fields.css">
-    <link rel="stylesheet" href="form-modules/styles/validation.css">
+    <link rel="stylesheet" href="form-modules/styles/base.css" />
+    <link rel="stylesheet" href="form-modules/styles/layout.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-elements.css" />
+    <link rel="stylesheet" href="form-modules/styles/form-fields.css" />
+    <link rel="stylesheet" href="form-modules/styles/validation.css" />
   </head>
   <body>
     <div class="theme-controls">
@@ -373,11 +373,11 @@ Para migrar desde CSS estático al sistema modular:
 <link rel="stylesheet" href="mi-formulario.css" />
 
 <!-- Después -->
-<link rel="stylesheet" href="form-modules/styles/base.css">
-<link rel="stylesheet" href="form-modules/styles/layout.css">
-<link rel="stylesheet" href="form-modules/styles/form-elements.css">
-<link rel="stylesheet" href="form-modules/styles/form-fields.css">
-<link rel="stylesheet" href="form-modules/styles/validation.css">
+<link rel="stylesheet" href="form-modules/styles/base.css" />
+<link rel="stylesheet" href="form-modules/styles/layout.css" />
+<link rel="stylesheet" href="form-modules/styles/form-elements.css" />
+<link rel="stylesheet" href="form-modules/styles/form-fields.css" />
+<link rel="stylesheet" href="form-modules/styles/validation.css" />
 ```
 
 2. **Configurar el FormManager:**
@@ -385,7 +385,7 @@ Para migrar desde CSS estático al sistema modular:
 ```javascript
 const form = new FormManager({
   eventName: "Mi Evento",
-  debugMode: true
+  debugMode: true,
 });
 await form.init();
 ```

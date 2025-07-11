@@ -1,13 +1,13 @@
 /**
  * AutoSelectManager - Gestor de auto-selección de campos únicos
- * 
+ *
  * Responsabilidades:
  * - Auto-seleccionar campos cuando solo hay una opción disponible
  * - Ocultar campos auto-seleccionados para simplificar la interfaz
  * - Ejecutar callbacks para activar lógica dependiente
  * - Gestionar delays apropiados para cada tipo de campo
  * - Centralizar toda la lógica de auto-selección en un solo lugar
- * 
+ *
  * @version 1.0
  */
 
@@ -17,10 +17,10 @@ export class AutoSelectManager {
   // Constantes para tipos de campos con auto-selección
   static FIELD_TYPES = {
     ATTENDEE_TYPE: "typeAttendee",
-    ATTENDANCE_DAY: "attendanceDay", 
+    ATTENDANCE_DAY: "attendanceDay",
     ACADEMIC_LEVEL: "academicLevel",
     FACULTY: "faculty",
-    PROGRAM: "program"
+    PROGRAM: "program",
   };
 
   // Delays por defecto para diferentes tipos de campo (en milisegundos)
@@ -29,16 +29,16 @@ export class AutoSelectManager {
     ACADEMIC_LEVEL: 100,
     FACULTY: 100,
     PROGRAM: 0,
-    ATTENDANCE_DAY: 0
+    ATTENDANCE_DAY: 0,
   };
 
   // Mapeo de claves de estado para campos del formulario
   static STATE_KEYS = {
-    TYPE_ATTENDEE: 'type_attendee',
-    ATTENDANCE_DAY: 'attendance_day',
-    ACADEMIC_LEVEL: 'academic_level',
-    FACULTY: 'faculty',
-    PROGRAM: 'program'
+    TYPE_ATTENDEE: "type_attendee",
+    ATTENDANCE_DAY: "attendance_day",
+    ACADEMIC_LEVEL: "academic_level",
+    FACULTY: "faculty",
+    PROGRAM: "program",
   };
 
   constructor(formElement, stateManager, ui, inputSelectors, loggerConfig = {}) {
@@ -47,7 +47,7 @@ export class AutoSelectManager {
     this.ui = ui;
     this.inputSelectors = inputSelectors;
     this.logger = new Logger("AutoSelectManager", loggerConfig);
-    
+
     // Callbacks to execute when a field is auto-selected
     this.callbacks = new Map();
   }
@@ -78,7 +78,7 @@ export class AutoSelectManager {
           logMessage: `Tipo de asistente auto-seleccionado y ocultado: ${singleType}`,
           callbackType: AutoSelectManager.FIELD_TYPES.ATTENDEE_TYPE,
           callbackValue: singleType,
-          delay: AutoSelectManager.DEFAULT_DELAYS.TYPE_ATTENDEE
+          delay: AutoSelectManager.DEFAULT_DELAYS.TYPE_ATTENDEE,
         });
       }
     }
@@ -102,7 +102,7 @@ export class AutoSelectManager {
           logMessage: `Día de asistencia auto-seleccionado y ocultado: ${singleDay}`,
           callbackType: AutoSelectManager.FIELD_TYPES.ATTENDANCE_DAY,
           callbackValue: singleDay,
-          delay: AutoSelectManager.DEFAULT_DELAYS.ATTENDANCE_DAY
+          delay: AutoSelectManager.DEFAULT_DELAYS.ATTENDANCE_DAY,
         });
       }
     }
@@ -121,7 +121,7 @@ export class AutoSelectManager {
         const academicLevel = academicLevels[0];
         const fieldValue = academicLevel.code || academicLevel;
         const displayName = academicLevel.name || fieldValue;
-        
+
         return this._autoSelectField({
           element,
           value: fieldValue,
@@ -129,7 +129,7 @@ export class AutoSelectManager {
           logMessage: `Nivel académico auto-seleccionado y ocultado: ${displayName}`,
           callbackType: AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL,
           callbackValue: fieldValue,
-          delay: AutoSelectManager.DEFAULT_DELAYS.ACADEMIC_LEVEL
+          delay: AutoSelectManager.DEFAULT_DELAYS.ACADEMIC_LEVEL,
         });
       }
     }
@@ -153,7 +153,7 @@ export class AutoSelectManager {
           logMessage: `Facultad auto-seleccionada y ocultada: ${facultyValue}`,
           callbackType: AutoSelectManager.FIELD_TYPES.FACULTY,
           callbackValue: facultyValue,
-          delay: AutoSelectManager.DEFAULT_DELAYS.FACULTY
+          delay: AutoSelectManager.DEFAULT_DELAYS.FACULTY,
         });
       }
     }
@@ -172,7 +172,7 @@ export class AutoSelectManager {
         const program = programs[0];
         const programValue = program.Codigo || program.codigo || program;
         const programName = program.Nombre || program.nombre || programValue;
-        
+
         return this._autoSelectField({
           element,
           value: programValue,
@@ -180,7 +180,7 @@ export class AutoSelectManager {
           logMessage: `Programa auto-seleccionado y ocultado: ${programName}`,
           callbackType: AutoSelectManager.FIELD_TYPES.PROGRAM,
           callbackValue: programValue,
-          delay: AutoSelectManager.DEFAULT_DELAYS.PROGRAM
+          delay: AutoSelectManager.DEFAULT_DELAYS.PROGRAM,
         });
       }
     }
@@ -200,19 +200,19 @@ export class AutoSelectManager {
     logMessage,
     callbackType,
     callbackValue,
-    delay = 0
+    delay = 0,
   }) {
     if (!element || !value) return false;
 
     // Establecer valor en el elemento DOM
     element.value = value;
-    
+
     // Actualizar estado
     this.stateManager.updateField(stateKey, value);
-    
+
     // Ocultar elemento
     this.ui.hideElement(element);
-    
+
     // Log de la operación
     this.logger.info(logMessage);
 
@@ -241,19 +241,20 @@ export class AutoSelectManager {
     const autoSelectionResults = {
       [AutoSelectManager.FIELD_TYPES.ATTENDEE_TYPE]: false,
       [AutoSelectManager.FIELD_TYPES.ATTENDANCE_DAY]: false,
-      [AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL]: false
+      [AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL]: false,
     };
 
     // Auto-select attendee type
-    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ATTENDEE_TYPE] = 
-      this.autoSelectTypeAttendee(config.typeAttendee || []);
+    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ATTENDEE_TYPE] = this.autoSelectTypeAttendee(
+      config.typeAttendee || []
+    );
 
     // Auto-select attendance day
-    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ATTENDANCE_DAY] = 
+    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ATTENDANCE_DAY] =
       this.autoSelectAttendanceDay(config.attendanceDays || []);
 
     // Auto-select academic level
-    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL] = 
+    autoSelectionResults[AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL] =
       this.autoSelectAcademicLevel(config.academicLevels || []);
 
     this.logger.info("Proceso de auto-selección completado:", autoSelectionResults);

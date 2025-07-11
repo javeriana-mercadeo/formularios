@@ -2,28 +2,28 @@
  * ===================================================================
  * 📋 SISTEMA DE EJEMPLOS PARA FORM MODULES
  * ===================================================================
- * 
+ *
  * Archivo organizado en secciones claramente definidas:
- * 
+ *
  * 🎯 CONFIGURACIÓN DEL FORMULARIO
  *    └─ FORM_CONFIG: Configuración principal del formulario
  *    └─ FORM_INSTANCE: Variable que almacena la instancia
- * 
- * 📋 TEMPLATES Y CÓDIGO DE EJEMPLO  
+ *
+ * 📋 TEMPLATES Y CÓDIGO DE EJEMPLO
  *    └─ Templates predefinidos para diferentes tipos de formularios
  *    └─ Funciones para generar y mostrar código
- * 
+ *
  * 🔧 LÓGICA DE LA PÁGINA DE EJEMPLOS
  *    └─ Navegación, efectos visuales y funcionalidades de la página
- * 
+ *
  * 🚀 INICIALIZACIÓN DEL FORMULARIO
  *    └─ initializeForm(): Crea la instancia del formulario
  *    └─ initializeApp(): Inicializa toda la aplicación
- * 
+ *
  * 🎭 MODALES Y FUNCIONES DE UI
  *    └─ Modales, toasts y funciones de interfaz de usuario
  *    └─ Funciones de control del formulario (reset, debug, etc.)
- * 
+ *
  * Para modificar la configuración del formulario, edita FORM_CONFIG
  * Para cambiar funcionalidades de la página, ve a la sección correspondiente
  */
@@ -46,7 +46,7 @@ const FORM_CONFIG = {
   // ============================================
   // INFORMACIÓN BÁSICA DEL EVENTO
   // ============================================
-  eventName: "Open Day Avanzado 2025",  // Nombre del evento
+  eventName: "Open Day Avanzado 2025", // Nombre del evento
   eventDate: "23/01/2025 12:00 PM" || "23%2F01%2F2025%2012%3A00%20PM", // Fecha del evento
   company: "Universidad Javeriana", // Nombre de la universidad/empresa
   //university: "", // Universidad específica (opcional)
@@ -280,7 +280,7 @@ const FORM_CONFIG = {
     onFormLoad: (formManager) => {
       console.log("⚙️ Formulario avanzado cargado");
       console.log("📊 Estadísticas de datos:", formManager.dataManager?.getDataStats());
-      
+
       // Ejemplo: Configuraciones adicionales al cargar
       //if (formManager.config.debugMode) {
       //  console.log("🔧 Modo debug activado");
@@ -333,7 +333,7 @@ const FORM_CONFIG = {
     // Función que se ejecuta cuando hay errores de validación
     //onValidationError: (error, formManager) => {
     //  console.warn("⚠️ Error de validación:", error);
-    //  
+    //
     //  // Ejemplo: Tracking de errores
     //  if (typeof gtag !== 'undefined') {
     //    gtag('event', 'validation_error', {
@@ -830,7 +830,8 @@ window.copyTemplate = function (templateKey, buttonElement) {
       .writeText(template.trim())
       .then(() => {
         // Feedback visual
-        const button = buttonElement || document.querySelector(`[onclick*="copyTemplate('${templateKey}')"]`);
+        const button =
+          buttonElement || document.querySelector(`[onclick*="copyTemplate('${templateKey}')"]`);
         if (button) {
           const originalText = button.innerHTML;
           button.innerHTML = "✅ Copiado";
@@ -922,16 +923,15 @@ window.showTemplate = function (templateKey) {
   }
 };
 
-
 // Función para aplicar syntax highlighting seguro usando CSS
 function applySafeSyntaxHighlighting(preElement, code, language) {
   // Agregar data attribute para el lenguaje
-  preElement.setAttribute('data-language', language);
-  
+  preElement.setAttribute("data-language", language);
+
   // Agregar estilos CSS si no existen
-  if (!document.getElementById('syntax-highlight-styles')) {
-    const style = document.createElement('style');
-    style.id = 'syntax-highlight-styles';
+  if (!document.getElementById("syntax-highlight-styles")) {
+    const style = document.createElement("style");
+    style.id = "syntax-highlight-styles";
     style.textContent = `
       /* JavaScript */
       pre[data-language="js"] .token-keyword { color: #8b5cf6; font-weight: 600; }
@@ -954,74 +954,104 @@ function applySafeSyntaxHighlighting(preElement, code, language) {
     `;
     document.head.appendChild(style);
   }
-  
+
   // Aplicar tokenización segura línea por línea
-  const lines = code.split('\n');
-  const highlightedLines = lines.map(line => tokenizeLine(line, language));
-  
+  const lines = code.split("\n");
+  const highlightedLines = lines.map((line) => tokenizeLine(line, language));
+
   // Usar innerHTML solo después de procesar todas las líneas
-  preElement.innerHTML = highlightedLines.join('\n');
+  preElement.innerHTML = highlightedLines.join("\n");
 }
 
 // Función para tokenizar una línea de código de forma segura
 function tokenizeLine(line, language) {
   if (!line.trim()) return line; // Líneas vacías sin procesar
-  
+
   let result = line;
-  
+
   // Escapar HTML primero para seguridad
-  result = result
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-  
-  switch(language) {
-    case 'js':
+  result = result.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  switch (language) {
+    case "js":
       result = tokenizeJavaScript(result);
       break;
-    case 'html':
+    case "html":
       result = tokenizeHTML(result);
       break;
-    case 'config':
+    case "config":
       result = tokenizeJSON(result);
       break;
   }
-  
+
   return result;
 }
 
 // Tokenizadores específicos por lenguaje
 function tokenizeJavaScript(line) {
   // Keywords
-  const keywords = ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 
-                   'import', 'export', 'from', 'default', 'class', 'extends', 'new', 'this',
-                   'async', 'await', 'try', 'catch', 'finally', 'throw', 'true', 'false',
-                   'null', 'undefined', 'typeof', 'instanceof', 'in', 'of', 'delete'];
-  
-  keywords.forEach(keyword => {
-    const regex = new RegExp(`\\b(${keyword})\\b`, 'g');
+  const keywords = [
+    "const",
+    "let",
+    "var",
+    "function",
+    "return",
+    "if",
+    "else",
+    "for",
+    "while",
+    "import",
+    "export",
+    "from",
+    "default",
+    "class",
+    "extends",
+    "new",
+    "this",
+    "async",
+    "await",
+    "try",
+    "catch",
+    "finally",
+    "throw",
+    "true",
+    "false",
+    "null",
+    "undefined",
+    "typeof",
+    "instanceof",
+    "in",
+    "of",
+    "delete",
+  ];
+
+  keywords.forEach((keyword) => {
+    const regex = new RegExp(`\\b(${keyword})\\b`, "g");
     line = line.replace(regex, '<span class="token-keyword">$1</span>');
   });
-  
+
   // Strings (solo si no están ya dentro de un span)
   line = line.replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, (match, quote, content) => {
-    if (match.includes('<span')) return match; // Ya procesado
+    if (match.includes("<span")) return match; // Ya procesado
     return `<span class="token-string">${quote}${content}${quote}</span>`;
   });
-  
+
   // Comments
   line = line.replace(/\/\/(.*)$/, '<span class="token-comment">//$1</span>');
   line = line.replace(/\/\*(.*?)\*\//, '<span class="token-comment">/*$1*/</span>');
-  
+
   // Numbers
   line = line.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="token-number">$1</span>');
-  
+
   // Functions (word followed by parentheses)
-  line = line.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="token-function">$1</span>');
-  
+  line = line.replace(
+    /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g,
+    '<span class="token-function">$1</span>'
+  );
+
   // Properties (after dots)
   line = line.replace(/\.([a-zA-Z_$][a-zA-Z0-9_$]*)/g, '.<span class="token-property">$1</span>');
-  
+
   return line;
 }
 
@@ -1029,34 +1059,36 @@ function tokenizeHTML(line) {
   // HTML tags
   line = line.replace(/&lt;(\/?[a-zA-Z][a-zA-Z0-9-]*)([^&]*?)&gt;/g, (match, tagName, attrs) => {
     let result = `&lt;<span class="token-tag">${tagName}</span>`;
-    
+
     // Attributes
     if (attrs.trim()) {
-      attrs = attrs.replace(/\s+([a-zA-Z-]+)=([\"'])([^\"']*?)\2/g, 
-        ' <span class="token-attr-name">$1</span>=<span class="token-attr-value">$2$3$2</span>');
+      attrs = attrs.replace(
+        /\s+([a-zA-Z-]+)=([\"'])([^\"']*?)\2/g,
+        ' <span class="token-attr-name">$1</span>=<span class="token-attr-value">$2$3$2</span>'
+      );
       result += attrs;
     }
-    
+
     result += '<span class="token-tag">&gt;</span>';
     return result;
   });
-  
+
   return line;
 }
 
 function tokenizeJSON(line) {
   // Property names in quotes
   line = line.replace(/"([^"]+)"(\s*:)/g, '<span class="token-property">"$1"</span>$2');
-  
+
   // String values
   line = line.replace(/:\s*"([^"]*)"/g, ': <span class="token-string">"$1"</span>');
-  
+
   // Numbers
   line = line.replace(/:\s*(\d+(?:\.\d+)?)/g, ': <span class="token-number">$1</span>');
-  
+
   // Booleans
   line = line.replace(/:\s*(true|false)/g, ': <span class="token-boolean">$1</span>');
-  
+
   return line;
 }
 
@@ -1066,7 +1098,7 @@ window.showCodeModal = function (example) {
   if (!config) return;
 
   const formId = `${example}_form`;
-  
+
   // Crear modal
   const modal = document.createElement("div");
   modal.id = `code-modal-${example}`;
@@ -1085,7 +1117,7 @@ window.showCodeModal = function (example) {
   `;
 
   const content = document.createElement("div");
-  
+
   // Responsive sizing based on viewport
   const isMobile = window.innerWidth <= 480;
   const isTablet = window.innerWidth <= 768;
@@ -1094,29 +1126,29 @@ window.showCodeModal = function (example) {
   let modalWidth, modalHeight, modalMinWidth, modalPadding, borderRadius;
 
   if (isMobile) {
-    modalWidth = '100vw';
-    modalHeight = '100vh';
-    modalMinWidth = '100vw';
-    modalPadding = '0';
-    borderRadius = '0';
+    modalWidth = "100vw";
+    modalHeight = "100vh";
+    modalMinWidth = "100vw";
+    modalPadding = "0";
+    borderRadius = "0";
   } else if (isTablet) {
-    modalWidth = '95vw';
-    modalHeight = '95vh';
-    modalMinWidth = '320px';
-    modalPadding = '10px';
-    borderRadius = '8px';
+    modalWidth = "95vw";
+    modalHeight = "95vh";
+    modalMinWidth = "320px";
+    modalPadding = "10px";
+    borderRadius = "8px";
   } else if (isSmallDesktop) {
-    modalWidth = '90vw';
-    modalHeight = '90vh';
-    modalMinWidth = '700px';
-    modalPadding = '20px';
-    borderRadius = '12px';
+    modalWidth = "90vw";
+    modalHeight = "90vh";
+    modalMinWidth = "700px";
+    modalPadding = "20px";
+    borderRadius = "12px";
   } else {
-    modalWidth = '85vw';
-    modalHeight = '85vh';
-    modalMinWidth = '900px';
-    modalPadding = '20px';
-    borderRadius = '12px';
+    modalWidth = "85vw";
+    modalHeight = "85vh";
+    modalMinWidth = "900px";
+    modalPadding = "20px";
+    borderRadius = "12px";
   }
 
   content.style.cssText = `
@@ -1124,7 +1156,7 @@ window.showCodeModal = function (example) {
     color: #24292f;
     border-radius: ${borderRadius};
     width: ${modalWidth};
-    max-width: ${isMobile ? '100vw' : '1400px'};
+    max-width: ${isMobile ? "100vw" : "1400px"};
     min-width: ${modalMinWidth};
     height: ${modalHeight};
     overflow: hidden;
@@ -1140,11 +1172,11 @@ window.showCodeModal = function (example) {
 
   // Header del modal
   const header = document.createElement("div");
-  const headerPadding = isMobile ? '16px' : '20px 24px 16px';
-  const headerDirection = isMobile ? 'column' : 'row';
-  const headerAlign = isMobile ? 'flex-start' : 'center';
-  const headerGap = isMobile ? '12px' : '0';
-  
+  const headerPadding = isMobile ? "16px" : "20px 24px 16px";
+  const headerDirection = isMobile ? "column" : "row";
+  const headerAlign = isMobile ? "flex-start" : "center";
+  const headerGap = isMobile ? "12px" : "0";
+
   header.style.cssText = `
     padding: ${headerPadding};
     border-bottom: 1px solid #d0d7de;
@@ -1156,14 +1188,14 @@ window.showCodeModal = function (example) {
     flex-shrink: 0;
     gap: ${headerGap};
   `;
-  
+
   const titleSection = document.createElement("div");
-  const titleSize = isMobile ? '1rem' : '1.125rem';
-  const subtitleSize = isMobile ? '0.8rem' : '0.875rem';
-  
+  const titleSize = isMobile ? "1rem" : "1.125rem";
+  const subtitleSize = isMobile ? "0.8rem" : "0.875rem";
+
   titleSection.innerHTML = `
     <h3 style="margin: 0; color: #24292f; font-size: ${titleSize}; font-weight: 600; line-height: 1.2;">
-      ${isMobile ? 'Código de Ejemplo' : `Código de Ejemplo - ${config.eventName || 'Formulario'}`}
+      ${isMobile ? "Código de Ejemplo" : `Código de Ejemplo - ${config.eventName || "Formulario"}`}
     </h3>
     <p style="margin: 4px 0 0; color: #656d76; font-size: ${subtitleSize};">
       Configuración ${example}
@@ -1171,9 +1203,9 @@ window.showCodeModal = function (example) {
   `;
 
   const closeButton = document.createElement("button");
-  const buttonPadding = isMobile ? '10px 14px' : '8px 12px';
-  const buttonFontSize = isMobile ? '0.9rem' : '0.875rem';
-  
+  const buttonPadding = isMobile ? "10px 14px" : "8px 12px";
+  const buttonFontSize = isMobile ? "0.9rem" : "0.875rem";
+
   closeButton.style.cssText = `
     background: #ef4444;
     color: white;
@@ -1187,16 +1219,16 @@ window.showCodeModal = function (example) {
     align-items: center;
     gap: 6px;
     transition: background-color 0.2s;
-    ${isMobile ? 'align-self: flex-end;' : ''}
+    ${isMobile ? "align-self: flex-end;" : ""}
   `;
   closeButton.innerHTML = `
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
       <path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/>
     </svg>
-    ${isMobile ? '' : 'Cerrar'}
+    ${isMobile ? "" : "Cerrar"}
   `;
-  closeButton.onmouseover = () => closeButton.style.backgroundColor = '#dc2626';
-  closeButton.onmouseout = () => closeButton.style.backgroundColor = '#ef4444';
+  closeButton.onmouseover = () => (closeButton.style.backgroundColor = "#dc2626");
+  closeButton.onmouseout = () => (closeButton.style.backgroundColor = "#ef4444");
   closeButton.onclick = () => modal.remove();
 
   header.appendChild(titleSection);
@@ -1213,21 +1245,21 @@ window.showCodeModal = function (example) {
     flex-shrink: 0;
   `;
 
-  const tabs = ['js', 'html', 'config'];
-  const tabLabels = { js: 'JavaScript', html: 'HTML', config: 'Config' };
-  
+  const tabs = ["js", "html", "config"];
+  const tabLabels = { js: "JavaScript", html: "HTML", config: "Config" };
+
   tabs.forEach((tabType, index) => {
     const tab = document.createElement("button");
-    tab.className = `modal-code-tab ${index === 0 ? 'modal-code-tab-active' : ''}`;
+    tab.className = `modal-code-tab ${index === 0 ? "modal-code-tab-active" : ""}`;
     tab.style.cssText = `
       padding: 12px 16px;
       border: none;
       background: transparent;
-      color: ${index === 0 ? '#0969da' : '#656d76'};
+      color: ${index === 0 ? "#0969da" : "#656d76"};
       cursor: pointer;
       font-size: 0.875rem;
       font-weight: 500;
-      border-bottom: 2px solid ${index === 0 ? '#0969da' : 'transparent'};
+      border-bottom: 2px solid ${index === 0 ? "#0969da" : "transparent"};
       transition: all 0.2s;
     `;
     tab.textContent = tabLabels[tabType];
@@ -1247,9 +1279,9 @@ window.showCodeModal = function (example) {
   tabs.forEach((tabType, index) => {
     const codeContent = document.createElement("div");
     codeContent.id = `modal-${example}-${tabType}-code`;
-    codeContent.className = `modal-code-content ${index !== 0 ? 'modal-code-hidden' : ''}`;
+    codeContent.className = `modal-code-content ${index !== 0 ? "modal-code-hidden" : ""}`;
     codeContent.style.cssText = `
-      display: ${index === 0 ? 'block' : 'none'};
+      display: ${index === 0 ? "block" : "none"};
       height: 100%;
       position: relative;
     `;
@@ -1270,21 +1302,21 @@ window.showCodeModal = function (example) {
       white-space: pre-wrap;
       word-wrap: break-word;
     `;
-    
+
     // Generar contenido según el tipo
-    let content = '';
-    switch(tabType) {
-      case 'js':
+    let content = "";
+    switch (tabType) {
+      case "js":
         content = generateExampleJS(config, formId);
         break;
-      case 'html':
+      case "html":
         content = generateExampleHTML(formId);
         break;
-      case 'config':
+      case "config":
         content = JSON.stringify(config, null, 2);
         break;
     }
-    
+
     // Aplicar syntax highlighting seguro con CSS
     applySafeSyntaxHighlighting(pre, content, tabType);
 
@@ -1315,8 +1347,8 @@ window.showCodeModal = function (example) {
       </svg>
       Copiar
     `;
-    copyButton.onmouseover = () => copyButton.style.backgroundColor = '#e5e7eb';
-    copyButton.onmouseout = () => copyButton.style.backgroundColor = '#f3f4f6';
+    copyButton.onmouseover = () => (copyButton.style.backgroundColor = "#e5e7eb");
+    copyButton.onmouseout = () => (copyButton.style.backgroundColor = "#f3f4f6");
     copyButton.onclick = () => copyModalCode(example, tabType, copyButton);
 
     codeContent.appendChild(pre);
@@ -1331,11 +1363,11 @@ window.showCodeModal = function (example) {
   document.body.appendChild(modal);
 
   // Desactivar scroll de la página
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = "hidden";
 
   // Función para restaurar scroll
   const restoreBodyScroll = () => {
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   };
 
   // Cerrar con click fuera
@@ -1348,13 +1380,13 @@ window.showCodeModal = function (example) {
 
   // Cerrar con ESC
   const handleEscape = (e) => {
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       modal.remove();
       restoreBodyScroll();
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("keydown", handleEscape);
     }
   };
-  document.addEventListener('keydown', handleEscape);
+  document.addEventListener("keydown", handleEscape);
 
   // Actualizar el botón de cerrar para restaurar scroll
   closeButton.onclick = () => {
@@ -1482,21 +1514,21 @@ function displayCode() {
     const jsElement = document.getElementById(`${example}-js-content`);
     if (jsElement) {
       const jsCode = generateExampleJS(config, formId);
-      applySafeSyntaxHighlighting(jsElement, jsCode, 'js');
+      applySafeSyntaxHighlighting(jsElement, jsCode, "js");
     }
 
     // HTML
     const htmlElement = document.getElementById(`${example}-html-content`);
     if (htmlElement) {
       const htmlCode = generateExampleHTML(formId);
-      applySafeSyntaxHighlighting(htmlElement, htmlCode, 'html');
+      applySafeSyntaxHighlighting(htmlElement, htmlCode, "html");
     }
 
     // Config
     const configElement = document.getElementById(`${example}-config-content`);
     if (configElement) {
       const configCode = JSON.stringify(config, null, 2);
-      applySafeSyntaxHighlighting(configElement, configCode, 'config');
+      applySafeSyntaxHighlighting(configElement, configCode, "config");
     }
   });
 }
@@ -1587,13 +1619,11 @@ window.showModalCodeTab = function (example, type) {
   });
 
   // Mapear tipos a labels de tabs para encontrar el correcto
-  const tabLabels = { js: 'JavaScript', html: 'HTML', config: 'Config' };
+  const tabLabels = { js: "JavaScript", html: "HTML", config: "Config" };
   const targetLabel = tabLabels[type];
-  
+
   // Encontrar y activar el tab correcto usando el label exacto
-  const targetTab = Array.from(tabs).find((tab) =>
-    tab.textContent.trim() === targetLabel
-  );
+  const targetTab = Array.from(tabs).find((tab) => tab.textContent.trim() === targetLabel);
   if (targetTab) {
     targetTab.classList.add("modal-code-tab-active");
     targetTab.style.color = "#0969da";
@@ -1615,14 +1645,15 @@ window.showModalCodeTab = function (example, type) {
 // Función para copiar código del modal
 window.copyModalCode = function (example, type, buttonElement) {
   const element = document.getElementById(`modal-${example}-${type}-content`);
-  
+
   if (element) {
     const text = element.textContent;
     navigator.clipboard
       .writeText(text)
       .then(() => {
         // Mostrar feedback visual
-        const button = buttonElement || document.querySelector(`#modal-${example}-${type}-code button`);
+        const button =
+          buttonElement || document.querySelector(`#modal-${example}-${type}-code button`);
         if (button) {
           const originalHTML = button.innerHTML;
           button.innerHTML = `
@@ -1631,11 +1662,11 @@ window.copyModalCode = function (example, type, buttonElement) {
             </svg>
             Copiado
           `;
-          button.style.backgroundColor = '#10b981';
+          button.style.backgroundColor = "#10b981";
 
           setTimeout(() => {
             button.innerHTML = originalHTML;
-            button.style.backgroundColor = '#f3f4f6';
+            button.style.backgroundColor = "#f3f4f6";
           }, 2000);
         }
       })
@@ -1658,13 +1689,11 @@ function initCodeTabs() {
     tabs.forEach((tab) => tab.classList.remove("gh-code-tab-active"));
 
     // Mapear tipos a labels de tabs para encontrar el correcto
-    const tabLabels = { js: 'JavaScript', html: 'HTML' };
+    const tabLabels = { js: "JavaScript", html: "HTML" };
     const targetLabel = tabLabels[type];
-    
+
     // Encontrar y activar el tab correcto usando el label exacto
-    const targetTab = Array.from(tabs).find((tab) =>
-      tab.textContent.trim() === targetLabel
-    );
+    const targetTab = Array.from(tabs).find((tab) => tab.textContent.trim() === targetLabel);
     if (targetTab) {
       targetTab.classList.add("gh-code-tab-active");
     }
@@ -1695,7 +1724,8 @@ function initCopyButtons() {
         .writeText(text)
         .then(() => {
           // Mostrar feedback visual
-          const button = buttonElement || document.querySelector(`.gh-copy-btn[onclick*="${example}"]`);
+          const button =
+            buttonElement || document.querySelector(`.gh-copy-btn[onclick*="${example}"]`);
           if (button) {
             const originalHTML = button.innerHTML;
             button.innerHTML = `
@@ -1800,10 +1830,10 @@ function initPageFunctionality() {
 function initializeForm() {
   // Crear instancia del formulario
   FORM_INSTANCE = new FormManager("advanced_form", FORM_CONFIG);
-  
+
   // Hacer disponible globalmente para funciones de la página
   window.advancedForm = FORM_INSTANCE;
-  
+
   return FORM_INSTANCE;
 }
 
@@ -1815,21 +1845,20 @@ async function initializeApp() {
     // 1. Inicializar el formulario
     const form = initializeForm();
     console.log("📋 Formulario creado");
-    
+
     // 2. Inicializar el formulario
     await form.init();
     console.log("⚙️ Formulario inicializado correctamente");
-    
+
     // 3. Generar código de ejemplo
     displayCode();
     console.log("📝 Código de ejemplo generado");
-    
+
     // 4. Inicializar funcionalidades de la página
     initPageFunctionality();
     console.log("🎯 Funcionalidades de página inicializadas");
-    
+
     console.log("✅ Aplicación inicializada correctamente");
-    
   } catch (error) {
     console.error("❌ Error inicializando aplicación:", error);
   }
@@ -1843,44 +1872,50 @@ document.addEventListener("DOMContentLoaded", initializeApp);
 // ============================================================================
 
 // Función para mostrar modal
-window.showModal = function(title, content) {
-  const modal = document.getElementById('results-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalContent = document.getElementById('modal-content');
-  const modalFooter = modal.querySelector('.gh-modal-footer');
-  
+window.showModal = function (title, content) {
+  const modal = document.getElementById("results-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalContent = document.getElementById("modal-content");
+  const modalFooter = modal.querySelector(".gh-modal-footer");
+
   // Determinar si el contenido es HTML o texto plano
-  if (typeof content === 'string' && content.includes('<table')) {
+  if (typeof content === "string" && content.includes("<table")) {
     // Es HTML de tabla, usar innerHTML
     modalContent.innerHTML = content;
-    
+
     // Personalizar título y footer si es la tabla de datos del formulario
-    if (title === 'Datos del Formulario') {
+    if (title === "Datos del Formulario") {
       const isDebugMode = window.advancedForm?.config?.debugMode;
-      const currentEnvironment = isDebugMode ? 'Sandbox' : 'Producción';
-      
+      const currentEnvironment = isDebugMode ? "Sandbox" : "Producción";
+
       // Eliminar padding del modal-body para la tabla
-      const modalBody = modal.querySelector('.gh-modal-body');
-      modalBody.style.padding = '0';
-      
+      const modalBody = modal.querySelector(".gh-modal-body");
+      modalBody.style.padding = "0";
+
       // Modificar el título para incluir el ambiente
       modalTitle.innerHTML = `
         <span>${title}</span>
-        <span style="margin-left: 12px; padding: 4px 10px; background: ${isDebugMode ? '#fef3c7' : '#d1fae5'}; color: ${isDebugMode ? '#92400e' : '#065f46'}; border-radius: 20px; font-size: 12px; font-weight: 500;">
+        <span style="margin-left: 12px; padding: 4px 10px; background: ${
+          isDebugMode ? "#fef3c7" : "#d1fae5"
+        }; color: ${
+        isDebugMode ? "#92400e" : "#065f46"
+      }; border-radius: 20px; font-size: 12px; font-weight: 500;">
           🔧 ${currentEnvironment}
         </span>
       `;
-      
+
       // Guardar los botones originales
       const originalFooter = modalFooter.innerHTML;
-      
+
       // Agregar leyenda antes de los botones
       modalFooter.innerHTML = `
         <div style="flex: 1; padding: 8px 0; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 8px; padding-top: 12px;">
           <strong>Leyenda:</strong> 
           <span style="color: #10b981;">✓</span> Campo con valor | 
           <span style="color: #6b7280;">○</span> Campo vacío | 
-          <span style="color: ${isDebugMode ? '#f59e0b' : '#10b981'};">●</span> ID activo (${currentEnvironment})
+          <span style="color: ${
+            isDebugMode ? "#f59e0b" : "#10b981"
+          };">●</span> ID activo (${currentEnvironment})
         </div>
         <div style="display: flex; gap: 12px;">
           ${originalFooter}
@@ -1889,17 +1924,17 @@ window.showModal = function(title, content) {
     } else {
       modalTitle.textContent = title;
     }
-  } else if (typeof content === 'object') {
+  } else if (typeof content === "object") {
     // Es un objeto, mostrar como JSON
     modalTitle.textContent = title;
     modalContent.textContent = JSON.stringify(content, null, 2);
-    
+
     // Restaurar padding del modal-body para otros tipos de contenido
-    const modalBody = modal.querySelector('.gh-modal-body');
-    modalBody.style.padding = '';
-    
+    const modalBody = modal.querySelector(".gh-modal-body");
+    modalBody.style.padding = "";
+
     // Restaurar footer original para otros tipos de contenido
-    if (!modalFooter.innerHTML.includes('Cerrar')) {
+    if (!modalFooter.innerHTML.includes("Cerrar")) {
       modalFooter.innerHTML = `
         <button class="gh-btn gh-btn-primary" onclick="closeModal()">Cerrar</button>
         <button class="gh-btn gh-btn-outline" onclick="copyModalContent()">Copiar</button>
@@ -1909,52 +1944,55 @@ window.showModal = function(title, content) {
     // Es texto plano
     modalTitle.textContent = title;
     modalContent.textContent = content;
-    
+
     // Restaurar padding del modal-body para otros tipos de contenido
-    const modalBody = modal.querySelector('.gh-modal-body');
-    modalBody.style.padding = '';
-    
+    const modalBody = modal.querySelector(".gh-modal-body");
+    modalBody.style.padding = "";
+
     // Restaurar footer original para otros tipos de contenido
-    if (!modalFooter.innerHTML.includes('Cerrar')) {
+    if (!modalFooter.innerHTML.includes("Cerrar")) {
       modalFooter.innerHTML = `
         <button class="gh-btn gh-btn-primary" onclick="closeModal()">Cerrar</button>
         <button class="gh-btn gh-btn-outline" onclick="copyModalContent()">Copiar</button>
       `;
     }
   }
-  
-  modal.classList.remove('gh-modal-hidden');
-  document.body.style.overflow = 'hidden';
+
+  modal.classList.remove("gh-modal-hidden");
+  document.body.style.overflow = "hidden";
 };
 
 // Función para cerrar modal
-window.closeModal = function() {
-  const modal = document.getElementById('results-modal');
-  modal.classList.add('gh-modal-hidden');
-  document.body.style.overflow = '';
+window.closeModal = function () {
+  const modal = document.getElementById("results-modal");
+  modal.classList.add("gh-modal-hidden");
+  document.body.style.overflow = "";
 };
 
 // Función para copiar contenido del modal
-window.copyModalContent = function() {
-  const modalContent = document.getElementById('modal-content');
+window.copyModalContent = function () {
+  const modalContent = document.getElementById("modal-content");
   const text = modalContent.textContent;
-  
-  navigator.clipboard.writeText(text).then(() => {
-    // Mostrar feedback temporal
-    const copyBtn = event.target;
-    const originalText = copyBtn.textContent;
-    copyBtn.textContent = '¡Copiado!';
-    copyBtn.style.backgroundColor = 'var(--color-success-emphasis)';
-    copyBtn.style.color = 'white';
-    
-    setTimeout(() => {
-      copyBtn.textContent = originalText;
-      copyBtn.style.backgroundColor = '';
-      copyBtn.style.color = '';
-    }, 2000);
-  }).catch(() => {
-    alert('Error al copiar al portapapeles');
-  });
+
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      // Mostrar feedback temporal
+      const copyBtn = event.target;
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = "¡Copiado!";
+      copyBtn.style.backgroundColor = "var(--color-success-emphasis)";
+      copyBtn.style.color = "white";
+
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+        copyBtn.style.backgroundColor = "";
+        copyBtn.style.color = "";
+      }, 2000);
+    })
+    .catch(() => {
+      alert("Error al copiar al portapapeles");
+    });
 };
 
 // ========================================
@@ -1962,22 +2000,22 @@ window.copyModalContent = function() {
 // ========================================
 
 // Función para mostrar toast
-window.showToast = function(title, message, type = 'info', duration = 4000) {
-  const container = document.getElementById('toast-container');
+window.showToast = function (title, message, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
   if (!container) return;
-  
+
   // Crear elemento toast
-  const toast = document.createElement('div');
+  const toast = document.createElement("div");
   toast.className = `gh-toast gh-toast-${type}`;
-  
+
   // Iconos según el tipo
   const icons = {
-    success: '✅',
-    error: '❌',
-    info: 'ℹ️',
-    warning: '⚠️'
+    success: "✅",
+    error: "❌",
+    info: "ℹ️",
+    warning: "⚠️",
   };
-  
+
   toast.innerHTML = `
     <div class="gh-toast-icon">${icons[type] || icons.info}</div>
     <div class="gh-toast-content">
@@ -1990,26 +2028,26 @@ window.showToast = function(title, message, type = 'info', duration = 4000) {
       </svg>
     </button>
   `;
-  
+
   // Agregar al contenedor
   container.appendChild(toast);
-  
+
   // Auto-cerrar después del duration
   if (duration > 0) {
     setTimeout(() => {
       closeToast(toast);
     }, duration);
   }
-  
+
   return toast;
 };
 
 // Función para cerrar toast
-window.closeToast = function(toast) {
+window.closeToast = function (toast) {
   if (!toast || !toast.parentElement) return;
-  
-  toast.classList.add('gh-toast-removing');
-  
+
+  toast.classList.add("gh-toast-removing");
+
   setTimeout(() => {
     if (toast.parentElement) {
       toast.parentElement.removeChild(toast);
@@ -2023,94 +2061,98 @@ window.closeToast = function(toast) {
 
 // Función para actualizar el estado del formulario
 function updateFormStatus(status, text) {
-  const statusDot = document.querySelector('.gh-form-status .gh-status-dot');
-  const statusText = document.querySelector('.gh-form-status .gh-status-text');
-  
+  const statusDot = document.querySelector(".gh-form-status .gh-status-dot");
+  const statusText = document.querySelector(".gh-form-status .gh-status-text");
+
   if (statusDot && statusText) {
     // Remover clases de estado existentes
-    statusDot.className = 'gh-status-dot';
-    
+    statusDot.className = "gh-status-dot";
+
     // Agregar nueva clase de estado
-    switch(status) {
-      case 'ready':
-        statusDot.classList.add('gh-status-ready');
+    switch (status) {
+      case "ready":
+        statusDot.classList.add("gh-status-ready");
         break;
-      case 'loading':
-        statusDot.classList.add('gh-status-loading');
+      case "loading":
+        statusDot.classList.add("gh-status-loading");
         break;
-      case 'debug':
-        statusDot.classList.add('gh-status-debug');
+      case "debug":
+        statusDot.classList.add("gh-status-debug");
         break;
-      case 'dev':
-        statusDot.classList.add('gh-status-dev');
+      case "dev":
+        statusDot.classList.add("gh-status-dev");
         break;
-      case 'error':
-        statusDot.classList.add('gh-status-error');
+      case "error":
+        statusDot.classList.add("gh-status-error");
         break;
     }
-    
+
     statusText.textContent = text;
   }
 }
 
 // Limpiar formulario
-window.resetForm = function() {
+window.resetForm = function () {
   if (window.advancedForm && window.advancedForm.reset) {
     window.advancedForm.reset();
-    updateFormStatus('ready', 'Listo');
-    showToast('Formulario Limpiado', 'El formulario ha sido restablecido correctamente', 'success');
+    updateFormStatus("ready", "Listo");
+    showToast("Formulario Limpiado", "El formulario ha sido restablecido correctamente", "success");
   } else {
-    updateFormStatus('error', 'Error');
-    showToast('Error', 'No se pudo acceder al formulario', 'error');
+    updateFormStatus("error", "Error");
+    showToast("Error", "No se pudo acceder al formulario", "error");
   }
 };
 
 // Toggle debug mode
-window.toggleDebugMode = function() {
+window.toggleDebugMode = function () {
   if (window.advancedForm && window.advancedForm.setDebugMode) {
     const currentMode = window.advancedForm.config.debugMode;
     window.advancedForm.setDebugMode(!currentMode);
-    
+
     if (!currentMode) {
-      updateFormStatus('debug', 'Debug ON');
-      showToast('Debug Mode', 'Modo debug activado - Se mostrarán mensajes detallados', 'info');
+      updateFormStatus("debug", "Debug ON");
+      showToast("Debug Mode", "Modo debug activado - Se mostrarán mensajes detallados", "info");
     } else {
-      updateFormStatus('ready', 'Listo');
-      showToast('Debug Mode', 'Modo debug desactivado', 'info');
+      updateFormStatus("ready", "Listo");
+      showToast("Debug Mode", "Modo debug desactivado", "info");
     }
   } else {
-    updateFormStatus('error', 'Error');
-    showToast('Error', 'No se pudo acceder al formulario', 'error');
+    updateFormStatus("error", "Error");
+    showToast("Error", "No se pudo acceder al formulario", "error");
   }
 };
 
 // Toggle dev mode
-window.toggleDevMode = function() {
+window.toggleDevMode = function () {
   if (window.advancedForm && window.advancedForm.setDevMode) {
     const currentMode = window.advancedForm.config.devMode;
     window.advancedForm.setDevMode(!currentMode);
-    
+
     if (!currentMode) {
-      updateFormStatus('dev', 'Dev Mode');
-      showToast('Dev Mode', 'Modo desarrollador activado - Funciones avanzadas habilitadas', 'warning');
+      updateFormStatus("dev", "Dev Mode");
+      showToast(
+        "Dev Mode",
+        "Modo desarrollador activado - Funciones avanzadas habilitadas",
+        "warning"
+      );
     } else {
-      updateFormStatus('ready', 'Listo');
-      showToast('Dev Mode', 'Modo desarrollador desactivado', 'info');
+      updateFormStatus("ready", "Listo");
+      showToast("Dev Mode", "Modo desarrollador desactivado", "info");
     }
   } else {
-    updateFormStatus('error', 'Error');
-    showToast('Error', 'No se pudo acceder al formulario', 'error');
+    updateFormStatus("error", "Error");
+    showToast("Error", "No se pudo acceder al formulario", "error");
   }
 };
 
 // Mostrar datos del formulario
-window.showFormData = function() {
+window.showFormData = function () {
   if (window.advancedForm && window.advancedForm.getFormData) {
     const data = window.advancedForm.getFormData();
     const tableHtml = generateFormDataTable(data);
-    showModal('Datos del Formulario', tableHtml);
+    showModal("Datos del Formulario", tableHtml);
   } else {
-    showModal('Error', 'No se pudo acceder al formulario. Asegúrate de que esté inicializado.');
+    showModal("Error", "No se pudo acceder al formulario. Asegúrate de que esté inicializado.");
   }
 };
 
@@ -2119,125 +2161,125 @@ function generateFormDataTable(formData) {
   // Definir el mapeo de campos con sus IDs de sandbox y producción
   const fieldMappings = {
     first_name: {
-      label: 'Nombre(s)',
-      sandbox: 'first_name',
-      production: 'first_name'
+      label: "Nombre(s)",
+      sandbox: "first_name",
+      production: "first_name",
     },
     last_name: {
-      label: 'Apellidos',
-      sandbox: 'last_name',
-      production: 'last_name'
+      label: "Apellidos",
+      sandbox: "last_name",
+      production: "last_name",
     },
     email: {
-      label: 'Email',
-      sandbox: 'email',
-      production: 'email'
+      label: "Email",
+      sandbox: "email",
+      production: "email",
     },
     phone: {
-      label: 'Teléfono',
-      sandbox: 'mobile',
-      production: 'mobile'
+      label: "Teléfono",
+      sandbox: "mobile",
+      production: "mobile",
     },
     type_doc: {
-      label: 'Tipo de Documento',
-      sandbox: '00N7j000002BI3X',
-      production: '00N5G00000WmhsT'
+      label: "Tipo de Documento",
+      sandbox: "00N7j000002BI3X",
+      production: "00N5G00000WmhsT",
     },
     document: {
-      label: 'Número de Documento',
-      sandbox: '00N7j000002BI3V',
-      production: '00N5G00000WmhsR'
+      label: "Número de Documento",
+      sandbox: "00N7j000002BI3V",
+      production: "00N5G00000WmhsR",
     },
     phone_code: {
-      label: 'Prefijo Celular',
-      sandbox: '00NO4000002IUPh',
-      production: '00NJw000002mzb7'
+      label: "Prefijo Celular",
+      sandbox: "00NO4000002IUPh",
+      production: "00NJw000002mzb7",
     },
     country: {
-      label: 'País de Residencia',
-      sandbox: '00N7j000002BY1c',
-      production: '00N5G00000WmhvJ'
+      label: "País de Residencia",
+      sandbox: "00N7j000002BY1c",
+      production: "00N5G00000WmhvJ",
     },
     department: {
-      label: 'Departamento',
-      sandbox: '00N7j000002BY1h',
-      production: '00N5G00000WmhvX'
+      label: "Departamento",
+      sandbox: "00N7j000002BY1h",
+      production: "00N5G00000WmhvX",
     },
     city: {
-      label: 'Ciudad',
-      sandbox: '00N7j000002BY1i',
-      production: '00N5G00000WmhvO'
+      label: "Ciudad",
+      sandbox: "00N7j000002BY1i",
+      production: "00N5G00000WmhvO",
     },
     type_attendee: {
-      label: 'Tipo de Asistente',
-      sandbox: '00NO40000000sTR',
-      production: '00NJw000001J3g6'
+      label: "Tipo de Asistente",
+      sandbox: "00NO40000000sTR",
+      production: "00NJw000001J3g6",
     },
     attendance_day: {
-      label: 'Día de Asistencia',
-      sandbox: '00NO4000007qrPB',
-      production: '00NJw000004iulj'
+      label: "Día de Asistencia",
+      sandbox: "00NO4000007qrPB",
+      production: "00NJw000004iulj",
     },
     academic_level: {
-      label: 'Nivel Académico',
-      sandbox: 'nivelacademico',
-      production: 'nivelacademico'
+      label: "Nivel Académico",
+      sandbox: "nivelacademico",
+      production: "nivelacademico",
     },
     faculty: {
-      label: 'Facultad',
-      sandbox: 'faculty',
-      production: 'faculty'
+      label: "Facultad",
+      sandbox: "faculty",
+      production: "faculty",
     },
     program: {
-      label: 'Programa (Código SAE)',
-      sandbox: '00N7j000002BI3p',
-      production: '00N5G00000WmhvV'
+      label: "Programa (Código SAE)",
+      sandbox: "00N7j000002BI3p",
+      production: "00N5G00000WmhvV",
     },
     admission_period: {
-      label: 'Período de Ingreso',
-      sandbox: '00N7j000002BY2L',
-      production: '00N5G00000WmhvI'
+      label: "Período de Ingreso",
+      sandbox: "00N7j000002BY2L",
+      production: "00N5G00000WmhvI",
     },
     authorization_data: {
-      label: 'Autorización de Datos',
-      sandbox: '00N7j000002BI3m',
-      production: '00N5G00000WmhvF'
+      label: "Autorización de Datos",
+      sandbox: "00N7j000002BI3m",
+      production: "00N5G00000WmhvF",
     },
     event_name: {
-      label: 'Nombre del Evento',
-      sandbox: '00NO400000AIAxR',
-      production: '00NJw000006f1BF'
+      label: "Nombre del Evento",
+      sandbox: "00NO400000AIAxR",
+      production: "00NJw000006f1BF",
     },
     event_date: {
-      label: 'Fecha del Evento',
-      sandbox: '00NO400000AIanI',
-      production: '00NJw000006f1BE'
+      label: "Fecha del Evento",
+      sandbox: "00NO400000AIanI",
+      production: "00NJw000006f1BE",
     },
     university: {
-      label: 'Universidad',
-      sandbox: '00NO400000B66Z3',
-      production: '00NJw000006f1BG'
+      label: "Universidad",
+      sandbox: "00NO400000B66Z3",
+      production: "00NJw000006f1BG",
     },
     campaign: {
-      label: 'Campaña',
-      sandbox: '00N7j000002BfKF',
-      production: '00N5G00000Wmi8X'
+      label: "Campaña",
+      sandbox: "00N7j000002BfKF",
+      production: "00N5G00000Wmi8X",
     },
     source: {
-      label: 'Fuente',
-      sandbox: '00N7j000002BKgW',
-      production: '00N5G00000WmhvW'
+      label: "Fuente",
+      sandbox: "00N7j000002BKgW",
+      production: "00N5G00000WmhvW",
     },
     medium: {
-      label: 'Medio',
-      sandbox: '00NO40000001izt',
-      production: '00NJw000001J3g8'
-    }
+      label: "Medio",
+      sandbox: "00NO40000001izt",
+      production: "00NJw000001J3g8",
+    },
   };
 
   // Determinar el ambiente actual
   const isDebugMode = window.advancedForm?.config?.debugMode;
-  const currentEnvironment = isDebugMode ? 'Sandbox' : 'Producción';
+  const currentEnvironment = isDebugMode ? "Sandbox" : "Producción";
 
   let tableHtml = `
     <table style="width: 100%; border-collapse: collapse; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
@@ -2253,16 +2295,16 @@ function generateFormDataTable(formData) {
   `;
 
   // Generar filas para cada campo
-  Object.keys(fieldMappings).forEach(fieldKey => {
+  Object.keys(fieldMappings).forEach((fieldKey) => {
     const mapping = fieldMappings[fieldKey];
     const value = formData[fieldKey];
-    const hasValue = value !== undefined && value !== null && value !== '';
-    
+    const hasValue = value !== undefined && value !== null && value !== "";
+
     // Formatear el valor
-    let displayValue = '';
+    let displayValue = "";
     if (hasValue) {
-      if (fieldKey === 'authorization_data') {
-        displayValue = value === '1' ? 'Sí autoriza' : value === '0' ? 'No autoriza' : value;
+      if (fieldKey === "authorization_data") {
+        displayValue = value === "1" ? "Sí autoriza" : value === "0" ? "No autoriza" : value;
       } else {
         displayValue = value;
       }
@@ -2276,26 +2318,46 @@ function generateFormDataTable(formData) {
     const activeId = isDebugMode ? sandboxId : productionId;
 
     tableHtml += `
-      <tr style="border-bottom: 1px solid #e2e8f0; ${hasValue ? 'background: #f8fafc;' : ''} height: 28px;">
+      <tr style="border-bottom: 1px solid #e2e8f0; ${
+        hasValue ? "background: #f8fafc;" : ""
+      } height: 28px;">
         <td style="padding: 3px 12px; border: 1px solid #e2e8f0; font-weight: 500; color: #111827; vertical-align: middle; line-height: 1.2;">
           <div style="display: flex; align-items: center; gap: 6px;">
             <span>${mapping.label}</span>
-            ${hasValue ? '<span style="color: #10b981; font-size: 10px;">✓</span>' : '<span style="color: #6b7280; font-size: 10px;">○</span>'}
+            ${
+              hasValue
+                ? '<span style="color: #10b981; font-size: 10px;">✓</span>'
+                : '<span style="color: #6b7280; font-size: 10px;">○</span>'
+            }
           </div>
         </td>
-        <td style="padding: 3px 10px; border: 1px solid #e2e8f0; font-family: 'Monaco', 'Menlo', monospace; font-size: 10px; ${isDebugMode && sandboxId === activeId ? 'background: #fef3c7; font-weight: 600;' : ''} color: #374151; vertical-align: middle; word-break: break-all; line-height: 1.2;">
+        <td style="padding: 3px 10px; border: 1px solid #e2e8f0; font-family: 'Monaco', 'Menlo', monospace; font-size: 10px; ${
+          isDebugMode && sandboxId === activeId ? "background: #fef3c7; font-weight: 600;" : ""
+        } color: #374151; vertical-align: middle; word-break: break-all; line-height: 1.2;">
           <div style="display: flex; align-items: center; gap: 3px;">
             <span>${sandboxId}</span>
-            ${isDebugMode && sandboxId === activeId ? '<span style="color: #f59e0b; font-size: 9px;">●</span>' : ''}
+            ${
+              isDebugMode && sandboxId === activeId
+                ? '<span style="color: #f59e0b; font-size: 9px;">●</span>'
+                : ""
+            }
           </div>
         </td>
-        <td style="padding: 3px 10px; border: 1px solid #e2e8f0; font-family: 'Monaco', 'Menlo', monospace; font-size: 10px; ${!isDebugMode && productionId === activeId ? 'background: #d1fae5; font-weight: 600;' : ''} color: #374151; vertical-align: middle; word-break: break-all; line-height: 1.2;">
+        <td style="padding: 3px 10px; border: 1px solid #e2e8f0; font-family: 'Monaco', 'Menlo', monospace; font-size: 10px; ${
+          !isDebugMode && productionId === activeId ? "background: #d1fae5; font-weight: 600;" : ""
+        } color: #374151; vertical-align: middle; word-break: break-all; line-height: 1.2;">
           <div style="display: flex; align-items: center; gap: 3px;">
             <span>${productionId}</span>
-            ${!isDebugMode && productionId === activeId ? '<span style="color: #10b981; font-size: 9px;">●</span>' : ''}
+            ${
+              !isDebugMode && productionId === activeId
+                ? '<span style="color: #10b981; font-size: 9px;">●</span>'
+                : ""
+            }
           </div>
         </td>
-        <td style="padding: 3px 12px; border: 1px solid #e2e8f0; ${hasValue ? 'color: #111827; font-weight: 500;' : ''} vertical-align: middle; word-wrap: break-word; line-height: 1.2; font-size: 11px;">${displayValue}</td>
+        <td style="padding: 3px 12px; border: 1px solid #e2e8f0; ${
+          hasValue ? "color: #111827; font-weight: 500;" : ""
+        } vertical-align: middle; word-wrap: break-word; line-height: 1.2; font-size: 11px;">${displayValue}</td>
       </tr>
     `;
   });
@@ -2309,34 +2371,36 @@ function generateFormDataTable(formData) {
 }
 
 // Mostrar logs
-window.showLogs = function() {
+window.showLogs = function () {
   if (window.advancedForm && window.advancedForm.getLogs) {
     const logs = window.advancedForm.getLogs();
-    
+
     // Formatear logs como texto legible
-    let formattedLogs = '';
-    
+    let formattedLogs = "";
+
     if (Array.isArray(logs) && logs.length > 0) {
-      formattedLogs = logs.map(log => {
-        // Formato: [timestamp] emoji LEVEL [eventName] (origin) message args
-        const timestamp = log.timestamp || new Date().toLocaleTimeString();
-        const emoji = log.emoji || '🔵';
-        const level = log.level || 'INFO';
-        const origin = log.origin || 'unknown';
-        const message = log.message || '';
-        const args = log.args && log.args.length > 0 ? ` ${JSON.stringify(log.args)}` : '';
-        
-        return `[${timestamp}] ${emoji} ${level} [Open Day Avanzado 2025] (${origin}) ${message}${args}`;
-      }).join('\n\n');
-    } else if (typeof logs === 'string') {
+      formattedLogs = logs
+        .map((log) => {
+          // Formato: [timestamp] emoji LEVEL [eventName] (origin) message args
+          const timestamp = log.timestamp || new Date().toLocaleTimeString();
+          const emoji = log.emoji || "🔵";
+          const level = log.level || "INFO";
+          const origin = log.origin || "unknown";
+          const message = log.message || "";
+          const args = log.args && log.args.length > 0 ? ` ${JSON.stringify(log.args)}` : "";
+
+          return `[${timestamp}] ${emoji} ${level} [Open Day Avanzado 2025] (${origin}) ${message}${args}`;
+        })
+        .join("\n\n");
+    } else if (typeof logs === "string") {
       formattedLogs = logs;
     } else {
-      formattedLogs = 'No hay logs disponibles';
+      formattedLogs = "No hay logs disponibles";
     }
-    
-    showModal('Logs del Sistema', formattedLogs);
+
+    showModal("Logs del Sistema", formattedLogs);
   } else {
-    showModal('Error', 'No se pudo acceder al formulario. Asegúrate de que esté inicializado.');
+    showModal("Error", "No se pudo acceder al formulario. Asegúrate de que esté inicializado.");
   }
 };
 

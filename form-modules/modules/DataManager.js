@@ -350,11 +350,10 @@ export class DataManager {
 
       this.isInitialized = true;
       this.logger.success("Todos los datos cargados correctamente");
-      
+
       if (this.data.programs) {
         this.logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
       }
-      
     } catch (error) {
       this.logger.error("Error cargando datos:", error);
       throw error;
@@ -493,7 +492,7 @@ export class DataManager {
       this.logger.warn(`No hay datos de programas cargados`);
       return [];
     }
-    
+
     if (!this.data.programs[academicLevel]) {
       this.logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
       return [];
@@ -508,7 +507,7 @@ export class DataManager {
       } else {
         // Si es un objeto con facultades, retornar todos los programas
         const allPrograms = [];
-        Object.values(levelPrograms).forEach(facultyData => {
+        Object.values(levelPrograms).forEach((facultyData) => {
           if (facultyData.Programas && Array.isArray(facultyData.Programas)) {
             allPrograms.push(...facultyData.Programas);
           }

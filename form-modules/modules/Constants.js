@@ -1,9 +1,9 @@
 /**
  * Constants - Constantes compartidas del sistema de formularios
- * 
+ *
  * Centraliza todas las constantes utilizadas en múltiples módulos
  * para evitar duplicación y facilitar el mantenimiento
- * 
+ *
  * @version 1.0
  */
 
@@ -17,27 +17,27 @@ export class Constants {
       DOCUMENT: '[name="document"]',
       EMAIL: '[name="email"]',
       PHONE_CODE: '[name="phone_code"]',
-      PHONE: '[name="phone"]'
+      PHONE: '[name="phone"]',
     },
     LOCATION: {
       COUNTRY: '[name="country"]',
       DEPARTMENT: '[name="department"]',
-      CITY: '[name="city"]'
+      CITY: '[name="city"]',
     },
     EVENT: {
       ATTENDANCE_DAY: '[name="attendance_day"]',
-      TYPE_ATTENDEE: '[name="type_attendee"]'
+      TYPE_ATTENDEE: '[name="type_attendee"]',
     },
     ACADEMIC: {
       ACADEMIC_LEVEL: '[name="academic_level"]',
       FACULTY: '[name="Facultad"]',
       PROGRAM: '[name="program"]',
-      ADMISSION_PERIOD: '[name="admission_period"]'
+      ADMISSION_PERIOD: '[name="admission_period"]',
     },
     FORM_CONTROLS: {
       SUBMIT_BUTTON: '[type="submit"]',
-      AUTHORIZATION_DATA: "authorization_data"
-    }
+      AUTHORIZATION_DATA: "authorization_data",
+    },
   };
 
   // Nombres de campos para validación y estado
@@ -49,26 +49,26 @@ export class Constants {
       PHONE: "phone",
       DOCUMENT: "document",
       TYPE_DOC: "type_doc",
-      PHONE_CODE: "phone_code"
+      PHONE_CODE: "phone_code",
     },
     LOCATION: {
       COUNTRY: "country",
       DEPARTMENT: "department",
-      CITY: "city"
+      CITY: "city",
     },
     EVENT: {
       TYPE_ATTENDEE: "type_attendee",
-      ATTENDANCE_DAY: "attendance_day"
+      ATTENDANCE_DAY: "attendance_day",
     },
     ACADEMIC: {
       ACADEMIC_LEVEL: "academic_level",
       FACULTY: "faculty",
       PROGRAM: "program",
-      ADMISSION_PERIOD: "admission_period"
+      ADMISSION_PERIOD: "admission_period",
     },
     AUTHORIZATION: {
-      DATA_AUTHORIZATION: "authorization_data"
-    }
+      DATA_AUTHORIZATION: "authorization_data",
+    },
   };
 
   // Valores por defecto del sistema
@@ -77,14 +77,14 @@ export class Constants {
     PHONE_CODE: "57",
     DEPARTMENT_BOGOTA: "11",
     CITY_BOGOTA: "11001",
-    ATTENDEE_TYPE_APPLICANT: "Aspirante"
+    ATTENDEE_TYPE_APPLICANT: "Aspirante",
   };
 
   // Estados del sistema
   static SYSTEM_STATE = {
     INITIALIZED: "initialized",
     SUBMITTING: "submitting",
-    LOADING: "loading"
+    LOADING: "loading",
   };
 
   // Tipos de validación
@@ -93,15 +93,16 @@ export class Constants {
     NAME: "name",
     EMAIL: "email",
     PHONE: "phone",
-    DOCUMENT: "document"
+    DOCUMENT: "document",
   };
 
   // Patrones de validación
   static VALIDATION_PATTERNS = {
     NAME: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-    EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    EMAIL:
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     PHONE: /^[\d\s\-\+\(\)]+$/,
-    DOCUMENT: /^\d{6,12}$/
+    DOCUMENT: /^\d{6,12}$/,
   };
 
   // Mensajes de error estándar
@@ -111,7 +112,7 @@ export class Constants {
     EMAIL: "Ingrese un correo electrónico válido",
     PHONE: "Número de teléfono válido (mínimo 7 dígitos)",
     DOCUMENT: "Solo números, entre 6 y 12 dígitos",
-    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales"
+    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales",
   };
 
   // Configuración por defecto de validación
@@ -119,7 +120,7 @@ export class Constants {
     MIN_NAME_LENGTH: 2,
     MIN_PHONE_LENGTH: 7,
     MIN_DOCUMENT_LENGTH: 6,
-    MAX_DOCUMENT_LENGTH: 12
+    MAX_DOCUMENT_LENGTH: 12,
   };
 
   // Clases CSS estándar
@@ -129,16 +130,16 @@ export class Constants {
     ERROR_TEXT: "error_text",
     HIDDEN: "hidden",
     LOADING: "loading",
-    DISABLED: "disabled"
+    DISABLED: "disabled",
   };
 
   // Tipos de campos para auto-selección
   static AUTO_SELECT_TYPES = {
     ATTENDEE_TYPE: "typeAttendee",
-    ATTENDANCE_DAY: "attendanceDay", 
+    ATTENDANCE_DAY: "attendanceDay",
     ACADEMIC_LEVEL: "academicLevel",
     FACULTY: "faculty",
-    PROGRAM: "program"
+    PROGRAM: "program",
   };
 
   // Delays para auto-selección (en milisegundos)
@@ -147,20 +148,20 @@ export class Constants {
     ACADEMIC_LEVEL: 100,
     FACULTY: 100,
     PROGRAM: 0,
-    ATTENDANCE_DAY: 0
+    ATTENDANCE_DAY: 0,
   };
 
   // Configuración de animaciones
   static ANIMATION_CONFIG = {
     DURATION: 300,
-    ENABLED: true
+    ENABLED: true,
   };
 
   // Textos de interfaz
   static UI_TEXTS = {
     LOADING: "Cargando...",
     SUCCESS: "Enviado correctamente",
-    ERROR: "Error al procesar"
+    ERROR: "Error al procesar",
   };
 
   // Configuración de logs por defecto
@@ -168,7 +169,7 @@ export class Constants {
     LEVEL: "info",
     ENABLED: true,
     PERSIST: false,
-    MAX_LOGS: 1000
+    MAX_LOGS: 1000,
   };
 
   /**
@@ -182,12 +183,12 @@ export class Constants {
     if (!categorySelectors) {
       throw new Error(`Categoría de campo no encontrada: ${category}`);
     }
-    
+
     const selector = categorySelectors[fieldType];
     if (!selector) {
       throw new Error(`Tipo de campo no encontrado: ${fieldType} en categoría ${category}`);
     }
-    
+
     return selector;
   }
 
@@ -202,12 +203,12 @@ export class Constants {
     if (!categoryNames) {
       throw new Error(`Categoría de campo no encontrada: ${category}`);
     }
-    
+
     const fieldName = categoryNames[fieldType];
     if (!fieldName) {
       throw new Error(`Tipo de campo no encontrado: ${fieldType} en categoría ${category}`);
     }
-    
+
     return fieldName;
   }
 
@@ -257,27 +258,27 @@ export class Constants {
         patterns: this.VALIDATION_PATTERNS,
         messages: this.ERROR_MESSAGES,
         config: this.VALIDATION_CONFIG,
-        types: this.VALIDATION_TYPES
+        types: this.VALIDATION_TYPES,
       },
       ui: {
         classes: this.CSS_CLASSES,
         animation: this.ANIMATION_CONFIG,
-        texts: this.UI_TEXTS
+        texts: this.UI_TEXTS,
       },
       autoSelect: {
         types: this.AUTO_SELECT_TYPES,
-        delays: this.AUTO_SELECT_DELAYS
+        delays: this.AUTO_SELECT_DELAYS,
       },
       logging: {
-        ...this.LOG_CONFIG
-      }
+        ...this.LOG_CONFIG,
+      },
     };
 
     const config = configs[moduleType];
     if (!config) {
       throw new Error(`Configuración de módulo no encontrada: ${moduleType}`);
     }
-    
+
     return { ...config };
   }
 }

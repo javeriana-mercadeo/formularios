@@ -10,21 +10,21 @@ export class EventListenerManager {
   // Constants for event handler types
   static HANDLER_TYPES = {
     COUNTRY_CHANGE: "countryChange",
-    DEPARTMENT_CHANGE: "departmentChange", 
+    DEPARTMENT_CHANGE: "departmentChange",
     TYPE_ATTENDEE_CHANGE: "typeAttendeeChange",
     ACADEMIC_LEVEL_CHANGE: "academicLevelChange",
     FACULTY_CHANGE: "facultyChange",
     AUTHORIZATION_CHANGE: "authorizationChange",
-    FORM_SUBMIT: "formSubmit"
+    FORM_SUBMIT: "formSubmit",
   };
 
   // Field selector mappings
   static FIELD_SELECTORS = {
     TEXT_FIELDS: {
       FIRST_NAME: "firstName",
-      LAST_NAME: "lastName", 
+      LAST_NAME: "lastName",
       DOCUMENT: "document",
-      PHONE: "phone"
+      PHONE: "phone",
     },
     SELECT_FIELDS: {
       TYPE_DOC: "typeDoc",
@@ -33,17 +33,17 @@ export class EventListenerManager {
       CITY: "city",
       ATTENDANCE_DAY: "attendanceDay",
       PROGRAM: "program",
-      ADMISSION_PERIOD: "admissionPeriod"
+      ADMISSION_PERIOD: "admissionPeriod",
     },
     SPECIAL_FIELDS: {
       COUNTRY: "country",
       DEPARTMENT: "department",
-      TYPE_ATTENDEE: "typeAttendee"
+      TYPE_ATTENDEE: "typeAttendee",
     },
     ACADEMIC_FIELDS: {
       ACADEMIC_LEVEL: "academicLevel",
-      FACULTY: "faculty"
-    }
+      FACULTY: "faculty",
+    },
   };
 
   // State key mappings for form fields
@@ -54,13 +54,13 @@ export class EventListenerManager {
     CITY: "city",
     ATTENDANCE_DAY: "attendance_day",
     PROGRAM: "program",
-    ADMISSION_PERIOD: "admission_period"
+    ADMISSION_PERIOD: "admission_period",
   };
 
   // Text cleaning method mappings
   static CLEAN_METHODS = {
     TEXT: "cleanText",
-    NUMBERS: "cleanNumbers"
+    NUMBERS: "cleanNumbers",
   };
 
   constructor(formElement, stateManager, ui, inputSelectors, loggerConfig = {}) {
@@ -69,7 +69,7 @@ export class EventListenerManager {
     this.ui = ui;
     this.inputSelectors = inputSelectors;
     this.logger = new Logger("EventListenerManager", loggerConfig);
-    
+
     // External handlers that can be registered
     this.handlers = new Map();
   }
@@ -86,14 +86,14 @@ export class EventListenerManager {
    */
   setupAllEventListeners() {
     this.logger.info("🎧 Configurando todos los event listeners...");
-    
+
     this._setupTextInputListeners();
     this._setupSelectListeners();
     this._setupSpecialFieldListeners();
     this._setupAcademicFieldListeners();
     this._setupAuthorizationListener();
     this._setupSubmitListener();
-    
+
     this.logger.info("✅ Event listeners configurados exitosamente");
   }
 
@@ -102,17 +102,31 @@ export class EventListenerManager {
    */
   _setupTextInputListeners() {
     const textFields = [
-      { selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.FIRST_NAME, stateKey: 'first_name', cleanMethod: EventListenerManager.CLEAN_METHODS.TEXT },
-      { selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.LAST_NAME, stateKey: 'last_name', cleanMethod: EventListenerManager.CLEAN_METHODS.TEXT },
-      { selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.DOCUMENT, stateKey: 'document', cleanMethod: EventListenerManager.CLEAN_METHODS.NUMBERS },
-      { selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.PHONE, stateKey: 'phone', cleanMethod: EventListenerManager.CLEAN_METHODS.NUMBERS }
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.FIRST_NAME,
+        stateKey: "first_name",
+        cleanMethod: EventListenerManager.CLEAN_METHODS.TEXT,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.LAST_NAME,
+        stateKey: "last_name",
+        cleanMethod: EventListenerManager.CLEAN_METHODS.TEXT,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.DOCUMENT,
+        stateKey: "document",
+        cleanMethod: EventListenerManager.CLEAN_METHODS.NUMBERS,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.TEXT_FIELDS.PHONE,
+        stateKey: "phone",
+        cleanMethod: EventListenerManager.CLEAN_METHODS.NUMBERS,
+      },
     ];
 
     textFields.forEach(({ selector, stateKey, cleanMethod }) => {
-      this.ui.addInputListener(
-        this.formElement, 
-        this.inputSelectors[selector], 
-        (value) => this._handleTextInput(value, stateKey, cleanMethod)
+      this.ui.addInputListener(this.formElement, this.inputSelectors[selector], (value) =>
+        this._handleTextInput(value, stateKey, cleanMethod)
       );
     });
   }
@@ -122,20 +136,39 @@ export class EventListenerManager {
    */
   _setupSelectListeners() {
     const selectFields = [
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.TYPE_DOC, stateKey: EventListenerManager.STATE_KEYS.TYPE_DOC },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.EMAIL, stateKey: EventListenerManager.STATE_KEYS.EMAIL },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.PHONE_CODE, stateKey: EventListenerManager.STATE_KEYS.PHONE_CODE },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.CITY, stateKey: EventListenerManager.STATE_KEYS.CITY },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.ATTENDANCE_DAY, stateKey: EventListenerManager.STATE_KEYS.ATTENDANCE_DAY },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.PROGRAM, stateKey: EventListenerManager.STATE_KEYS.PROGRAM },
-      { selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.ADMISSION_PERIOD, stateKey: EventListenerManager.STATE_KEYS.ADMISSION_PERIOD }
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.TYPE_DOC,
+        stateKey: EventListenerManager.STATE_KEYS.TYPE_DOC,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.EMAIL,
+        stateKey: EventListenerManager.STATE_KEYS.EMAIL,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.PHONE_CODE,
+        stateKey: EventListenerManager.STATE_KEYS.PHONE_CODE,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.CITY,
+        stateKey: EventListenerManager.STATE_KEYS.CITY,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.ATTENDANCE_DAY,
+        stateKey: EventListenerManager.STATE_KEYS.ATTENDANCE_DAY,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.PROGRAM,
+        stateKey: EventListenerManager.STATE_KEYS.PROGRAM,
+      },
+      {
+        selector: EventListenerManager.FIELD_SELECTORS.SELECT_FIELDS.ADMISSION_PERIOD,
+        stateKey: EventListenerManager.STATE_KEYS.ADMISSION_PERIOD,
+      },
     ];
 
     selectFields.forEach(({ selector, stateKey }) => {
-      this.ui.addChangeListener(
-        this.formElement,
-        this.inputSelectors[selector],
-        (value) => this._handleSimpleSelect(value, stateKey)
+      this.ui.addChangeListener(this.formElement, this.inputSelectors[selector], (value) =>
+        this._handleSimpleSelect(value, stateKey)
       );
     });
   }
@@ -151,7 +184,7 @@ export class EventListenerManager {
       (value) => this._handleCountryChange(value)
     );
 
-    // Departamento - requiere lógica especial para mostrar/ocultar ciudades  
+    // Departamento - requiere lógica especial para mostrar/ocultar ciudades
     this.ui.addChangeListener(
       this.formElement,
       this.inputSelectors[EventListenerManager.FIELD_SELECTORS.SPECIAL_FIELDS.DEPARTMENT],
@@ -189,10 +222,8 @@ export class EventListenerManager {
    * Configurar listener para autorización
    */
   _setupAuthorizationListener() {
-    this.ui.addRadioListener(
-      this.formElement,
-      this.inputSelectors.authorizationData,
-      (value) => this._handleAuthorizationChange(value)
+    this.ui.addRadioListener(this.formElement, this.inputSelectors.authorizationData, (value) =>
+      this._handleAuthorizationChange(value)
     );
   }
 
@@ -229,7 +260,9 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.COUNTRY_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.COUNTRY_CHANGE}`
+      );
     }
   }
 
@@ -241,7 +274,9 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.DEPARTMENT_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.DEPARTMENT_CHANGE}`
+      );
     }
   }
 
@@ -253,7 +288,9 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE}`
+      );
     }
   }
 
@@ -265,7 +302,9 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE}`
+      );
     }
   }
 
@@ -277,7 +316,9 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FACULTY_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FACULTY_CHANGE}`
+      );
     }
   }
 
@@ -285,13 +326,15 @@ export class EventListenerManager {
    * Manejar cambio de autorización (delegar al handler)
    */
   _handleAuthorizationChange(value) {
-    this.stateManager.updateField('authorization_data', value);
-    
+    this.stateManager.updateField("authorization_data", value);
+
     const handler = this.handlers.get(EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE);
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE}`
+      );
     }
   }
 
@@ -303,7 +346,9 @@ export class EventListenerManager {
     if (handler) {
       handler(event);
     } else {
-      this.logger.warn(`No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FORM_SUBMIT}`);
+      this.logger.warn(
+        `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FORM_SUBMIT}`
+      );
       event.preventDefault();
     }
   }
@@ -313,12 +358,12 @@ export class EventListenerManager {
    */
   removeAllListeners() {
     this.logger.info("🧹 Removiendo todos los event listeners");
-    
+
     // Clonar el formulario para remover todos los listeners
     const newForm = this.formElement.cloneNode(true);
     this.formElement.parentNode.replaceChild(newForm, this.formElement);
     this.formElement = newForm;
-    
+
     this.logger.info("✅ Event listeners removidos");
   }
 
@@ -329,7 +374,7 @@ export class EventListenerManager {
     return {
       totalHandlers: this.handlers.size,
       registeredHandlers: Array.from(this.handlers.keys()),
-      formElement: this.formElement ? 'attached' : 'detached'
+      formElement: this.formElement ? "attached" : "detached",
     };
   }
 

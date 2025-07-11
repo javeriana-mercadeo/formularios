@@ -1,13 +1,13 @@
 /**
  * FormManager - Gestor principal de formularios de eventos
  * Orquesta todos los módulos y gestiona el ciclo de vida del formulario
- * 
+ *
  * Funcionalidades principales:
  * - Inicialización y configuración del formulario
  * - Coordinación entre módulos especializados
  * - Gestión del estado global del formulario
  * - Manejo de eventos de envío y validación
- * 
+ *
  * @version 1.0
  */
 
@@ -34,13 +34,13 @@ export class FormManager {
 
     // Inicializar gestores principales
     this._initializeManagers(config);
-    
+
     // Configurar selectores de campos
     this._setupInputSelectors();
-    
+
     // Inicializar módulos básicos
     this._initializeBasicModules();
-    
+
     // Inicializar estado interno
     this._initializeInternalState();
   }
@@ -231,34 +231,55 @@ export class FormManager {
    * Configurar manejadores de eventos del formulario
    */
   _registerEventHandlers() {
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.COUNTRY_CHANGE, (value) => {
-      this.handleCountryChange(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.COUNTRY_CHANGE,
+      (value) => {
+        this.handleCountryChange(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.DEPARTMENT_CHANGE, (value) => {
-      this.handleDepartmentChange(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.DEPARTMENT_CHANGE,
+      (value) => {
+        this.handleDepartmentChange(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE, (value) => {
-      this.handleTypeAttendeeChange(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE,
+      (value) => {
+        this.handleTypeAttendeeChange(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE, (value) => {
-      this.academicFieldsManager.handleAcademicLevelChange(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE,
+      (value) => {
+        this.academicFieldsManager.handleAcademicLevelChange(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.FACULTY_CHANGE, (value) => {
-      this.academicFieldsManager.handleFacultyChange(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.FACULTY_CHANGE,
+      (value) => {
+        this.academicFieldsManager.handleFacultyChange(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE, (value) => {
-      this.toggleSubmitButton(value === "1");
-      this._handleAuthorizationUI(value);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE,
+      (value) => {
+        this.toggleSubmitButton(value === "1");
+        this._handleAuthorizationUI(value);
+      }
+    );
 
-    this.eventListenerManager.registerHandler(EventListenerManager.HANDLER_TYPES.FORM_SUBMIT, (event) => {
-      this.handleSubmit(event);
-    });
+    this.eventListenerManager.registerHandler(
+      EventListenerManager.HANDLER_TYPES.FORM_SUBMIT,
+      (event) => {
+        this.handleSubmit(event);
+      }
+    );
   }
 
   /**
@@ -493,7 +514,9 @@ export class FormManager {
 
       const bogota = cities.find(
         (city) =>
-          city.nombre && (city.nombre.toLowerCase().includes("bogota") || city.codigo === Constants.DEFAULT_VALUES.CITY_BOGOTA)
+          city.nombre &&
+          (city.nombre.toLowerCase().includes("bogota") ||
+            city.codigo === Constants.DEFAULT_VALUES.CITY_BOGOTA)
       );
 
       if (bogota) {

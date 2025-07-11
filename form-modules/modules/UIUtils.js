@@ -1,13 +1,13 @@
 /**
  * UIUtils - Utilidades para manipulación del DOM e interfaz de usuario
- * 
+ *
  * Responsabilidades:
  * - Manipulación segura de elementos DOM
  * - Gestión de errores visuales y mensajes
  * - Poblado dinámico de campos select
  * - Manejo de animaciones y transiciones
  * - Utilidades de validación y limpieza de datos
- * 
+ *
  * @version 1.0
  */
 
@@ -285,7 +285,7 @@ export class UIUtils {
       }
 
       selectElement.appendChild(optionElement);
-        addedCount++;
+      addedCount++;
     });
 
     normalOptions.forEach((option, index) => {
@@ -303,7 +303,7 @@ export class UIUtils {
       }
 
       selectElement.appendChild(optionElement);
-        addedCount++;
+      addedCount++;
     });
   }
 
@@ -622,9 +622,9 @@ export class UIUtils {
     const errorElements = formElement.querySelectorAll(".error_text");
     errorElements.forEach((errorElement) => {
       errorElement.style.display = "none";
-      
+
       // No limpiar contenido de elementos con data-puj-form que tienen contenido predefinido
-      if (!errorElement.hasAttribute('data-puj-form')) {
+      if (!errorElement.hasAttribute("data-puj-form")) {
         errorElement.textContent = "";
       }
     });
@@ -973,9 +973,7 @@ export class UIUtils {
    */
   _validateOptionsArray(options) {
     if (!Array.isArray(options)) {
-      this.logger.error(
-        `Las opciones deben ser un array, recibido: ${typeof options}`
-      );
+      this.logger.error(`Las opciones deben ser un array, recibido: ${typeof options}`);
       return false;
     }
 

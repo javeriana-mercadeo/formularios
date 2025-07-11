@@ -1,12 +1,12 @@
 /**
  * ValidationModule - Módulo centralizado de validación de formularios
- * 
+ *
  * Responsabilidades:
  * - Definir reglas de validación para diferentes tipos de campos
  * - Validar campos individuales y formularios completos
  * - Gestionar mensajes de error personalizables
  * - Manejar validación condicional según el contexto
- * 
+ *
  * @version 1.0
  */
 
@@ -19,7 +19,7 @@ export class ValidationModule {
     NAME: "name",
     EMAIL: "email",
     PHONE: "phone",
-    DOCUMENT: "document"
+    DOCUMENT: "document",
   };
 
   // Constantes para nombres de campos
@@ -31,34 +31,35 @@ export class ValidationModule {
       PHONE: "phone",
       DOCUMENT: "document",
       TYPE_DOC: "type_doc",
-      PHONE_CODE: "phone_code"
+      PHONE_CODE: "phone_code",
     },
     LOCATION: {
       COUNTRY: "country",
       DEPARTMENT: "department",
-      CITY: "city"
+      CITY: "city",
     },
     EVENT: {
       TYPE_ATTENDEE: "type_attendee",
-      ATTENDANCE_DAY: "attendance_day"
+      ATTENDANCE_DAY: "attendance_day",
     },
     ACADEMIC: {
       ACADEMIC_LEVEL: "academic_level",
       FACULTY: "faculty",
       PROGRAM: "program",
-      ADMISSION_PERIOD: "admission_period"
+      ADMISSION_PERIOD: "admission_period",
     },
     AUTHORIZATION: {
-      DATA_AUTHORIZATION: "authorization_data"
-    }
+      DATA_AUTHORIZATION: "authorization_data",
+    },
   };
 
   // Constantes para patrones de validación
   static VALIDATION_PATTERNS = {
     NAME: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-    EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    EMAIL:
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     PHONE: /^[\d\s\-\+\(\)]+$/,
-    DOCUMENT: /^\d{6,12}$/
+    DOCUMENT: /^\d{6,12}$/,
   };
 
   // Constantes de configuración por defecto
@@ -66,7 +67,7 @@ export class ValidationModule {
     MIN_NAME_LENGTH: 2,
     MIN_PHONE_LENGTH: 7,
     MIN_DOCUMENT_LENGTH: 6,
-    MAX_DOCUMENT_LENGTH: 12
+    MAX_DOCUMENT_LENGTH: 12,
   };
 
   // Constantes para mensajes de error
@@ -76,7 +77,7 @@ export class ValidationModule {
     EMAIL: "Ingrese un correo electrónico válido",
     PHONE: "Número de teléfono válido (mínimo 7 dígitos)",
     DOCUMENT: "Solo números, entre 6 y 12 dígitos",
-    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales"
+    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales",
   };
 
   constructor(config = {}, loggerConfig = {}) {
@@ -118,16 +119,22 @@ export class ValidationModule {
       [ValidationModule.FIELD_NAMES.PERSONAL.PHONE]: ValidationModule.VALIDATION_TYPES.PHONE,
       [ValidationModule.FIELD_NAMES.PERSONAL.DOCUMENT]: ValidationModule.VALIDATION_TYPES.DOCUMENT,
       [ValidationModule.FIELD_NAMES.PERSONAL.TYPE_DOC]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.PERSONAL.PHONE_CODE]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.PERSONAL.PHONE_CODE]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
       [ValidationModule.FIELD_NAMES.LOCATION.COUNTRY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
       [ValidationModule.FIELD_NAMES.LOCATION.CITY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.EVENT.TYPE_ATTENDEE]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.EVENT.ATTENDANCE_DAY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.EVENT.TYPE_ATTENDEE]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.EVENT.ATTENDANCE_DAY]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
       [ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY]: ValidationModule.VALIDATION_TYPES.REQUIRED,
       [ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM]: ValidationModule.VALIDATION_TYPES.REQUIRED,
-      [ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD]: ValidationModule.VALIDATION_TYPES.REQUIRED,
+      [ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD]:
+        ValidationModule.VALIDATION_TYPES.REQUIRED,
     };
   }
 
@@ -190,7 +197,7 @@ export class ValidationModule {
    * @returns {boolean} - True si el campo es válido
    */
   validateField(fieldElement) {
-    const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
+    const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
     const value = fieldElement.value;
 
     // Obtener tipo de validación
@@ -227,7 +234,7 @@ export class ValidationModule {
    * @returns {string} - Mensaje de error correspondiente
    */
   getErrorMessage(fieldElement) {
-    const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
+    const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
     const validationType = this.fieldValidationMap[fieldId];
 
     if (!validationType) {
@@ -244,12 +251,13 @@ export class ValidationModule {
     const results = {};
 
     fields.forEach((field) => {
-      const fieldElement = typeof field === "string" 
-        ? document.getElementById(field) || document.querySelector(`[data-puj-form="${field}"]`)
-        : field;
+      const fieldElement =
+        typeof field === "string"
+          ? document.getElementById(field) || document.querySelector(`[data-puj-form="${field}"]`)
+          : field;
 
       if (fieldElement) {
-        const fieldId = fieldElement.id || fieldElement.getAttribute('data-puj-form');
+        const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
         results[fieldId] = this.validateField(fieldElement);
       }
     });
@@ -271,7 +279,7 @@ export class ValidationModule {
 
     requiredFields.forEach((field) => {
       const isValid = this.validateField(field);
-      const fieldId = field.id || field.getAttribute('data-puj-form');
+      const fieldId = field.id || field.getAttribute("data-puj-form");
 
       if (isValid) {
         results.validFields.push(fieldId);
@@ -335,11 +343,13 @@ export class ValidationModule {
         ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL,
         ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY,
         ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM,
-        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD
+        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD,
       ];
 
       academicFields.forEach((fieldId) => {
-        const element = formElement.querySelector(`[data-puj-form="field-${fieldId.replace('_', '-')}"]`);
+        const element = formElement.querySelector(
+          `[data-puj-form="field-${fieldId.replace("_", "-")}"]`
+        );
 
         if (element && element.style.display !== "none") {
           if (!this.validateRequired(element.value)) {
@@ -379,7 +389,8 @@ export class ValidationModule {
 
     // Agregar error de autorización si es necesario
     if (!authorizationValid) {
-      results.errors[ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION] = this.config.errorMessages.authorization;
+      results.errors[ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION] =
+        this.config.errorMessages.authorization;
       results.invalidFields.push(ValidationModule.FIELD_NAMES.AUTHORIZATION.DATA_AUTHORIZATION);
     }
 
@@ -501,12 +512,14 @@ export class ValidationModule {
     if (formData[ValidationModule.FIELD_NAMES.LOCATION.COUNTRY] === "COL") {
       if (!this.validateRequired(formData[ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT])) {
         results.isValid = false;
-        results.errors[ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT] = this.config.errorMessages.required;
+        results.errors[ValidationModule.FIELD_NAMES.LOCATION.DEPARTMENT] =
+          this.config.errorMessages.required;
       }
 
       if (!this.validateRequired(formData[ValidationModule.FIELD_NAMES.LOCATION.CITY])) {
         results.isValid = false;
-        results.errors[ValidationModule.FIELD_NAMES.LOCATION.CITY] = this.config.errorMessages.required;
+        results.errors[ValidationModule.FIELD_NAMES.LOCATION.CITY] =
+          this.config.errorMessages.required;
       }
     }
 
@@ -516,7 +529,7 @@ export class ValidationModule {
         ValidationModule.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL,
         ValidationModule.FIELD_NAMES.ACADEMIC.FACULTY,
         ValidationModule.FIELD_NAMES.ACADEMIC.PROGRAM,
-        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD
+        ValidationModule.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD,
       ];
 
       academicFields.forEach((fieldId) => {
