@@ -45,8 +45,7 @@ export class AcademicFieldsManager {
     ui,
     autoSelectManager,
     inputSelectors,
-    config,
-    loggerConfig = {}
+    config
   ) {
     this.formElement = formElement;
     this.stateManager = stateManager;
@@ -55,7 +54,6 @@ export class AcademicFieldsManager {
     this.autoSelectManager = autoSelectManager;
     this.inputSelectors = inputSelectors;
     this.config = config;
-    this.logger = new Logger("AcademicFieldsManager", loggerConfig);
 
     // Academic fields internal state
     this.academicFieldsState = {
@@ -74,7 +72,7 @@ export class AcademicFieldsManager {
    * Carga los niveles académicos disponibles y configura la visibilidad
    */
   showAcademicFields() {
-    this.logger.info("🎓 Mostrando campos académicos para aspirante");
+    Logger.info("🎓 Mostrando campos académicos para aspirante");
 
     const academicLevelElement = this.formElement.querySelector(
       this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL]
@@ -95,7 +93,7 @@ export class AcademicFieldsManager {
    * Se ejecuta cuando el tipo de asistente no es "Aspirante"
    */
   hideAcademicFields() {
-    this.logger.info("👤 Ocultando campos académicos");
+    Logger.info("👤 Ocultando campos académicos");
 
     const fieldSelectors = [
       this.inputSelectors[AcademicFieldsManager.FIELD_SELECTORS.ACADEMIC_LEVEL],
@@ -164,7 +162,7 @@ export class AcademicFieldsManager {
       AcademicFieldsManager.FIELD_TYPES.ACADEMIC_LEVEL
     );
     if (currentAcademicLevel) {
-      this.logger.info(`🔄 Procesando nivel académico auto-seleccionado: ${currentAcademicLevel}`);
+      Logger.info(`🔄 Procesando nivel académico auto-seleccionado: ${currentAcademicLevel}`);
       this.handleAcademicLevelChange(currentAcademicLevel);
     }
   }
@@ -205,7 +203,7 @@ export class AcademicFieldsManager {
     // Aplicar filtro de facultades si está configurado
     if (this.config.faculties && this.config.faculties.length > 0) {
       faculties = faculties.filter((faculty) => this.config.faculties.includes(faculty));
-      this.logger.info(
+      Logger.info(
         `Facultades filtradas: ${faculties.length} de ${
           this.dataManager.getFaculties(academicLevel).length
         }`
@@ -241,7 +239,7 @@ export class AcademicFieldsManager {
         const programCode = program.Codigo || program.codigo || program;
         return this.config.programs.includes(programCode);
       });
-      this.logger.info(
+      Logger.info(
         `Programas filtrados: ${programs.length} de ${
           this.dataManager.getPrograms(academicLevel, faculty).length
         }`
@@ -249,7 +247,7 @@ export class AcademicFieldsManager {
     }
 
     this.academicFieldsState.availablePrograms = programs;
-    this.logger.info(`Cargados ${programs ? programs.length : 0} programas para ${faculty}`);
+    Logger.info(`Cargados ${programs ? programs.length : 0} programas para ${faculty}`);
 
     const programElement = this.formElement.querySelector(this.inputSelectors.program);
     this.ui.populateSelect(this.inputSelectors.program, programs, "Codigo", "Nombre");
@@ -370,7 +368,7 @@ export class AcademicFieldsManager {
    */
   async refreshAcademicData() {
     if (this.academicFieldsState.isVisible) {
-      this.logger.info("🔄 Refrescando datos académicos");
+      Logger.info("🔄 Refrescando datos académicos");
       this._loadAndPopulateAcademicLevels();
 
       if (this.academicFieldsState.currentLevel) {

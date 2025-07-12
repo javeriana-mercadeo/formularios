@@ -65,7 +65,7 @@ class GlobalDataCache {
 }
 
 export class DataManager {
-  constructor(loggerConfig, dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
+  constructor(dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
     this.dataUrls = {
       ...dataUrls,
     };
@@ -92,6 +92,16 @@ export class DataManager {
         "https://cloud.cx.javeriana.edu.co/periodos.json",
         "../data/periodos.json",
       ],
+      university: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/universidades.json",
+        "https://cloud.cx.javeriana.edu.co/universidades.json",
+        "../data/universidades.json",
+      ],
+      college: [
+        "https://www.javeriana.edu.co/recursosdb/1372208/10609114/Colegios+PRD.json",
+        "https://cloud.cx.javeriana.edu.co/Colegios+PRD.json",
+        "../data/Colegios PRD.json",
+      ],
     };
 
     this.cacheEnabled = cacheEnabled;
@@ -108,9 +118,6 @@ export class DataManager {
       periods: null,
     };
 
-    // Módulos
-    this.logger = new Logger("DataManager", loggerConfig);
-
     // Estado de carga
     this.loadingPromises = {};
     this.isInitialized = false;
@@ -126,13 +133,13 @@ export class DataManager {
     if (this.cacheEnabled && cacheKey) {
       const cachedData = this.getCachedData(actualCacheKey);
       if (cachedData) {
-        this.logger.loading(`Cargando datos desde caché: ${actualCacheKey}`);
+        Logger.loading(`Cargando datos desde caché: ${actualCacheKey}`);
         return cachedData;
       }
     }
 
     try {
-      this.logger.loading(`Cargando datos desde: ${url}`);
+      Logger.loading(`Cargando datos desde: ${url}`);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -146,10 +153,10 @@ export class DataManager {
         this.setCachedData(actualCacheKey, data);
       }
 
-      this.logger.success(`Datos cargados correctamente: ${url}`);
+      Logger.success(`Datos cargados correctamente: ${url}`);
       return data;
     } catch (error) {
-      this.logger.error(`Error cargando datos desde ${url}:`, error);
+      Logger.error(`Error cargando datos desde ${url}:`, error);
       throw error;
     }
   }
@@ -163,7 +170,7 @@ export class DataManager {
     // Verificar si ya hay una carga en progreso (compartida entre instancias)
     const existingPromise = this.globalCache.getLoadingPromise(actualCacheKey);
     if (existingPromise) {
-      this.logger.loading(`Esperando carga en progreso compartida: ${actualCacheKey}`);
+      Logger.loading(`Esperando carga en progreso compartida: ${actualCacheKey}`);
       return await existingPromise;
     }
 
@@ -171,7 +178,7 @@ export class DataManager {
     if (this.cacheEnabled) {
       const cachedData = this.globalCache.getCachedData(actualCacheKey, this.cacheExpirationHours);
       if (cachedData) {
-        this.logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
+        Logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
         return cachedData;
       }
     }
@@ -207,7 +214,7 @@ export class DataManager {
 
     for (const url of uniqueUrls) {
       try {
-        this.logger.loading(`Intentando cargar datos desde: ${url}`);
+        Logger.loading(`Intentando cargar datos desde: ${url}`);
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -221,19 +228,17 @@ export class DataManager {
           this.globalCache.setCachedData(cacheKey, data);
         }
 
-        this.logger.success(`Datos cargados correctamente desde: ${url}`);
+        Logger.success(`Datos cargados correctamente desde: ${url}`);
         return data;
       } catch (error) {
-        this.logger.warn(`Error cargando desde ${url}: ${error.message}`);
+        Logger.warn(`Error cargando desde ${url}: ${error.message}`);
         lastError = error;
         continue;
       }
     }
 
     // Si ninguna URL funcionó, lanzar el último error
-    this.logger.error(
-      `Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`
-    );
+    Logger.error(`Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`);
     throw lastError || new Error(`No se pudieron cargar los datos de tipo '${dataType}'`);
   }
 
@@ -334,28 +339,68 @@ export class DataManager {
     }
   }
 
+  async loadUniversity() {
+    if (this.data.university) {
+      return this.data.university;
+    }
+
+    if (this.loadingPromises.university) {
+      return await this.loadingPromises.university;
+    }
+
+    this.loadingPromises.university = this.loadDataWithFallback("university");
+
+    try {
+      this.data.university = await this.loadingPromises.university;
+      return this.data.university;
+    } finally {
+      delete this.loadingPromises.university;
+    }
+  }
+
+  async loadCollege() {
+    if (this.data.college) {
+      return this.data.college;
+    }
+
+    if (this.loadingPromises.college) {
+      return await this.loadingPromises.college;
+    }
+
+    this.loadingPromises.college = this.loadDataWithFallback("college");
+
+    try {
+      this.data.college = await this.loadingPromises.college;
+      return this.data.college;
+    } finally {
+      delete this.loadingPromises.college;
+    }
+  }
+
   /**
    * Cargar todos los datos
    */
   async loadAll() {
     try {
-      this.logger.loading("Cargando todos los datos...");
+      Logger.loading("Cargando todos los datos...");
 
       await Promise.all([
         this.loadLocations(),
         this.loadPrefixes(),
         this.loadPrograms(),
         this.loadPeriods(),
+        this.loadUniversity(),
+        this.loadCollege(),
       ]);
 
       this.isInitialized = true;
-      this.logger.success("Todos los datos cargados correctamente");
+      Logger.success("Todos los datos cargados correctamente");
 
       if (this.data.programs) {
-        this.logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
+        Logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
       }
     } catch (error) {
-      this.logger.error("Error cargando datos:", error);
+      Logger.error("Error cargando datos:", error);
       throw error;
     }
   }
@@ -429,7 +474,7 @@ export class DataManager {
    */
   getAcademicLevels() {
     if (!this.data.programs) {
-      this.logger.warn("No hay datos de programas cargados");
+      Logger.warn("No hay datos de programas cargados");
       return [];
     }
 
@@ -445,7 +490,7 @@ export class DataManager {
       name: levelNames[levelCode] || levelCode,
     }));
 
-    this.logger.debug("Niveles académicos detectados desde programas:", levels);
+    Logger.debug("Niveles académicos detectados desde programas:", levels);
     return levels;
   }
 
@@ -454,28 +499,28 @@ export class DataManager {
    */
   getFaculties(academicLevel) {
     if (!this.data.programs || !this.data.programs[academicLevel]) {
-      this.logger.warn(`No se encontraron programas para el nivel académico: ${academicLevel}`);
+      Logger.warn(`No se encontraron programas para el nivel académico: ${academicLevel}`);
       return [];
     }
 
     const levelPrograms = this.data.programs[academicLevel];
-    this.logger.debug(`Estructura de datos para nivel ${academicLevel}:`, levelPrograms);
+    Logger.debug(`Estructura de datos para nivel ${academicLevel}:`, levelPrograms);
 
     // Verificar estructura de datos
     if (typeof levelPrograms === "object" && !Array.isArray(levelPrograms)) {
       // Estructura: programs.PREG.FACULTAD
       const faculties = Object.keys(levelPrograms);
-      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, faculties);
+      Logger.debug(`Facultades encontradas para ${academicLevel}:`, faculties);
       return faculties;
     } else if (Array.isArray(levelPrograms)) {
       // Estructura: array de programas con propiedad facultad
       const faculties = [...new Set(levelPrograms.map((program) => program.facultad))];
       const filteredFaculties = faculties.filter((faculty) => faculty); // Filtrar valores vacíos
-      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, filteredFaculties);
+      Logger.debug(`Facultades encontradas para ${academicLevel}:`, filteredFaculties);
       return filteredFaculties;
     }
 
-    this.logger.warn(`Estructura de datos no reconocida para nivel ${academicLevel}`);
+    Logger.warn(`Estructura de datos no reconocida para nivel ${academicLevel}`);
     return [];
   }
 
@@ -489,12 +534,12 @@ export class DataManager {
     }
 
     if (!this.data.programs) {
-      this.logger.warn(`No hay datos de programas cargados`);
+      Logger.warn(`No hay datos de programas cargados`);
       return [];
     }
 
     if (!this.data.programs[academicLevel]) {
-      this.logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
+      Logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
       return [];
     }
 
@@ -525,7 +570,7 @@ export class DataManager {
       return levelPrograms.filter((program) => program.facultad === faculty);
     }
 
-    this.logger.warn(`No se encontraron programas para facultad ${faculty}`);
+    Logger.warn(`No se encontraron programas para facultad ${faculty}`);
     return [];
   }
 
@@ -684,7 +729,7 @@ export class DataManager {
 
       return data;
     } catch (error) {
-      this.logger.error("Error al leer caché:", error);
+      Logger.error("Error al leer caché:", error);
       return null;
     }
   }
@@ -700,7 +745,7 @@ export class DataManager {
 
       localStorage.setItem(`formData_${key}`, JSON.stringify(cacheItem));
     } catch (error) {
-      this.logger.error("Error al guardar en caché:", error);
+      Logger.error("Error al guardar en caché:", error);
     }
   }
 
@@ -714,7 +759,7 @@ export class DataManager {
       }
     });
 
-    this.logger.info("🧹 Caché limpiado");
+    Logger.info("🧹 Caché limpiado");
   }
 
   /**

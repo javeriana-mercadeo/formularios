@@ -26,8 +26,6 @@ import { Constants } from "./Constants.js";
 export class FormManager {
   // Referencia a constantes centralizadas
   static INPUT_SELECTORS = Constants.INPUT_SELECTORS;
-  static DEFAULT_VALUES = Constants.DEFAULT_VALUES;
-  static SYSTEM_STATE = Constants.SYSTEM_STATE;
 
   constructor(selector, config = {}) {
     this.selector = selector;
@@ -49,9 +47,9 @@ export class FormManager {
    * Inicializar gestores de configuración y estado
    */
   _initializeManagers(config) {
-    this.configManager = new ConfigManager(config);
-    this.stateManager = new FormStateManager(this.configManager.get("logging"));
-    this.config = this.configManager.getConfig();
+    this.configManager = new ConfigManager(config, this.selector);
+    this.stateManager = new FormStateManager();
+    this.config = ConfigManager.getConfig();
   }
 
   /**
@@ -84,15 +82,12 @@ export class FormManager {
    * Inicializar módulos básicos del sistema
    */
   _initializeBasicModules() {
-    this.logger = new Logger(this.config.eventName, this.config.logging);
-    this.validator = new ValidationModule({}, this.config.logging);
-    this.dataManager = new DataManager(
-      this.config.logging,
-      this.config.dataUrls,
-      this.config.cacheEnabled
-    );
-    this.apiService = new APIService(this.config);
-    this.ui = new UIUtils(this.config.logging);
+    // Logger automáticamente usa configuración de ConfigManager
+    this.logger = new Logger();
+    this.validator = new ValidationModule({}, this.selector);
+    this.dataManager = new DataManager(this.config.dataUrls, this.config.cacheEnabled);
+    this.apiService = new APIService();
+    this.ui = new UIUtils();
 
     // Módulos especializados (se inicializarán después del DOM)
     this.autoSelectManager = null;
@@ -123,13 +118,13 @@ export class FormManager {
    */
   async init() {
     try {
-      this.logger.info(`Inicializando FormManager para: ${this.selector}`);
+      Logger.info(`Inicializando FormManager para: ${this.selector} (${this.config.eventName})`);
 
       // Buscar el formulario
       this.formElement = document.getElementById(this.selector);
       if (!this.formElement) {
         const error = `Formulario no encontrado: ${this.selector}`;
-        this.logger.error(error);
+        Logger.error(error);
         throw new Error(error);
       }
 
@@ -163,9 +158,9 @@ export class FormManager {
       }
 
       this.isInitialized = true;
-      this.logger.info("FormManager inicializado correctamente");
+      Logger.info("FormManager inicializado correctamente");
     } catch (error) {
-      this.logger.error("Error al inicializar FormManager:", error);
+      Logger.error("Error al inicializar FormManager:", error);
       throw error;
     }
   }
@@ -180,8 +175,7 @@ export class FormManager {
       this.formElement,
       this.stateManager,
       this.ui,
-      this.inputSelectors,
-      this.config.logging
+      this.inputSelectors
     );
 
     // Academic fields manager
@@ -192,8 +186,7 @@ export class FormManager {
       this.ui,
       this.autoSelectManager,
       this.inputSelectors,
-      this.config,
-      this.config.logging
+      this.config
     );
 
     // Event listener manager
@@ -201,8 +194,7 @@ export class FormManager {
       this.formElement,
       this.stateManager,
       this.ui,
-      this.inputSelectors,
-      this.config.logging
+      this.inputSelectors
     );
 
     // Registrar callbacks y handlers
@@ -214,15 +206,15 @@ export class FormManager {
    * Configurar callbacks para la lógica de auto-selección de campos
    */
   _registerAutoSelectCallbacks() {
-    this.autoSelectManager.onAutoSelect(AutoSelectManager.FIELD_TYPES.ATTENDEE_TYPE, (value) => {
+    this.autoSelectManager.onAutoSelect(Constants.AUTO_SELECT_TYPES.ATTENDEE_TYPE, (value) => {
       this.handleTypeAttendeeChange(value);
     });
 
-    this.autoSelectManager.onAutoSelect(AutoSelectManager.FIELD_TYPES.ACADEMIC_LEVEL, (value) => {
+    this.autoSelectManager.onAutoSelect(Constants.AUTO_SELECT_TYPES.ACADEMIC_LEVEL, (value) => {
       this.academicFieldsManager.handleAcademicLevelChange(value);
     });
 
-    this.autoSelectManager.onAutoSelect(AutoSelectManager.FIELD_TYPES.FACULTY, (value) => {
+    this.autoSelectManager.onAutoSelect(Constants.AUTO_SELECT_TYPES.FACULTY, (value) => {
       this.academicFieldsManager.handleFacultyChange(value);
     });
   }
@@ -290,28 +282,12 @@ export class FormManager {
     if (errorAuthElement) {
       if (value === "0") {
         errorAuthElement.style.display = "block";
-        this.logger.info("Showing authorization error message");
+        Logger.info("Showing authorization error message");
       } else {
         errorAuthElement.style.display = "none";
-        this.logger.info("Hiding authorization error message");
+        Logger.info("Hiding authorization error message");
       }
     }
-  }
-
-  /**
-   * Aplicar variables CSS personalizadas al documento
-   * Permite personalizar la apariencia del formulario dinámicamente
-   * @param {Object} variables - Variables CSS a aplicar
-   */
-  applyCustomVariables(variables) {
-    const root = document.documentElement;
-
-    Object.entries(variables).forEach(([property, value]) => {
-      const cssProperty = property.startsWith("--") ? property : `--${property}`;
-      root.style.setProperty(cssProperty, value);
-    });
-
-    this.logger.debug("Variables CSS aplicadas:", variables);
   }
 
   /**
@@ -319,16 +295,7 @@ export class FormManager {
    * Establece URLs de Salesforce y campos ocultos necesarios
    */
   configureForm() {
-    this.logger.info("Configurando formulario...");
-
-    // Configurar action del formulario
-    const actionUrl = this.config.debugMode
-      ? this.config.salesforceUrls.test
-      : this.config.salesforceUrls.prod;
-
-    this.formElement.action = actionUrl;
-    this.logger.debug("Action del formulario:", actionUrl);
-    this.logger.debug("Modo debug:", this.config.debugMode);
+    Logger.info("Configurando formulario...");
 
     // Agregar campos ocultos de Salesforce
     this.addHiddenFields();
@@ -341,66 +308,77 @@ export class FormManager {
    * Añadir campos ocultos requeridos para la integración con Salesforce
    */
   addHiddenFields() {
-    const hiddenFields = [
-      { name: "oid", value: this.config.debugMode ? this.config.oids.test : this.config.oids.prod },
-      { name: "retURL", value: this.config.thankYouUrl },
-      { name: "debug", value: this.config.debugMode ? "1" : "0" },
-      { name: "debugEmail", value: this.config.debugMode ? this.config.debugEmail : "" },
-      { name: "lead_source", value: "Landing Pages" },
-      { name: "company", value: "NA" },
+    const { sandboxMode, debugMode, debugEmail } = this.config;
+    const sf = Constants.SALESFORCE_FIELD_MAPPING;
+    const env = sandboxMode ? "test" : "prod";
+
+    const fields = [
+      // Campos básicos
+      { name: "oid", value: sf.OID[env] },
+      { name: sf.RET_URL, value: this.config.thankYouUrl },
+      { name: sf.DEBUG, value: debugMode ? "1" : "0" },
+      { name: sf.DEBUG_EMAIL, value: debugMode ? debugEmail : "" },
+      { name: sf.LEAD_SOURCE, value: this.config.leadSource },
+
+      // Campos dinámicos
+      { name: sf.REQUEST_ORIGIN[env], value: this.config.originRequest },
+      { name: sf.EVENT_NAME[env], value: this.config.eventName },
+      { name: sf.EVENT_DATE[env], value: this.config.eventDate },
+      { name: sf.CAMPAIGN[env], value: this.config.campaign },
+      { name: sf.ARTICLE[env], value: this.config.article },
+      { name: sf.SOURCE[env], value: this.config.source },
+      { name: sf.SUB_SOURCE[env], value: this.config.subSource },
+      { name: sf.MEDIUM[env], value: this.config.medium },
     ];
 
-    hiddenFields.forEach((field) => {
-      // Agregar al DOM
-      this.ui.addHiddenField(this.formElement, field.name, field.value);
-
-      // Agregar al estado del formulario
-      this.formState[field.name] = field.value;
-    });
+    // Agregar campos válidos
+    fields
+      .filter((field) => field.value)
+      .forEach((field) => {
+        this.ui.addHiddenField(this.formElement, field.name, field.value);
+        this.formState[field.name] = field.value;
+      });
   }
 
   /**
    * Configurar valores iniciales y parámetros del evento
    */
   setInitialValues() {
-    // Configurar valores desde la configuración
-    if (this.config.eventName) {
-      this.ui.setHiddenFieldValue(this.formElement, "event_name", this.config.eventName);
-      this.formState.event_name = this.config.eventName;
-    }
+    Logger.info("🔄 Detectando campos en DOM y aplicando valores iniciales del FormStateManager");
 
-    if (this.config.eventDate) {
-      this.ui.setHiddenFieldValue(this.formElement, "event_date", this.config.eventDate);
-      this.formState.event_date = this.config.eventDate;
-    }
+    // Obtener estado inicial del FormStateManager
+    const initialState = this.stateManager.getInitialState();
+    let appliedCount = 0;
 
-    if (this.config.university) {
-      this.ui.setHiddenFieldValue(this.formElement, "university", this.config.university);
-      this.formState.university = this.config.university;
-    }
+    // Buscar todos los inputs en el formulario
+    const allInputs = this.formElement.querySelectorAll("input, select, textarea");
 
-    // Configurar otros valores UTM
-    if (this.config.campaign) {
-      this.ui.setHiddenFieldValue(this.formElement, "campaign", this.config.campaign);
-      this.formState.campaign = this.config.campaign;
-    }
+    allInputs.forEach((element) => {
+      const elementName = element.name || element.id;
+      if (!elementName) return;
 
-    if (this.config.source) {
-      this.ui.setHiddenFieldValue(this.formElement, "source", this.config.source);
-      this.formState.source = this.config.source;
-    }
+      // Verificar si este campo existe en el estado inicial
+      if (initialState.hasOwnProperty(elementName)) {
+        const defaultValue = initialState[elementName];
 
-    if (this.config.medium) {
-      this.ui.setHiddenFieldValue(this.formElement, "medium", this.config.medium);
-      this.formState.medium = this.config.medium;
-    }
+        // Solo aplicar si hay un valor por defecto
+        if (defaultValue || defaultValue === 0) {
+          element.value = defaultValue;
+          appliedCount++;
+        }
+      }
+    });
+
+    Logger.info(
+      `✅ Valores iniciales aplicados automáticamente: ${appliedCount} campos detectados en DOM`
+    );
   }
 
   /**
    * Inicializar campos del formulario
    */
   initializeFields() {
-    this.logger.info("Inicializando campos del formulario...");
+    Logger.info("Inicializando campos del formulario...");
 
     // Inicializar ubicaciones
     this.ui.populateCountries(this.dataManager.getLocations());
@@ -431,17 +409,17 @@ export class FormManager {
    * Establecer valores predeterminados
    */
   setDefaultValues() {
-    this.logger.info("Estableciendo valores predeterminados...");
+    Logger.info("Estableciendo valores predeterminados...");
 
-    // Establecer Colombia como país predeterminado
+    // Establecer país desde el estado del formulario
     const countryElement = this.formElement.querySelector(this.inputSelectors.country);
     if (countryElement) {
-      countryElement.value = Constants.DEFAULT_VALUES.COUNTRY_CODE;
-      this.formState.country = Constants.DEFAULT_VALUES.COUNTRY_CODE;
-      this.logger.info("País predeterminado establecido: Colombia");
+      const countryValue = this.formState.country;
+      countryElement.value = countryValue;
+      Logger.info(`País predeterminado establecido: ${countryValue}`);
 
       // Ejecutar inmediatamente el manejo de cambio de país para mostrar departamentos
-      this.handleCountryChange(Constants.DEFAULT_VALUES.COUNTRY_CODE);
+      this.handleCountryChange(countryValue);
 
       // Verificar si los datos de ubicaciones están disponibles
       const departments = this.dataManager.getDepartments();
@@ -456,12 +434,12 @@ export class FormManager {
       }
     }
 
-    // Establecer +57 como prefijo predeterminado
+    // Establecer prefijo telefónico desde el estado del formulario
     const phoneCodeElement = this.formElement.querySelector(this.inputSelectors.phoneCode);
     if (phoneCodeElement) {
-      phoneCodeElement.value = Constants.DEFAULT_VALUES.PHONE_CODE;
-      this.formState.phone_code = Constants.DEFAULT_VALUES.PHONE_CODE;
-      this.logger.info("Prefijo telefónico predeterminado establecido: +57 (Colombia)");
+      const phoneCodeValue = this.formState.phone_code;
+      phoneCodeElement.value = phoneCodeValue;
+      Logger.info(`Prefijo telefónico predeterminado establecido: +${phoneCodeValue}`);
     }
   }
 
@@ -472,32 +450,34 @@ export class FormManager {
     const departmentElement = this.formElement.querySelector(this.inputSelectors.department);
     if (departmentElement) {
       const departments = this.dataManager.getDepartments();
+      const defaultDepartmentCode = this.formState.department;
 
-      const bogotaDC = departments.find(
+      // Buscar el departamento por el código del estado, o por nombre como fallback
+      const targetDepartment = departments.find(
         (dep) =>
-          dep.nombre &&
-          (dep.nombre.toLowerCase().includes("bogota") ||
-            dep.nombre.toLowerCase().includes("d.c.") ||
-            dep.codigo === Constants.DEFAULT_VALUES.DEPARTMENT_BOGOTA)
+          dep.codigo === defaultDepartmentCode ||
+          (dep.nombre &&
+            (dep.nombre.toLowerCase().includes("bogota") ||
+              dep.nombre.toLowerCase().includes("d.c.")))
       );
 
-      if (bogotaDC) {
-        departmentElement.value = bogotaDC.codigo;
-        this.formState.department = bogotaDC.codigo;
-        this.logger.info(`Departamento predeterminado establecido: ${bogotaDC.nombre}`);
+      if (targetDepartment) {
+        departmentElement.value = targetDepartment.codigo;
+        this.formState.department = targetDepartment.codigo;
+        Logger.info(`Departamento predeterminado establecido: ${targetDepartment.nombre}`);
 
         // Ejecutar inmediatamente el manejo de cambio de departamento para mostrar ciudades
-        this.handleDepartmentChange(bogotaDC.codigo);
+        this.handleDepartmentChange(targetDepartment.codigo);
 
         // Verificar si las ciudades están disponibles
-        const cities = this.dataManager.getCities(bogotaDC.codigo);
+        const cities = this.dataManager.getCities(targetDepartment.codigo);
 
         if (cities.length > 0) {
-          // Establecer Bogotá inmediatamente
-          this.setDefaultCity(bogotaDC.codigo);
+          // Establecer ciudad predeterminada inmediatamente
+          this.setDefaultCity(targetDepartment.codigo);
         } else {
           setTimeout(() => {
-            this.setDefaultCity(bogotaDC.codigo);
+            this.setDefaultCity(targetDepartment.codigo);
           }, 100);
         }
       }
@@ -505,24 +485,25 @@ export class FormManager {
   }
 
   /**
-   * Establecer Bogotá como ciudad predeterminada
+   * Establecer ciudad predeterminada
    */
   setDefaultCity(departmentCode) {
     const cityElement = this.formElement.querySelector(this.inputSelectors.city);
     if (cityElement) {
       const cities = this.dataManager.getCities(departmentCode);
+      const defaultCityCode = this.formState.city;
 
-      const bogota = cities.find(
+      // Buscar la ciudad por el código del estado, o por nombre como fallback
+      const targetCity = cities.find(
         (city) =>
-          city.nombre &&
-          (city.nombre.toLowerCase().includes("bogota") ||
-            city.codigo === Constants.DEFAULT_VALUES.CITY_BOGOTA)
+          city.codigo === defaultCityCode ||
+          (city.nombre && city.nombre.toLowerCase().includes("bogota"))
       );
 
-      if (bogota) {
-        cityElement.value = bogota.codigo;
-        this.formState.city = bogota.codigo;
-        this.logger.info(`Ciudad predeterminada establecida: ${bogota.nombre}`);
+      if (targetCity) {
+        cityElement.value = targetCity.codigo;
+        this.formState.city = targetCity.codigo;
+        Logger.info(`Ciudad predeterminada establecida: ${targetCity.nombre}`);
       }
     }
   }
@@ -531,7 +512,7 @@ export class FormManager {
    * Auto-seleccionar y ocultar opciones únicas usando AutoSelectManager
    */
   autoSelectSingleOptions() {
-    this.logger.info("🔄 Ejecutando auto-selección de campos únicos...");
+    Logger.info("🔄 Ejecutando auto-selección de campos únicos...");
     this.autoSelectManager.autoSelectAllConfiguredFields(this.config);
   }
 
@@ -546,12 +527,12 @@ export class FormManager {
         element.value = faculty;
         this.formState.faculty = faculty;
         this.ui.hideElement(element);
-        this.logger.info(`Facultad auto-seleccionada y ocultada: ${faculty}`);
+        Logger.info(`Facultad auto-seleccionada y ocultada: ${faculty}`);
 
         // CRUCIAL: Ejecutar la lógica de cambio inmediatamente para cargar programas
         // incluso cuando el campo está oculto
         setTimeout(() => {
-          this.logger.info(`🚀 Auto-cargando programas para facultad oculta: ${faculty}`);
+          Logger.info(`🚀 Auto-cargando programas para facultad oculta: ${faculty}`);
           this.handleFacultyChange(faculty);
         }, 100);
 
@@ -573,7 +554,7 @@ export class FormManager {
         element.value = value;
         this.formState.program = value;
         this.ui.hideElement(element);
-        this.logger.info(
+        Logger.info(
           `Programa auto-seleccionado y ocultado: ${program.Nombre || program.nombre || value}`
         );
         return true;
@@ -586,7 +567,7 @@ export class FormManager {
    * Configurar event listeners usando EventListenerManager
    */
   setupEventListeners() {
-    this.logger.info("🎧 Configurando event listeners usando EventListenerManager...");
+    Logger.info("🎧 Configurando event listeners usando EventListenerManager...");
     this.eventListenerManager.setupAllEventListeners();
   }
 
@@ -606,8 +587,20 @@ export class FormManager {
       if (this.config.validation.showErrorsOnBlur) {
         field.addEventListener("blur", () => {
           // Solo validar si el campo ha sido tocado
-          if (this.stateManager.isFieldTouched(field.id || field.name)) {
-            this.validateField(field);
+          const fieldName = field.id || field.name;
+          if (this.stateManager.isFieldTouched(fieldName)) {
+            // Usar ValidationModule directamente
+            const validationResult = this.validator.validateFieldWithRules(fieldName, field.value);
+
+            if (!validationResult.isValid) {
+              // Guardar error en estado y mostrar en UI
+              this.stateManager.setValidationError(fieldName, validationResult.error);
+              this.ui.showFieldError(field, validationResult.error);
+            } else {
+              // Limpiar errores
+              this.stateManager.clearValidationError(fieldName);
+              this.ui.hideFieldError(field);
+            }
           }
         });
       }
@@ -623,33 +616,16 @@ export class FormManager {
   }
 
   /**
-   * Validar un campo específico
-   */
-  validateField(field, forceShow = false) {
-    const isValid = this.validator.validateField(field);
-    const fieldKey = field.name || field.id;
-
-    if (!isValid) {
-      this.stateManager.setValidationError(fieldKey, this.validator.getErrorMessage(field));
-      // Solo mostrar error si el campo ha sido tocado o es validación forzada (submit)
-      if (forceShow || this.stateManager.isFieldTouched(fieldKey)) {
-        this.ui.showFieldError(field, this.validator.getErrorMessage(field));
-      }
-    } else {
-      this.stateManager.clearValidationError(fieldKey);
-      this.ui.hideFieldError(field);
-    }
-
-    return isValid;
-  }
-
-  /**
    * Manejar cambio de país
    */
   handleCountryChange(value) {
     this.stateManager.updateField("country", value);
 
-    if (value === Constants.DEFAULT_VALUES.COUNTRY_CODE) {
+    // Obtener el país por defecto del estado inicial para la comparación
+    const initialState = this.stateManager.getInitialState();
+    const defaultCountry = initialState[Constants.FIELD_NAMES.LOCATION.COUNTRY];
+
+    if (value === defaultCountry) {
       const departments = this.dataManager.getDepartments();
       // Poblar departamentos priorizando Bogotá D.C.
       this.ui.populateSelect(this.inputSelectors.department, departments, "codigo", "nombre", [
@@ -698,10 +674,11 @@ export class FormManager {
     }
 
     this.stateManager.updateField("type_attendee", value);
-    this.logger.info(`👤 Tipo de asistente cambiado a: ${value}`);
+    Logger.info(`👤 Tipo de asistente cambiado a: ${value}`);
 
-    if (value === Constants.DEFAULT_VALUES.ATTENDEE_TYPE_APPLICANT) {
-      this.logger.info("🎓 Procesando lógica de Aspirante");
+    // Usar la constante semántica para comparar
+    if (value === Constants.ATTENDEE_TYPES.APPLICANT) {
+      Logger.info("🎓 Procesando lógica de Aspirante");
       this.academicFieldsManager.showAcademicFields();
 
       // Procesar campos auto-seleccionados
@@ -709,20 +686,10 @@ export class FormManager {
         this.academicFieldsManager.processAutoSelectedFields();
       }, 200);
     } else {
-      this.logger.info("👤 No es aspirante, ocultando campos académicos");
+      Logger.info("👤 No es aspirante, ocultando campos académicos");
       this.academicFieldsManager.hideAcademicFields();
     }
   }
-
-  // Método removido - ahora delegado a AcademicFieldsManager.processAutoSelectedFields()
-
-  // Método removido - ahora delegado a AcademicFieldsManager.showAcademicFields()
-
-  // Método removido - ahora delegado a AcademicFieldsManager.hideAcademicFields()
-
-  // Método removido - ahora delegado a AcademicFieldsManager.handleAcademicLevelChange()
-
-  // Método removido - ahora delegado a AcademicFieldsManager.handleFacultyChange()
 
   /**
    * Procesar parámetros URL
@@ -750,70 +717,100 @@ export class FormManager {
   }
 
   /**
-   * Validar todo el formulario
-   */
-  validateForm() {
-    const fields = this.formElement.querySelectorAll("input[required], select[required]");
-    let isValid = true;
-
-    fields.forEach((field) => {
-      // Forzar mostrar errores durante validación completa (submit)
-      if (!this.validateField(field, true)) {
-        isValid = false;
-      }
-    });
-
-    return isValid;
-  }
-
-  /**
-   * Manejar envío del formulario
+   * Único manejador de envío del formulario
+   * No envía datos hasta que todo el formulario esté válido
    */
   async handleSubmit(e) {
     e.preventDefault();
 
-    if (this.isSubmitting) return;
-
-    // Validar formulario
-    if (!this.validateForm()) {
-      this.logger.error("Formulario inválido");
+    // Prevenir múltiples envíos
+    if (this.isSubmitting) {
+      Logger.warn("⚠️ Envío ya en progreso, ignorando intento adicional");
       return;
     }
 
+    Logger.info("🚀 Iniciando proceso de envío del formulario");
+
+    // PASO 1: Validación completa obligatoria
+    const formData = this.stateManager.getFormData();
+    const validationResult = this.validator.validateFullForm(this.formElement, formData);
+
+    if (!validationResult.isValid) {
+      Logger.error(
+        `❌ Formulario inválido. Errores: ${Object.keys(validationResult.errors).length}`
+      );
+
+      // Mostrar todos los errores en UI
+      Object.entries(validationResult.errors).forEach(([fieldName, errorMessage]) => {
+        const field =
+          this.formElement.querySelector(`[name="${fieldName}"]`) ||
+          this.formElement.querySelector(`[id="${fieldName}"]`);
+
+        if (field) {
+          this.stateManager.markFieldAsTouched(fieldName);
+          this.stateManager.setValidationError(fieldName, errorMessage);
+          this.ui.showFieldError(field, errorMessage);
+        } else {
+          Logger.warn(`Campo con error no encontrado en DOM: ${fieldName}`);
+        }
+      });
+
+      // NO CONTINUAR - formulario inválido
+      return;
+    }
+
+    Logger.info("✅ Formulario válido - procediendo con envío");
+
+    // PASO 2: Bloquear UI durante envío
     this.isSubmitting = true;
     const submitBtn = this.formElement.querySelector(this.inputSelectors.submitButton);
     if (submitBtn) {
       submitBtn.disabled = true;
+      submitBtn.textContent = submitBtn.dataset.loadingText || "Enviando...";
     }
 
     try {
-      // Ejecutar callback personalizado
+      // PASO 3: Callback pre-envío (opcional)
       if (this.config.callbacks.onFormSubmit) {
-        const shouldContinue = await this.config.callbacks.onFormSubmit(this.formState, this);
+        const shouldContinue = await this.config.callbacks.onFormSubmit(formData, this);
         if (!shouldContinue) {
+          Logger.info("📋 Envío cancelado por callback personalizado");
           return;
         }
       }
 
-      // Modo desarrollo
+      // PASO 4: Modo desarrollo (simulación)
       if (this.config.devMode) {
-        this.logger.info("🔧 DEV_MODE: Datos del formulario:", this.formState);
+        Logger.info("🔧 DEV_MODE: Simulando envío exitoso");
+        Logger.debug("Datos que se enviarían:", formData);
         this.ui.showSuccessMessage("Formulario enviado correctamente (modo desarrollo)");
         return;
       }
 
-      // Enviar formulario
-      await this.apiService.submitForm(this.formElement, this.formState);
-    } catch (error) {
-      this.logger.error("Error al enviar formulario:", error);
+      // PASO 5: Envío real a Salesforce
+      Logger.info("📡 Enviando datos a Salesforce...");
+      const result = await this.apiService.submitForm(this.formElement);
 
+      Logger.info("✅ Formulario enviado exitosamente");
+      if (this.config.callbacks.onFormSuccess) {
+        this.config.callbacks.onFormSuccess(result, this);
+      }
+    } catch (error) {
+      Logger.error("❌ Error durante el envío:", error);
+
+      // Callback de error
       if (this.config.callbacks.onValidationError) {
         this.config.callbacks.onValidationError(error, this);
       }
+
+      // Mostrar error en UI
+      this.ui.showErrorMessage("Error al enviar el formulario. Por favor, intente nuevamente.");
     } finally {
+      // PASO 6: Restaurar UI
       this.isSubmitting = false;
       if (submitBtn) {
         submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || "Enviar";
       }
     }
   }
@@ -824,7 +821,7 @@ export class FormManager {
   setDebugMode(enabled) {
     this.config.debugMode = enabled;
     this.configureForm();
-    this.logger.info(`Modo debug: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    Logger.info(`Modo debug: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
 
   /**
@@ -832,7 +829,7 @@ export class FormManager {
    */
   setDevMode(enabled) {
     this.config.devMode = enabled;
-    this.logger.info(`Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    Logger.info(`Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
 
   /**
@@ -887,21 +884,21 @@ export class FormManager {
    * Habilitar logging
    */
   enableLogging() {
-    this.logger.enable();
+    Logger.enable();
   }
 
   /**
    * Deshabilitar logging
    */
   disableLogging() {
-    this.logger.disable();
+    Logger.disable();
   }
 
   /**
    * Alternar logging
    */
   toggleLogging() {
-    this.logger.toggle();
+    Logger.toggle();
   }
 
   /**
@@ -909,35 +906,35 @@ export class FormManager {
    * @param {string} level - Nivel ('error', 'warn', 'info', 'debug')
    */
   setLogLevel(level) {
-    this.logger.setLevel(level);
+    Logger.setLevel(level);
   }
 
   /**
    * Obtener configuración de logging
    */
   getLoggingConfig() {
-    return this.logger.getConfig();
+    return Logger.getLoggingConfig();
   }
 
   /**
    * Obtener logs persistidos
    */
   getLogs() {
-    return this.logger.getLogs();
+    return Logger.getLogs();
   }
 
   /**
    * Limpiar logs
    */
   clearLogs() {
-    this.logger.clearLogs();
+    Logger.clearLogs();
   }
 
   /**
    * Obtener estadísticas de logging
    */
   getLoggingStats() {
-    return this.logger.getStats();
+    return Logger.getStats();
   }
 
   /**
@@ -945,7 +942,7 @@ export class FormManager {
    * @param {string} format - Formato ('json', 'csv', 'txt')
    */
   exportLogs(format = "json") {
-    return this.logger.exportLogs(format);
+    return Logger.exportLogs(format);
   }
 
   /**
@@ -954,9 +951,14 @@ export class FormManager {
    * @param {number} maxLogs - Máximo número de logs
    */
   setLogPersistence(persist = true, maxLogs = 1000) {
-    this.logger.config.persistLogs = persist;
-    this.logger.config.maxLogs = maxLogs;
-    this.logger.info(
+    // Actualizar configuración via ConfigManager para que se propague a Logger
+    ConfigManager.updateConfig({
+      logging: {
+        persistLogs: persist,
+        maxLogs: maxLogs,
+      },
+    });
+    Logger.info(
       `Persistencia de logs ${persist ? "habilitada" : "deshabilitada"} (max: ${maxLogs})`
     );
   }
@@ -966,7 +968,7 @@ export class FormManager {
    * @param {Function} callback - Función callback
    */
   addLogListener(callback) {
-    this.logger.addListener(callback);
+    Logger.addListener(callback);
   }
 
   /**
@@ -982,7 +984,7 @@ export class FormManager {
       this.submitButton = null;
     }
 
-    this.logger.info("FormManager destruido");
+    Logger.info("FormManager destruido");
     this.isInitialized = false;
   }
 }

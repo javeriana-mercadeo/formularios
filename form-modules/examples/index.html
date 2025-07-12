@@ -311,7 +311,6 @@
                               placeholder="*Nombre(s)"
                               data-puj-form="first_name"
                               name="first_name"
-                              required
                             />
                           </div>
                           <div class="name-field">
@@ -320,7 +319,6 @@
                               placeholder="*Apellidos"
                               data-puj-form="last_name"
                               name="last_name"
-                              required
                             />
                           </div>
                         </div>
@@ -328,7 +326,7 @@
                         <!-- Documento de identidad -->
                         <div class="document-row">
                           <div class="document-type-field">
-                            <select data-puj-form="type_doc" name="type_doc" required>
+                            <select data-puj-form="type_doc" name="type_doc">
                               <option value="">*Tipo de documento</option>
                               <option value="CC">Cédula Ciudadanía</option>
                               <option value="CE">Cédula Extranjería</option>
@@ -342,7 +340,6 @@
                               placeholder="*Número de documento"
                               data-puj-form="document"
                               name="document"
-                              required
                             />
                           </div>
                         </div>
@@ -354,13 +351,12 @@
                           data-puj-form="email"
                           name="email"
                           maxlength="80"
-                          required
                         />
 
                         <!-- Phone row -->
                         <div class="phone-row">
                           <div class="prefix-field">
-                            <select data-puj-form="phone_code" name="phone_code" required>
+                            <select data-puj-form="phone_code" name="phone_code">
                               <option value="">(+) Indicativo</option>
                               <!-- Options will be populated by JavaScript -->
                             </select>
@@ -371,13 +367,12 @@
                               placeholder="*Teléfono celular"
                               data-puj-form="phone"
                               name="phone"
-                              required
                             />
                           </div>
                         </div>
 
                         <!-- Ubicación -->
-                        <select data-puj-form="country" name="country" required>
+                        <select data-puj-form="country" name="country">
                           <option value="">*País de residencia</option>
                           <!-- Options will be populated by JavaScript -->
                         </select>
@@ -393,13 +388,13 @@
                         </select>
 
                         <!-- Día de asistencia -->
-                        <select data-puj-form="attendance_day" name="attendance_day" required>
+                        <select data-puj-form="attendance_day" name="attendance_day">
                           <option value="">*Día de asistencia</option>
                           <!-- Options will be populated by JavaScript -->
                         </select>
 
                         <!-- Tipo de asistente -->
-                        <select data-puj-form="type_attendee" name="type_attendee" required>
+                        <select data-puj-form="type_attendee" name="type_attendee">
                           <option value="">*Tipo de asistente</option>
                           <!-- Options will be populated by JavaScript -->
                         </select>
@@ -470,7 +465,7 @@
                             </div>
                           </div>
 
-                          <div class="error_text" data-puj-form="error_auth">
+                          <div class="error_text" data-puj-form="error_auth" style="display: none">
                             La Pontificia Universidad Javeriana requiere de tu autorización para el
                             tratamiento de tus datos personales para continuar con el presente
                             proceso, sin la autorización legalmente no podemos darte continuidad al

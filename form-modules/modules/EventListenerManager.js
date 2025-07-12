@@ -63,12 +63,11 @@ export class EventListenerManager {
     NUMBERS: "cleanNumbers",
   };
 
-  constructor(formElement, stateManager, ui, inputSelectors, loggerConfig = {}) {
+  constructor(formElement, stateManager, ui, inputSelectors) {
     this.formElement = formElement;
     this.stateManager = stateManager;
     this.ui = ui;
     this.inputSelectors = inputSelectors;
-    this.logger = new Logger("EventListenerManager", loggerConfig);
 
     // External handlers that can be registered
     this.handlers = new Map();
@@ -85,7 +84,7 @@ export class EventListenerManager {
    * Configurar todos los event listeners del formulario
    */
   setupAllEventListeners() {
-    this.logger.info("🎧 Configurando todos los event listeners...");
+    Logger.info("🎧 Configurando todos los event listeners...");
 
     this._setupTextInputListeners();
     this._setupSelectListeners();
@@ -94,7 +93,7 @@ export class EventListenerManager {
     this._setupAuthorizationListener();
     this._setupSubmitListener();
 
-    this.logger.info("✅ Event listeners configurados exitosamente");
+    Logger.info("✅ Event listeners configurados exitosamente");
   }
 
   /**
@@ -260,7 +259,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.COUNTRY_CHANGE}`
       );
     }
@@ -274,7 +273,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.DEPARTMENT_CHANGE}`
       );
     }
@@ -288,7 +287,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE}`
       );
     }
@@ -302,7 +301,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE}`
       );
     }
@@ -316,7 +315,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FACULTY_CHANGE}`
       );
     }
@@ -332,7 +331,7 @@ export class EventListenerManager {
     if (handler) {
       handler(value);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.AUTHORIZATION_CHANGE}`
       );
     }
@@ -346,7 +345,7 @@ export class EventListenerManager {
     if (handler) {
       handler(event);
     } else {
-      this.logger.warn(
+      Logger.warn(
         `No hay handler registrado para ${EventListenerManager.HANDLER_TYPES.FORM_SUBMIT}`
       );
       event.preventDefault();
@@ -357,14 +356,14 @@ export class EventListenerManager {
    * Remover todos los event listeners
    */
   removeAllListeners() {
-    this.logger.info("🧹 Removiendo todos los event listeners");
+    Logger.info("🧹 Removiendo todos los event listeners");
 
     // Clonar el formulario para remover todos los listeners
     const newForm = this.formElement.cloneNode(true);
     this.formElement.parentNode.replaceChild(newForm, this.formElement);
     this.formElement = newForm;
 
-    this.logger.info("✅ Event listeners removidos");
+    Logger.info("✅ Event listeners removidos");
   }
 
   /**
@@ -391,7 +390,7 @@ export class EventListenerManager {
   removeHandler(eventType) {
     const removed = this.handlers.delete(eventType);
     if (removed) {
-      this.logger.info(`Handler removido: ${eventType}`);
+      Logger.info(`Handler removido: ${eventType}`);
     }
     return removed;
   }
@@ -401,6 +400,6 @@ export class EventListenerManager {
    */
   clearHandlers() {
     this.handlers.clear();
-    this.logger.info("🧹 Todos los handlers han sido limpiados");
+    Logger.info("🧹 Todos los handlers han sido limpiados");
   }
 }

@@ -8,48 +8,16 @@
  */
 
 export class Constants {
-  // Selectores de campos del formulario
-  static INPUT_SELECTORS = {
-    PERSONAL: {
-      FIRST_NAME: '[name="first_name"]',
-      LAST_NAME: '[name="last_name"]',
-      TYPE_DOC: '[name="type_doc"]',
-      DOCUMENT: '[name="document"]',
-      EMAIL: '[name="email"]',
-      PHONE_CODE: '[name="phone_code"]',
-      PHONE: '[name="phone"]',
-    },
-    LOCATION: {
-      COUNTRY: '[name="country"]',
-      DEPARTMENT: '[name="department"]',
-      CITY: '[name="city"]',
-    },
-    EVENT: {
-      ATTENDANCE_DAY: '[name="attendance_day"]',
-      TYPE_ATTENDEE: '[name="type_attendee"]',
-    },
-    ACADEMIC: {
-      ACADEMIC_LEVEL: '[name="academic_level"]',
-      FACULTY: '[name="Facultad"]',
-      PROGRAM: '[name="program"]',
-      ADMISSION_PERIOD: '[name="admission_period"]',
-    },
-    FORM_CONTROLS: {
-      SUBMIT_BUTTON: '[type="submit"]',
-      AUTHORIZATION_DATA: "authorization_data",
-    },
-  };
-
   // Nombres de campos para validación y estado
   static FIELD_NAMES = {
     PERSONAL: {
       FIRST_NAME: "first_name",
       LAST_NAME: "last_name",
-      EMAIL: "email",
-      PHONE: "phone",
-      DOCUMENT: "document",
       TYPE_DOC: "type_doc",
+      DOCUMENT: "document",
+      EMAIL: "email",
       PHONE_CODE: "phone_code",
+      PHONE: "phone",
     },
     LOCATION: {
       COUNTRY: "country",
@@ -71,66 +39,70 @@ export class Constants {
     },
   };
 
-  // Valores por defecto del sistema
-  static DEFAULT_VALUES = {
-    COUNTRY_CODE: "COL",
-    PHONE_CODE: "57",
-    DEPARTMENT_BOGOTA: "11",
-    CITY_BOGOTA: "11001",
-    ATTENDEE_TYPE_APPLICANT: "Aspirante",
+  // Selectores de campos del formulario
+  static INPUT_SELECTORS = {
+    PERSONAL: {
+      FIRST_NAME: `[name="${Constants.FIELD_NAMES.PERSONAL.FIRST_NAME}"]`,
+      LAST_NAME: `[name="${Constants.FIELD_NAMES.PERSONAL.LAST_NAME}"]`,
+      TYPE_DOC: `[name="${Constants.FIELD_NAMES.PERSONAL.TYPE_DOC}"]`,
+      DOCUMENT: `[name="${Constants.FIELD_NAMES.PERSONAL.DOCUMENT}"]`,
+      EMAIL: `[name="${Constants.FIELD_NAMES.PERSONAL.EMAIL}"]`,
+      PHONE_CODE: `[name="${Constants.FIELD_NAMES.PERSONAL.PHONE_CODE}"]`,
+      PHONE: `[name="${Constants.FIELD_NAMES.PERSONAL.PHONE}"]`,
+    },
+    LOCATION: {
+      COUNTRY: `[name="${Constants.FIELD_NAMES.LOCATION.COUNTRY}"]`,
+      DEPARTMENT: `[name="${Constants.FIELD_NAMES.LOCATION.DEPARTMENT}"]`,
+      CITY: `[name="${Constants.FIELD_NAMES.LOCATION.CITY}"]`,
+    },
+    EVENT: {
+      ATTENDANCE_DAY: `[name="${Constants.FIELD_NAMES.EVENT.ATTENDANCE_DAY}"]`,
+      TYPE_ATTENDEE: `[name="${Constants.FIELD_NAMES.EVENT.TYPE_ATTENDEE}"]`,
+    },
+    ACADEMIC: {
+      ACADEMIC_LEVEL: `[name="${Constants.FIELD_NAMES.ACADEMIC.ACADEMIC_LEVEL}"]`,
+      FACULTY: `[name="${Constants.FIELD_NAMES.ACADEMIC.FACULTY}"]`,
+      PROGRAM: `[name="${Constants.FIELD_NAMES.ACADEMIC.PROGRAM}"]`,
+      ADMISSION_PERIOD: `[name="${Constants.FIELD_NAMES.ACADEMIC.ADMISSION_PERIOD}"]`,
+    },
+    FORM_CONTROLS: {
+      SUBMIT_BUTTON: '[type="submit"]',
+      AUTHORIZATION_DATA: "authorization_data",
+    },
   };
 
-  // Estados del sistema
-  static SYSTEM_STATE = {
-    INITIALIZED: "initialized",
-    SUBMITTING: "submitting",
-    LOADING: "loading",
+  static ATTENDEE_TYPES = {
+    APPLICANT: "Aspirante",
+    FAMILY_MEMBER: "Padre de familia y/o acudiente",
+    CURRENT_STUDENT: "Estudiante actual",
+    GRADUATE: "Graduado",
+    TEACHER: "Docente y/o psicoorientador",
+    VISITOR: "Visitante PUJ",
+    ADMINISTRATIVE: "Administrativo PUJ",
+    BUSINESS: "Empresario",
   };
 
-  // Tipos de validación
-  static VALIDATION_TYPES = {
-    REQUIRED: "required",
-    NAME: "name",
-    EMAIL: "email",
-    PHONE: "phone",
-    DOCUMENT: "document",
-  };
-
-  // Patrones de validación
-  static VALIDATION_PATTERNS = {
-    NAME: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-    EMAIL:
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    PHONE: /^[\d\s\-\+\(\)]+$/,
-    DOCUMENT: /^\d{6,12}$/,
-  };
-
-  // Mensajes de error estándar
-  static ERROR_MESSAGES = {
-    REQUIRED: "Este campo es obligatorio",
-    NAME: "Mínimo 2 caracteres, solo letras",
-    EMAIL: "Ingrese un correo electrónico válido",
-    PHONE: "Número de teléfono válido (mínimo 7 dígitos)",
-    DOCUMENT: "Solo números, entre 6 y 12 dígitos",
-    AUTHORIZATION: "Debe autorizar el tratamiento de datos personales",
-  };
-
-  // Configuración por defecto de validación
-  static VALIDATION_CONFIG = {
-    MIN_NAME_LENGTH: 2,
-    MIN_PHONE_LENGTH: 7,
-    MIN_DOCUMENT_LENGTH: 6,
-    MAX_DOCUMENT_LENGTH: 12,
-  };
-
-  // Clases CSS estándar
-  static CSS_CLASSES = {
-    ERROR: "error",
-    VALID: "validated",
-    ERROR_TEXT: "error_text",
-    HIDDEN: "hidden",
-    LOADING: "loading",
-    DISABLED: "disabled",
+  static ACADEMIC_LEVELS = {
+    UNDERGRADUATE: {
+      code: "PREG",
+      name: "Pregrado",
+    },
+    GRADUATE: {
+      code: "GRAD",
+      name: "Posgrado",
+    },
+    ECCLESIASTICAL: {
+      code: "ECLE",
+      name: "Eclesiástico",
+    },
+    TECHNICAL: {
+      code: "ETDH",
+      name: "Técnico",
+    },
+    CONTINUING_EDUCATION: {
+      code: "EDCO",
+      name: "Educación Continua",
+    },
   };
 
   // Tipos de campos para auto-selección
@@ -170,6 +142,57 @@ export class Constants {
     ENABLED: true,
     PERSIST: false,
     MAX_LOGS: 1000,
+  };
+
+  static THANK_YOU_PAGE = "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY";
+
+  static SALESFORCE_SUBMIT_URLS = {
+    test: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+    prod: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+  };
+
+  // Mapeo de campos de Salesforce para APIService
+  static SALESFORCE_FIELD_MAPPING = {
+    // Campos estáticos
+    OID: { test: "00D7j0000004eQD", prod: "00Df4000003l8Bf" },
+    RET_URL: "retURL",
+    DEBUG: "debug",
+    DEBUG_EMAIL: "debugEmail",
+
+    // Campos personales
+    NAME: "first_name",
+    LAST_NAME: "last_name",
+    DOCUMENT_TYPE: { test: "00N7j000002BI3X", prod: "00N5G00000WmhsT" },
+    DOCUMENT_NUMBER: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" },
+    EMAIL: "email",
+    PHONE_PREFIX: { test: "00NO4000002IUPh", prod: "00NJw000002mzb7" },
+    PHONE: "phone",
+    COUNTRY_RESIDENCE: { test: "00N7j000002BY1c", prod: "00N5G00000WmhvJ" },
+    DEPARTMENT_RESIDENCE: { test: "00N7j000002BY1h", prod: "00N5G00000WmhvX" },
+    CITY_RESIDENCE: { test: "00N7j000002BY1i", prod: "00N5G00000WmhvO" },
+    ADMISSION_PERIOD: { test: "00N7j000002BY2L", prod: "00N5G00000WmhvI" },
+    LEAD_SOURCE: "lead_source",
+    AUTHORIZATION_SOURCE: { test: "00N7j000002BY26", prod: "00N5G00000WmhvT" },
+    SAE_CODE: { test: "00N7j000002BI3p", prod: "00N5G00000WmhvV" },
+
+    // Datos de eventos
+    ATTENDEE_TYPE: { test: "00NO40000000sTR", prod: "00NJw000001J3g6" },
+    ACADEMIC_LEVEL: { test: "nivelacademico", prod: "nivelacademico" },
+    FACULTY: { test: "Facultad", prod: "Facultad" },
+    ATTENDANCE_DAY: { test: "00NO4000007qrPB", prod: "00NJw000004iulj" },
+    COLLEGE: { test: "00NO4000005begL", prod: "00NJw0000041omr" },
+
+    REQUEST_ORIGIN: { test: "00NO40000002ZeP", prod: "00NJw000001J3HI" },
+    SOURCE: { test: "00N7j000002BKgW", prod: "00N5G00000WmhvW" },
+    SUB_SOURCE: { test: "00N7j000002BKgb", prod: "00N5G00000WmhvZ" },
+    MEDIUM: { test: "00NO40000001izt", prod: "00NJw000001J3g8" },
+    CAMPAIGN: { test: "00N7j000002BfKF", prod: "00N5G00000Wmi8X" },
+    DATA_AUTHORIZATION: { test: "00N7j000002BI3m", prod: "00N5G00000WmhvF" },
+    ARTICLE: { test: "00NO400000D2PVt", prod: "00NJw000006f1BB" },
+    EVENT_NAME: { test: "00NO400000AIAxR", prod: "00NJw000006f1BF" },
+    EVENT_DATE: { test: "00NO400000AIanI", prod: "00NJw000006f1BE" },
+    UNIVERSITY: { test: "00NO400000B66Z3", prod: "00NJw000006f1BG" },
+    PARTNER_COMPANY: { test: "00NO400000B68fh", prod: "00NJw000006F1BC" },
   };
 
   /**
@@ -213,55 +236,13 @@ export class Constants {
   }
 
   /**
-   * Obtener patrón de validación por tipo
-   * @param {string} validationType - Tipo de validación
-   * @returns {RegExp} - Patrón de validación
-   */
-  static getValidationPattern(validationType) {
-    const pattern = this.VALIDATION_PATTERNS[validationType];
-    if (!pattern) {
-      throw new Error(`Patrón de validación no encontrado: ${validationType}`);
-    }
-    return pattern;
-  }
-
-  /**
-   * Obtener mensaje de error por tipo
-   * @param {string} errorType - Tipo de error
-   * @returns {string} - Mensaje de error
-   */
-  static getErrorMessage(errorType) {
-    const message = this.ERROR_MESSAGES[errorType];
-    if (!message) {
-      throw new Error(`Mensaje de error no encontrado: ${errorType}`);
-    }
-    return message;
-  }
-
-  /**
-   * Verificar si un valor es un valor por defecto del sistema
-   * @param {string} value - Valor a verificar
-   * @returns {boolean} - True si es un valor por defecto
-   */
-  static isDefaultValue(value) {
-    return Object.values(this.DEFAULT_VALUES).includes(value);
-  }
-
-  /**
    * Obtener configuración completa para un módulo específico
-   * @param {string} moduleType - Tipo de módulo (validation, ui, autoSelect, etc.)
+   * @param {string} moduleType - Tipo de módulo (ui, autoSelect, logging)
    * @returns {Object} - Configuración del módulo
    */
   static getModuleConfig(moduleType) {
     const configs = {
-      validation: {
-        patterns: this.VALIDATION_PATTERNS,
-        messages: this.ERROR_MESSAGES,
-        config: this.VALIDATION_CONFIG,
-        types: this.VALIDATION_TYPES,
-      },
       ui: {
-        classes: this.CSS_CLASSES,
         animation: this.ANIMATION_CONFIG,
         texts: this.UI_TEXTS,
       },

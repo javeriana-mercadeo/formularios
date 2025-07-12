@@ -12,9 +12,10 @@
  */
 
 import { Logger } from "./Logger.js";
+import { ConfigManager } from "./ConfigManager.js";
 
 export class UIUtils {
-  constructor(loggerConfig = {}) {
+  constructor() {
     // Configuración por defecto
     this.config = {
       errorClass: "error",
@@ -32,7 +33,36 @@ export class UIUtils {
       errorText: "Error al procesar",
     };
 
-    this.logger = new Logger("UIUtils", loggerConfig);
+    // Contexto del formulario desde ConfigManager
+    this.formContext = null;
+  }
+
+  /**
+   * Obtener contexto del formulario actual desde ConfigManager
+   * @returns {HTMLElement} - Elemento del formulario o document si no hay contexto
+   */
+  getFormContext() {
+    if (!this.formContext) {
+      this.formContext = ConfigManager.getFormElement();
+    }
+    return this.formContext || document;
+  }
+
+  /**
+   * Actualizar contexto del formulario (útil cuando cambia dinámicamente)
+   * @param {HTMLElement} newContext - Nuevo contexto del formulario
+   */
+  setFormContext(newContext) {
+    this.formContext = newContext;
+    Logger.debug(`Contexto de UIUtils actualizado:`, newContext ? newContext.id : 'document');
+  }
+
+  /**
+   * Refrescar contexto del formulario desde ConfigManager
+   */
+  refreshFormContext() {
+    this.formContext = ConfigManager.getFormElement();
+    Logger.debug(`Contexto de UIUtils refrescado desde ConfigManager`);
   }
 
   /**
@@ -94,14 +124,15 @@ export class UIUtils {
   /**
    * Buscar elemento en el DOM con manejo seguro de errores
    * @param {string} selector - Selector CSS
-   * @param {HTMLElement} context - Contexto de búsqueda
+   * @param {HTMLElement} context - Contexto de búsqueda (opcional, usa formContext por defecto)
    * @returns {HTMLElement|null} - Elemento encontrado o null
    */
-  findElement(selector, context = document) {
+  findElement(selector, context = null) {
     try {
-      return context.querySelector(selector);
+      const searchContext = context || this.getFormContext();
+      return searchContext.querySelector(selector);
     } catch (error) {
-      this.logger.error(`Error al buscar elemento: ${selector}`, error);
+      Logger.error(`Error al buscar elemento: ${selector}`, error);
       return null;
     }
   }
@@ -109,14 +140,15 @@ export class UIUtils {
   /**
    * Buscar múltiples elementos con manejo de errores
    * @param {string} selector - Selector CSS
-   * @param {HTMLElement} context - Contexto de búsqueda
+   * @param {HTMLElement} context - Contexto de búsqueda (opcional, usa formContext por defecto)
    * @returns {NodeList} - Lista de elementos encontrados
    */
-  findElements(selector, context = document) {
+  findElements(selector, context = null) {
     try {
-      return context.querySelectorAll(selector);
+      const searchContext = context || this.getFormContext();
+      return searchContext.querySelectorAll(selector);
     } catch (error) {
-      this.logger.error(`Error al buscar elementos: ${selector}`, error);
+      Logger.error(`Error al buscar elementos: ${selector}`, error);
       return [];
     }
   }
@@ -187,14 +219,22 @@ export class UIUtils {
 
   /**
    * Poblar elemento select con opciones dinámicamente
-   * Incluye manejo de prioridades y validación de datos
+   * Incluye manejo de prioridades, validación de datos y auto-ocultación
    * @param {string|HTMLElement} selector - Selector o elemento
    * @param {Array} options - Opciones a agregar
    * @param {string} valueKey - Clave para el valor
    * @param {string} textKey - Clave para el texto
    * @param {Array} priorityItems - Items prioritarios
+   * @param {boolean} autoHide - Si auto-ocultar cuando hay una sola opción (default: true)
    */
-  populateSelect(selector, options, valueKey = null, textKey = null, priorityItems = []) {
+  populateSelect(
+    selector,
+    options,
+    valueKey = null,
+    textKey = null,
+    priorityItems = [],
+    autoHide = true
+  ) {
     // Validar que las opciones sean un array válido
     if (!this._validateOptionsArray(options)) {
       return;
@@ -203,9 +243,7 @@ export class UIUtils {
     const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
 
     if (!selectElement) {
-      this.logger.error(
-        `PopulateSelect - No se encontró el elemento select con selector: ${selector}`
-      );
+      Logger.error(`PopulateSelect - No se encontró el elemento select con selector: ${selector}`);
       return;
     }
 
@@ -239,7 +277,7 @@ export class UIUtils {
         optionValue === "" ||
         optionText === ""
       ) {
-        this.logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, {
+        Logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, {
           option,
           optionValue,
           optionText,
@@ -305,6 +343,83 @@ export class UIUtils {
       selectElement.appendChild(optionElement);
       addedCount++;
     });
+
+    // Auto-ocultar y preseleccionar si solo hay una opción válida
+    if (autoHide) {
+      this.autoHideAndSelectSingleOption(selectElement);
+    }
+
+    Logger.debug(`PopulateSelect - ${addedCount} opciones agregadas a ${selector}`);
+  }
+
+  /**
+   * Auto-ocultar select y preseleccionar si solo tiene una opción válida
+   * @param {HTMLElement} selectElement - Elemento select
+   */
+  autoHideAndSelectSingleOption(selectElement) {
+    if (!selectElement) return;
+
+    // Contar opciones válidas (excluyendo placeholder vacío)
+    const validOptions = Array.from(selectElement.options).filter(
+      (option) => option.value && option.value.trim() !== ""
+    );
+
+    if (validOptions.length === 1) {
+      const singleOption = validOptions[0];
+
+      // Preseleccionar la única opción
+      selectElement.value = singleOption.value;
+
+      // Ocultar el select
+      this.hideElement(selectElement);
+
+      // Marcar como auto-oculto para referencia
+      selectElement.dataset.autoHidden = "true";
+
+      Logger.info(
+        `Select auto-ocultado y preseleccionado: ${singleOption.textContent} (${singleOption.value})`
+      );
+
+      // Disparar evento change para que otros módulos sepan del cambio
+      const changeEvent = new Event("change", { bubbles: true });
+      selectElement.dispatchEvent(changeEvent);
+    } else {
+      // Mostrar el select si tiene múltiples opciones
+      this.showElement(selectElement);
+      selectElement.dataset.autoHidden = "false";
+    }
+  }
+
+  /**
+   * Procesar todos los selects en un formulario para auto-ocultación
+   * @param {HTMLElement} formElement - Elemento del formulario
+   */
+  processAllSelectsForAutoHide(formElement) {
+    if (!formElement) return;
+
+    const allSelects = formElement.querySelectorAll("select");
+    let processedCount = 0;
+
+    allSelects.forEach((selectElement) => {
+      this.autoHideAndSelectSingleOption(selectElement);
+      processedCount++;
+    });
+
+    Logger.info(`Procesados ${processedCount} selects para auto-ocultación`);
+  }
+
+  /**
+   * Mostrar select que fue auto-ocultado (para casos especiales)
+   * @param {HTMLElement} selectElement - Elemento select
+   */
+  showAutoHiddenSelect(selectElement) {
+    if (!selectElement) return;
+
+    if (selectElement.dataset.autoHidden === "true") {
+      this.showElement(selectElement);
+      selectElement.dataset.autoHidden = "false";
+      Logger.info(`Select auto-ocultado restaurado a visible`);
+    }
   }
 
   /**
@@ -316,7 +431,7 @@ export class UIUtils {
 
     const countrySelect = this.findElement('[name="country"]');
     if (!countrySelect) {
-      this.logger.error('No se encontró el elemento select con name="country"');
+      Logger.error('No se encontró el elemento select con name="country"');
       return;
     }
 
@@ -339,17 +454,17 @@ export class UIUtils {
    */
   populatePrefixes(prefixes) {
     if (!prefixes) {
-      this.logger.error("No se recibieron prefijos para poblar");
+      Logger.error("No se recibieron prefijos para poblar");
       return;
     }
 
     const prefixSelect = this.findElement('[name="phone_code"]');
     if (!prefixSelect) {
-      this.logger.error('No se encontró el elemento select con name="phone_code"');
+      Logger.error('No se encontró el elemento select con name="phone_code"');
       return;
     }
 
-    this.logger.info("Poblando prefijos telefónicos:", prefixes.length);
+    Logger.info("Poblando prefijos telefónicos:", prefixes.length);
 
     // Limpiar opciones existentes
     prefixSelect.innerHTML = '<option value="">(+) Indicativo</option>';
@@ -375,7 +490,7 @@ export class UIUtils {
 
     // Establecer Colombia como default (+57)
     prefixSelect.value = "57";
-    this.logger.info("Prefijo de Colombia (+57) establecido como predeterminado");
+    Logger.info("Prefijo de Colombia (+57) establecido como predeterminado");
   }
 
   /**
@@ -520,7 +635,7 @@ export class UIUtils {
     const errorId = `error_${fieldId}`;
 
     // Verificar si ya existe
-    const existingError = document.getElementById(errorId);
+    const existingError = this.getFormContext().querySelector(`#${errorId}`);
     if (existingError) return existingError;
 
     // Crear elemento de error
@@ -973,12 +1088,12 @@ export class UIUtils {
    */
   _validateOptionsArray(options) {
     if (!Array.isArray(options)) {
-      this.logger.error(`Las opciones deben ser un array, recibido: ${typeof options}`);
+      Logger.error(`Las opciones deben ser un array, recibido: ${typeof options}`);
       return false;
     }
 
     if (options.length === 0) {
-      this.logger.warn(`Array de opciones está vacío`);
+      Logger.warn(`Array de opciones está vacío`);
       return false;
     }
 

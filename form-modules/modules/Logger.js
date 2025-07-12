@@ -4,17 +4,28 @@
  * @version 1.0
  */
 
-class Logger {
-  constructor(eventName, config = {}) {
+import { ConfigManager } from "./ConfigManager.js";
+
+export class Logger {
+  // Instancia singleton estática
+  static _instance = null;
+
+  constructor() {
+    if (Logger._instance) return Logger._instance;
+
+    const loggerConfig = ConfigManager.hasGlobalInstance()
+      ? ConfigManager.getLoggingConfig()
+      : null;
+
     this.config = {
-      enabled: config.enabled !== undefined ? config.enabled : true,
-      level: config.level || "info", // 'error', 'warn', 'info', 'debug'
-      prefix: eventName || "FormSystem",
-      showTimestamp: config.showTimestamp !== undefined ? config.showTimestamp : true,
-      showLevel: config.showLevel !== undefined ? config.showLevel : true,
-      colors: config.colors !== undefined ? config.colors : true,
-      persistLogs: config.persistLogs !== undefined ? config.persistLogs : false,
-      maxLogs: config.maxLogs || 1000,
+      enabled: loggerConfig?.enabled !== undefined ? loggerConfig.enabled : true,
+      level: loggerConfig?.level || "info", // 'error', 'warn', 'info', 'debug'
+      prefix: loggerConfig?.prefix || "FormSystem",
+      showTimestamp: loggerConfig?.showTimestamp !== undefined ? loggerConfig.showTimestamp : true,
+      showLevel: loggerConfig?.showLevel !== undefined ? loggerConfig.showLevel : true,
+      colors: loggerConfig?.colors !== undefined ? loggerConfig.colors : true,
+      persistLogs: loggerConfig?.persistLogs !== undefined ? loggerConfig.persistLogs : false,
+      maxLogs: loggerConfig?.maxLogs || 1000,
     };
 
     this.levels = {
@@ -29,6 +40,11 @@ class Logger {
 
     this.logs = [];
     this.listeners = [];
+
+    // Establecer como instancia singleton
+    Logger._instance = this;
+
+    return this;
   }
 
   /**
@@ -238,6 +254,39 @@ class Logger {
   }
 
   /**
+   * Actualizar configuración del logger desde ConfigManager
+   * Este método se llama cuando ConfigManager actualiza su configuración
+   */
+  updateConfig() {
+    const loggerConfig = ConfigManager.hasGlobalInstance()
+      ? ConfigManager.getLoggingConfig()
+      : null;
+
+    if (loggerConfig) {
+      // Actualizar solo con configuración de ConfigManager
+      this.config = {
+        enabled: loggerConfig.enabled !== undefined ? loggerConfig.enabled : this.config.enabled,
+        level: loggerConfig.level || this.config.level,
+        prefix: loggerConfig.prefix || this.config.prefix,
+        showTimestamp:
+          loggerConfig.showTimestamp !== undefined
+            ? loggerConfig.showTimestamp
+            : this.config.showTimestamp,
+        showLevel:
+          loggerConfig.showLevel !== undefined ? loggerConfig.showLevel : this.config.showLevel,
+        colors: loggerConfig.colors !== undefined ? loggerConfig.colors : this.config.colors,
+        persistLogs:
+          loggerConfig.persistLogs !== undefined
+            ? loggerConfig.persistLogs
+            : this.config.persistLogs,
+        maxLogs: loggerConfig.maxLogs || this.config.maxLogs,
+      };
+
+      this.info(`Configuración de logger actualizada desde ConfigManager`);
+    }
+  }
+
+  /**
    * Obtener logs persistidos
    * @returns {Array}
    */
@@ -349,14 +398,201 @@ class Logger {
     this.info(title);
     console.table(data);
   }
+
+  /**
+   * ========================================================================
+   * MÉTODOS ESTÁTICOS PARA SINGLETON
+   * ========================================================================
+   */
+
+  /**
+   * Obtener la instancia singleton del Logger
+   * @returns {Logger|null} - Instancia singleton o null si no existe
+   */
+  static getInstance() {
+    return Logger._instance;
+  }
+
+  /**
+   * Crear o obtener la instancia singleton usando configuración de ConfigManager
+   * @returns {Logger} - Instancia singleton
+   */
+  static createInstance() {
+    if (!Logger._instance) {
+      Logger._instance = new Logger();
+    } else {
+      Logger._instance.updateConfig();
+    }
+    return Logger._instance;
+  }
+
+  /**
+   * Verificar si existe una instancia singleton
+   * @returns {boolean} - True si existe una instancia singleton
+   */
+  static hasInstance() {
+    return Logger._instance !== null;
+  }
+
+  /**
+   * Resetear la instancia singleton (útil para testing)
+   */
+  static resetInstance() {
+    if (Logger._instance) {
+      Logger._instance.info("Reseteando instancia singleton de Logger");
+    }
+    Logger._instance = null;
+  }
+
+  /**
+   * Métodos de logging estáticos que usan la instancia singleton
+   */
+  static info(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.info(message, ...args);
+    }
+  }
+
+  static error(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.error(message, ...args);
+    }
+  }
+
+  static warn(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.warn(message, ...args);
+    }
+  }
+
+  static debug(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.debug(message, ...args);
+    }
+  }
+
+  static success(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.success(message, ...args);
+    }
+  }
+
+  static loading(message, ...args) {
+    if (Logger._instance) {
+      Logger._instance.loading(message, ...args);
+    }
+  }
+
+  /**
+   * Obtener logs de la instancia singleton
+   * @returns {Array} - Array de logs o array vacío si no hay instancia
+   */
+  static getLogs() {
+    return Logger._instance ? Logger._instance.getLogs() : [];
+  }
+
+  /**
+   * Exportar logs de la instancia singleton
+   * @param {string} format - Formato de exportación
+   * @returns {string} - Logs formateados
+   */
+  static exportLogs(format = "json") {
+    return Logger._instance ? Logger._instance.exportLogs(format) : "[]";
+  }
+
+  /**
+   * Cambiar nivel de logging en la instancia singleton
+   * @param {string} level - Nuevo nivel
+   */
+  static setLevel(level) {
+    if (Logger._instance) {
+      Logger._instance.setLevel(level);
+    }
+  }
+
+  /**
+   * Habilitar/deshabilitar logging en la instancia singleton
+   * @param {boolean} enabled - Estado del logging
+   */
+  static setEnabled(enabled) {
+    if (Logger._instance) {
+      if (enabled) {
+        Logger._instance.enable();
+      } else {
+        Logger._instance.disable();
+      }
+    }
+  }
+
+  /**
+   * Habilitar logging en la instancia singleton
+   */
+  static enable() {
+    if (Logger._instance) {
+      Logger._instance.enable();
+    }
+  }
+
+  /**
+   * Deshabilitar logging en la instancia singleton
+   */
+  static disable() {
+    if (Logger._instance) {
+      Logger._instance.disable();
+    }
+  }
+
+  /**
+   * Alternar logging en la instancia singleton
+   */
+  static toggle() {
+    if (Logger._instance) {
+      Logger._instance.toggle();
+    }
+  }
+
+  /**
+   * Obtener configuración de la instancia singleton
+   * @returns {Object} - Configuración actual o objeto vacío si no hay instancia
+   */
+  static getLoggingConfig() {
+    return Logger._instance ? Logger._instance.getConfig() : {};
+  }
+
+  /**
+   * Limpiar logs de la instancia singleton
+   */
+  static clearLogs() {
+    if (Logger._instance) {
+      Logger._instance.clearLogs();
+    }
+  }
+
+  /**
+   * Obtener estadísticas de la instancia singleton
+   * @returns {Object} - Estadísticas o objeto vacío si no hay instancia
+   */
+  static getStats() {
+    return Logger._instance ? Logger._instance.getStats() : {};
+  }
+
+  /**
+   * Agregar listener a la instancia singleton
+   * @param {Function} callback - Función callback
+   */
+  static addListener(callback) {
+    if (Logger._instance) {
+      Logger._instance.addListener(callback);
+    }
+  }
+
+  /**
+   * Sincronizar configuración desde ConfigManager
+   * Se llama cuando ConfigManager actualiza su configuración
+   */
+  static syncFromConfigManager() {
+    if (Logger._instance) {
+      Logger._instance.updateConfig();
+    }
+  }
 }
-
-// Export for module usage
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = Logger;
-}
-
-// Global availability
-window.Logger = Logger;
-
-export { Logger };

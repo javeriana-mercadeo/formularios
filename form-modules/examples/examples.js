@@ -58,7 +58,7 @@ const FORM_CONFIG = {
   // Comentar con "//" las opciones que NO quieres mostrar
   typeAttendee: [
     "Aspirante", // ✅ Solo Aspirante (se auto-seleccionará y ocultará, mostrando campos académicos)
-    //"Padre de familia y/o acudiente", // ❌ Desactivado - Familiares de aspirantes
+    "Padre de familia y/o acudiente", // ❌ Desactivado - Familiares de aspirantes
     //"Docente y/o psicoorientador", // ❌ Desactivado - Personal educativo
     //"Visitante PUJ", // ❌ Desactivado - Visitantes externos
     //"Administrativo PUJ", // ❌ Desactivado - Personal administrativo
@@ -205,14 +205,14 @@ const FORM_CONFIG = {
   //  NUMERO_DOCUMENTO: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" },
   //  // Agregar más campos según necesidades
   //},
-  //salesforceUrls: {
-  //  test: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-  //  prod: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-  //},
-  //oids: {
-  //  test: "00D7j0000004eQD",
-  //  prod: "00Df4000003l8Bf",
-  //},
+  salesforceUrls: {
+    test: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+    prod: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+  },
+  oids: {
+    test: "00D7j0000004eQD",
+    prod: "00Df4000003l8Bf",
+  },
 
   // ============================================
   // URLS DE RESPUESTA

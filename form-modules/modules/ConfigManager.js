@@ -5,141 +5,81 @@
  */
 
 export class ConfigManager {
-  // Constants for field types and validation
-  static FIELD_TYPES = {
-    ATTENDEE_TYPES: {
-      APPLICANT: "Aspirante",
-      FAMILY_MEMBER: "Padre de familia y/o acudiente",
-      CURRENT_STUDENT: "Estudiante actual",
-      GRADUATE: "Graduado",
-      TEACHER: "Docente y/o psicoorientador",
-      VISITOR: "Visitante PUJ",
-      ADMINISTRATIVE: "Administrativo PUJ",
-      BUSINESS: "Empresario",
-    },
-    ACADEMIC_LEVELS: {
-      UNDERGRADUATE: { code: "PREG", name: "Pregrado" },
-      GRADUATE: { code: "GRAD", name: "Posgrado" },
-      ECCLESIASTICAL: { code: "ECLE", name: "Eclesiástico" },
-      TECHNICAL: { code: "ETDH", name: "Técnico" },
-      CONTINUING_EDUCATION: { code: "EDCO", name: "Educación Continua" },
-    },
-  };
+  // Instancia global estática para acceso desde cualquier módulo
+  static _instance = null;
 
-  // Default URLs for external data sources
-  static DEFAULT_URLS = {
-    SALESFORCE: {
-      TEST: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-      PROD: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-    },
-    THANK_YOU: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
-    PRIVACY_POLICY: "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
-  };
+  constructor(config = {}, selector) {
+    // Establecer como instancia global si no existe una
+    if (!ConfigManager._instance) {
+      ConfigManager._instance = this;
+    }
 
-  // Default Organization IDs
-  static DEFAULT_OIDS = {
-    TEST: "00D7j0000004eQD",
-    PROD: "00Df4000003l8Bf",
-  };
+    this.selector = selector;
+    this.config = this.getDefaultConfig(config);
 
-  // Default field mapping for Salesforce
-  static DEFAULT_FIELD_MAPPING = {
-    DOCUMENT_TYPE: { test: "00N7j000002BI3X", prod: "00N5G00000WmhsT" },
-    DOCUMENT_NUMBER: { test: "00N7j000002BI3V", prod: "00N5G00000WmhsR" },
-  };
+    ConfigManager._instance = this;
 
-  constructor(config = {}) {
-    this.config = this.mergeWithDefaults(config);
+    return this;
   }
 
   /**
-   * Obtener configuración por defecto
+   * Obtener configuración fusionada con valores por defecto
+   * @param {Object} customConfig - Configuración personalizada
+   * @returns {Object} - Configuración completa con valores por defecto
    */
-  getDefaultConfig() {
-    return {
-      // Basic event information
+  getDefaultConfig(customConfig = {}) {
+    const defaultConfig = {
+      // DATOS DE EVENTO
       eventName: "",
       eventDate: "",
-      university: "",
-      company: "",
-
-      // Attendee types - using constants
-      typeAttendee: [
-        ConfigManager.FIELD_TYPES.ATTENDEE_TYPES.APPLICANT,
-        ConfigManager.FIELD_TYPES.ATTENDEE_TYPES.FAMILY_MEMBER,
-      ],
-
-      // Event attendance days
-      attendanceDays: [],
-
-      // Available academic levels
-      academicLevels: [],
-
-      // Faculty filter (optional)
-      faculties: [],
-
-      // Program filter (optional)
-      programs: [],
-
-      // Fields to hide from form
-      hiddenFields: [],
-
-      // Development and debug settings
-      debugMode: false,
-      devMode: false,
-      debugEmail: "",
-
-      // Cache configuration
-      cacheEnabled: false,
-      cacheExpirationHours: 12,
-
-      // Campaign and tracking configuration
       campaign: "",
       article: "",
       source: "",
       subSource: "",
       medium: "",
+      leadSource: "Landing Pages",
+      originRequest: "web_to_lead_eventos",
 
-      // Data URLs configuration
+      // LISTAS
+      departments: [],
+      cities: [],
+      countries: [],
+      typeAttendee: [],
+      attendanceDays: [],
+      academicLevels: [],
+      faculties: [],
+      programs: [],
+      university: [],
+      company: [],
+
+      // CONFIGURACIONES
+      sandboxMode: false,
+      debugMode: false,
+      devMode: false,
+      debugEmail: "",
+      cacheEnabled: false,
+      cacheExpirationHours: 12,
+
+      // URLs
       dataUrls: {
         locations: "",
         prefixes: "",
         programs: "",
         periods: "",
       },
+      thankYouUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
+      privacyPolicyUrl:
+        "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
 
-      // Salesforce configuration - using constants
-      fieldMapping: ConfigManager.DEFAULT_FIELD_MAPPING,
-      salesforceUrls: ConfigManager.DEFAULT_URLS.SALESFORCE,
-      oids: ConfigManager.DEFAULT_OIDS,
-
-      // Response URLs - using constants
-      thankYouUrl: ConfigManager.DEFAULT_URLS.THANK_YOU,
-      privacyPolicyUrl: ConfigManager.DEFAULT_URLS.PRIVACY_POLICY,
-
-      // HTML form configuration
-      formSelector: '[data-puj-form="main-form"]',
-
-      // Validation configuration
+      // VALIDACIÓN
       validation: {
         realTimeValidation: true,
         showErrorsOnBlur: true,
       },
 
-      // Styles configuration
-      styles: {
-        enabled: true,
-        basePath: "../",
-        autoLoad: true,
-        includeTheme: false,
-        themePath: "styles/themes/custom-theme.css",
-        customVariables: {},
-        useCombined: false,
-        customFile: null,
-      },
-
-      // Logging configuration
+      // LOGGING
       logging: {
+        prefix: this.selector || "form-manager",
         enabled: true,
         level: "info",
         showTimestamp: true,
@@ -149,7 +89,7 @@ export class ConfigManager {
         maxLogs: 1000,
       },
 
-      // Custom callbacks
+      // CALLBACKS
       callbacks: {
         onFormLoad: null,
         onFormSubmit: null,
@@ -157,87 +97,136 @@ export class ConfigManager {
         onValidationError: null,
       },
     };
+
+    // Fusión profunda usando structuredClone
+    const merged = structuredClone(defaultConfig);
+    return this.deepMerge(merged, customConfig);
   }
 
   /**
-   * Fusionar configuración personalizada con valores por defecto
-   */
-  mergeWithDefaults(customConfig) {
-    const defaultConfig = this.getDefaultConfig();
-    return this.deepMerge(defaultConfig, customConfig);
-  }
-
-  /**
-   * Fusión profunda de objetos
-   */
+   * Fusionar configuración con valores por defecto
+   * @param {Object} config - Configuración personalizada
+   * @returns {Object} - Configuración fusionada
+   * */
   deepMerge(target, source) {
-    const result = { ...target };
-
     for (const key in source) {
       if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
-        result[key] = this.deepMerge(target[key] || {}, source[key]);
+        target[key] = this.deepMerge(target[key] || {}, source[key]);
       } else {
-        result[key] = source[key];
+        target[key] = source[key];
       }
     }
-
-    return result;
+    return target;
   }
 
   /**
-   * Obtener configuración actual
+   * Método estático para obtener/crear la instancia singleton
+   */
+  static getInstance(config = {}, selector) {
+    if (!ConfigManager._instance) {
+      ConfigManager._instance = new ConfigManager(config, selector);
+    }
+    return ConfigManager._instance;
+  }
+
+  /**
+   * Obtener configuración completa
    */
   getConfig() {
-    return { ...this.config };
+    return this.config;
   }
 
   /**
-   * Actualizar configuración
+   * Obtener configuración de logging
+   */
+  getLoggingConfig() {
+    return this.config.logging;
+  }
+
+  /**
+   * Actualizar configuración del singleton
    */
   updateConfig(newConfig) {
     this.config = this.deepMerge(this.config, newConfig);
+    return this.config;
+  }
+
+  /**
+   * Obtener configuración completa global
+   * @returns {Object|null} - Configuración completa o null si no hay instancia global
+   */
+  static getConfig() {
+    return ConfigManager.getInstance().getConfig();
+  }
+
+  /**
+   * Obtener configuración global de logging
+   * @returns {Object|null} - Configuración de logging o null si no hay instancia global
+   */
+  static getLoggingConfig() {
+    return ConfigManager.getInstance().getLoggingConfig();
+  }
+
+  /**
+   * Actualizar configuración global
+   * @param {Object} newConfig - Nueva configuración a aplicar
+   * @returns {Object} - Configuración actualizada
+   */
+  static updateConfig(newConfig) {
+    return ConfigManager.getInstance().updateConfig(newConfig);
+  }
+
+  /**
+   * Verificar si existe una instancia global
+   * @returns {boolean} - True si existe una instancia global
+   */
+  static hasGlobalInstance() {
+    return ConfigManager._instance !== null;
   }
 
   /**
    * Obtener configuración específica por clave
+   */
+  static get(key) {
+    return ConfigManager.getInstance().get(key);
+  }
+
+  /**
+   * Establecer configuración específica
+   */
+  static set(key, value) {
+    return ConfigManager.getInstance().set(key, value);
+  }
+
+  /**
+   * Obtener selector del formulario actual
+   * @returns {string|null} - Selector del formulario o null si no hay instancia
+   */
+  static getSelector() {
+    return ConfigManager._instance ? ConfigManager._instance.selector : null;
+  }
+
+  /**
+   * Obtener elemento del formulario actual
+   * @returns {HTMLElement|null} - Elemento del formulario o null si no existe
+   */
+  static getFormElement() {
+    const selector = ConfigManager.getSelector();
+    return selector ? document.getElementById(selector) : null;
+  }
+
+  /**
+   * Obtener configuración específica por clave (método de instancia)
    */
   get(key) {
     return this.config[key];
   }
 
   /**
-   * Establecer configuración específica
+   * Establecer configuración específica (método de instancia)
    */
   set(key, value) {
     this.config[key] = value;
-  }
-
-  /**
-   * Validar configuración requerida
-   */
-  validateConfig() {
-    const requiredFields = ["eventName", "salesforceUrls", "oids"];
-    const missingFields = requiredFields.filter((key) => !this.config[key]);
-
-    if (missingFields.length > 0) {
-      throw new Error(`Configuración requerida faltante: ${missingFields.join(", ")}`);
-    }
-
-    return true;
-  }
-
-  /**
-   * Obtener configuración para el ambiente actual
-   */
-  getEnvironmentConfig() {
-    const isDebugMode = this.config.debugMode;
-
-    return {
-      salesforceUrl: isDebugMode
-        ? this.config.salesforceUrls.test
-        : this.config.salesforceUrls.prod,
-      organizationId: isDebugMode ? this.config.oids.test : this.config.oids.prod,
-      environmentMode: isDebugMode ? "TEST" : "PRODUCTION",
-    };
+    return this.config[key];
   }
 }
