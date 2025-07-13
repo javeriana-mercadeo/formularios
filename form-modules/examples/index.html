@@ -306,27 +306,17 @@
                         <!-- Información del participante -->
                         <div class="name-row">
                           <div class="name-field">
-                            <input
-                              type="text"
-                              placeholder="*Nombre(s)"
-                              data-puj-form="first_name"
-                              name="first_name"
-                            />
+                            <input type="text" placeholder="*Nombre(s)" name="first_name" />
                           </div>
                           <div class="name-field">
-                            <input
-                              type="text"
-                              placeholder="*Apellidos"
-                              data-puj-form="last_name"
-                              name="last_name"
-                            />
+                            <input type="text" placeholder="*Apellidos" name="last_name" />
                           </div>
                         </div>
 
                         <!-- Documento de identidad -->
                         <div class="document-row">
                           <div class="document-type-field">
-                            <select data-puj-form="type_doc" name="type_doc">
+                            <select name="type_doc">
                               <option value="">*Tipo de documento</option>
                               <option value="CC">Cédula Ciudadanía</option>
                               <option value="CE">Cédula Extranjería</option>
@@ -335,100 +325,76 @@
                             </select>
                           </div>
                           <div class="document-number-field">
-                            <input
-                              type="text"
-                              placeholder="*Número de documento"
-                              data-puj-form="document"
-                              name="document"
-                            />
+                            <input type="text" placeholder="*Número de documento" name="document" />
                           </div>
                         </div>
 
                         <!-- Email -->
-                        <input
-                          type="email"
-                          placeholder="*Email"
-                          data-puj-form="email"
-                          name="email"
-                          maxlength="80"
-                        />
+                        <input type="email" placeholder="*Email" name="email" />
 
                         <!-- Phone row -->
                         <div class="phone-row">
                           <div class="prefix-field">
-                            <select data-puj-form="phone_code" name="phone_code">
+                            <select name="phone_code">
                               <option value="">(+) Indicativo</option>
-                              <!-- Options will be populated by JavaScript -->
+                              <!-- Las opciones se cargan de forma dinámica -->
                             </select>
                           </div>
                           <div class="mobile-field">
-                            <input
-                              type="text"
-                              placeholder="*Teléfono celular"
-                              data-puj-form="phone"
-                              name="phone"
-                            />
+                            <input type="text" placeholder="*Teléfono celular" name="mobile" />
                           </div>
                         </div>
 
                         <!-- Ubicación -->
-                        <select data-puj-form="country" name="country">
+                        <select name="country">
                           <option value="">*País de residencia</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <select data-puj-form="department" name="department" style="display: none">
+                        <select name="department" style="display: none">
                           <option value="">*Selecciona el departamento</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <select data-puj-form="city" name="city" style="display: none">
+                        <select name="city" style="display: none">
                           <option value="">*Selecciona la Ciudad</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Día de asistencia -->
-                        <select data-puj-form="attendance_day" name="attendance_day">
+                        <select name="attendance_day">
                           <option value="">*Día de asistencia</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Tipo de asistente -->
-                        <select data-puj-form="type_attendee" name="type_attendee">
+                        <select name="type_attendee">
                           <option value="">*Tipo de asistente</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Nivel académico -->
-                        <select
-                          data-puj-form="academic_level"
-                          name="academic_level"
-                          style="display: none"
-                        >
+                        <select name="academic_level" style="display: none">
                           <option value="">*Nivel académico</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Facultad -->
-                        <select data-puj-form="faculty" name="Facultad" style="display: none">
+                        <select name="faculty" style="display: none">
                           <option value="">*Facultad de interés</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Programa -->
-                        <select data-puj-form="program" name="program" style="display: none">
+                        <select name="program" style="display: none">
                           <option value="">*Programa de interés</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Período de ingreso -->
-                        <select
-                          data-puj-form="admission_period"
-                          name="admission_period"
-                          style="display: none"
-                        >
+                        <select name="admission_period" style="display: none">
                           <option value="">*Periodo esperado de Ingreso de interés</option>
-                          <!-- Options will be populated by JavaScript -->
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
                         <!-- Autorización de datos -->
@@ -446,21 +412,11 @@
 
                           <div class="radio-inline-group">
                             <div class="radio-option">
-                              <input
-                                type="radio"
-                                data-puj-form="autorizacion_si"
-                                name="authorization_data"
-                                value="1"
-                              />
+                              <input type="radio" name="authorization_data" value="1" />
                               <label for="autorizacion_si">Sí</label>
                             </div>
                             <div class="radio-option">
-                              <input
-                                type="radio"
-                                data-puj-form="autorizacion_no"
-                                name="authorization_data"
-                                value="0"
-                              />
+                              <input type="radio" name="authorization_data" value="0" />
                               <label for="autorizacion_no">No</label>
                             </div>
                           </div>
@@ -836,10 +792,10 @@
             </div>
           </div>
 
-          <!-- DataManager Module -->
+          <!-- Data Module -->
           <div class="gh-api-module">
             <div class="gh-api-module-header">
-              <h3 class="gh-api-module-title">DataManager</h3>
+              <h3 class="gh-api-module-title">Data</h3>
               <span class="gh-api-badge gh-api-badge-data">Data</span>
             </div>
             <p class="gh-api-module-description">
@@ -892,10 +848,10 @@
             </div>
           </div>
 
-          <!-- ValidationModule -->
+          <!-- Validation -->
           <div class="gh-api-module">
             <div class="gh-api-module-header">
-              <h3 class="gh-api-module-title">ValidationModule</h3>
+              <h3 class="gh-api-module-title">Validation</h3>
               <span class="gh-api-badge gh-api-badge-validation">Validation</span>
             </div>
             <p class="gh-api-module-description">

@@ -1,5 +1,5 @@
 /**
- * APIService - Servicio de integración con APIs externas
+ * Service - Servicio de integración con APIs externas
  *
  * Responsabilidades principales:
  * - Gestionar envío de formularios a Salesforce Web-to-Lead
@@ -13,9 +13,9 @@
 
 import { Logger } from "./Logger.js";
 import { Constants } from "./Constants.js";
-import { ConfigManager } from "./ConfigManager.js";
+import { Config } from "./Config.js";
 
-export class APIService {
+export class Service {
   constructor() {
     this.isSubmitting = false;
     this.submitHistory = [];
@@ -27,24 +27,24 @@ export class APIService {
    * @returns {string} - ID de campo de Salesforce
    */
   getFieldId(fieldKey) {
-    const mapping = Constants.SALESFORCE_FIELD_MAPPING[fieldKey];
+    const mapping = Constants.FIELD_MAPPING[fieldKey];
     if (!mapping) {
       Logger.warn(`Campo no encontrado en mapeo: ${fieldKey}`);
       return "";
     }
 
-    const config = ConfigManager.getConfig();
+    const config = Config.getConfig();
     return config.sandboxMode ? mapping.test : mapping.prod;
   }
 
   /**
    * Crear mapeo completo de campos del formulario a Salesforce
-   * Centraliza toda la lógica de mapeo usando SALESFORCE_FIELD_MAPPING
+   * Centraliza toda la lógica de mapeo usando FIELD_MAPPING
    * @returns {Object} - Mapeo completo de campos
    */
   createFieldMapping() {
-    const mapping = Constants.SALESFORCE_FIELD_MAPPING;
-    const isTest = ConfigManager.getConfig().sandboxMode;
+    const mapping = Constants.FIELD_MAPPING;
+    const isTest = Config.getConfig().sandboxMode;
 
     return {
       // Campos personales
@@ -96,7 +96,7 @@ export class APIService {
    * @returns {string} - URL de Salesforce Web-to-Lead
    */
   getSalesforceUrl() {
-    return ConfigManager.sandboxMode
+    return Config.sandboxMode
       ? Constants.SALESFORCE_SUBMIT_URLS.test
       : Constants.SALESFORCE_SUBMIT_URLS.prod;
   }
@@ -106,7 +106,7 @@ export class APIService {
    * @returns {string} - OID de Salesforce
    */
   getOID() {
-    return ConfigManager.sandboxMode ? ConfigManager.oids.test : ConfigManager.oids.prod;
+    return Config.sandboxMode ? Config.oids.test : Config.oids.prod;
   }
 
   /**
@@ -159,7 +159,7 @@ export class APIService {
       const preparedData = this.prepareFormData(formElement);
 
       // Log de datos en modo debug
-      if (ConfigManager.sandboxMode) {
+      if (Config.sandboxMode) {
         Logger.log("🔍 Datos preparados para envío:");
         for (let [key, value] of preparedData.entries()) {
           Logger.log(`  ${key}: ${value}`);
@@ -205,13 +205,13 @@ export class APIService {
     try {
       return await this.performSubmit(formData);
     } catch (error) {
-      if (attempt >= ConfigManager.maxRetries) {
+      if (attempt >= Config.maxRetries) {
         throw error;
       }
 
-      Logger.log(`⚠️ Intento ${attempt} falló, reintentando en ${ConfigManager.retryDelay}ms...`);
+      Logger.log(`⚠️ Intento ${attempt} falló, reintentando en ${Config.retryDelay}ms...`);
 
-      await new Promise((resolve) => setTimeout(resolve, ConfigManager.retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, Config.retryDelay));
 
       return this.submitWithRetry(formData, attempt + 1);
     }
@@ -229,7 +229,7 @@ export class APIService {
       const xhr = new XMLHttpRequest();
 
       // Configurar timeout
-      xhr.timeout = ConfigManager.timeout;
+      xhr.timeout = Config.timeout;
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -286,11 +286,11 @@ export class APIService {
       errors.push("URLs de Salesforce no configuradas correctamente");
     }
 
-    if (!ConfigManager.oids.test || !ConfigManager.oids.prod) {
+    if (!Config.oids.test || !Config.oids.prod) {
       errors.push("OIDs de Salesforce no configurados correctamente");
     }
 
-    if (!ConfigManager.thankYouUrl) {
+    if (!Config.thankYouUrl) {
       errors.push("URL de agradecimiento no configurada");
     }
 
@@ -310,7 +310,7 @@ export class APIService {
       const testData = new FormData();
       testData.append("oid", this.getOID());
       testData.append("debug", "1");
-      testData.append("debugEmail", ConfigManager.debugEmail || "test@example.com");
+      testData.append("debugEmail", Config.debugEmail || "test@example.com");
 
       const response = await this.performSubmit(testData);
 
@@ -360,8 +360,8 @@ export class APIService {
    * @param {string} debugEmail - Email para recibir copias de debug
    */
   setsandboxMode(enabled, debugEmail = "") {
-    ConfigManager.sandboxMode = enabled;
-    ConfigManager.debugEmail = debugEmail;
+    Config.sandboxMode = enabled;
+    Config.debugEmail = debugEmail;
 
     Logger.log(`🔧 Modo debug API: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
     if (enabled && debugEmail) {
@@ -374,7 +374,7 @@ export class APIService {
    * @param {Object} newConfig - Nueva configuración a aplicar
    */
   updateConfig(newConfig) {
-    ConfigManager = { ...ConfigManager, ...newConfig };
+    Config = { ...Config, ...newConfig };
   }
 
   /**
@@ -382,7 +382,7 @@ export class APIService {
    * @returns {Object} - Configuración completa del servicio
    */
   getConfig() {
-    return { ...ConfigManager };
+    return { ...Config };
   }
 
   /**
@@ -392,7 +392,7 @@ export class APIService {
    * @param {string} prodId - ID de Salesforce para ambiente de producción
    */
   addFieldMapping(fieldKey, testId, prodId) {
-    Constants.SALESFORCE_FIELD_MAPPING[fieldKey] = {
+    Constants.FIELD_MAPPING[fieldKey] = {
       test: testId,
       prod: prodId,
     };
@@ -403,7 +403,7 @@ export class APIService {
    * @param {string} fieldKey - Clave del campo a remover
    */
   removeFieldMapping(fieldKey) {
-    delete Constants.SALESFORCE_FIELD_MAPPING[fieldKey];
+    delete Constants.FIELD_MAPPING[fieldKey];
   }
 
   /**
@@ -412,11 +412,11 @@ export class APIService {
    */
   getEnvironmentInfo() {
     return {
-      mode: ConfigManager.sandboxMode ? "TEST" : "PRODUCTION",
+      mode: Config.sandboxMode ? "TEST" : "PRODUCTION",
       salesforceUrl: this.getSalesforceUrl(),
       oid: this.getOID(),
-      thankYouUrl: ConfigManager.thankYouUrl,
-      debugEmail: ConfigManager.debugEmail,
+      thankYouUrl: Config.thankYouUrl,
+      debugEmail: Config.debugEmail,
     };
   }
 
@@ -425,7 +425,7 @@ export class APIService {
    * @returns {string} - Configuración en formato JSON
    */
   exportConfig() {
-    return JSON.stringify(ConfigManager, null, 2);
+    return JSON.stringify(Config, null, 2);
   }
 
   /**

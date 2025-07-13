@@ -1,5 +1,5 @@
 /**
- * DataManager - Maneja la carga y gestión de datos del formulario
+ * Data - Maneja la carga y gestión de datos del formulario
  * Incluye ubicaciones, prefijos telefónicos, programas académicos y períodos
  * @version 1.0
  */
@@ -64,7 +64,7 @@ class GlobalDataCache {
   }
 }
 
-export class DataManager {
+export class Data {
   constructor(dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
     this.dataUrls = {
       ...dataUrls,

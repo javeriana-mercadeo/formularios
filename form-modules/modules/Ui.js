@@ -1,5 +1,5 @@
 /**
- * UIUtils - Utilidades para manipulación del DOM e interfaz de usuario
+ * Ui - Utilidades para manipulación del DOM e interfaz de usuario
  *
  * Responsabilidades:
  * - Manipulación segura de elementos DOM
@@ -12,9 +12,9 @@
  */
 
 import { Logger } from "./Logger.js";
-import { ConfigManager } from "./ConfigManager.js";
+import { Config } from "./Config.js";
 
-export class UIUtils {
+export class Ui {
   constructor() {
     // Configuración por defecto
     this.config = {
@@ -33,17 +33,17 @@ export class UIUtils {
       errorText: "Error al procesar",
     };
 
-    // Contexto del formulario desde ConfigManager
+    // Contexto del formulario desde Config
     this.formContext = null;
   }
 
   /**
-   * Obtener contexto del formulario actual desde ConfigManager
+   * Obtener contexto del formulario actual desde Config
    * @returns {HTMLElement} - Elemento del formulario o document si no hay contexto
    */
   getFormContext() {
     if (!this.formContext) {
-      this.formContext = ConfigManager.getFormElement();
+      this.formContext = Config.getFormElement();
     }
     return this.formContext || document;
   }
@@ -54,15 +54,15 @@ export class UIUtils {
    */
   setFormContext(newContext) {
     this.formContext = newContext;
-    Logger.debug(`Contexto de UIUtils actualizado:`, newContext ? newContext.id : 'document');
+    Logger.debug(`Contexto de Ui actualizado:`, newContext ? newContext.id : "document");
   }
 
   /**
-   * Refrescar contexto del formulario desde ConfigManager
+   * Refrescar contexto del formulario desde Config
    */
   refreshFormContext() {
-    this.formContext = ConfigManager.getFormElement();
-    Logger.debug(`Contexto de UIUtils refrescado desde ConfigManager`);
+    this.formContext = Config.getFormElement();
+    Logger.debug(`Contexto de Ui refrescado desde Config`);
   }
 
   /**
@@ -224,17 +224,10 @@ export class UIUtils {
    * @param {Array} options - Opciones a agregar
    * @param {string} valueKey - Clave para el valor
    * @param {string} textKey - Clave para el texto
-   * @param {Array} priorityItems - Items prioritarios
+   * @param {string} priorityItems - Item prioritario (un solo valor)
    * @param {boolean} autoHide - Si auto-ocultar cuando hay una sola opción (default: true)
    */
-  populateSelect(
-    selector,
-    options,
-    valueKey = null,
-    textKey = null,
-    priorityItems = [],
-    autoHide = true
-  ) {
+  populateSelect({ selector, options, priorityItems = null, autoHide = true }) {
     // Validar que las opciones sean un array válido
     if (!this._validateOptionsArray(options)) {
       return;
@@ -243,7 +236,7 @@ export class UIUtils {
     const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
 
     if (!selectElement) {
-      Logger.error(`PopulateSelect - No se encontró el elemento select con selector: ${selector}`);
+      Logger.error(`No se encontró el elemento select con selector: ${selector}`);
       return;
     }
 
@@ -264,37 +257,22 @@ export class UIUtils {
         optionValue = option;
         optionText = option;
       } else if (typeof option === "object" && option !== null) {
-        optionValue = valueKey ? option[valueKey] : option.value || option.code;
-        optionText = textKey ? option[textKey] : option.text || option.name || optionValue;
+        optionValue = option.value;
+        optionText = option.text;
       }
 
       // Evitar valores undefined o null
-      if (
-        optionValue === undefined ||
-        optionValue === null ||
-        optionText === undefined ||
-        optionText === null ||
-        optionValue === "" ||
-        optionText === ""
-      ) {
-        Logger.warn(`PopulateSelect - Saltando opción con valor inválido:`, {
-          option,
-          optionValue,
-          optionText,
-        });
+      if (!optionValue && !optionText) {
+        Logger.warn(`Saltando opción con valor inválido:`, { option });
         return; // Saltar esta opción
       }
 
       // Verificar si esta opción es prioritaria
-      const isPriority = priorityItems.some((priorityItem) => {
-        if (typeof priorityItem === "string") {
-          return (
-            optionText.toLowerCase().includes(priorityItem.toLowerCase()) ||
-            optionValue.toString().toLowerCase().includes(priorityItem.toLowerCase())
-          );
-        }
-        return false;
-      });
+      const isPriority =
+        priorityItems &&
+        typeof priorityItems === "string" &&
+        (optionText.toLowerCase() === priorityItems.toLowerCase() ||
+          optionValue.toString().toLowerCase() === priorityItems.toLowerCase());
 
       if (isPriority) {
         priorityOptions.push(option);
@@ -313,8 +291,8 @@ export class UIUtils {
         optionElement.value = option;
         optionElement.textContent = option;
       } else if (typeof option === "object") {
-        const value = valueKey ? option[valueKey] : option.value || option.code;
-        const text = textKey ? option[textKey] : option.text || option.name || value;
+        const value = option.value;
+        const text = option.text;
 
         optionElement.value = value;
         optionElement.textContent = text;
@@ -333,8 +311,8 @@ export class UIUtils {
         optionElement.value = option;
         optionElement.textContent = option;
       } else if (typeof option === "object") {
-        const value = valueKey ? option[valueKey] : option.value || option.code;
-        const text = textKey ? option[textKey] : option.text || option.name || value;
+        const value = option.value;
+        const text = option.text;
 
         optionElement.value = value;
         optionElement.textContent = text;
@@ -349,7 +327,7 @@ export class UIUtils {
       this.autoHideAndSelectSingleOption(selectElement);
     }
 
-    Logger.debug(`PopulateSelect - ${addedCount} opciones agregadas a ${selector}`);
+    Logger.debug(`${addedCount} opciones agregadas a ${selector}`);
   }
 
   /**
@@ -423,77 +401,6 @@ export class UIUtils {
   }
 
   /**
-   * Poblar select de países con Colombia como prioridad
-   * @param {Object} locations - Datos de ubicaciones
-   */
-  populateCountries(locations) {
-    if (!locations) return;
-
-    const countrySelect = this.findElement('[name="country"]');
-    if (!countrySelect) {
-      Logger.error('No se encontró el elemento select con name="country"');
-      return;
-    }
-
-    // Convertir object locations a array para usar populateSelect
-    const countries = Object.entries(locations).map(([code, country]) => ({
-      codigo: code,
-      nombre: country.nombre,
-    }));
-
-    // Usar populateSelect con prioridad para Colombia
-    this.populateSelect('[name="country"]', countries, "codigo", "nombre", ["colombia"]);
-
-    // Establecer Colombia como default
-    countrySelect.value = "COL";
-  }
-
-  /**
-   * Poblar select de prefijos telefónicos con Colombia como prioridad
-   * @param {Array} prefixes - Lista de prefijos telefónicos
-   */
-  populatePrefixes(prefixes) {
-    if (!prefixes) {
-      Logger.error("No se recibieron prefijos para poblar");
-      return;
-    }
-
-    const prefixSelect = this.findElement('[name="phone_code"]');
-    if (!prefixSelect) {
-      Logger.error('No se encontró el elemento select con name="phone_code"');
-      return;
-    }
-
-    Logger.info("Poblando prefijos telefónicos:", prefixes.length);
-
-    // Limpiar opciones existentes
-    prefixSelect.innerHTML = '<option value="">(+) Indicativo</option>';
-
-    prefixes.forEach((prefix) => {
-      const option = this.createElement(
-        "option",
-        {
-          value: prefix.phoneCode,
-        },
-        `(+${prefix.phoneCode}) ${prefix.phoneName}`
-      );
-
-      // Destacar Colombia
-      if (prefix.phoneName === "Colombia") {
-        option.style.backgroundColor = "aliceBlue";
-        option.style.color = "#000000";
-        option.style.fontWeight = "900";
-      }
-
-      prefixSelect.appendChild(option);
-    });
-
-    // Establecer Colombia como default (+57)
-    prefixSelect.value = "57";
-    Logger.info("Prefijo de Colombia (+57) establecido como predeterminado");
-  }
-
-  /**
    * Crear campo de nivel académico de forma dinámica
    * @param {HTMLElement} formElement - Elemento del formulario
    * @returns {HTMLElement|null} - Elemento creado o existente
@@ -509,7 +416,7 @@ export class UIUtils {
     // Crear select de nivel académico
     academicLevelElement = this.createElement("select", {
       name: "academic_level",
-      required: "required",
+      reqUired: "reqUired",
       style: "display: none;",
     });
 
@@ -544,7 +451,7 @@ export class UIUtils {
    * @param {string} id - ID opcional del campo
    * @returns {HTMLElement|null} - Campo creado
    */
-  addHiddenField(formElement, name, value = "", id = "") {
+  addHiddenField(formElement, name, value = "", info = "") {
     if (!formElement) return null;
 
     // Verificar si ya existe
@@ -554,11 +461,8 @@ export class UIUtils {
       hiddenField = this.createElement("input", {
         type: "hidden",
         name: name,
+        info: info,
       });
-
-      if (id) {
-        hiddenField.id = id;
-      }
 
       formElement.appendChild(hiddenField);
     }
@@ -854,12 +758,12 @@ export class UIUtils {
   /**
    * Añadir listeners para grupo de radio buttons
    * @param {HTMLElement} formElement - Formulario contenedor
-   * @param {string} name - Nombre del grupo de radios
+   * @param {string} selector - Selector CSS completo para los radio buttons
    * @param {Function} callback - Función callback
    * @returns {NodeList} - Lista de radio buttons configurados
    */
-  addRadioListener(formElement, name, callback) {
-    const radioButtons = formElement.querySelectorAll(`input[type="radio"][name="${name}"]`);
+  addRadioListener(formElement, selector, callback) {
+    const radioButtons = formElement.querySelectorAll(`input[type="radio"]${selector}`);
 
     radioButtons.forEach((radio) => {
       radio.addEventListener("change", (e) => {
@@ -943,7 +847,7 @@ export class UIUtils {
   }
 
   /**
-   * Restaurar elemento quitando el indicador de carga
+   * Restaurar elemento qUitando el indicador de carga
    * @param {HTMLElement} element - Elemento a restaurar
    */
   hideLoadingIndicator(element) {

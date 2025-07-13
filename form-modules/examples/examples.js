@@ -91,7 +91,6 @@ const FORM_CONFIG = {
     //{ code: "GRAD", name: "Posgrado" }, // ✅ Maestrías y Doctorados
     //{ code: "ECLE", name: "Eclesiástico" }, // ✅ Programas eclesiásticos
     //{ code: "ETDH", name: "Técnico" }, // ✅ Programas técnicos
-    //{ code: "EDCO", name: "Educación Continua" }, // ✅ Educación continua
   ],
 
   // ============================================
@@ -219,36 +218,6 @@ const FORM_CONFIG = {
   // ============================================
   //thankYouUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
   //privacyPolicyUrl: "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
-
-  // ============================================
-  // CONFIGURACIÓN DEL FORMULARIO HTML
-  // ============================================
-  formSelector: "#advanced_form", // Selector del formulario en el HTML
-
-  // ============================================
-  // CONFIGURACIÓN DE ESTILOS
-  // ============================================
-  styles: {
-    enabled: true, // true = Cargar estilos automáticamente | false = Sin estilos
-    basePath: "../", // Ruta base para archivos CSS
-    autoLoad: true, // true = Cargar automáticamente | false = Carga manual
-    useCombined: true, // true = Usar CSS combinado | false = Archivos separados
-    //includeTheme: false, // true = Incluir tema personalizado | false = Tema por defecto
-    //themePath: "styles/themes/custom-theme.css", // Ruta del tema personalizado
-    //customFile: null, // Archivo CSS personalizado específico
-    customVariables: {
-      // Variables CSS personalizadas
-      "primary-color": "#2563eb", // Color primario
-      "primary-hover": "#1d4ed8", // Color primario en hover
-      "success-color": "#10b981", // Color de éxito
-      "border-radius": "8px", // Radio de bordes
-      //"font-family": "'Inter', sans-serif", // Fuente personalizada
-      //"error-color": "#ef4444", // Color de errores
-      //"warning-color": "#f59e0b", // Color de advertencias
-      //"background-color": "#ffffff", // Color de fondo
-      //"text-color": "#111827", // Color de texto
-    },
-  },
 
   // ============================================
   // CONFIGURACIÓN DE VALIDACIÓN

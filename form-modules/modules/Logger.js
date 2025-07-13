@@ -4,7 +4,7 @@
  * @version 1.0
  */
 
-import { ConfigManager } from "./ConfigManager.js";
+import { Config } from "./Config.js";
 
 export class Logger {
   // Instancia singleton estática
@@ -13,9 +13,7 @@ export class Logger {
   constructor() {
     if (Logger._instance) return Logger._instance;
 
-    const loggerConfig = ConfigManager.hasGlobalInstance()
-      ? ConfigManager.getLoggingConfig()
-      : null;
+    const loggerConfig = Config.hasGlobalInstance() ? Config.getLoggingConfig() : null;
 
     this.config = {
       enabled: loggerConfig?.enabled !== undefined ? loggerConfig.enabled : true,
@@ -254,16 +252,14 @@ export class Logger {
   }
 
   /**
-   * Actualizar configuración del logger desde ConfigManager
-   * Este método se llama cuando ConfigManager actualiza su configuración
+   * Actualizar configuración del logger desde Config
+   * Este método se llama cuando Config actualiza su configuración
    */
   updateConfig() {
-    const loggerConfig = ConfigManager.hasGlobalInstance()
-      ? ConfigManager.getLoggingConfig()
-      : null;
+    const loggerConfig = Config.hasGlobalInstance() ? Config.getLoggingConfig() : null;
 
     if (loggerConfig) {
-      // Actualizar solo con configuración de ConfigManager
+      // Actualizar solo con configuración de Config
       this.config = {
         enabled: loggerConfig.enabled !== undefined ? loggerConfig.enabled : this.config.enabled,
         level: loggerConfig.level || this.config.level,
@@ -282,7 +278,7 @@ export class Logger {
         maxLogs: loggerConfig.maxLogs || this.config.maxLogs,
       };
 
-      this.info(`Configuración de logger actualizada desde ConfigManager`);
+      this.info(`Configuración de logger actualizada desde Config`);
     }
   }
 
@@ -414,7 +410,7 @@ export class Logger {
   }
 
   /**
-   * Crear o obtener la instancia singleton usando configuración de ConfigManager
+   * Crear o obtener la instancia singleton usando configuración de Config
    * @returns {Logger} - Instancia singleton
    */
   static createInstance() {
@@ -587,10 +583,10 @@ export class Logger {
   }
 
   /**
-   * Sincronizar configuración desde ConfigManager
-   * Se llama cuando ConfigManager actualiza su configuración
+   * Sincronizar configuración desde Config
+   * Se llama cuando Config actualiza su configuración
    */
-  static syncFromConfigManager() {
+  static syncFromConfig() {
     if (Logger._instance) {
       Logger._instance.updateConfig();
     }
