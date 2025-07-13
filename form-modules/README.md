@@ -176,8 +176,6 @@ const config = {
 
   // Validación
   validation: {
-    realTimeValidation: true,
-    showErrorsOnBlur: true,
   },
 
   // Configuración de logging
@@ -187,9 +185,6 @@ const config = {
     prefix: "FormManager",
     showTimestamp: true,
     showLevel: true,
-    colors: true,
-    persistLogs: false,
-    maxLogs: 1000,
   },
 
   // Modo desarrollo

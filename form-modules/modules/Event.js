@@ -8,11 +8,11 @@ import { Logger } from "./Logger.js";
 import { Constants } from "./Constants.js";
 
 export class Event {
-  constructor(formElement, stateManager, Ui, inputSelectors) {
+  constructor({ formElement, state, ui, logger = null }) {
     this.formElement = formElement;
-    this.stateManager = stateManager;
-    this.Ui = Ui;
-    this.inputSelectors = inputSelectors;
+    this.state = state;
+    this.ui = ui;
+    this.logger = logger;
 
     // External handlers para lógica específica del formulario
     this.handlers = new Map();
@@ -22,6 +22,17 @@ export class Event {
 
     // Configuración de campos del formulario desde Constants
     this.fieldConfigs = Constants.FIELD_CONFIGS;
+
+    // Mapeo de handlers especiales internos
+    this.specialHandlers = {
+      country: this._handleCountryChange.bind(this),
+      department: this._handleDepartmentChange.bind(this),
+      typeAttendee: this._handleTypeAttendeeChange.bind(this),
+      academicLevel: this._handleAcademicLevelChange.bind(this),
+      faculty: this._handleFacultyChange.bind(this),
+      program: this._handleProgramChange.bind(this),
+      authorization: this._handleAuthorizationChange.bind(this),
+    };
   }
 
   // ===============================
@@ -32,13 +43,12 @@ export class Event {
    * Configurar todos los event listeners del formulario
    */
   setupAllEvents() {
-    Logger.info("🎧 Configurando todos los event listeners...");
+    this.logger.info("🎧 Configurando todos los event listeners...");
 
     this._setupFormFieldListeners();
-    this._setupSpecialFieldListeners();
     this._setupSubmitListener();
 
-    Logger.info("✅ Event listeners configurados exitosamente");
+    this.logger.info("✅ Event listeners configurados exitosamente");
   }
 
   /**
@@ -47,54 +57,44 @@ export class Event {
    */
   _setupFormFieldListeners() {
     this.fieldConfigs.forEach((config) => {
-      const selector = this.inputSelectors[config.selectorKey];
-      if (!selector) {
-        Logger.warn(`Selector no encontrado para: ${config.selectorKey}`);
-        return;
+      // Verificar si el elemento existe en el DOM usando la utilidad de UI
+      const { exists } = this.ui.checkElementExists(config.selector);
+      
+      if (!exists) {
+        return; // El logging ya se maneja en checkElementExists
       }
 
+      // Determinar el callback apropiado
+      let callback;
+      
+      if (config.handler && this.specialHandlers[config.handler]) {
+        // Usar handler especial
+        callback = this.specialHandlers[config.handler];
+      } else if (config.type === "text") {
+        // Handler básico para texto con limpieza
+        callback = (value) => {
+          if (config.cleanMethod && this.ui[config.cleanMethod]) {
+            value = this.ui[config.cleanMethod](value);
+          }
+          return this._handleTextInput(value, config.stateKey, config.cleanMethod);
+        };
+      } else {
+        // Handler básico para select/otros
+        callback = (value) => this._handleSimpleSelect(value, config.stateKey);
+      }
+
+      // Agregar listener según el tipo
       if (config.type === "text") {
-        this.Ui.addInputListener(this.formElement, selector, (value) =>
-          this._handleTextInput(value, config.stateKey, config.cleanMethod)
-        );
-      } else if (config.type === "select") {
-        this.Ui.addChangeListener(this.formElement, selector, (value) =>
-          this._handleSimpleSelect(value, config.stateKey)
-        );
+        this.addInputListener(config.selector, callback);
+      } else if (config.type === "radio") {
+        this.addRadioListener(config.selector, callback);
+      } else {
+        // select y otros tipos
+        this.addChangeListener(config.selector, callback);
       }
     });
   }
 
-  /**
-   * Configurar listeners para campos especiales que reqUieren lógica custom
-   * @private
-   */
-  _setupSpecialFieldListeners() {
-    const specialFields = [
-      { selector: "country", handler: this._handleCountryChange.bind(this) },
-      { selector: "department", handler: this._handleDepartmentChange.bind(this) },
-      { selector: "typeAttendee", handler: this._handleTypeAttendeeChange.bind(this) },
-      { selector: "academicLevel", handler: this._handleAcademicLevelChange.bind(this) },
-      { selector: "faculty", handler: this._handleFacultyChange.bind(this) },
-      { selector: "program", handler: this._handleProgramChange.bind(this) },
-    ];
-
-    specialFields.forEach(({ selector, handler }) => {
-      const selectorValue = this.inputSelectors[selector];
-      if (selectorValue) {
-        this.Ui.addChangeListener(this.formElement, selectorValue, handler);
-      }
-    });
-
-    // Listener especial para autorización (radio buttons)
-    if (this.inputSelectors.authorizationData) {
-      this.Ui.addRadioListener(
-        this.formElement,
-        this.inputSelectors.authorizationData,
-        this._handleAuthorizationChange.bind(this)
-      );
-    }
-  }
 
   /**
    * Configurar listener para envío del formulario
@@ -113,8 +113,11 @@ export class Event {
    * @private
    */
   _handleTextInput(value, stateKey, cleanMethod) {
-    const cleanValue = this.Ui[cleanMethod](value);
-    this.stateManager.updateField(stateKey, cleanValue);
+    let cleanValue = value;
+    if (cleanMethod && this.ui[cleanMethod]) {
+      cleanValue = this.ui[cleanMethod](value);
+    }
+    this.state.updateField(stateKey, cleanValue);
     return cleanValue;
   }
 
@@ -123,7 +126,7 @@ export class Event {
    * @private
    */
   _handleSimpleSelect(value, stateKey) {
-    this.stateManager.updateField(stateKey, value);
+    this.state.updateField(stateKey, value);
   }
 
   /**
@@ -131,7 +134,7 @@ export class Event {
    * @private
    */
   _handleAuthorizationChange(value) {
-    this.stateManager.updateField(Constants.FIELDS.DATA_AUTHORIZATION, value);
+    this.state.updateField(Constants.FIELDS.DATA_AUTHORIZATION, value);
     this._delegateToHandler(Constants.HANDLER_TYPES.AUTHORIZATION_CHANGE, value);
   }
 
@@ -144,7 +147,7 @@ export class Event {
     if (handler) {
       handler(event);
     } else {
-      Logger.warn(`No hay handler registrado para ${Constants.HANDLER_TYPES.FORM_SUBMIT}`);
+      this.logger.warn(`No hay handler registrado para ${Constants.HANDLER_TYPES.FORM_SUBMIT}`);
       event.preventDefault();
     }
   }
@@ -186,7 +189,7 @@ export class Event {
     if (handler) {
       handler(value);
     } else {
-      Logger.warn(`No hay handler registrado para ${handlerType}`);
+      this.logger.warn(`No hay handler registrado para ${handlerType}`);
     }
   }
 
@@ -201,7 +204,7 @@ export class Event {
    */
   registerHandler(eventType, handler) {
     this.handlers.set(eventType, handler);
-    Logger.debug(`Handler registrado para: ${eventType}`);
+    this.logger.debug(`Handler registrado para: ${eventType}`);
   }
 
   /**
@@ -221,7 +224,7 @@ export class Event {
   removeHandler(eventType) {
     const removed = this.handlers.delete(eventType);
     if (removed) {
-      Logger.debug(`Handler removido: ${eventType}`);
+      this.logger.debug(`Handler removido: ${eventType}`);
     }
     return removed;
   }
@@ -231,7 +234,7 @@ export class Event {
    */
   clearHandlers() {
     this.handlers.clear();
-    Logger.debug("🧹 Todos los handlers han sido limpiados");
+    this.logger.debug("🧹 Todos los handlers han sido limpiados");
   }
 
   /**
@@ -261,7 +264,7 @@ export class Event {
     }
 
     this.customEvents.get(eventName).push(callback);
-    Logger.debug(`Event listener agregado para evento: ${eventName}`);
+    this.logger.debug(`Event listener agregado para evento: ${eventName}`);
 
     return () => this.off(eventName, callback);
   }
@@ -277,7 +280,7 @@ export class Event {
       const index = listeners.indexOf(callback);
       if (index > -1) {
         listeners.splice(index, 1);
-        Logger.debug(`Event listener removido para evento: ${eventName}`);
+        this.logger.debug(`Event listener removido para evento: ${eventName}`);
       }
     }
   }
@@ -307,7 +310,7 @@ export class Event {
         try {
           callback(data);
         } catch (error) {
-          Logger.error(`Error en listener del evento ${eventName}:`, error);
+          this.logger.error(`Error en listener del evento ${eventName}:`, error);
         }
       });
     }
@@ -320,10 +323,10 @@ export class Event {
   removeAllCustomListeners(eventName) {
     if (eventName) {
       this.customEvents.delete(eventName);
-      Logger.debug(`Todos los listeners removidos para evento: ${eventName}`);
+      this.logger.debug(`Todos los listeners removidos para evento: ${eventName}`);
     } else {
       this.customEvents.clear();
-      Logger.debug("Todos los custom event listeners removidos");
+      this.logger.debug("Todos los custom event listeners removidos");
     }
   }
 
@@ -369,7 +372,7 @@ export class Event {
    * Remover todos los event listeners del formulario
    */
   removeAllListeners() {
-    Logger.info("🧹 Removiendo todos los event listeners");
+    this.logger.info("🧹 Removiendo todos los event listeners");
 
     // Clonar el formulario para remover todos los listeners DOM
     const newForm = this.formElement.cloneNode(true);
@@ -379,7 +382,7 @@ export class Event {
     // Limpiar event listeners personalizados
     this.customEvents.clear();
 
-    Logger.info("✅ Event listeners removidos");
+    this.logger.info("✅ Event listeners removidos");
   }
 
   /**
@@ -389,10 +392,171 @@ export class Event {
     this.removeAllListeners();
     this.clearHandlers();
     this.formElement = null;
-    this.stateManager = null;
-    this.Ui = null;
-    this.inputSelectors = null;
+    this.state = null;
+    this.ui = null;
 
-    Logger.debug("Event destrUido");
+    this.logger.debug("Event destrUido");
+  }
+
+  // ===============================
+  // MÉTODOS CONTROLADORES DE EVENTOS
+  // (Reemplazan los métodos de UI.js)
+  // ===============================
+
+  /**
+   * Agregar listener de input con limpieza automática
+   * @param {string} selector - Selector del campo
+   * @param {Function} cleanFunction - Función de limpieza (opcional)
+   * @returns {HTMLElement|null} - Elemento configurado
+   */
+  addInputListener(selector, cleanFunction = null) {
+    const element = this.ui.findElement(selector);
+    if (!element) {
+      this.logger.warn(`No se encontró elemento para input listener: ${selector}`);
+      return null;
+    }
+
+    // Listener para marcar como tocado en focus
+    element.addEventListener("focus", (e) => {
+      const fieldName = e.target.name || e.target.id;
+      if (fieldName && this.state) {
+        this.state.markFieldAsTouched(fieldName);
+      }
+    });
+
+    // Listener para validar en blur (cuando sale del campo)
+    element.addEventListener("blur", (e) => {
+      const fieldName = e.target.name || e.target.id;
+      const value = this.ui.getFieldValue(e.target);
+      
+      if (fieldName && this.state) {
+        // Si el campo está vacío y es requerido, ejecutar validación
+        if (!value || value.trim() === '') {
+          this.state.updateField(fieldName, value);
+        }
+      }
+    });
+
+    element.addEventListener("input", (e) => {
+      let value = this.ui.getFieldValue(e.target);
+
+      // Aplicar función de limpieza si existe
+      if (cleanFunction) {
+        value = cleanFunction(value);
+        this.ui.setFieldValue(e.target, value);
+      }
+
+      // Actualizar estado y marcar como tocado
+      const fieldName = e.target.name || e.target.id;
+      if (fieldName && this.state) {
+        this.state.markFieldAsTouched(fieldName);
+        this.state.updateField(fieldName, value);
+      }
+    });
+
+    this.logger.debug(`Input listener agregado para: ${selector}`);
+    return element;
+  }
+
+  /**
+   * Agregar listener de change
+   * @param {string} selector - Selector del campo
+   * @param {Function} callback - Función callback (opcional)
+   * @returns {HTMLElement|null} - Elemento configurado
+   */
+  addChangeListener(selector, callback = null) {
+    const element = this.ui.findElement(selector);
+    if (!element) {
+      this.logger.warn(`No se encontró elemento para change listener: ${selector}`);
+      return null;
+    }
+
+    // Listener para marcar como tocado en focus
+    element.addEventListener("focus", (e) => {
+      const fieldName = e.target.name || e.target.id;
+      if (fieldName && this.state) {
+        this.state.markFieldAsTouched(fieldName);
+      }
+    });
+
+    // Listener para validar en blur (cuando sale del campo)
+    element.addEventListener("blur", (e) => {
+      const fieldName = e.target.name || e.target.id;
+      const value = this.ui.getFieldValue(e.target);
+      
+      if (fieldName && this.state) {
+        // Si el campo está vacío y es requerido, ejecutar validación
+        if (!value || value.trim() === '') {
+          this.state.updateField(fieldName, value);
+        }
+      }
+    });
+
+    element.addEventListener("change", (e) => {
+      const value = this.ui.getFieldValue(e.target);
+
+      // Ejecutar callback personalizado
+      if (callback) {
+        callback(value, e.target);
+      }
+
+      // Actualizar estado y marcar como tocado
+      const fieldName = e.target.name || e.target.id;
+      if (fieldName && this.state) {
+        this.state.markFieldAsTouched(fieldName);
+        this.state.updateField(fieldName, value);
+      }
+    });
+
+    this.logger.debug(`Change listener agregado para: ${selector}`);
+    return element;
+  }
+
+  /**
+   * Agregar listeners para grupo de radio buttons
+   * @param {string} selector - Selector CSS para los radio buttons
+   * @param {Function} callback - Función callback (opcional)
+   * @returns {NodeList} - Lista de radio buttons configurados
+   */
+  addRadioListener(selector, callback = null) {
+    const radioButtons = this.formElement.querySelectorAll(`input[type="radio"]${selector}`);
+
+    if (radioButtons.length === 0) {
+      this.logger.warn(`No se encontraron radio buttons para: ${selector}`);
+      return [];
+    }
+
+    radioButtons.forEach((radio) => {
+      // Listener para marcar como tocado en focus
+      radio.addEventListener("focus", (e) => {
+        const fieldName = e.target.name || e.target.id;
+        if (fieldName && this.state) {
+          this.state.markFieldAsTouched(fieldName);
+        }
+      });
+
+      radio.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          const value = this.ui.getFieldValue(e.target);
+
+          // Ejecutar callback personalizado
+          if (callback) {
+            callback(value, e.target);
+          }
+
+          // Actualizar estado y marcar como tocado
+          const fieldName = e.target.name || e.target.id;
+          if (fieldName && this.state) {
+            this.state.markFieldAsTouched(fieldName);
+            this.state.updateField(fieldName, value);
+          }
+        }
+      });
+    });
+
+    this.logger.debug(
+      `Radio listeners agregados para: ${selector} (${radioButtons.length} elementos)`
+    );
+    return radioButtons;
   }
 }

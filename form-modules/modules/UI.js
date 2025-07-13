@@ -6,92 +6,24 @@
  * - Gestión de errores visuales y mensajes
  * - Poblado dinámico de campos select
  * - Manejo de animaciones y transiciones
- * - Utilidades de validación y limpieza de datos
  *
  * @version 1.0
  */
 
-import { Logger } from "./Logger.js";
-import { Config } from "./Config.js";
-
 export class Ui {
-  constructor() {
+  constructor({ config = {}, logger = null } = {}) {
     // Configuración por defecto
-    this.config = {
-      errorClass: "error",
-      validClass: "validated",
-      errorTextClass: "error_text",
-      hiddenClass: "hidden",
-
-      // Configuración de animaciones
-      animationDuration: 300,
-      enableAnimations: true,
-
-      // Configuración de mensajes
-      loadingText: "Cargando...",
-      successText: "Enviado correctamente",
-      errorText: "Error al procesar",
-    };
-
-    // Contexto del formulario desde Config
-    this.formContext = null;
+    this.config = config;
+    this.logger = logger;
+    this.formContext = document.getElementById(this.config.selector) || document;
   }
 
   /**
-   * Obtener contexto del formulario actual desde Config
+   * Obtener contexto del formulario actual
    * @returns {HTMLElement} - Elemento del formulario o document si no hay contexto
    */
   getFormContext() {
-    if (!this.formContext) {
-      this.formContext = Config.getFormElement();
-    }
-    return this.formContext || document;
-  }
-
-  /**
-   * Actualizar contexto del formulario (útil cuando cambia dinámicamente)
-   * @param {HTMLElement} newContext - Nuevo contexto del formulario
-   */
-  setFormContext(newContext) {
-    this.formContext = newContext;
-    Logger.debug(`Contexto de Ui actualizado:`, newContext ? newContext.id : "document");
-  }
-
-  /**
-   * Refrescar contexto del formulario desde Config
-   */
-  refreshFormContext() {
-    this.formContext = Config.getFormElement();
-    Logger.debug(`Contexto de Ui refrescado desde Config`);
-  }
-
-  /**
-   * Limpiar texto para permitir solo letras, espacios y acentos
-   * @param {string} text - Texto a limpiar
-   * @returns {string} - Texto limpio
-   */
-  cleanText(text) {
-    return text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, "");
-  }
-
-  /**
-   * Limpiar texto para permitir solo números y espacios
-   * @param {string} text - Texto a limpiar
-   * @returns {string} - Solo números
-   */
-  cleanNumbers(text) {
-    return text.replace(/[^0-9 ]/g, "");
-  }
-
-  /**
-   * Verificar si un email tiene formato válido
-   * @param {string} email - Email a validar
-   * @returns {boolean} - True si es válido
-   */
-  isValidEmail(email) {
-    const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regex.test(email.toLowerCase());
+    return this.formContext;
   }
 
   /**
@@ -129,10 +61,10 @@ export class Ui {
    */
   findElement(selector, context = null) {
     try {
-      const searchContext = context || this.getFormContext();
+      const searchContext = context || this.formContext;
       return searchContext.querySelector(selector);
     } catch (error) {
-      Logger.error(`Error al buscar elemento: ${selector}`, error);
+      this.logger.error(`Error al buscar elemento: ${selector}`, error);
       return null;
     }
   }
@@ -145,12 +77,191 @@ export class Ui {
    */
   findElements(selector, context = null) {
     try {
-      const searchContext = context || this.getFormContext();
+      const searchContext = context || this.formContext;
       return searchContext.querySelectorAll(selector);
     } catch (error) {
-      Logger.error(`Error al buscar elementos: ${selector}`, error);
+      this.logger.error(`Error al buscar elementos: ${selector}`, error);
       return [];
     }
+  }
+
+  /**
+   * Verificar si un elemento existe en el DOM
+   * @param {string|Object} selector - Selector CSS directo o configuración con selectorKey
+   * @returns {Object} - { exists: boolean, element: HTMLElement|null, selector: string }
+   */
+  checkElementExists(selector) {
+    if (!selector) {
+      this.logger.warn(`Selector no definido para: ${selector}`);
+      return { exists: false, element: null, selector: null };
+    }
+
+    const element = this.findElement(selector);
+    const exists = !!element;
+
+    if (!exists) {
+      this.logger.debug(`Elemento no encontrado en DOM para: ${selector}`);
+      return { exists: false, element: null, selector: null };
+    }
+
+    return { exists, element, selector };
+  }
+
+  /**
+   * Método centralizado para todas las operaciones DOM con scope del formulario
+   * Asegura que todas las consultas estén limitadas al contexto del formulario específico
+   * @param {string} selector - Selector CSS
+   * @returns {HTMLElement|null} - Elemento encontrado o null
+   */
+  scopedQuery(selector) {
+    return this.findElement(selector);
+  }
+
+  /**
+   * Método centralizado para múltiples elementos DOM con scope del formulario
+   * @param {string} selector - Selector CSS
+   * @returns {NodeList} - Lista de elementos encontrados
+   */
+  scopedQueryAll(selector) {
+    return this.findElements(selector);
+  }
+
+  /**
+   * Verificar si el contexto del formulario está configurado correctamente
+   * @returns {boolean} - True si hay un contexto específico configurado
+   */
+  hasValidFormContext() {
+    return this.formContext && this.formContext !== document;
+  }
+
+  /**
+   * Log de advertencia si no hay contexto de formulario específico
+   * @private
+   */
+  _logContextWarning(method) {
+    if (!this.hasValidFormContext()) {
+      this.logger.warn(
+        `⚠️ Método ${method} ejecutado sin contexto específico de formulario. Esto puede afectar múltiples instancias.`
+      );
+    }
+  }
+
+  /**
+   * Obtener valor de un campo (input, select, textarea)
+   * @param {HTMLElement|string} elementOrSelector - Elemento o selector CSS
+   * @returns {string} - Valor del campo
+   */
+  getFieldValue(elementOrSelector) {
+    this._logContextWarning("getFieldValue");
+    const element =
+      typeof elementOrSelector === "string"
+        ? this.scopedQuery(elementOrSelector)
+        : elementOrSelector;
+
+    if (!element) {
+      this.logger.warn(`Campo no encontrado para obtener valor: ${elementOrSelector}`);
+      return "";
+    }
+
+    return element.value || "";
+  }
+
+  /**
+   * Establecer valor de un campo (input, select, textarea)
+   * @param {HTMLElement|string} elementOrSelector - Elemento o selector CSS
+   * @param {string|number} value - Valor a establecer
+   * @returns {boolean} - True si se estableció correctamente
+   */
+  setFieldValue(elementOrSelector, value) {
+    this._logContextWarning("setFieldValue");
+    const element =
+      typeof elementOrSelector === "string"
+        ? this.scopedQuery(elementOrSelector)
+        : elementOrSelector;
+
+    if (!element) {
+      this.logger.warn(`Campo no encontrado para establecer valor: ${elementOrSelector}`);
+      return false;
+    }
+
+    const oldValue = element.value;
+    element.value = value;
+
+    this.logger.debug(
+      `Campo ${element.name || element.id || "sin-nombre"}: "${oldValue}" → "${value}"`
+    );
+    return true;
+  }
+
+  /**
+   * Obtener texto de un elemento
+   * @param {HTMLElement|string} elementOrSelector - Elemento o selector CSS
+   * @returns {string} - Texto del elemento
+   */
+  getFieldText(elementOrSelector) {
+    this._logContextWarning("getFieldText");
+    const element =
+      typeof elementOrSelector === "string"
+        ? this.scopedQuery(elementOrSelector)
+        : elementOrSelector;
+
+    if (!element) {
+      this.logger.warn(`Elemento no encontrado para obtener texto: ${elementOrSelector}`);
+      return "";
+    }
+
+    return element.textContent || "";
+  }
+
+  /**
+   * Establecer texto de un elemento
+   * @param {HTMLElement|string} elementOrSelector - Elemento o selector CSS
+   * @param {string} text - Texto a establecer
+   * @returns {boolean} - True si se estableció correctamente
+   */
+  setFieldText(elementOrSelector, text) {
+    this._logContextWarning("setFieldText");
+    const element =
+      typeof elementOrSelector === "string"
+        ? this.scopedQuery(elementOrSelector)
+        : elementOrSelector;
+
+    if (!element) {
+      this.logger.warn(`Elemento no encontrado para establecer texto: ${elementOrSelector}`);
+      return false;
+    }
+
+    const oldText = element.textContent;
+    element.textContent = text;
+
+    this.logger.debug(
+      `Texto de elemento ${element.id || element.tagName}: "${oldText}" → "${text}"`
+    );
+    return true;
+  }
+
+  /**
+   * Verificar si un elemento es visible
+   * @param {HTMLElement|string} elementOrSelector - Elemento o selector CSS
+   * @returns {boolean} - True si el elemento es visible
+   */
+  isElementVisible(elementOrSelector) {
+    this._logContextWarning("isElementVisible");
+    const element =
+      typeof elementOrSelector === "string"
+        ? this.scopedQuery(elementOrSelector)
+        : elementOrSelector;
+
+    if (!element) {
+      return false;
+    }
+
+    const computedStyle = window.getComputedStyle(element);
+    return (
+      computedStyle.display !== "none" &&
+      computedStyle.visibility !== "hidden" &&
+      element.offsetParent !== null
+    );
   }
 
   /**
@@ -228,15 +339,16 @@ export class Ui {
    * @param {boolean} autoHide - Si auto-ocultar cuando hay una sola opción (default: true)
    */
   populateSelect({ selector, options, priorityItems = null, autoHide = true }) {
-    // Validar que las opciones sean un array válido
-    if (!this._validateOptionsArray(options)) {
+    // Validación básica (el módulo que llama debe validar los datos)
+    if (!Array.isArray(options) || options.length === 0) {
+      this.logger.error("Array de opciones inválido o vacío para el selector:", selector);
       return;
     }
 
     const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
 
     if (!selectElement) {
-      Logger.error(`No se encontró el elemento select con selector: ${selector}`);
+      this.logger.error(`No se encontró el elemento select con selector: ${selector}`);
       return;
     }
 
@@ -263,7 +375,7 @@ export class Ui {
 
       // Evitar valores undefined o null
       if (!optionValue && !optionText) {
-        Logger.warn(`Saltando opción con valor inválido:`, { option });
+        this.logger.warn(`Saltando opción con valor inválido:`, { option });
         return; // Saltar esta opción
       }
 
@@ -327,7 +439,7 @@ export class Ui {
       this.autoHideAndSelectSingleOption(selectElement);
     }
 
-    Logger.debug(`${addedCount} opciones agregadas a ${selector}`);
+    this.logger.debug(`${addedCount} opciones agregadas a ${selector}`);
   }
 
   /**
@@ -354,7 +466,7 @@ export class Ui {
       // Marcar como auto-oculto para referencia
       selectElement.dataset.autoHidden = "true";
 
-      Logger.info(
+      this.logger.info(
         `Select auto-ocultado y preseleccionado: ${singleOption.textContent} (${singleOption.value})`
       );
 
@@ -366,81 +478,6 @@ export class Ui {
       this.showElement(selectElement);
       selectElement.dataset.autoHidden = "false";
     }
-  }
-
-  /**
-   * Procesar todos los selects en un formulario para auto-ocultación
-   * @param {HTMLElement} formElement - Elemento del formulario
-   */
-  processAllSelectsForAutoHide(formElement) {
-    if (!formElement) return;
-
-    const allSelects = formElement.querySelectorAll("select");
-    let processedCount = 0;
-
-    allSelects.forEach((selectElement) => {
-      this.autoHideAndSelectSingleOption(selectElement);
-      processedCount++;
-    });
-
-    Logger.info(`Procesados ${processedCount} selects para auto-ocultación`);
-  }
-
-  /**
-   * Mostrar select que fue auto-ocultado (para casos especiales)
-   * @param {HTMLElement} selectElement - Elemento select
-   */
-  showAutoHiddenSelect(selectElement) {
-    if (!selectElement) return;
-
-    if (selectElement.dataset.autoHidden === "true") {
-      this.showElement(selectElement);
-      selectElement.dataset.autoHidden = "false";
-      Logger.info(`Select auto-ocultado restaurado a visible`);
-    }
-  }
-
-  /**
-   * Crear campo de nivel académico de forma dinámica
-   * @param {HTMLElement} formElement - Elemento del formulario
-   * @returns {HTMLElement|null} - Elemento creado o existente
-   */
-  createAcademicLevelField(formElement) {
-    const typeAttendeeElement = formElement.querySelector('[name="type_attendee"]');
-    if (!typeAttendeeElement) return null;
-
-    // Verificar si ya existe
-    let academicLevelElement = formElement.querySelector('[name="academic_level"]');
-    if (academicLevelElement) return academicLevelElement;
-
-    // Crear select de nivel académico
-    academicLevelElement = this.createElement("select", {
-      name: "academic_level",
-      reqUired: "reqUired",
-      style: "display: none;",
-    });
-
-    academicLevelElement.innerHTML = '<option value="">*Nivel académico de interés</option>';
-
-    // Crear div de error
-    const errorDiv = this.createElement(
-      "div",
-      {
-        className: this.config.errorTextClass,
-        style: "display: none;",
-      },
-      "Selecciona un nivel académico de interés"
-    );
-
-    // Insertar después del tipo de asistente
-    typeAttendeeElement.parentNode.insertBefore(
-      academicLevelElement,
-      typeAttendeeElement.nextSibling
-    );
-
-    academicLevelElement.parentNode.insertBefore(errorDiv, academicLevelElement.nextSibling);
-
-    return academicLevelElement;
   }
 
   /**
@@ -496,25 +533,33 @@ export class Ui {
    * @param {string} message - Mensaje de error a mostrar
    */
   showFieldError(fieldElement, message) {
-    if (!fieldElement) return;
+    if (!fieldElement) {
+      this.logger.warn("🚫 [UI] showFieldError: fieldElement es null");
+      return;
+    }
 
     const fieldId = fieldElement.id || fieldElement.name;
+    this.logger.info(`🔴 [UI] MOSTRANDO ERROR para ${fieldId}: "${message}"`);
+
     let errorElement =
       this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
 
     // Crear elemento de error si no existe
     if (!errorElement) {
+      this.logger.debug(`📝 Creando elemento de error para: ${fieldId}`);
       errorElement = this.createErrorElement(fieldElement);
     }
 
     // Marcar campo como error
     fieldElement.classList.add(this.config.errorClass);
     fieldElement.classList.remove(this.config.validClass);
+    this.logger.debug(`✅ Clases de error aplicadas a: ${fieldId}`);
 
     // Mostrar mensaje de error
     if (errorElement) {
       errorElement.textContent = message;
       errorElement.style.display = "block";
+      this.logger.debug(`💬 Mensaje de error mostrado: ${fieldId} -> ${message}`);
 
       if (this.config.enableAnimations) {
         errorElement.style.opacity = "0";
@@ -523,6 +568,83 @@ export class Ui {
         setTimeout(() => {
           errorElement.style.opacity = "1";
         }, 10);
+      }
+    } else {
+      this.logger.warn(`⚠️ No se pudo crear elemento de error para: ${fieldId}`);
+    }
+  }
+
+  /**
+   * Mostrar mensaje de error general del formulario
+   * @param {string} message - Mensaje de error a mostrar
+   */
+  showGeneralError(message) {
+    let errorContainer = this.formContext.querySelector(".form-general-error");
+
+    // Crear contenedor de error general si no existe
+    if (!errorContainer) {
+      errorContainer = document.createElement("div");
+      errorContainer.className = "form-general-error error_text";
+      errorContainer.style.cssText = `
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        display: none;
+      `;
+
+      // Insertar al inicio del formulario
+      const firstElement = this.formContext.querySelector("input, select, textarea, button");
+      if (firstElement) {
+        firstElement.parentNode.insertBefore(errorContainer, firstElement);
+      } else {
+        this.formContext.insertAdjacentElement("afterbegin", errorContainer);
+      }
+    }
+
+    // Mostrar el mensaje
+    errorContainer.textContent = message;
+    errorContainer.style.display = "block";
+
+    // Animación si está habilitada
+    if (this.config.enableAnimations) {
+      errorContainer.style.opacity = "0";
+      errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`;
+
+      setTimeout(() => {
+        errorContainer.style.opacity = "1";
+      }, 10);
+    }
+
+    // Desplazar hasta el error
+    errorContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Auto-ocultar después de 10 segundos
+    setTimeout(() => {
+      this.hideGeneralError();
+    }, 10000);
+
+    this.logger.debug("Mensaje de error general mostrado:", message);
+  }
+
+  /**
+   * Ocultar mensaje de error general del formulario
+   */
+  hideGeneralError() {
+    const errorContainer = this.formContext.querySelector(".form-general-error");
+
+    if (errorContainer) {
+      if (this.config.enableAnimations) {
+        errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`;
+        errorContainer.style.opacity = "0";
+
+        setTimeout(() => {
+          errorContainer.style.display = "none";
+        }, this.config.animationDuration);
+      } else {
+        errorContainer.style.display = "none";
       }
     }
   }
@@ -533,14 +655,23 @@ export class Ui {
    * @returns {HTMLElement|null} - Elemento de error creado
    */
   createErrorElement(fieldElement) {
-    if (!fieldElement) return null;
+    if (!fieldElement) {
+      this.logger.debug("🚫 createErrorElement: fieldElement es null");
+      return null;
+    }
 
     const fieldId = fieldElement.id || fieldElement.name;
     const errorId = `error_${fieldId}`;
+    this.logger.debug(`🏗️ createErrorElement para: ${fieldId} (ID: ${errorId})`);
 
     // Verificar si ya existe
-    const existingError = this.getFormContext().querySelector(`#${errorId}`);
-    if (existingError) return existingError;
+    this.logger.debug(`📋 Buscando en contexto: ${this.formContext.id || "document"}`);
+
+    const existingError = this.formContext.querySelector(`#${errorId}`);
+    if (existingError) {
+      this.logger.debug(`✅ Elemento de error ya existe: ${errorId}`);
+      return existingError;
+    }
 
     // Crear elemento de error
     const errorElement = document.createElement("div");
@@ -548,17 +679,22 @@ export class Ui {
     errorElement.className = "error_text";
     errorElement.setAttribute("data-error-for", fieldId);
     errorElement.style.display = "none";
+    this.logger.debug(`🆕 Elemento de error creado: ${errorId}`);
 
     // Encontrar dónde insertar el elemento
     const insertionPoint = this.findErrorInsertionPoint(fieldElement);
+    this.logger.debug(`📍 Punto de inserción encontrado:`, insertionPoint);
 
     if (insertionPoint.parent && insertionPoint.nextSibling) {
       insertionPoint.parent.insertBefore(errorElement, insertionPoint.nextSibling);
+      this.logger.debug(`✅ Error insertado antes de nextSibling`);
     } else if (insertionPoint.parent) {
       insertionPoint.parent.appendChild(errorElement);
+      this.logger.debug(`✅ Error agregado al parent`);
     } else {
       // Fallback: insertar después del campo
       fieldElement.parentNode.insertBefore(errorElement, fieldElement.nextSibling);
+      this.logger.debug(`✅ Error insertado como fallback después del campo`);
     }
 
     return errorElement;
@@ -570,6 +706,20 @@ export class Ui {
    * @returns {Object} - Información de inserción
    */
   findErrorInsertionPoint(fieldElement) {
+    // Manejo especial para radio buttons
+    if (fieldElement.type === "radio") {
+      // Buscar el contenedor del grupo de radio buttons
+      const radioGroupContainer =
+        fieldElement.closest(".radio-inline-group, .radio-group") || fieldElement.closest("div");
+
+      if (radioGroupContainer) {
+        return {
+          parent: radioGroupContainer.parentElement,
+          nextSibling: radioGroupContainer.nextSibling,
+        };
+      }
+    }
+
     // Buscar contenedor padre más apropiado
     const fieldContainer =
       fieldElement.closest(
@@ -599,6 +749,8 @@ export class Ui {
     if (!fieldElement) return;
 
     const fieldId = fieldElement.id || fieldElement.name;
+    this.logger.info(`🟢 [UI] OCULTANDO ERROR para ${fieldId}`);
+
     const errorElement =
       this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
 
@@ -650,162 +802,6 @@ export class Ui {
   }
 
   /**
-   * Obtener elemento de error existente o crear uno nuevo
-   * @param {HTMLElement} fieldElement - Campo de referencia
-   * @returns {HTMLElement|null} - Elemento de error
-   */
-  getOrCreateErrorElement(fieldElement) {
-    if (!fieldElement) return null;
-
-    const fieldId = fieldElement.id || fieldElement.name;
-    let errorElement =
-      this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
-
-    if (!errorElement) {
-      errorElement = this.createErrorElement(fieldElement);
-    }
-
-    return errorElement;
-  }
-
-  /**
-   * Mostrar mensaje de éxito en el contenedor apropiado
-   * @param {string} message - Mensaje a mostrar
-   * @param {HTMLElement} container - Contenedor específico (opcional)
-   */
-  showSuccessMessage(message, container = null) {
-    const targetContainer =
-      container ||
-      this.findElement("[data-puj-form='message-success']") ||
-      this.findElement("[data-success-msg]");
-
-    if (targetContainer) {
-      targetContainer.textContent = message;
-      targetContainer.style.display = "block";
-
-      if (this.config.enableAnimations) {
-        targetContainer.style.opacity = "0";
-        targetContainer.style.transition = `opacity ${this.config.animationDuration}ms`;
-
-        setTimeout(() => {
-          targetContainer.style.opacity = "1";
-        }, 10);
-      }
-    }
-  }
-
-  /**
-   * Ocultar mensaje de éxito del contenedor
-   * @param {HTMLElement} container - Contenedor específico (opcional)
-   */
-  hideSuccessMessage(container = null) {
-    const targetContainer =
-      container ||
-      this.findElement("[data-puj-form='message-success']") ||
-      this.findElement("[data-success-msg]");
-
-    if (targetContainer) {
-      this.hideElement(targetContainer);
-    }
-  }
-
-  /**
-   * Añadir listener de input con función de limpieza automática
-   * @param {HTMLElement} formElement - Formulario contenedor
-   * @param {string} selector - Selector del campo
-   * @param {Function} cleanFunction - Función de limpieza
-   * @returns {HTMLElement|null} - Elemento configurado
-   */
-  addInputListener(formElement, selector, cleanFunction) {
-    const element = formElement.querySelector(selector);
-    if (!element) return;
-
-    element.addEventListener("input", (e) => {
-      if (cleanFunction) {
-        e.target.value = cleanFunction(e.target.value);
-      }
-
-      // Limpiar error si existe
-      this.hideFieldError(e.target);
-    });
-
-    return element;
-  }
-
-  /**
-   * Añadir listener de cambio para un campo
-   * @param {HTMLElement} formElement - Formulario contenedor
-   * @param {string} selector - Selector del campo
-   * @param {Function} callback - Función callback
-   * @returns {HTMLElement|null} - Elemento configurado
-   */
-  addChangeListener(formElement, selector, callback) {
-    const element = formElement.querySelector(selector);
-    if (!element) return;
-
-    element.addEventListener("change", (e) => {
-      if (callback) {
-        callback(e.target.value);
-      }
-
-      // Limpiar error si existe
-      this.hideFieldError(e.target);
-    });
-
-    return element;
-  }
-
-  /**
-   * Añadir listeners para grupo de radio buttons
-   * @param {HTMLElement} formElement - Formulario contenedor
-   * @param {string} selector - Selector CSS completo para los radio buttons
-   * @param {Function} callback - Función callback
-   * @returns {NodeList} - Lista de radio buttons configurados
-   */
-  addRadioListener(formElement, selector, callback) {
-    const radioButtons = formElement.querySelectorAll(`input[type="radio"]${selector}`);
-
-    radioButtons.forEach((radio) => {
-      radio.addEventListener("change", (e) => {
-        if (callback) {
-          callback(e.target.value);
-        }
-      });
-    });
-
-    return radioButtons;
-  }
-
-  /**
-   * Validar y limpiar el valor de un campo según su tipo
-   * @param {HTMLElement} field - Campo a procesar
-   * @param {string} type - Tipo de validación ('text', 'number', 'email')
-   * @returns {string} - Valor limpio
-   */
-  validateAndCleanField(field, type = "text") {
-    if (!field) return "";
-
-    let value = field.value;
-
-    switch (type) {
-      case "text":
-        value = this.cleanText(value);
-        break;
-      case "number":
-        value = this.cleanNumbers(value);
-        break;
-      case "email":
-        value = value.trim().toLowerCase();
-        break;
-      default:
-        value = value.trim();
-    }
-
-    field.value = value;
-    return value;
-  }
-
-  /**
    * Deshabilitar un elemento de formulario
    * @param {HTMLElement} element - Elemento a deshabilitar
    */
@@ -825,198 +821,5 @@ export class Ui {
 
     element.disabled = false;
     element.classList.remove("disabled");
-  }
-
-  /**
-   * Mostrar indicador de carga en un elemento (generalmente botones)
-   * @param {HTMLElement} element - Elemento a modificar
-   * @param {string} text - Texto de carga personalizado
-   */
-  showLoadingIndicator(element, text = null) {
-    if (!element) return;
-
-    const loadingText = text || this.config.loadingText;
-
-    // Guardar texto original
-    element.dataset.originalText = element.textContent;
-
-    // Mostrar indicador
-    element.textContent = loadingText;
-    element.disabled = true;
-    element.classList.add("loading");
-  }
-
-  /**
-   * Restaurar elemento qUitando el indicador de carga
-   * @param {HTMLElement} element - Elemento a restaurar
-   */
-  hideLoadingIndicator(element) {
-    if (!element) return;
-
-    // Restaurar texto original
-    element.textContent = element.dataset.originalText || "";
-    element.disabled = false;
-    element.classList.remove("loading");
-
-    delete element.dataset.originalText;
-  }
-
-  /**
-   * Limpiar formulario
-   */
-  clearForm(formElement) {
-    if (!formElement) return;
-
-    // Limpiar campos
-    const fields = formElement.querySelectorAll("input, select, textarea");
-    fields.forEach((field) => {
-      if (field.type === "radio" || field.type === "checkbox") {
-        field.checked = false;
-      } else {
-        field.value = "";
-      }
-
-      // Limpiar clases de validación
-      field.classList.remove(this.config.errorClass, this.config.validClass);
-    });
-
-    // Ocultar errores
-    const errorElements = formElement.querySelectorAll(`.${this.config.errorTextClass}`);
-    errorElements.forEach((error) => {
-      error.style.display = "none";
-    });
-
-    // Ocultar mensajes de éxito
-    this.hideSuccessMessage();
-  }
-
-  /**
-   * Obtener datos del formulario
-   */
-  getFormData(formElement) {
-    if (!formElement) return {};
-
-    const formData = {};
-    const fields = formElement.querySelectorAll("input, select, textarea");
-
-    fields.forEach((field) => {
-      if (field.type === "radio" || field.type === "checkbox") {
-        if (field.checked) {
-          formData[field.name] = field.value;
-        }
-      } else {
-        formData[field.name] = field.value;
-      }
-    });
-
-    return formData;
-  }
-
-  /**
-   * Establecer datos del formulario
-   */
-  setFormData(formElement, data) {
-    if (!formElement || !data) return;
-
-    Object.entries(data).forEach(([name, value]) => {
-      const field = formElement.querySelector(`[name="${name}"]`);
-      if (field) {
-        if (field.type === "radio" || field.type === "checkbox") {
-          field.checked = field.value === value;
-        } else {
-          field.value = value;
-        }
-      }
-    });
-  }
-
-  /**
-   * Crear notificación temporal
-   */
-  createNotification(message, type = "info", duration = 3000) {
-    const notification = this.createElement(
-      "div",
-      {
-        className: `notification notification-${type}`,
-        style: `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === "error" ? "#f44336" : type === "success" ? "#4caf50" : "#2196f3"};
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        z-index: 10000;
-        font-family: Arial, sans-serif;
-        font-weight: bold;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      `,
-      },
-      message
-    );
-
-    document.body.appendChild(notification);
-
-    if (this.config.enableAnimations) {
-      notification.style.opacity = "0";
-      notification.style.transition = `opacity ${this.config.animationDuration}ms`;
-
-      setTimeout(() => {
-        notification.style.opacity = "1";
-      }, 10);
-    }
-
-    // Auto-ocultar después del tiempo especificado
-    setTimeout(() => {
-      if (document.body.contains(notification)) {
-        if (this.config.enableAnimations) {
-          notification.style.opacity = "0";
-          setTimeout(() => {
-            if (document.body.contains(notification)) {
-              document.body.removeChild(notification);
-            }
-          }, this.config.animationDuration);
-        } else {
-          document.body.removeChild(notification);
-        }
-      }
-    }, duration);
-
-    return notification;
-  }
-
-  /**
-   * Validar que el array de opciones sea válido
-   * @param {Array} options - Opciones a validar
-   * @returns {boolean} - True si es válido
-   */
-  _validateOptionsArray(options) {
-    if (!Array.isArray(options)) {
-      Logger.error(`Las opciones deben ser un array, recibido: ${typeof options}`);
-      return false;
-    }
-
-    if (options.length === 0) {
-      Logger.warn(`Array de opciones está vacío`);
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Actualizar configuración del módulo
-   * @param {Object} newConfig - Nueva configuración
-   */
-  updateConfig(newConfig) {
-    this.config = { ...this.config, ...newConfig };
-  }
-
-  /**
-   * Obtener copia de la configuración actual
-   * @returns {Object} - Configuración actual
-   */
-  getConfig() {
-    return { ...this.config };
   }
 }

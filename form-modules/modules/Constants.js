@@ -143,62 +143,118 @@ export class Constants {
 
   // Configuración de campos del formulario para Events
   static FIELD_CONFIGS = [
-    // Campos de texto con limpieza
+    // Campos de datos personales
     {
-      selectorKey: "firstName",
+      selector: Constants.SELECTORS.FIRST_NAME,
       stateKey: Constants.FIELDS.FIRST_NAME,
       type: "text",
       cleanMethod: "cleanText",
     },
     {
-      selectorKey: "lastName",
+      selector: Constants.SELECTORS.LAST_NAME,
       stateKey: Constants.FIELDS.LAST_NAME,
       type: "text",
       cleanMethod: "cleanText",
     },
     {
-      selectorKey: "document",
+      selector: Constants.SELECTORS.TYPE_DOC,
+      stateKey: Constants.FIELDS.TYPE_DOC,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.DOCUMENT,
       stateKey: Constants.FIELDS.DOCUMENT,
       type: "text",
       cleanMethod: "cleanNumbers",
     },
     {
-      selectorKey: "phone",
+      selector: Constants.SELECTORS.EMAIL,
+      stateKey: Constants.FIELDS.EMAIL,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.PHONE_CODE,
+      stateKey: Constants.FIELDS.PHONE_CODE,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.PHONE,
       stateKey: Constants.FIELDS.PHONE,
       type: "text",
       cleanMethod: "cleanNumbers",
     },
 
-    // Campos de selección simple
+    // Campos de ubicación
     {
-      selectorKey: "typeDoc",
-      stateKey: Constants.FIELDS.TYPE_DOC,
+      selector: Constants.SELECTORS.COUNTRY,
+      stateKey: Constants.FIELDS.COUNTRY,
       type: "select",
+      handler: "country", // Handler especial para cascada de ubicaciones
     },
     {
-      selectorKey: "email",
-      stateKey: Constants.FIELDS.EMAIL,
+      selector: Constants.SELECTORS.DEPARTMENT,
+      stateKey: Constants.FIELDS.DEPARTMENT,
       type: "select",
+      handler: "department", // Handler especial para cascada de ubicaciones
     },
     {
-      selectorKey: "phoneCode",
-      stateKey: Constants.FIELDS.PHONE_CODE,
+      selector: Constants.SELECTORS.CITY,
+      stateKey: Constants.FIELDS.CITY,
       type: "select",
     },
+
+    // Campos académicos
     {
-      selectorKey: "admissionPeriod",
+      selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+      stateKey: Constants.FIELDS.ACADEMIC_LEVEL,
+      type: "select",
+      handler: "academicLevel", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.FACULTY,
+      stateKey: Constants.FIELDS.FACULTY,
+      type: "select",
+      handler: "faculty", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.PROGRAM,
+      stateKey: Constants.FIELDS.PROGRAM,
+      type: "select",
+      handler: "program", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.ADMISSION_PERIOD,
       stateKey: Constants.FIELDS.ADMISSION_PERIOD,
       type: "select",
     },
+
+    // Campos de evento
     {
-      selectorKey: "college",
+      selector: Constants.SELECTORS.TYPE_ATTENDEE,
+      stateKey: Constants.FIELDS.TYPE_ATTENDEE,
+      type: "select",
+      handler: "typeAttendee", // Handler especial para lógica de tipo de asistente
+    },
+    {
+      selector: Constants.SELECTORS.ATTENDANCE_DAY,
+      stateKey: Constants.FIELDS.ATTENDANCE_DAY,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.COLLEGE,
       stateKey: Constants.FIELDS.COLLEGE,
       type: "select",
     },
     {
-      selectorKey: "university",
+      selector: Constants.SELECTORS.UNIVERSITY,
       stateKey: Constants.FIELDS.UNIVERSITY,
       type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.DATA_AUTHORIZATION,
+      stateKey: Constants.FIELDS.DATA_AUTHORIZATION,
+      type: "radio", // Es radio button, no checkbox
+      handler: "authorization", // Handler especial para autorización
     },
   ];
 
@@ -221,6 +277,14 @@ export class Constants {
     ENABLED: true,
     PERSIST: false,
     MAX_LOGS: 1000,
+  };
+
+  // Tipos de campos que deben excluirse de la validación automática
+  static EXCLUDED_FIELD_TYPES = {
+    HIDDEN: "hidden",
+    BUTTON: "button",
+    SUBMIT: "submit",
+    RESET: "reset",
   };
 
   static THANK_YOU_PAGE = "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY";
@@ -525,72 +589,4 @@ export class Constants {
       },
     },
   };
-
-  /**
-   * Obtener selector de campo por categoría y tipo
-   * @param {string} category - Categoría del campo (PERSONAL, LOCATION, etc.)
-   * @param {string} fieldType - Tipo específico del campo
-   * @returns {string} - Selector CSS del campo
-   */
-  static getFieldSelector(category, fieldType) {
-    const categorySelectors = this.SELECTORS[category];
-    if (!categorySelectors) {
-      throw new Error(`Categoría de campo no encontrada: ${category}`);
-    }
-
-    const selector = categorySelectors[fieldType];
-    if (!selector) {
-      throw new Error(`Tipo de campo no encontrado: ${fieldType} en categoría ${category}`);
-    }
-
-    return selector;
-  }
-
-  /**
-   * Obtener nombre de campo por categoría y tipo
-   * @param {string} category - Categoría del campo
-   * @param {string} fieldType - Tipo específico del campo
-   * @returns {string} - Nombre del campo
-   */
-  static getFieldName(category, fieldType) {
-    const categoryNames = this.FIELDS[category];
-    if (!categoryNames) {
-      throw new Error(`Categoría de campo no encontrada: ${category}`);
-    }
-
-    const fieldName = categoryNames[fieldType];
-    if (!fieldName) {
-      throw new Error(`Tipo de campo no encontrado: ${fieldType} en categoría ${category}`);
-    }
-
-    return fieldName;
-  }
-
-  /**
-   * Obtener configuración completa para un módulo específico
-   * @param {string} moduleType - Tipo de módulo (Ui, autoSelect, logging)
-   * @returns {Object} - Configuración del módulo
-   */
-  static getModuleConfig(moduleType) {
-    const configs = {
-      Ui: {
-        animation: this.ANIMATION_CONFIG,
-        texts: this.Ui_TEXTS,
-      },
-      autoSelect: {
-        types: this.AUTO_SELECT_TYPES,
-        delays: this.AUTO_SELECT_DELAYS,
-      },
-      logging: {
-        ...this.LOG_CONFIG,
-      },
-    };
-
-    const config = configs[moduleType];
-    if (!config) {
-      throw new Error(`Configuración de módulo no encontrada: ${moduleType}`);
-    }
-
-    return { ...config };
-  }
 }

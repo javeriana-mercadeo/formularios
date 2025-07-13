@@ -1,31 +1,13 @@
 /**
- * Config - Maneja la configuración centralizada del FormManager
- * Separa la lógica de configuración del FormManager principal
- * @version 1.0
+ * Config - Maneja la configuración de una instancia específica del FormManager
+ * Cada FormManager tiene su propia instancia de Config
+ * @version 2.0 - Eliminado patrón singleton
  */
 
+import { Constants } from "./Constants.js";
+
 export class Config {
-  // Instancia global estática para acceso desde cualqUier módulo
-  static _instance = null;
-
-  constructor(config = {}, selector) {
-    this.selector = selector;
-    this.config = this.getDefaultConfig(config);
-
-    // Solo establecer como instancia global si no existe una
-    if (!Config._instance) {
-      Config._instance = this;
-    }
-
-    return this;
-  }
-
-  /**
-   * Obtener configuración fusionada con valores por defecto
-   * @param {Object} customConfig - Configuración personalizada
-   * @returns {Object} - Configuración completa con valores por defecto
-   */
-  getDefaultConfig(customConfig = {}) {
+  constructor({ config = {}, selector }) {
     const defaultConfig = {
       // DATOS DE EVENTO
       eventName: "",
@@ -35,18 +17,29 @@ export class Config {
       source: "",
       subSource: "",
       medium: "",
-      leadSource: "Landing Pages",
-      originRequest: "web_to_lead_eventos",
+      leadSource: "",
+      originRequest: "",
 
       // LISTAS
+      // Ubicaciones
+      countries: [],
       departments: [],
       cities: [],
-      countries: [],
-      typeAttendee: [],
-      attendanceDays: [],
+
+      // Datos académicos
       academicLevels: [],
       faculties: [],
       programs: [],
+
+      // Datos del evento
+      typeAttendee: [
+        "Aspirante",
+        "Padre de familia y/o acudiente",
+        "Docente y/o psicoorientador",
+        "Visitante PUJ",
+        "Administrativo PUJ",
+      ],
+      attendanceDays: [],
       university: [],
       company: [],
 
@@ -55,37 +48,50 @@ export class Config {
       debugMode: false,
       devMode: false,
       debugEmail: "",
-      cacheEnabled: false,
-      cacheExpirationHours: 12,
+
+      cache: {
+        enabled: false,
+        expirationHours: 12,
+      },
 
       // URLs
-      dataUrls: {
+      urls: {
         locations: "",
         prefixes: "",
         programs: "",
         periods: "",
       },
+
       thankYouUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
       privacyPolicyUrl:
         "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
 
-      // VALIDACIÓN
-      validation: {
-        realTimeValidation: true,
-        showErrorsOnBlur: true,
-        strictInitialValidation: true, // Si debe validar valores iniciales estrictamente
-      },
-
       // LOGGING
       logging: {
-        prefix: this.selector || "form-manager",
+        prefix: `${selector} | ${config.eventName || defaultConfig.eventName}` || "form-manager",
         enabled: true,
         level: "info",
         showTimestamp: true,
         showLevel: true,
-        colors: true,
-        persistLogs: false,
-        maxLogs: 1000,
+      },
+
+      // UI
+      ui: {
+        selector: selector,
+
+        errorClass: "error",
+        validClass: "validated",
+        errorTextClass: "error_text",
+        hiddenClass: "hidden",
+
+        // Configuración de animaciones
+        animationDuration: 300,
+        enableAnimations: true,
+
+        // Configuración de mensajes
+        loadingText: "Cargando...",
+        successText: "Enviado correctamente",
+        errorText: "Error al procesar",
       },
 
       // CALLBACKS
@@ -97,9 +103,8 @@ export class Config {
       },
     };
 
-    // Fusión profunda usando structuredClone
-    const merged = structuredClone(defaultConfig);
-    return this.deepMerge(merged, customConfig);
+    this.config = this.deepMerge(structuredClone(defaultConfig), config);
+    this.selector = selector;
   }
 
   /**
@@ -118,15 +123,9 @@ export class Config {
     return target;
   }
 
-  /**
-   * Método estático para obtener/crear la instancia singleton
-   */
-  static getInstance(config = {}, selector) {
-    if (!Config._instance) {
-      Config._instance = new Config(config, selector);
-    }
-    return Config._instance;
-  }
+  // ===============================
+  // MÉTODOS DE INSTANCIA
+  // ===============================
 
   /**
    * Obtener configuración completa
@@ -142,8 +141,12 @@ export class Config {
     return this.config.logging;
   }
 
+  getUiConfig() {
+    return this.config.ui;
+  }
+
   /**
-   * Actualizar configuración del singleton
+   * Actualizar configuración
    */
   updateConfig(newConfig) {
     this.config = this.deepMerge(this.config, newConfig);
@@ -151,81 +154,25 @@ export class Config {
   }
 
   /**
-   * Obtener configuración completa global
-   * @returns {Object|null} - Configuración completa o null si no hay instancia global
-   */
-  static getConfig() {
-    return Config.getInstance().getConfig();
-  }
-
-  /**
-   * Obtener configuración global de logging
-   * @returns {Object|null} - Configuración de logging o null si no hay instancia global
-   */
-  static getLoggingConfig() {
-    return Config.getInstance().getLoggingConfig();
-  }
-
-  /**
-   * Actualizar configuración global
-   * @param {Object} newConfig - Nueva configuración a aplicar
-   * @returns {Object} - Configuración actualizada
-   */
-  static updateConfig(newConfig) {
-    return Config.getInstance().updateConfig(newConfig);
-  }
-
-  /**
-   * Verificar si existe una instancia global
-   * @returns {boolean} - True si existe una instancia global
-   */
-  static hasGlobalInstance() {
-    return Config._instance !== null;
-  }
-
-  /**
    * Obtener configuración específica por clave
-   */
-  static get(key) {
-    return Config.getInstance().get(key);
-  }
-
-  /**
-   * Establecer configuración específica
-   */
-  static set(key, value) {
-    return Config.getInstance().set(key, value);
-  }
-
-  /**
-   * Obtener selector del formulario actual
-   * @returns {string|null} - Selector del formulario o null si no hay instancia
-   */
-  static getSelector() {
-    return Config._instance ? Config._instance.selector : null;
-  }
-
-  /**
-   * Obtener elemento del formulario actual
-   * @returns {HTMLElement|null} - Elemento del formulario o null si no existe
-   */
-  static getFormElement() {
-    const selector = Config.getSelector();
-    return selector ? document.getElementById(selector) : null;
-  }
-
-  /**
-   * Obtener configuración específica por clave (método de instancia)
    */
   get(key) {
     return this.config[key];
   }
 
   /**
-   * Establecer configuración específica (método de instancia)
+   * Establecer configuración específica
    */
   set(key, value) {
     this.config[key] = value;
     return this.config[key];
+  }
+
+  /**
+   * Obtener selector del formulario
+   * @returns {string} - Selector del formulario
+   */
+  getSelector() {
+    return this.selector;
   }
 }

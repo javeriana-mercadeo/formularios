@@ -4,15 +4,14 @@
  * @version 1.0
  */
 
-import { Logger } from "./Logger.js";
 import { Constants } from "./Constants.js";
 
 export class Academic {
-  constructor(Data, Ui, stateManager, inputSelectors) {
+  constructor(Data, Ui, state, logger = null) {
     this.Data = Data;
     this.Ui = Ui;
-    this.stateManager = stateManager;
-    this.inputSelectors = inputSelectors;
+    this.state = state;
+    this.logger = logger;
   }
 
   // ===============================
@@ -23,7 +22,7 @@ export class Academic {
    * Inicializar estado de campos académicos basado en tipo de asistente
    */
   initializeAcademicFields() {
-    const currentTypeAttendee = this.stateManager.getField(Constants.FIELDS.TYPE_ATTENDEE);
+    const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
     if (currentTypeAttendee === Constants.ATTENDEE_TYPES.APPLICANT) {
       this._showAcademicFields();
     } else {
@@ -35,8 +34,9 @@ export class Academic {
    * Manejar cambio de tipo de asistente
    */
   handleTypeAttendeeChange(value) {
-    this.stateManager.updateField(Constants.FIELDS.TYPE_ATTENDEE, value);
-    Logger.info(`👤 Tipo de asistente cambiado a: ${value}`);
+    this.state.updateField(Constants.FIELDS.TYPE_ATTENDEE, value);
+
+    this.logger.info(`👤 Tipo de asistente cambiado a: ${value}`);
 
     if (value === Constants.ATTENDEE_TYPES.APPLICANT) {
       this._showAcademicFields();
@@ -49,8 +49,8 @@ export class Academic {
    * Manejar cambio de nivel académico
    */
   handleAcademicLevelChange(levelValue) {
-    this.stateManager.updateField(Constants.FIELDS.ACADEMIC_LEVEL, levelValue);
-    Logger.info(`🎓 Nivel académico cambiado a: ${levelValue}`);
+    this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, levelValue);
+    this.logger.info(`🎓 Nivel académico cambiado a: ${levelValue}`);
 
     if (levelValue) {
       this._loadFacultiesForLevel(levelValue);
@@ -63,8 +63,8 @@ export class Academic {
    * Manejar cambio de facultad
    */
   handleFacultyChange(facultyValue) {
-    this.stateManager.updateField(Constants.FIELDS.FACULTY, facultyValue);
-    Logger.info(`🏛️ Facultad cambiada a: ${facultyValue}`);
+    this.state.updateField(Constants.FIELDS.FACULTY, facultyValue);
+    this.logger.info(`🏛️ Facultad cambiada a: ${facultyValue}`);
 
     if (facultyValue) {
       this._loadProgramsForFaculty(facultyValue);
@@ -77,11 +77,11 @@ export class Academic {
    * Manejar cambio de programa académico
    */
   handleProgramChange(programValue) {
-    this.stateManager.updateField(Constants.FIELDS.PROGRAM, programValue);
-    Logger.info(`📚 Programa académico cambiado a: ${programValue}`);
+    this.state.updateField(Constants.FIELDS.PROGRAM, programValue);
+    this.logger.info(`📚 Programa académico cambiado a: ${programValue}`);
 
     if (programValue) {
-      const currentAcademicLevel = this.stateManager.getField(Constants.FIELDS.ACADEMIC_LEVEL);
+      const currentAcademicLevel = this.state.getField(Constants.FIELDS.ACADEMIC_LEVEL);
       if (currentAcademicLevel) {
         this._loadPeriodsForLevel(currentAcademicLevel);
       }
@@ -102,14 +102,14 @@ export class Academic {
     const academicLevels = this.Data.getAcademicLevels();
 
     this.Ui.populateSelect({
-      selector: this.inputSelectors.academicLevel,
+      selector: Constants.SELECTORS.ACADEMIC_LEVEL,
       options: academicLevels.map((level) => ({
         value: level.code,
         text: level.name,
       })),
     });
 
-    this.stateManager.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, true);
+    this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, true);
   }
 
   /**
@@ -117,22 +117,60 @@ export class Academic {
    * @private
    */
   _hideAcademicFields() {
+    this.logger.info("🧹 [ACADEMIC] Ocultando y limpiando campos académicos");
+
     const academicFields = [
-      { key: Constants.FIELDS.ACADEMIC_LEVEL, selector: this.inputSelectors.academicLevel },
-      { key: Constants.FIELDS.FACULTY, selector: this.inputSelectors.faculty },
-      { key: Constants.FIELDS.PROGRAM, selector: this.inputSelectors.program },
-      { key: Constants.FIELDS.ADMISSION_PERIOD, selector: this.inputSelectors.admissionPeriod },
+      { key: Constants.FIELDS.ACADEMIC_LEVEL, selector: Constants.SELECTORS.ACADEMIC_LEVEL },
+      { key: Constants.FIELDS.FACULTY, selector: Constants.SELECTORS.FACULTY },
+      { key: Constants.FIELDS.PROGRAM, selector: Constants.SELECTORS.PROGRAM },
+      { key: Constants.FIELDS.ADMISSION_PERIOD, selector: Constants.SELECTORS.ADMISSION_PERIOD },
     ];
 
     academicFields.forEach(({ key, selector }) => {
-      const element = document.querySelector(selector);
+      this.logger.info(`🧹 [ACADEMIC] Limpiando campo: ${key}`);
+
+      const element = this.Ui.scopedQuery(selector);
       if (element) {
-        this.Ui.hideElement(element);
+        // IMPORTANTE: Limpiar error ANTES de ocultar para evitar elementos DOM huérfanos
         this.Ui.hideFieldError(element);
+        this.Ui.hideElement(element);
+
+        this.logger.info(`👁️ [ACADEMIC] Elemento ${key} ocultado y error limpiado de UI`);
       }
-      this.stateManager.setFieldVisibility(key, false);
-      this.stateManager.updateField(key, "");
-      this.stateManager.clearValidationError(key);
+
+      this.state.setFieldVisibility(key, false);
+      this.state.updateField(key, "");
+      this.state.clearValidationError(key);
+
+      // Forzar limpieza adicional de cualquier elemento de error residual
+      this._forceCleanFieldError(key);
+
+      this.logger.info(`✅ [ACADEMIC] Estado limpiado para ${key}`);
+    });
+
+    this.logger.info("🧹 [ACADEMIC] Limpieza de campos académicos completada");
+  }
+
+  /**
+   * Forzar limpieza de errores visuales de un campo específico
+   * @private
+   */
+  _forceCleanFieldError(fieldKey) {
+    // Buscar y limpiar TODOS los posibles elementos de error para este campo
+    const possibleErrorSelectors = [
+      `#error_${fieldKey}`,
+      `[data-error-for="${fieldKey}"]`,
+      `.error_text[data-error-for="${fieldKey}"]`,
+    ];
+
+    possibleErrorSelectors.forEach((selector) => {
+      const errorElement = this.Ui.scopedQuery(selector);
+      if (errorElement) {
+        errorElement.style.display = "none";
+        errorElement.textContent = "";
+
+        this.logger.info(`🧹 [ACADEMIC] Error residual limpiado: ${selector}`);
+      }
     });
   }
 
@@ -148,9 +186,9 @@ export class Academic {
     };
 
     const selectorMapping = {
-      faculty: this.inputSelectors.faculty,
-      program: this.inputSelectors.program,
-      admissionPeriod: this.inputSelectors.admissionPeriod,
+      faculty: Constants.SELECTORS.FACULTY,
+      program: Constants.SELECTORS.PROGRAM,
+      admissionPeriod: Constants.SELECTORS.ADMISSION_PERIOD,
     };
 
     fieldKeys.forEach((key) => {
@@ -158,12 +196,12 @@ export class Academic {
       const selector = selectorMapping[key];
 
       if (field && selector) {
-        const element = document.querySelector(selector);
+        const element = this.Ui.scopedQuery(selector);
         if (element) {
           this.Ui.hideElement(element);
         }
-        this.stateManager.setFieldVisibility(field, false);
-        this.stateManager.updateField(field, "");
+        this.state.setFieldVisibility(field, false);
+        this.state.updateField(field, "");
       }
     });
   }
@@ -180,14 +218,14 @@ export class Academic {
     const faculties = this.Data.getFaculties(academicLevel);
 
     this.Ui.populateSelect({
-      selector: this.inputSelectors.faculty,
+      selector: Constants.SELECTORS.FACULTY,
       options: faculties.map((faculty) => ({
         value: faculty,
         text: faculty,
       })),
     });
 
-    this.stateManager.setFieldVisibility(Constants.FIELDS.FACULTY, true);
+    this.state.setFieldVisibility(Constants.FIELDS.FACULTY, true);
   }
 
   /**
@@ -195,24 +233,25 @@ export class Academic {
    * @private
    */
   _loadProgramsForFaculty(facultyValue) {
-    const currentAcademicLevel = this.stateManager.getField(Constants.FIELDS.ACADEMIC_LEVEL);
+    const currentAcademicLevel = this.state.getField(Constants.FIELDS.ACADEMIC_LEVEL);
 
     if (!currentAcademicLevel) {
-      Logger.warn("No se puede cargar programas sin nivel académico seleccionado");
+      this.logger.warn("No se puede cargar programas sin nivel académico seleccionado");
+
       return;
     }
 
     const programs = this.Data.getPrograms(currentAcademicLevel, facultyValue);
 
     this.Ui.populateSelect({
-      selector: this.inputSelectors.program,
+      selector: Constants.SELECTORS.PROGRAM,
       options: programs.map((program) => ({
         value: program.Codigo,
         text: program.Nombre,
       })),
     });
 
-    this.stateManager.setFieldVisibility(Constants.FIELDS.PROGRAM, true);
+    this.state.setFieldVisibility(Constants.FIELDS.PROGRAM, true);
   }
 
   /**
@@ -223,14 +262,14 @@ export class Academic {
     const periods = this.Data.getPeriods(academicLevel);
 
     this.Ui.populateSelect({
-      selector: this.inputSelectors.admissionPeriod,
+      selector: Constants.SELECTORS.ADMISSION_PERIOD,
       options: periods.map((period) => ({
         value: period.codigo,
         text: period.nombre,
       })),
     });
 
-    this.stateManager.setFieldVisibility(Constants.FIELDS.ADMISSION_PERIOD, true);
+    this.state.setFieldVisibility(Constants.FIELDS.ADMISSION_PERIOD, true);
   }
 
   // ===============================
@@ -242,49 +281,19 @@ export class Academic {
    */
   getAcademicState() {
     return {
-      typeAttendee: this.stateManager.getField(Constants.FIELDS.TYPE_ATTENDEE),
-      academicLevel: this.stateManager.getField(Constants.FIELDS.ACADEMIC_LEVEL),
-      faculty: this.stateManager.getField(Constants.FIELDS.FACULTY),
-      program: this.stateManager.getField(Constants.FIELDS.PROGRAM),
-      admissionPeriod: this.stateManager.getField(Constants.FIELDS.ADMISSION_PERIOD),
+      typeAttendee: this.state.getField(Constants.FIELDS.TYPE_ATTENDEE),
+      academicLevel: this.state.getField(Constants.FIELDS.ACADEMIC_LEVEL),
+      faculty: this.state.getField(Constants.FIELDS.FACULTY),
+      program: this.state.getField(Constants.FIELDS.PROGRAM),
+      admissionPeriod: this.state.getField(Constants.FIELDS.ADMISSION_PERIOD),
     };
-  }
-
-  /**
-   * Validar que los campos académicos estén completos
-   */
-  validateAcademicFields() {
-    const typeAttendee = this.stateManager.getField(Constants.FIELDS.TYPE_ATTENDEE);
-
-    // Solo validar si es aspirante
-    if (typeAttendee !== Constants.ATTENDEE_TYPES.APPLICANT) {
-      return true;
-    }
-
-    const academicLevel = this.stateManager.getField(Constants.FIELDS.ACADEMIC_LEVEL);
-    const faculty = this.stateManager.getField(Constants.FIELDS.FACULTY);
-    const program = this.stateManager.getField(Constants.FIELDS.PROGRAM);
-    const admissionPeriod = this.stateManager.getField(Constants.FIELDS.ADMISSION_PERIOD);
-
-    const missingFields = [];
-    if (!academicLevel) missingFields.push("Nivel académico");
-    if (!faculty) missingFields.push("Facultad");
-    if (!program) missingFields.push("Programa");
-    if (!admissionPeriod) missingFields.push("Período de admisión");
-
-    if (missingFields.length > 0) {
-      Logger.warn(`Campos académicos incompletos: ${missingFields.join(", ")}`);
-      return false;
-    }
-
-    return true;
   }
 
   /**
    * Resetear todos los campos académicos
    */
   resetAcademicFields() {
-    Logger.info("🔄 Reseteando campos académicos");
+    this.logger.info("🔄 Reseteando campos académicos");
 
     const academicFields = [
       Constants.FIELDS.ACADEMIC_LEVEL,
@@ -294,9 +303,9 @@ export class Academic {
     ];
 
     academicFields.forEach((field) => {
-      this.stateManager.updateField(field, "");
-      this.stateManager.setFieldVisibility(field, false);
-      this.stateManager.clearValidationError(field);
+      this.state.updateField(field, "");
+      this.state.setFieldVisibility(field, false);
+      this.state.clearValidationError(field);
     });
 
     this._hideAcademicFields();

@@ -4,70 +4,13 @@
  * @version 1.0
  */
 
-import { Logger } from "./Logger.js";
-
-// Sistema de cache global compartido entre todas las instancias
-class GlobalDataCache {
-  constructor() {
-    this.cache = new Map();
-    this.loadingPromises = new Map();
-    this.cacheTimestamps = new Map();
-  }
-
-  static getInstance() {
-    if (!GlobalDataCache.instance) {
-      GlobalDataCache.instance = new GlobalDataCache();
-    }
-    return GlobalDataCache.instance;
-  }
-
-  isCacheValid(key, expirationHours) {
-    const timestamp = this.cacheTimestamps.get(key);
-    if (!timestamp) return false;
-
-    const now = Date.now();
-    const expirationTime = timestamp + expirationHours * 60 * 60 * 1000;
-    return now < expirationTime;
-  }
-
-  getCachedData(key, expirationHours) {
-    if (!this.isCacheValid(key, expirationHours)) {
-      this.cache.delete(key);
-      this.cacheTimestamps.delete(key);
-      return null;
-    }
-    return this.cache.get(key);
-  }
-
-  setCachedData(key, data) {
-    this.cache.set(key, data);
-    this.cacheTimestamps.set(key, Date.now());
-  }
-
-  getLoadingPromise(key) {
-    return this.loadingPromises.get(key);
-  }
-
-  setLoadingPromise(key, promise) {
-    this.loadingPromises.set(key, promise);
-
-    // Limpiar la promesa cuando se complete
-    promise.finally(() => {
-      this.loadingPromises.delete(key);
-    });
-  }
-
-  clearCache() {
-    this.cache.clear();
-    this.cacheTimestamps.clear();
-    this.loadingPromises.clear();
-  }
-}
+import { Cache } from "./Cache.js";
 
 export class Data {
-  constructor(dataUrls = {}, cacheEnabled = false, cacheExpirationHours = 12) {
-    this.dataUrls = {
-      ...dataUrls,
+  constructor(config = {}, urls = {}, logger) {
+    this.logger = logger;
+    this.urls = {
+      ...urls,
     };
 
     // URLs de fallback en orden de prioridad
@@ -104,11 +47,11 @@ export class Data {
       ],
     };
 
-    this.cacheEnabled = cacheEnabled;
-    this.cacheExpirationHours = cacheExpirationHours;
+    this.cacheEnabled = config.enabled;
+    this.cacheExpirationHours = config.expirationHours;
 
     // Obtener instancia global del cache
-    this.globalCache = GlobalDataCache.getInstance();
+    this.cache = Cache.getInstance();
 
     // Almacén de datos cargados
     this.data = {
@@ -133,13 +76,13 @@ export class Data {
     if (this.cacheEnabled && cacheKey) {
       const cachedData = this.getCachedData(actualCacheKey);
       if (cachedData) {
-        Logger.loading(`Cargando datos desde caché: ${actualCacheKey}`);
+        this.logger.loading(`Cargando datos desde caché: ${actualCacheKey}`);
         return cachedData;
       }
     }
 
     try {
-      Logger.loading(`Cargando datos desde: ${url}`);
+      this.logger.loading(`Cargando datos desde: ${url}`);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -153,10 +96,10 @@ export class Data {
         this.setCachedData(actualCacheKey, data);
       }
 
-      Logger.success(`Datos cargados correctamente: ${url}`);
+      this.logger.success(`Datos cargados correctamente: ${url}`);
       return data;
     } catch (error) {
-      Logger.error(`Error cargando datos desde ${url}:`, error);
+      this.logger.error(`Error cargando datos desde ${url}:`, error);
       throw error;
     }
   }
@@ -168,24 +111,24 @@ export class Data {
     const actualCacheKey = dataType;
 
     // Verificar si ya hay una carga en progreso (compartida entre instancias)
-    const existingPromise = this.globalCache.getLoadingPromise(actualCacheKey);
+    const existingPromise = this.cache.getLoadingPromise(actualCacheKey);
     if (existingPromise) {
-      Logger.loading(`Esperando carga en progreso compartida: ${actualCacheKey}`);
+      this.logger.loading(`Esperando carga en progreso compartida: ${actualCacheKey}`);
       return await existingPromise;
     }
 
     // Verificar caché global si está habilitado
     if (this.cacheEnabled) {
-      const cachedData = this.globalCache.getCachedData(actualCacheKey, this.cacheExpirationHours);
+      const cachedData = this.cache.getCachedData(actualCacheKey, this.cacheExpirationHours);
       if (cachedData) {
-        Logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
+        this.logger.loading(`Cargando datos desde caché global: ${actualCacheKey}`);
         return cachedData;
       }
     }
 
     // Crear promesa de carga y registrarla globalmente
     const loadPromise = this._performDataLoad(dataType, actualCacheKey);
-    this.globalCache.setLoadingPromise(actualCacheKey, loadPromise);
+    this.cache.setLoadingPromise(actualCacheKey, loadPromise);
 
     return await loadPromise;
   }
@@ -198,8 +141,8 @@ export class Data {
     const urls = [];
 
     // Primero intentar con la URL del usuario si existe
-    if (this.dataUrls[dataType]) {
-      urls.push(this.dataUrls[dataType]);
+    if (this.urls[dataType]) {
+      urls.push(this.urls[dataType]);
     }
 
     // Luego agregar las URLs de fallback
@@ -214,7 +157,7 @@ export class Data {
 
     for (const url of uniqueUrls) {
       try {
-        Logger.loading(`Intentando cargar datos desde: ${url}`);
+        this.logger.loading(`Intentando cargar datos desde: ${url}`);
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -225,20 +168,22 @@ export class Data {
 
         // Guardar en caché global si está habilitado
         if (this.cacheEnabled && cacheKey) {
-          this.globalCache.setCachedData(cacheKey, data);
+          this.cache.setCachedData(cacheKey, data);
         }
 
-        Logger.success(`Datos cargados correctamente desde: ${url}`);
+        this.logger.success(`Datos cargados correctamente desde: ${url}`);
         return data;
       } catch (error) {
-        Logger.warn(`Error cargando desde ${url}: ${error.message}`);
+        this.logger.warn(`Error cargando desde ${url}: ${error.message}`);
         lastError = error;
         continue;
       }
     }
 
     // Si ninguna URL funcionó, lanzar el último error
-    Logger.error(`Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`);
+    this.logger.error(
+      `Error cargando datos de tipo '${dataType}' desde todas las URLs disponibles`
+    );
     throw lastError || new Error(`No se pudieron cargar los datos de tipo '${dataType}'`);
   }
 
@@ -382,7 +327,7 @@ export class Data {
    */
   async loadAll() {
     try {
-      Logger.loading("Cargando todos los datos...");
+      this.logger.loading("Cargando todos los datos...");
 
       await Promise.all([
         this.loadLocations(),
@@ -394,13 +339,13 @@ export class Data {
       ]);
 
       this.isInitialized = true;
-      Logger.success("Todos los datos cargados correctamente");
+      this.logger.success("Todos los datos cargados correctamente");
 
       if (this.data.programs) {
-        Logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
+        this.logger.debug("Niveles académicos en programas:", Object.keys(this.data.programs));
       }
     } catch (error) {
-      Logger.error("Error cargando datos:", error);
+      this.logger.error("Error cargando datos:", error);
       throw error;
     }
   }
@@ -474,7 +419,7 @@ export class Data {
    */
   getAcademicLevels() {
     if (!this.data.programs) {
-      Logger.warn("No hay datos de programas cargados");
+      this.logger.warn("No hay datos de programas cargados");
       return [];
     }
 
@@ -490,7 +435,7 @@ export class Data {
       name: levelNames[levelCode] || levelCode,
     }));
 
-    Logger.debug("Niveles académicos detectados desde programas:", levels);
+    this.logger.debug("Niveles académicos detectados desde programas:", levels);
     return levels;
   }
 
@@ -499,28 +444,28 @@ export class Data {
    */
   getFaculties(academicLevel) {
     if (!this.data.programs || !this.data.programs[academicLevel]) {
-      Logger.warn(`No se encontraron programas para el nivel académico: ${academicLevel}`);
+      this.logger.warn(`No se encontraron programas para el nivel académico: ${academicLevel}`);
       return [];
     }
 
     const levelPrograms = this.data.programs[academicLevel];
-    Logger.debug(`Estructura de datos para nivel ${academicLevel}:`, levelPrograms);
+    this.logger.debug(`Estructura de datos para nivel ${academicLevel}:`, levelPrograms);
 
     // Verificar estructura de datos
     if (typeof levelPrograms === "object" && !Array.isArray(levelPrograms)) {
       // Estructura: programs.PREG.FACULTAD
       const faculties = Object.keys(levelPrograms);
-      Logger.debug(`Facultades encontradas para ${academicLevel}:`, faculties);
+      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, faculties);
       return faculties;
     } else if (Array.isArray(levelPrograms)) {
       // Estructura: array de programas con propiedad facultad
       const faculties = [...new Set(levelPrograms.map((program) => program.facultad))];
       const filteredFaculties = faculties.filter((faculty) => faculty); // Filtrar valores vacíos
-      Logger.debug(`Facultades encontradas para ${academicLevel}:`, filteredFaculties);
+      this.logger.debug(`Facultades encontradas para ${academicLevel}:`, filteredFaculties);
       return filteredFaculties;
     }
 
-    Logger.warn(`Estructura de datos no reconocida para nivel ${academicLevel}`);
+    this.logger.warn(`Estructura de datos no reconocida para nivel ${academicLevel}`);
     return [];
   }
 
@@ -534,12 +479,12 @@ export class Data {
     }
 
     if (!this.data.programs) {
-      Logger.warn(`No hay datos de programas cargados`);
+      this.logger.warn(`No hay datos de programas cargados`);
       return [];
     }
 
     if (!this.data.programs[academicLevel]) {
-      Logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
+      this.logger.warn(`No hay programas para el nivel académico: ${academicLevel}`);
       return [];
     }
 
@@ -570,7 +515,7 @@ export class Data {
       return levelPrograms.filter((program) => program.facultad === faculty);
     }
 
-    Logger.warn(`No se encontraron programas para facultad ${faculty}`);
+    this.logger.warn(`No se encontraron programas para facultad ${faculty}`);
     return [];
   }
 
@@ -729,7 +674,7 @@ export class Data {
 
       return data;
     } catch (error) {
-      Logger.error("Error al leer caché:", error);
+      this.logger.error("Error al leer caché:", error);
       return null;
     }
   }
@@ -745,7 +690,7 @@ export class Data {
 
       localStorage.setItem(`formData_${key}`, JSON.stringify(cacheItem));
     } catch (error) {
-      Logger.error("Error al guardar en caché:", error);
+      this.logger.error("Error al guardar en caché:", error);
     }
   }
 
@@ -759,7 +704,7 @@ export class Data {
       }
     });
 
-    Logger.info("🧹 Caché limpiado");
+    this.logger.info("🧹 Caché limpiado");
   }
 
   /**
@@ -811,8 +756,8 @@ export class Data {
   /**
    * Actualizar URLs de datos
    */
-  updateDataUrls(newUrls) {
-    this.dataUrls = { ...this.dataUrls, ...newUrls };
+  updateurls(newUrls) {
+    this.urls = { ...this.urls, ...newUrls };
   }
 
   /**

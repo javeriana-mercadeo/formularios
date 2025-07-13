@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ejemplos Completos - Sistema de formularios</title>
+    <link rel="icon" href="assets/logo-jave.svg" type="image/x-icon" />
     <link rel="stylesheet" href="examples.css" />
     <link rel="stylesheet" href="../styles/form-styles.css" />
   </head>
@@ -245,24 +246,7 @@
                 <h3 class="gh-example-title">Configuración Completa</h3>
                 <span class="gh-example-badge gh-badge-advanced">Avanzado</span>
               </div>
-              <div class="gh-example-actions">
-                <button class="gh-btn gh-btn-sm gh-btn-outline" onclick="showCodeModal('advanced')">
-                  <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                    <path
-                      d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 10-1.06 1.06L13.94 8l-3.72 3.72a.75.75 0 101.06 1.06l4.25-4.25a.75.75 0 000-1.06L11.28 3.22z"
-                    />
-                  </svg>
-                  Código
-                </button>
-                <button class="gh-btn gh-btn-sm gh-btn-primary">
-                  <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
-                    <path
-                      d="M8 2a.75.75 0 01.75.75v3.5h3.5a.75.75 0 010 1.5h-3.5v3.5a.75.75 0 01-1.5 0v-3.5h-3.5a.75.75 0 010-1.5h3.5v-3.5A.75.75 0 018 2z"
-                    />
-                  </svg>
-                  Demo
-                </button>
-              </div>
+              <div class="gh-example-actions"></div>
             </div>
 
             <div class="gh-example-content">
@@ -412,20 +396,23 @@
 
                           <div class="radio-inline-group">
                             <div class="radio-option">
-                              <input type="radio" name="authorization_data" value="1" />
+                              <input
+                                type="radio"
+                                id="autorizacion_si"
+                                name="authorization_data"
+                                value="1"
+                              />
                               <label for="autorizacion_si">Sí</label>
                             </div>
                             <div class="radio-option">
-                              <input type="radio" name="authorization_data" value="0" />
+                              <input
+                                type="radio"
+                                id="autorizacion_no"
+                                name="authorization_data"
+                                value="0"
+                              />
                               <label for="autorizacion_no">No</label>
                             </div>
-                          </div>
-
-                          <div class="error_text" data-puj-form="error_auth" style="display: none">
-                            La Pontificia Universidad Javeriana requiere de tu autorización para el
-                            tratamiento de tus datos personales para continuar con el presente
-                            proceso, sin la autorización legalmente no podemos darte continuidad al
-                            mismo.
                           </div>
                         </div>
 
@@ -477,6 +464,169 @@
 
                       <div id="advanced-html-code" class="gh-code-content gh-code-hidden">
                         <pre id="advanced-html-content"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 2: Program Filters -->
+          <div class="gh-example-card" id="example-2">
+            <div class="gh-example-header">
+              <div class="gh-example-title-section">
+                <h3 class="gh-example-title">Filtros de Programas</h3>
+                <span class="gh-example-badge gh-badge-basic">Especializado</span>
+              </div>
+              <div class="gh-example-actions"></div>
+            </div>
+
+            <div class="gh-example-content">
+              <div class="gh-example-description">
+                <p>
+                  Demuestra cómo configurar filtros de programas por facultades específicas. Ideal
+                  para eventos enfocados en áreas académicas particulares como Ingeniería.
+                </p>
+              </div>
+
+              <div class="gh-example-features">
+                <div class="gh-feature-tag">Filtros por facultad</div>
+                <div class="gh-feature-tag">Programas específicos</div>
+                <div class="gh-feature-tag">Auto-selección</div>
+                <div class="gh-feature-tag">Validación académica</div>
+              </div>
+
+              <div class="gh-form-and-code-container">
+                <div class="gh-form-demo">
+                  <div class="gh-form-title-section">
+                    <h4 class="gh-form-title">Filtros de Programas</h4>
+                    <div class="gh-form-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-form-actions-section">
+                    <div class="gh-form-actions">
+                      <button class="gh-action-tab" onclick="resetForm()">Limpiar</button>
+                      <button class="gh-action-tab" onclick="toggleDebugMode()">Debug</button>
+                      <button class="gh-action-tab" onclick="showFormData()">Ver Datos</button>
+                      <button class="gh-action-tab" onclick="showLogs()">Ver Logs</button>
+                    </div>
+                  </div>
+                  <div class="gh-form-container">
+                    <div class="form-card">
+                      <form id="programs_demo_form" novalidate aria-label="Filtros de Programas">
+                        <div class="name-row">
+                          <div class="name-field">
+                            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                          </div>
+                          <div class="name-field">
+                            <input type="text" placeholder="*Apellidos" name="last_name" />
+                          </div>
+                        </div>
+
+                        <input type="email" placeholder="*Email" name="email" />
+
+                        <select name="type_attendee">
+                          <option value="">*Tipo de asistente</option>
+                          <option value="Aspirante">Aspirante</option>
+                        </select>
+
+                        <select name="academic_level">
+                          <option value="">*Nivel académico</option>
+                        </select>
+
+                        <select name="faculty">
+                          <option value="">*Facultad de interés</option>
+                        </select>
+
+                        <select name="program">
+                          <option value="">*Programa de interés</option>
+                        </select>
+
+                        <div>
+                          <p>
+                            ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
+                            <a
+                              href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+                              target="_blank"
+                            >
+                              autorización de privacidad
+                            </a>
+                            ?
+                          </p>
+
+                          <div class="radio-inline-group">
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="autorizacion_si_programs"
+                                name="authorization_data"
+                                value="1"
+                              />
+                              <label for="autorizacion_si_programs">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="autorizacion_no_programs"
+                                name="authorization_data"
+                                value="0"
+                              />
+                              <label for="autorizacion_no_programs">No</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gh-code-demo">
+                  <div class="gh-code-title-section">
+                    <h4 class="gh-code-title">Código de Ejemplo</h4>
+                    <div class="gh-code-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-code-actions-section">
+                    <div class="gh-code-actions">
+                      <div class="gh-code-tabs">
+                        <button
+                          class="gh-code-tab gh-code-tab-active"
+                          onclick="showCodeTab('programs', 'js')"
+                        >
+                          JavaScript
+                        </button>
+                        <button class="gh-code-tab" onclick="showCodeTab('programs', 'html')">
+                          HTML
+                        </button>
+                      </div>
+                      <button class="gh-copy-btn" onclick="copyCode('programs', this)">
+                        <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+                          <path
+                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+                          />
+                          <path
+                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-code-container">
+                    <div class="gh-code-section">
+                      <div id="programs-js-code" class="gh-code-content">
+                        <pre id="programs-js-content"></pre>
+                      </div>
+
+                      <div id="programs-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="programs-html-content"></pre>
                       </div>
                     </div>
                   </div>
@@ -980,6 +1130,7 @@
     <!-- Contenedor de notificaciones toast -->
     <div id="toast-container" class="gh-toast-container"></div>
 
+    <script type="module" src="script.js"></script>
     <script type="module" src="examples.js"></script>
   </body>
 </html>

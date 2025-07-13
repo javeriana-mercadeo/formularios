@@ -881,6 +881,69 @@
   background-color: var(--color-canvas-subtle);
 }
 
+.gh-example-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gh-example-tags {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.gh-tag {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.gh-tag-feature {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent-emphasis);
+}
+
+.gh-tag-academic {
+  background-color: var(--color-success-subtle);
+  color: var(--color-success-emphasis);
+}
+
+.gh-tag-demo {
+  background-color: var(--color-attention-subtle);
+  color: var(--color-attention-emphasis);
+}
+
+.gh-tag-location {
+  background-color: var(--color-danger-subtle);
+  color: var(--color-danger-emphasis);
+}
+
+.gh-tag-validation {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+
+.gh-tag-logging {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.gh-tag-utm {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.gh-tag-performance {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
 .gh-example-title-section {
   display: flex;
   align-items: center;
@@ -1136,6 +1199,7 @@
 .gh-code-tab:hover {
   background-color: var(--color-canvas-subtle);
   border-color: var(--color-border-muted);
+  color: var(--color-fg-default);
 }
 
 .gh-code-tab-active {
@@ -1625,44 +1689,6 @@
   overflow: hidden;
 }
 
-.gh-code-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4);
-  background-color: var(--color-canvas-default);
-  border-bottom: 1px solid var(--color-border-default);
-}
-
-.gh-code-header-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.gh-code-header-right {
-  display: flex;
-  align-items: center;
-}
-
-.gh-code-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--color-fg-default);
-  margin: 0;
-}
-
-.gh-code-status {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.gh-code-container {
-  padding: var(--space-6);
-  background-color: var(--color-canvas-default);
-}
-
 /* Form title section */
 .gh-form-title-section {
   display: flex;
@@ -1710,6 +1736,19 @@
   justify-content: space-between;
   padding: var(--space-4);
   background-color: var(--color-canvas-default);
+}
+
+.gh-code-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-fg-default);
+  margin: 0;
+}
+
+.gh-code-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 /* Code actions section */
@@ -1763,3 +1802,4 @@
     flex-wrap: wrap;
   }
 }
+

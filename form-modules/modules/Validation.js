@@ -1,406 +1,205 @@
 /**
- * Validation - Módulo centralizado de validación de formularios
+ * Validation - Módulo simplificado de validación de formularios
  *
  * Responsabilidades:
- * - Definir reglas de validación para diferentes tipos de campos
- * - Validar campos individuales y formularios completos
- * - Gestionar mensajes de error personalizables
- * - Manejar validación condicional según el contexto
+ * - Validar que todos los campos presentes en el DOM estén completos
+ * - Validar autorización de datos
+ * - Validar campos condicionales (Colombia, Aspirante)
+ * - Gestionar mensajes de error
  *
- * @version 1.0
+ * @version 1.0 - Simplificado para validación automática por DOM
  */
 
-import { Logger } from "./Logger.js";
 import { Constants } from "./Constants.js";
 
 export class Validation {
-  // Tipos de validación disponibles
-  static VALIDATION_TYPES = {
-    REQUiRED: "reqUired",
-    NAME: "name",
-    NAME_LENGTH: "name_length",
-    NAME_FORMAT: "name_format",
-    EMAIL: "email",
-    PHONE: "phone",
-    PHONE_LENGTH: "phone_length",
-    PHONE_FORMAT: "phone_format",
-    DOCUMENT: "document",
-    DOCUMENT_LENGTH: "document_length",
-    DOCUMENT_FORMAT: "document_format",
-  };
-
-  // Patrones de validación granulares
-  static VALIDATION_PATTERNS = {
-    // Nombres - formato y longitud separados
-    NAME_FORMAT: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, // Solo letras y espacios
-    NAME_LENGTH: /^.{2,}$/, // Mínimo 2 caracteres
-
-    // Email - validación completa
-    EMAIL:
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
-    // Teléfono - formato y longitud separados
-    PHONE_FORMAT: /^\d+$/, // Solo números
-    PHONE_LENGTH: /^.{7,}$/, // Mínimo 7 caracteres
-
-    // Documento - formato alfanumérico internacional (sin símbolos de formateo)
-    DOCUMENT_FORMAT: /^[A-Za-z0-9]+$/, // Solo letras y números
-    DOCUMENT_LENGTH: /^.{6,18}$/, // Entre 6 y 18 caracteres
-  };
-
-  // Mensajes de error específicos y granulares
+  // Mensajes de error específicos
   static ERROR_MESSAGES = {
-    REQUiRED: "Este campo es obligatorio",
-
-    // Nombres
-    NAME_LENGTH: "El nombre debe tener al menos 2 caracteres",
-    NAME_FORMAT: "El nombre solo puede contener letras y espacios",
-
-    // Email
-    EMAIL: "Ingrese un correo electrónico válido",
-
-    // Teléfono
-    PHONE_LENGTH: "El teléfono debe tener al menos 7 dígitos",
-    PHONE_FORMAT: "El teléfono solo puede contener números",
-
-    // Documento
-    DOCUMENT_LENGTH: "El documento debe tener entre 6 y 18 caracteres",
-    DOCUMENT_FORMAT:
-      "El documento solo puede contener letras y números (sin puntos, gUiones ni espacios)",
-
+    REQUIRED: "Este campo es obligatorio",
+    EMAIL: "Ingresa un correo electrónico válido",
+    EMAIL_INVALID: "El formato del correo electrónico no es válido",
+    PHONE: "Ingresa tu número de teléfono",
+    PHONE_INVALID: "El número de teléfono debe contener solo números",
+    SELECT: "Selecciona una opción",
+    CHECKBOX: "Debes marcar esta casilla",
+    RADIO: "Selecciona una opción",
+    NAME_TOO_SHORT: "El nombre debe tener al menos 2 caracteres",
+    NAME_INVALID: "El nombre solo puede contener letras y espacios",
+    DOCUMENT_TOO_SHORT: "El documento debe tener al menos 6 caracteres",
+    DOCUMENT_INVALID: "El documento debe contener solo números",
     AUTHORIZATION:
-      "La Pontificia Universidad Javeriana reqUiere de tu autorización para el tratamiento de tus datos personales para continuar con el presente proceso, sin la autorización legalmente no podemos darte continUidad al mismo.",
+      "La Pontificia Universidad Javeriana requiere de tu autorización para el tratamiento de tus datos personales para continuar con el presente proceso, sin la autorización legalmente no podemos darte continuidad al mismo.",
   };
 
-  constructor(config = {}, selector) {
-    // Store any custom configuration
-    this.config = config;
-
-    // Mapeo de campos a múltiples reglas de validación (en orden de ejecución)
-    this.fieldValidationMap = {
-      // Campos con validaciones granulares
-      [Constants.FIELDS.FIRST_NAME]: [
-        Validation.VALIDATION_TYPES.REQUiRED,
-        Validation.VALIDATION_TYPES.NAME_LENGTH,
-        Validation.VALIDATION_TYPES.NAME_FORMAT,
-      ],
-      [Constants.FIELDS.LAST_NAME]: [
-        Validation.VALIDATION_TYPES.REQUiRED,
-        Validation.VALIDATION_TYPES.NAME_LENGTH,
-        Validation.VALIDATION_TYPES.NAME_FORMAT,
-      ],
-      [Constants.FIELDS.EMAIL]: [
-        Validation.VALIDATION_TYPES.REQUiRED,
-        Validation.VALIDATION_TYPES.EMAIL,
-      ],
-      [Constants.FIELDS.PHONE]: [
-        Validation.VALIDATION_TYPES.REQUiRED,
-        Validation.VALIDATION_TYPES.PHONE_LENGTH,
-        Validation.VALIDATION_TYPES.PHONE_FORMAT,
-      ],
-      [Constants.FIELDS.DOCUMENT]: [
-        Validation.VALIDATION_TYPES.REQUiRED,
-        Validation.VALIDATION_TYPES.DOCUMENT_FORMAT,
-        Validation.VALIDATION_TYPES.DOCUMENT_LENGTH,
-      ],
-
-      // Campos solo requeridos
-      [Constants.FIELDS.TYPE_DOC]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.PHONE_CODE]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.COUNTRY]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.DEPARTMENT]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.CITY]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.TYPE_ATTENDEE]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.ATTENDANCE_DAY]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.ACADEMIC_LEVEL]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.FACULTY]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.PROGRAM]: [Validation.VALIDATION_TYPES.REQUiRED],
-      [Constants.FIELDS.ADMISSION_PERIOD]: [Validation.VALIDATION_TYPES.REQUiRED],
-    };
+  constructor({ logger = null }) {
+    this.logger = logger;
   }
 
   /**
-   * Validar que un campo requerido tenga valor
-   * @param {string} value - Valor a validar
-   * @returns {boolean} - True si el valor es válido
+   * Validar que todos los campos presentes en el DOM estén completos
+   * Detecta automáticamente TODOS los campos de entrada y los trata como requeridos
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @returns {Object} Resultado de la validación con campos faltantes
    */
-  validateReqUired(value) {
-    return value && value.trim().length > 0;
-  }
+  validateAllRequiredFields(formElement) {
+    const missingFields = [];
 
-  /**
-   * Validar nombre con validaciones granulares
-   * @param {string} value - Valor a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  validateName(value) {
-    if (!value) return { isValid: false, error: Validation.ERROR_MESSAGES.REQUiRED };
+    // Buscar TODOS los campos de entrada en el formulario
+    const allFields = formElement.querySelectorAll("input, select, textarea");
 
-    const trimmedValue = value.trim();
+    // Filtrar campos que NO deben ser validados usando constantes
+    const fieldsToValidate = Array.from(allFields).filter((field) => {
+      const fieldName = field.name || field.id || "sin-nombre";
 
-    // Primero validar longitud
-    if (!Validation.VALIDATION_PATTERNS.NAME_LENGTH.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.NAME_LENGTH };
-    }
+      // Excluir tipos de campos definidos en constantes
+      const excludedTypes = Object.values(Constants.EXCLUDED_FIELD_TYPES);
+      if (excludedTypes.includes(field.type)) {
+        this.logger.debug(`⚪ Campo excluido por tipo (${field.type}): ${fieldName}`);
 
-    // Luego validar formato
-    if (!Validation.VALIDATION_PATTERNS.NAME_FORMAT.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.NAME_FORMAT };
-    }
-
-    return { isValid: true };
-  }
-
-  /**
-   * Validar email
-   * @param {string} value - Email a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  validateEmail(value) {
-    if (!value) return { isValid: false, error: Validation.ERROR_MESSAGES.REQUiRED };
-
-    const trimmedValue = value.trim().toLowerCase();
-
-    if (!Validation.VALIDATION_PATTERNS.EMAIL.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.EMAIL };
-    }
-
-    return { isValid: true };
-  }
-
-  /**
-   * Validar teléfono con validaciones granulares
-   * @param {string} value - Valor a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  validatePhone(value) {
-    if (!value) return { isValid: false, error: Validation.ERROR_MESSAGES.REQUiRED };
-
-    const trimmedValue = value.trim();
-
-    // Primero validar longitud
-    if (!Validation.VALIDATION_PATTERNS.PHONE_LENGTH.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.PHONE_LENGTH };
-    }
-
-    // Luego validar formato
-    if (!Validation.VALIDATION_PATTERNS.PHONE_FORMAT.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.PHONE_FORMAT };
-    }
-
-    return { isValid: true };
-  }
-
-  /**
-   * Validar documento con validaciones granulares
-   * @param {string} value - Valor a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  validateDocument(value) {
-    if (!value) return { isValid: false, error: Validation.ERROR_MESSAGES.REQUiRED };
-
-    const trimmedValue = value.trim();
-
-    // Primero validar formato (solo números)
-    if (!Validation.VALIDATION_PATTERNS.DOCUMENT_FORMAT.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.DOCUMENT_FORMAT };
-    }
-
-    // Luego validar longitud
-    if (!Validation.VALIDATION_PATTERNS.DOCUMENT_LENGTH.test(trimmedValue)) {
-      return { isValid: false, error: Validation.ERROR_MESSAGES.DOCUMENT_LENGTH };
-    }
-
-    return { isValid: true };
-  }
-
-  /**
-   * Ejecutar validación específica por tipo
-   * @param {string} validationType - Tipo de validación a ejecutar
-   * @param {string} value - Valor a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  executeValidation(validationType, value) {
-    switch (validationType) {
-      case Validation.VALIDATION_TYPES.REQUiRED:
-        return this.validateReqUired(value)
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.REQUiRED };
-
-      case Validation.VALIDATION_TYPES.NAME_LENGTH:
-        return Validation.VALIDATION_PATTERNS.NAME_LENGTH.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.NAME_LENGTH };
-
-      case Validation.VALIDATION_TYPES.NAME_FORMAT:
-        return Validation.VALIDATION_PATTERNS.NAME_FORMAT.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.NAME_FORMAT };
-
-      case Validation.VALIDATION_TYPES.EMAIL:
-        return Validation.VALIDATION_PATTERNS.EMAIL.test(value?.trim().toLowerCase() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.EMAIL };
-
-      case Validation.VALIDATION_TYPES.PHONE_LENGTH:
-        return Validation.VALIDATION_PATTERNS.PHONE_LENGTH.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.PHONE_LENGTH };
-
-      case Validation.VALIDATION_TYPES.PHONE_FORMAT:
-        return Validation.VALIDATION_PATTERNS.PHONE_FORMAT.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.PHONE_FORMAT };
-
-      case Validation.VALIDATION_TYPES.DOCUMENT_FORMAT:
-        return Validation.VALIDATION_PATTERNS.DOCUMENT_FORMAT.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.DOCUMENT_FORMAT };
-
-      case Validation.VALIDATION_TYPES.DOCUMENT_LENGTH:
-        return Validation.VALIDATION_PATTERNS.DOCUMENT_LENGTH.test(value?.trim() || "")
-          ? { isValid: true }
-          : { isValid: false, error: Validation.ERROR_MESSAGES.DOCUMENT_LENGTH };
-
-      default:
-        return { isValid: true };
-    }
-  }
-
-  /**
-   * Validar un campo con múltiples reglas de validación
-   * @param {string} fieldName - Nombre del campo
-   * @param {string} value - Valor a validar
-   * @returns {{isValid: boolean, error?: string}} - Resultado de validación
-   */
-  validateFieldWithRules(fieldName, value) {
-    const validationRules = this.fieldValidationMap[fieldName];
-
-    if (!validationRules || validationRules.length === 0) {
-      return { isValid: true };
-    }
-
-    // Ejecutar validaciones en orden hasta encontrar un error
-    for (const validationType of validationRules) {
-      const result = this.executeValidation(validationType, value);
-      if (!result.isValid) {
-        return result; // Retorna el primer error encontrado
+        return false;
       }
-    }
 
-    return { isValid: true };
-  }
+      // Excluir campos que no tienen name ni id
+      if (!field.name && !field.id) {
+        this.logger.debug(`⚪ Campo excluido sin name/id: ${field.tagName}`);
 
-  /**
-   * Validar un campo individual del formulario
-   * @param {HTMLElement} fieldElement - Elemento del campo a validar
-   * @returns {boolean} - True si el campo es válido
-   */
-  validateField(fieldElement) {
-    const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
-    const value = fieldElement.value;
-
-    // Obtener tipo de validación
-    const validationType = this.fieldValidationMap[fieldId];
-
-    if (!validationType) {
-      // Si no hay mapeo específico, verificar si es requerido
-      if (fieldElement.hasAttribute("reqUired")) {
-        return this.validateReqUired(value);
+        return false;
       }
+
+      // Excluir campos que no están visibles (display: none)
+      const computedStyle = window.getComputedStyle(field);
+      if (computedStyle.display === "none") {
+        this.logger.debug(`👁️ Campo excluido por visibilidad (display: none): ${fieldName}`);
+
+        return false;
+      }
+
+      // También verificar si algún elemento padre está oculto
+      let parent = field.parentElement;
+      while (parent && parent !== formElement) {
+        const parentStyle = window.getComputedStyle(parent);
+        if (parentStyle.display === "none") {
+          this.logger.debug(
+            `👁️ Campo excluido por padre oculto: ${fieldName} (padre: ${parent.tagName})`
+          );
+
+          return false;
+        }
+        parent = parent.parentElement;
+      }
+
       return true;
-    }
+    });
 
-    // Aplicar validación según el tipo
-    switch (validationType) {
-      case Validation.VALIDATION_TYPES.NAME:
-        return this.validateName(value);
-      case Validation.VALIDATION_TYPES.EMAIL:
-        return this.validateEmail(value);
-      case Validation.VALIDATION_TYPES.PHONE:
-        return this.validatePhone(value);
-      case Validation.VALIDATION_TYPES.DOCUMENT:
-        return this.validateDocument(value);
-      case Validation.VALIDATION_TYPES.REQUiRED:
-        return this.validateReqUired(value);
-      default:
-        return true;
-    }
-  }
+    const totalFields = allFields.length;
+    const visibleFields = fieldsToValidate.length;
+    const hiddenFields = totalFields - visibleFields;
 
-  /**
-   * Obtener el mensaje de error apropiado para un campo
-   * @param {HTMLElement} fieldElement - Elemento del campo
-   * @returns {string} - Mensaje de error correspondiente
-   */
-  getErrorMessage(fieldElement) {
-    const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
-    const validationType = this.fieldValidationMap[fieldId];
+    this.logger.debug(
+      `🔍 Campos en el DOM: ${totalFields} total, ${visibleFields} visibles, ${hiddenFields} ocultos/excluidos`
+    );
 
-    if (!validationType) {
-      return Validation.ERROR_MESSAGES.REQUiRED;
-    }
+    // Validar cada campo presente en el DOM
+    fieldsToValidate.forEach((field) => {
+      const fieldName = field.name || field.id;
+      const fieldType = field.type;
+      let isEmpty = false;
+      let errorMessage = Validation.ERROR_MESSAGES.REQUIRED;
 
-    return Validation.ERROR_MESSAGES[validationType] || Validation.ERROR_MESSAGES.REQUiRED;
-  }
+      // Validar según el tipo de campo
+      if (fieldType === "radio") {
+        // Para radio buttons, verificar si alguno del grupo está seleccionado
+        const radioGroup = formElement.querySelectorAll(`input[name="${field.name}"]`);
+        const hasSelection = Array.from(radioGroup).some((radio) => radio.checked);
+        if (!hasSelection) {
+          isEmpty = true;
+          errorMessage = Validation.ERROR_MESSAGES.RADIO;
+        }
+      } else if (fieldType === "checkbox") {
+        // Para checkbox, verificar si está marcado
+        isEmpty = !field.checked;
+        errorMessage = Validation.ERROR_MESSAGES.CHECKBOX;
+      } else if (field.tagName.toLowerCase() === "select") {
+        // Para select, el valor no debe estar vacío
+        const fieldValue = this._getFieldValue(field);
+        isEmpty = !fieldValue || fieldValue === "";
+        errorMessage = Validation.ERROR_MESSAGES.SELECT;
+      } else {
+        // Para inputs de texto, email, etc.
+        const fieldValue = this._getFieldValue(field);
+        isEmpty = !fieldValue || fieldValue.trim() === "";
 
-  /**
-   * Validar múltiples campos
-   */
-  validateFields(fields) {
-    const results = {};
+        // Si no está vacío, validar formato específico
+        if (!isEmpty) {
+          const specificError = this._validateFieldFormat(fieldName, fieldValue, fieldType);
+          if (specificError) {
+            isEmpty = true; // Marcar como "error" para que se agregue a la lista
+            errorMessage = specificError;
+          }
+        }
 
-    fields.forEach((field) => {
-      const fieldElement =
-        typeof field === "string"
-          ? document.getElementById(field) || document.querySelector(`[data-puj-form="${field}"]`)
-          : field;
+        // Mensaje por defecto si está vacío
+        if (isEmpty && !errorMessage) {
+          switch (fieldType) {
+            case "email":
+              errorMessage = Validation.ERROR_MESSAGES.EMAIL;
+              break;
+            case "tel":
+              errorMessage = Validation.ERROR_MESSAGES.PHONE;
+              break;
+            default:
+              errorMessage = Validation.ERROR_MESSAGES.REQUIRED;
+          }
+        }
+      }
 
-      if (fieldElement) {
-        const fieldId = fieldElement.id || fieldElement.getAttribute("data-puj-form");
-        results[fieldId] = this.validateField(fieldElement);
+      // Log cada campo que se está validando
+
+      this.logger.debug(
+        `🔍 Validando campo: ${fieldName} (${fieldType}) - Vacío: ${isEmpty} - Valor: "${this._getFieldValue(
+          field
+        )}"`
+      );
+
+      // Solo agregar si está vacío y evitar duplicados para radio buttons
+      if (isEmpty && !missingFields.some((missing) => missing.name === fieldName)) {
+        missingFields.push({
+          name: fieldName,
+          element: field,
+          type: fieldType,
+          message: errorMessage,
+        });
+
+        this.logger.debug(`❌ Campo faltante agregado: ${fieldName}`);
       }
     });
 
-    return results;
-  }
-
-  /**
-   * Validar formulario completo
-   */
-  validateForm(formElement) {
-    const reqUiredFields = formElement.querySelectorAll("[reqUired]");
-    const results = {
-      isValid: true,
-      errors: {},
-      validFields: [],
-      invalidFields: [],
+    const result = {
+      isValid: missingFields.length === 0,
+      missingFields: missingFields,
+      totalRequired: fieldsToValidate.length,
+      missingCount: missingFields.length,
     };
 
-    reqUiredFields.forEach((field) => {
-      const isValid = this.validateField(field);
-      const fieldId = field.id || field.getAttribute("data-puj-form");
+    this.logger.debug(
+      `📊 Resumen validación: ${result.isValid ? "VÁLIDO" : "INVÁLIDO"} - ${result.missingCount}/${
+        result.totalRequired
+      } campos faltantes`
+    );
 
-      if (isValid) {
-        results.validFields.push(fieldId);
-      } else {
-        results.invalidFields.push(fieldId);
-        results.errors[fieldId] = this.getErrorMessage(field);
-        results.isValid = false;
-      }
-    });
-
-    return results;
+    return result;
   }
 
   /**
    * Validar autorización de datos
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @returns {boolean} - True si está autorizado
    */
   validateAuthorization(formElement) {
-    const authRadios = formElement.querySelectorAll('input[type="radio"][name*="authorization"]');
+    const authRadios = formElement.querySelectorAll(Constants.SELECTORS.DATA_AUTHORIZATION);
 
     for (let radio of authRadios) {
-      if (radio.checked && radio.value === "1") {
+      if (radio.checked && this._getFieldValue(radio) === "1") {
         return true;
       }
     }
@@ -410,6 +209,9 @@ export class Validation {
 
   /**
    * Validar campos condicionales (departamento y ciudad para Colombia)
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @param {Object} formData - Datos del formulario
+   * @returns {Object} - Resultado de validación condicional
    */
   validateConditionalFields(formElement, formData) {
     const results = {
@@ -417,44 +219,51 @@ export class Validation {
       errors: {},
     };
 
-    // Validar departamento y ciudad si el país es Colombia
-    if (formData[Constants.FIELDS.COUNTRY] === "COL") {
-      const departmentElement = formElement.querySelector('[data-puj-form="field-department"]');
-      const cityElement = formElement.querySelector('[data-puj-form="field-city"]');
+    // Validar departamento y ciudad si el país es Colombia Y el campo país fue realmente seleccionado por el usuario
+    const countryElement = formElement.querySelector(Constants.SELECTORS.COUNTRY);
+    const isCountryReallySelected =
+      countryElement &&
+      this._isElementVisible(countryElement) &&
+      this._getFieldValue(countryElement);
 
-      if (departmentElement && departmentElement.style.display !== "none") {
-        if (!this.validateReqUired(departmentElement.value)) {
+    if (formData[Constants.FIELDS.COUNTRY] === "COL" && isCountryReallySelected) {
+      const departmentElement = formElement.querySelector(Constants.SELECTORS.DEPARTMENT);
+      const cityElement = formElement.querySelector(Constants.SELECTORS.CITY);
+
+      if (departmentElement && this._isElementVisible(departmentElement)) {
+        const departmentValue = this._getFieldValue(departmentElement);
+        if (!departmentValue || departmentValue.trim() === "") {
           results.isValid = false;
-          results.errors.department = Validation.ERROR_MESSAGES.REQUiRED;
+          results.errors[Constants.FIELDS.DEPARTMENT] = Validation.ERROR_MESSAGES.SELECT;
         }
       }
 
-      if (cityElement && cityElement.style.display !== "none") {
-        if (!this.validateReqUired(cityElement.value)) {
+      if (cityElement && this._isElementVisible(cityElement)) {
+        const cityValue = this._getFieldValue(cityElement);
+        if (!cityValue || cityValue.trim() === "") {
           results.isValid = false;
-          results.errors.city = Validation.ERROR_MESSAGES.REQUiRED;
+          results.errors[Constants.FIELDS.CITY] = Validation.ERROR_MESSAGES.SELECT;
         }
       }
     }
 
     // Validar campos académicos si el tipo de asistente es "Aspirante"
-    if (formData[Constants.FIELDS.TYPE_ATTENDEE] === "Aspirante") {
+    if (formData[Constants.FIELDS.TYPE_ATTENDEE] === Constants.ATTENDEE_TYPES.APPLICANT) {
       const academicFields = [
-        Constants.FIELDS.ACADEMIC_LEVEL,
-        Constants.FIELDS.FACULTY,
-        Constants.FIELDS.PROGRAM,
-        Constants.FIELDS.ADMISSION_PERIOD,
+        { id: Constants.FIELDS.ACADEMIC_LEVEL, selector: Constants.SELECTORS.ACADEMIC_LEVEL },
+        { id: Constants.FIELDS.FACULTY, selector: Constants.SELECTORS.FACULTY },
+        { id: Constants.FIELDS.PROGRAM, selector: Constants.SELECTORS.PROGRAM },
+        { id: Constants.FIELDS.ADMISSION_PERIOD, selector: Constants.SELECTORS.ADMISSION_PERIOD },
       ];
 
-      academicFields.forEach((fieldId) => {
-        const element = formElement.querySelector(
-          `[data-puj-form="field-${fieldId.replace("_", "-")}"]`
-        );
+      academicFields.forEach((field) => {
+        const element = formElement.querySelector(field.selector);
 
-        if (element && element.style.display !== "none") {
-          if (!this.validateReqUired(element.value)) {
+        if (element && this._isElementVisible(element)) {
+          const elementValue = this._getFieldValue(element);
+          if (!elementValue || elementValue.trim() === "") {
             results.isValid = false;
-            results.errors[fieldId] = Validation.ERROR_MESSAGES.REQUiRED;
+            results.errors[field.id] = Validation.ERROR_MESSAGES.SELECT;
           }
         }
       });
@@ -465,183 +274,39 @@ export class Validation {
 
   /**
    * Validación completa del formulario incluyendo campos condicionales
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @param {Object} formData - Datos del formulario
+   * @returns {Object} - Resultado completo de validación
    */
   validateFullForm(formElement, formData) {
-    // Validar campos básicos
-    const basicValidation = this.validateForm(formElement);
+    // 1. Validar que todos los campos del DOM estén completos
+    const basicValidation = this.validateAllRequiredFields(formElement);
 
-    // Validar autorización
+    // 2. Validar autorización
     const authorizationValid = this.validateAuthorization(formElement);
 
-    // Validar campos condicionales
+    // 3. Validar campos condicionales
     const conditionalValidation = this.validateConditionalFields(formElement, formData);
 
     // Combinar resultados
     const results = {
       isValid: basicValidation.isValid && authorizationValid && conditionalValidation.isValid,
       errors: {
-        ...basicValidation.errors,
         ...conditionalValidation.errors,
       },
-      validFields: basicValidation.validFields,
-      invalidFields: basicValidation.invalidFields,
+      missingFields: basicValidation.missingFields,
+      totalRequired: basicValidation.totalRequired,
+      missingCount: basicValidation.missingCount,
     };
+
+    // Agregar errores de campos básicos requeridos faltantes
+    basicValidation.missingFields.forEach((fieldInfo) => {
+      results.errors[fieldInfo.name] = fieldInfo.message;
+    });
 
     // Agregar error de autorización si es necesario
     if (!authorizationValid) {
       results.errors[Constants.FIELDS.DATA_AUTHORIZATION] = Validation.ERROR_MESSAGES.AUTHORIZATION;
-      results.invalidFields.push(Constants.FIELDS.DATA_AUTHORIZATION);
-    }
-
-    return results;
-  }
-
-  /**
-   * Limpiar errores de un campo
-   */
-  clearFieldError(fieldId) {
-    // Este método será usado por el Ui para limpiar errores visuales
-    // La implementación específica dependerá del sistema de Ui
-    Logger.info(`Limpiando error para campo: ${fieldId}`);
-  }
-
-  /**
-   * Mostrar error de un campo
-   */
-  showFieldError(fieldId, message) {
-    // Este método será usado por el Ui para mostrar errores visuales
-    // La implementación específica dependerá del sistema de Ui
-    Logger.info(`Mostrando error para campo ${fieldId}: ${message}`);
-  }
-
-  /**
-   * Actualizar configuración de validación
-   */
-  updateConfig(newConfig) {
-    this.config = { ...this.config, ...newConfig };
-  }
-
-  /**
-   * Agregar regla de validación personalizada
-   */
-  addValidationRule(fieldId, validationType, customValidator = null) {
-    this.fieldValidationMap[fieldId] = validationType;
-
-    if (customValidator && typeof customValidator === "function") {
-      // Agregar validador personalizado
-      this[`validate${validationType.charAt(0).toUpperCase() + validationType.slice(1)}`] =
-        customValidator;
-    }
-  }
-
-  /**
-   * Agregar mensaje de error personalizado
-   */
-  addErrorMessage(type, message) {
-    this.config.errorMessages[type] = message;
-  }
-
-  /**
-   * Validar valor individual sin elemento DOM
-   */
-  validateValue(value, type) {
-    switch (type) {
-      case Validation.VALIDATION_TYPES.NAME:
-        return this.validateName(value);
-      case Validation.VALIDATION_TYPES.EMAIL:
-        return this.validateEmail(value);
-      case Validation.VALIDATION_TYPES.PHONE:
-        return this.validatePhone(value);
-      case Validation.VALIDATION_TYPES.DOCUMENT:
-        return this.validateDocument(value);
-      case Validation.VALIDATION_TYPES.REQUiRED:
-        return this.validateReqUired(value);
-      default:
-        return true;
-    }
-  }
-
-  /**
-   * Obtener todas las reglas de validación
-   */
-  getValidationRules() {
-    return { ...this.fieldValidationMap };
-  }
-
-  /**
-   * Obtener todos los mensajes de error
-   */
-  getErrorMessages() {
-    return { ...this.config.errorMessages };
-  }
-
-  /**
-   * Validar datos del formulario como objeto
-   */
-  validateFormData(formData) {
-    const results = {
-      isValid: true,
-      errors: {},
-    };
-
-    // Validar campos requeridos básicos
-    const reqUiredFields = [
-      Constants.FIELDS.FIRST_NAME,
-      Constants.FIELDS.LAST_NAME,
-      Constants.FIELDS.TYPE_DOC,
-      Constants.FIELDS.DOCUMENT,
-      Constants.FIELDS.EMAIL,
-      Constants.FIELDS.PHONE_CODE,
-      Constants.FIELDS.PHONE,
-      Constants.FIELDS.COUNTRY,
-    ];
-
-    reqUiredFields.forEach((fieldId) => {
-      const value = formData[fieldId];
-      const validationType = this.fieldValidationMap[fieldId];
-
-      if (!this.validateValue(value, validationType)) {
-        results.isValid = false;
-        results.errors[fieldId] =
-          this.config.errorMessages[validationType] || Validation.ERROR_MESSAGES.REQUiRED;
-      }
-    });
-
-    // Validar campos condicionales
-    if (formData[Constants.FIELDS.COUNTRY] === "COL") {
-      if (!this.validateReqUired(formData[Constants.FIELDS.DEPARTMENT])) {
-        results.isValid = false;
-        results.errors[Constants.FIELDS.DEPARTMENT] = Validation.ERROR_MESSAGES.REQUiRED;
-      }
-
-      if (!this.validateReqUired(formData[Constants.FIELDS.CITY])) {
-        results.isValid = false;
-        results.errors[Constants.FIELDS.CITY] = Validation.ERROR_MESSAGES.REQUiRED;
-      }
-    }
-
-    // Validar campos académicos si es aspirante
-    if (formData[Constants.FIELDS.TYPE_ATTENDEE] === "Aspirante") {
-      const academicFields = [
-        Constants.FIELDS.ACADEMIC_LEVEL,
-        Constants.FIELDS.FACULTY,
-        Constants.FIELDS.PROGRAM,
-        Constants.FIELDS.ADMISSION_PERIOD,
-      ];
-
-      academicFields.forEach((fieldId) => {
-        if (!this.validateReqUired(formData[fieldId])) {
-          results.isValid = false;
-          results.errors[fieldId] = Validation.ERROR_MESSAGES.REQUiRED;
-        }
-      });
-    }
-
-    // Validar autorización
-    const authField = Constants.FIELDS.DATA_AUTHORIZATION;
-    if (!formData[authField] || formData[authField] !== "1") {
-      results.isValid = false;
-      results.errors[authField] = Validation.ERROR_MESSAGES.AUTHORIZATION;
     }
 
     return results;
@@ -679,59 +344,303 @@ export class Validation {
         return;
       }
 
-      // Validar el campo
-      const validationResult = this.validateFieldWithRules(fieldName, value);
+      // Para validación inicial, solo verificar si el campo tiene valor
+      // (no aplicamos validaciones estrictas en valores iniciales)
+      const hasValue = value && value.toString().trim() !== "";
 
-      if (validationResult.isValid) {
+      if (hasValue) {
         results.validCount++;
         results.validFields.push(fieldName);
       } else {
-        results.isValid = false;
         results.errorCount++;
         results.invalidFields.push(fieldName);
 
         const errorInfo = {
           field: fieldName,
           value: value,
-          message: validationResult.error,
+          message: "Campo vacío",
           element: element?.tagName?.toLowerCase() || "unknown",
         };
 
         results.errors.push(errorInfo);
 
-        // Actualizar estado si se reqUiere
+        // Actualizar estado si se requiere
         if (updateState && stateManager) {
-          stateManager.setValidationError(fieldName, validationResult.error);
+          stateManager.setValidationError(fieldName, "Campo vacío");
         }
 
-        // Mostrar error en Ui
+        // Mostrar error en UI si se requiere
         if (Ui && element) {
-          Ui.showFieldError(element, validationResult.error);
+          Ui.showFieldError(element, "Campo vacío");
         }
 
-        // Log individual del error
-        Logger.debug(`❌ Valor inicial inválido - ${fieldName}: ${validationResult.error}`);
+        this.logger.debug(`❌ Valor inicial vacío - ${fieldName}`);
       }
     });
 
     // Log resumen según el resultado
-    if (results.isValid) {
-      Logger.info(
+
+    if (results.errorCount === 0) {
+      this.logger.info(
         `✅ Valores iniciales aplicados y validados: ${
           appliedCount || results.validCount
         } campos sin errores`
       );
     } else {
-      // En modo dev, mostrar detalles de errores
-      if (stateManager && stateManager.isDevMode()) {
-        Logger.warn(
-          `⚠️ ${appliedCount || results.validCount + results.errorCount} valores aplicados, ${
-            results.errorCount
-          } con errores de validación`
-        );
-      }
+      this.logger.warn(
+        `⚠️ ${appliedCount || results.validCount + results.errorCount} valores aplicados, ${
+          results.errorCount
+        } con valores vacíos`
+      );
     }
 
     return results;
+  }
+
+  /**
+   * Obtener todos los mensajes de error
+   * @returns {Object} - Mensajes de error disponibles
+   */
+  getErrorMessages() {
+    return { ...Validation.ERROR_MESSAGES };
+  }
+
+  // ===============================
+  // MÉTODOS HELPER PRIVADOS
+  // ===============================
+
+  /**
+   * Obtener valor de un campo de forma centralizada
+   * @param {HTMLElement} field - Elemento del campo
+   * @returns {string} - Valor del campo
+   * @private
+   */
+  _getFieldValue(field) {
+    if (!field) return "";
+    return field.value || "";
+  }
+
+  /**
+   * Verificar si un elemento es visible de forma centralizada
+   * @param {HTMLElement} element - Elemento a verificar
+   * @returns {boolean} - True si el elemento es visible
+   * @private
+   */
+  _isElementVisible(element) {
+    if (!element) return false;
+
+    const computedStyle = window.getComputedStyle(element);
+    return (
+      computedStyle.display !== "none" &&
+      computedStyle.visibility !== "hidden" &&
+      element.offsetParent !== null
+    );
+  }
+
+  /**
+   * Validar formato específico de un campo
+   * @param {string} fieldName - Nombre del campo
+   * @param {string} value - Valor del campo
+   * @param {string} fieldType - Tipo del campo
+   * @returns {string|null} - Mensaje de error o null si es válido
+   * @private
+   */
+  _validateFieldFormat(fieldName, value, fieldType) {
+    // Validaciones por nombre de campo
+    switch (fieldName) {
+      case "first_name":
+      case "last_name":
+        return this._validateName(value);
+
+      case "email":
+        return this._validateEmail(value);
+
+      case "document":
+        return this._validateDocument(value);
+
+      case "mobile":
+        return this._validatePhone(value);
+
+      default:
+        // Validaciones por tipo de campo
+        switch (fieldType) {
+          case "email":
+            return this._validateEmail(value);
+          case "tel":
+            return this._validatePhone(value);
+          default:
+            return null; // Sin validaciones específicas
+        }
+    }
+  }
+
+  /**
+   * Validar nombre (mínimo 2 caracteres, solo letras y espacios)
+   * @private
+   */
+  _validateName(value) {
+    if (value.length < 2) {
+      return Validation.ERROR_MESSAGES.NAME_TOO_SHORT;
+    }
+
+    // Solo letras, espacios y acentos
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!nameRegex.test(value)) {
+      return Validation.ERROR_MESSAGES.NAME_INVALID;
+    }
+
+    return null;
+  }
+
+  /**
+   * Validar email
+   * @private
+   */
+  _validateEmail(value) {
+    if (!Validation.isValidEmailFormat(value)) {
+      return Validation.ERROR_MESSAGES.EMAIL_INVALID;
+    }
+    return null;
+  }
+
+  /**
+   * Validar documento (mínimo 6 caracteres, solo números)
+   * @private
+   */
+  _validateDocument(value) {
+    if (value.length < 6) {
+      return Validation.ERROR_MESSAGES.DOCUMENT_TOO_SHORT;
+    }
+
+    // Solo números
+    const documentRegex = /^\d+$/;
+    if (!documentRegex.test(value)) {
+      return Validation.ERROR_MESSAGES.DOCUMENT_INVALID;
+    }
+
+    return null;
+  }
+
+  /**
+   * Validar teléfono (solo números, mínimo 7 dígitos)
+   * @private
+   */
+  _validatePhone(value) {
+    // Remover espacios y caracteres especiales
+    const cleanValue = value.replace(/[\s\-\(\)]/g, "");
+
+    if (cleanValue.length < 7) {
+      return "El teléfono debe tener al menos 7 dígitos";
+    }
+
+    // Solo números
+    const phoneRegex = /^\d+$/;
+    if (!phoneRegex.test(cleanValue)) {
+      return Validation.ERROR_MESSAGES.PHONE_INVALID;
+    }
+
+    return null;
+  }
+
+  // ===============================
+  // MÉTODOS DE LIMPIEZA Y VALIDACIÓN DE FORMATO
+  // (Movidos desde UI.js para mejor separación de responsabilidades)
+  // ===============================
+
+  /**
+   * Limpiar texto para permitir solo letras, espacios y acentos
+   * @param {string} text - Texto a limpiar
+   * @returns {string} - Texto limpio
+   */
+  static cleanText(text) {
+    if (!text) return "";
+    return text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, "");
+  }
+
+  /**
+   * Limpiar texto para permitir solo números y espacios
+   * @param {string} text - Texto a limpiar
+   * @returns {string} - Solo números
+   */
+  static cleanNumbers(text) {
+    if (!text) return "";
+    return text.replace(/[^0-9 ]/g, "");
+  }
+
+  /**
+   * Verificar si un email tiene formato válido (versión robusta)
+   * @param {string} email - Email a validar
+   * @returns {boolean} - True si es válido
+   */
+  static isValidEmailFormat(email) {
+    if (!email) return false;
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(email.toLowerCase());
+  }
+
+  /**
+   * Validar y limpiar un campo según su tipo
+   * @param {string} value - Valor a validar y limpiar
+   * @param {string} type - Tipo de campo ('text', 'number', 'email')
+   * @returns {object} - {cleanValue, isValid, error}
+   */
+  static validateAndCleanField(value, type = "text") {
+    if (!value) {
+      return { cleanValue: "", isValid: true, error: null };
+    }
+
+    let cleanValue = value;
+    let isValid = true;
+    let error = null;
+
+    switch (type) {
+      case "text":
+      case "name":
+        cleanValue = this.cleanText(value);
+        if (cleanValue.length < 2) {
+          isValid = false;
+          error = Validation.ERROR_MESSAGES.NAME_TOO_SHORT;
+        }
+        break;
+
+      case "number":
+      case "document":
+        cleanValue = this.cleanNumbers(value);
+        if (cleanValue.length < 6 && type === "document") {
+          isValid = false;
+          error = Validation.ERROR_MESSAGES.DOCUMENT_TOO_SHORT;
+        }
+        break;
+
+      case "email":
+        cleanValue = value.trim().toLowerCase();
+        if (!this.isValidEmailFormat(cleanValue)) {
+          isValid = false;
+          error = Validation.ERROR_MESSAGES.EMAIL_INVALID;
+        }
+        break;
+
+      default:
+        cleanValue = value.trim();
+    }
+
+    return { cleanValue, isValid, error };
+  }
+
+  /**
+   * Validar un array de opciones
+   * @param {Array} options - Array de opciones a validar
+   * @returns {boolean} - True si las opciones son válidas
+   */
+  static validateOptionsArray(options) {
+    if (!Array.isArray(options)) return false;
+    if (options.length === 0) return false;
+
+    return options.every((option) => {
+      return (
+        typeof option === "string" || (typeof option === "object" && option.value !== undefined)
+      );
+    });
   }
 }

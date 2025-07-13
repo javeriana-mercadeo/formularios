@@ -1,15 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep:*)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(rg:*)",
-      "Bash(find:*)",
-      "Bash(python3:*)",
       "Bash(node:*)",
       "Bash(rm:*)",
-      "Bash(ls:*)"
+      "Bash(cd:*)",
+      "Bash(python:*)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }
