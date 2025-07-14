@@ -7,11 +7,12 @@
 import { Constants } from "./Constants.js";
 
 export class Locations {
-  constructor(Data, Ui, state, logger = null) {
+  constructor(Data, Ui, state, logger = null, config = null) {
     this.Data = Data;
     this.Ui = Ui;
     this.state = state;
     this.logger = logger;
+    this.config = config;
   }
 
   // ===============================
@@ -61,19 +62,41 @@ export class Locations {
   _showLocationFields() {
     this.logger.info("🌍 Mostrando campos de ubicación");
 
-    const departments = this.Data.getDepartments();
+    const filteredDepartments = this.getFilteredDepartments();
 
-    this.Ui.populateSelect({
-      selector: Constants.SELECTORS.DEPARTMENT,
-      options: departments.map((dept) => ({
-        value: dept.codigo,
-        text: dept.nombre,
-      })),
-      priorityItems: ["bogotá", "bogota"],
-    });
+    if (filteredDepartments.length === 1) {
+      // Solo un departamento: ocultar campo y preseleccionar
+      this.Ui.populateSelect({
+        selector: Constants.SELECTORS.DEPARTMENT,
+        options: [{ value: filteredDepartments[0].value, text: filteredDepartments[0].text }],
+      });
+      
+      // Preseleccionar automáticamente
+      this.state.updateField(Constants.FIELDS.DEPARTMENT, filteredDepartments[0].value);
+      this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
+      
+      this.logger.info(`🔧 Departamento preseleccionado automáticamente: ${filteredDepartments[0].text}`);
+      
+      // Cargar ciudades automáticamente
+      setTimeout(() => this._populateCities(filteredDepartments[0].value), 100);
+      
+    } else if (filteredDepartments.length === 0) {
+      // Sin departamentos disponibles
+      this.logger.warn("⚠️ No hay departamentos disponibles con la configuración actual");
+      this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
+      
+    } else {
+      // Múltiples departamentos: mostrar select normalmente
+      this.Ui.populateSelect({
+        selector: Constants.SELECTORS.DEPARTMENT,
+        options: filteredDepartments,
+        priorityItems: ["bogotá", "bogota"],
+      });
 
-    this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.DEPARTMENT));
-    this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, true);
+      this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.DEPARTMENT));
+      this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, true);
+      this.logger.info(`📋 Select de departamentos con ${filteredDepartments.length} opciones`);
+    }
   }
 
   /**
@@ -143,18 +166,37 @@ export class Locations {
   _populateCities(departmentCode) {
     this.logger.info(`🏙️ Cargando ciudades para departamento: ${departmentCode}`);
 
-    const cities = this.Data.getCities(departmentCode);
+    const filteredCities = this.getFilteredCities(departmentCode);
 
-    this.Ui.populateSelect({
-      selector: Constants.SELECTORS.CITY,
-      options: cities.map((city) => ({
-        value: city.codigo,
-        text: city.nombre,
-      })),
-    });
+    if (filteredCities.length === 1) {
+      // Solo una ciudad: ocultar campo y preseleccionar
+      this.Ui.populateSelect({
+        selector: Constants.SELECTORS.CITY,
+        options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
+      });
+      
+      // Preseleccionar automáticamente
+      this.state.updateField(Constants.FIELDS.CITY, filteredCities[0].value);
+      this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
+      
+      this.logger.info(`🔧 Ciudad preseleccionada automáticamente: ${filteredCities[0].text}`);
+      
+    } else if (filteredCities.length === 0) {
+      // Sin ciudades disponibles
+      this.logger.warn("⚠️ No hay ciudades disponibles para este departamento");
+      this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
+      
+    } else {
+      // Múltiples ciudades: mostrar select normalmente
+      this.Ui.populateSelect({
+        selector: Constants.SELECTORS.CITY,
+        options: filteredCities,
+      });
 
-    this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.CITY));
-    this.state.setFieldVisibility(Constants.FIELDS.CITY, true);
+      this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.CITY));
+      this.state.setFieldVisibility(Constants.FIELDS.CITY, true);
+      this.logger.info(`📋 Select de ciudades con ${filteredCities.length} opciones`);
+    }
   }
 
   /**
@@ -252,6 +294,9 @@ export class Locations {
    * Inicializar campos de ubicación con valores por defecto
    */
   initializeLocationFields() {
+    // Si hay configuración específica de país, aplicarla
+    this.initializeFromCountryConfiguration();
+    
     const currentCountry = this.state.getField(Constants.FIELDS.COUNTRY);
     const defaultCountry = this.state._getInitialState()[Constants.FIELDS.COUNTRY];
 
@@ -323,5 +368,218 @@ export class Locations {
 
     const cities = this.Data.getCities(departmentCode);
     return cities.some((city) => city.codigo === cityCode);
+  }
+
+  // ===============================
+  // MÉTODOS DE FILTRADO POR CONFIGURACIÓN
+  // ===============================
+
+  /**
+   * Obtener países filtrados por configuración
+   */
+  getFilteredCountries() {
+    const allCountries = this.Data.getCountries();
+    
+    if (!this.config) {
+      return allCountries.map(country => ({ value: country.code, text: country.name }));
+    }
+
+    const configCountries = this.config.get('countries');
+
+    // Si hay países específicos en configuración, filtrar por esos
+    if (configCountries && configCountries.length > 0) {
+      const filteredCountries = allCountries
+        .filter(country => configCountries.includes(country.name) || configCountries.includes(country.code))
+        .map(country => ({ value: country.code, text: country.name }));
+      
+      this.logger.info(`🌍 Países filtrados por configuración: ${filteredCountries.map(c => c.text).join(', ')}`);
+      return filteredCountries;
+    }
+
+    this.logger.info(`🌍 Mostrando todos los países disponibles`);
+    return allCountries.map(country => ({ value: country.code, text: country.name }));
+  }
+
+  /**
+   * Obtener departamentos filtrados por configuración
+   */
+  getFilteredDepartments() {
+    const allDepartments = this.Data.getDepartments();
+    
+    if (!this.config) {
+      return allDepartments.map(dept => ({ value: dept.codigo, text: dept.nombre }));
+    }
+
+    const configDepartments = this.config.get('departments');
+    const configCities = this.config.get('cities');
+
+    // Si hay ciudades específicas, obtener departamentos de esas ciudades
+    if (configCities && configCities.length > 0) {
+      const departmentsFromCities = this.getDepartmentsFromCities(configCities);
+      this.logger.info(`🏛️ Departamentos desde ciudades configuradas: ${departmentsFromCities.map(d => d.text).join(', ')}`);
+      return departmentsFromCities;
+    }
+
+    // Si hay departamentos específicos en configuración, filtrar por esos
+    if (configDepartments && configDepartments.length > 0) {
+      const filteredDepartments = allDepartments
+        .filter(dept => 
+          configDepartments.includes(dept.nombre) || 
+          configDepartments.includes(dept.codigo)
+        )
+        .map(dept => ({ value: dept.codigo, text: dept.nombre }));
+      
+      this.logger.info(`🏛️ Departamentos filtrados por configuración: ${filteredDepartments.map(d => d.text).join(', ')}`);
+      return filteredDepartments;
+    }
+
+    this.logger.info(`🏛️ Mostrando todos los departamentos disponibles`);
+    return allDepartments.map(dept => ({ value: dept.codigo, text: dept.nombre }));
+  }
+
+  /**
+   * Obtener ciudades filtradas por configuración
+   */
+  getFilteredCities(departmentCode) {
+    const allCities = this.Data.getCities(departmentCode);
+    
+    if (!this.config) {
+      return allCities.map(city => ({ value: city.codigo, text: city.nombre }));
+    }
+
+    const configCities = this.config.get('cities');
+
+    // Si hay ciudades específicas en configuración, filtrar por esas
+    if (configCities && configCities.length > 0) {
+      const filteredCities = allCities
+        .filter(city => 
+          configCities.includes(city.nombre) || 
+          configCities.includes(city.codigo)
+        )
+        .map(city => ({ value: city.codigo, text: city.nombre }));
+      
+      this.logger.info(`🏙️ Ciudades filtradas por configuración: ${filteredCities.map(c => c.text).join(', ')}`);
+      return filteredCities;
+    }
+
+    this.logger.info(`🏙️ Mostrando todas las ciudades para departamento ${departmentCode}`);
+    return allCities.map(city => ({ value: city.codigo, text: city.nombre }));
+  }
+
+  /**
+   * Obtener departamentos desde ciudades configuradas
+   */
+  getDepartmentsFromCities(configCities) {
+    const allDepartments = this.Data.getDepartments();
+    const departmentsSet = new Set();
+
+    allDepartments.forEach(department => {
+      const cities = this.Data.getCities(department.codigo);
+      const hasConfiguredCity = cities.some(city => 
+        configCities.includes(city.nombre) || configCities.includes(city.codigo)
+      );
+      
+      if (hasConfiguredCity) {
+        departmentsSet.add(department.codigo);
+      }
+    });
+
+    return Array.from(departmentsSet)
+      .map(deptCode => {
+        const dept = allDepartments.find(d => d.codigo === deptCode);
+        return { value: dept.codigo, text: dept.nombre };
+      });
+  }
+
+  /**
+   * Método público para inicializar filtros basados en configuración de países
+   */
+  initializeFromCountryConfiguration() {
+    if (!this.config) {
+      this.logger.warn("No hay configuración disponible para inicializar desde países");
+      return;
+    }
+
+    const configCountries = this.config.get('countries');
+    
+    if (!configCountries || configCountries.length === 0) {
+      this.logger.info("No hay países específicos configurados, usando lógica estándar");
+      return;
+    }
+
+    this.logger.info(`🔧 Inicializando desde países configurados: ${configCountries.join(', ')}`);
+
+    // Analizar los países configurados para determinar comportamiento
+    const countriesAnalysis = this.analyzeCountriesConfiguration(configCountries);
+    
+    this.logger.info(`📊 Análisis de países:`, countriesAnalysis);
+
+    // Aplicar lógica según el análisis
+    if (countriesAnalysis.countries.length === 1) {
+      // Un solo país
+      this.state.updateField(Constants.FIELDS.COUNTRY, countriesAnalysis.countries[0]);
+      this.state.setFieldVisibility(Constants.FIELDS.COUNTRY, false);
+      this.logger.info(`🔧 País oculto y preseleccionado: ${countriesAnalysis.countries[0]}`);
+    } else {
+      // Múltiples países
+      this.state.setFieldVisibility(Constants.FIELDS.COUNTRY, true);
+      this.logger.info(`📋 Países visibles para selección múltiple`);
+    }
+  }
+
+  /**
+   * Analizar configuración de países para determinar comportamiento
+   */
+  analyzeCountriesConfiguration(configCountries) {
+    const allCountries = this.Data.getCountries();
+    const matchedCountries = [];
+
+    configCountries.forEach(configCountry => {
+      const country = allCountries.find(c => 
+        c.name === configCountry || c.code === configCountry
+      );
+      if (country) {
+        matchedCountries.push(country.code);
+      }
+    });
+
+    return {
+      countries: matchedCountries
+    };
+  }
+
+  /**
+   * Método público para inicializar filtros basados en configuración de ubicación específica
+   */
+  initializeFromLocationConfiguration() {
+    if (!this.config) {
+      this.logger.warn("No hay configuración disponible para inicializar ubicaciones");
+      return;
+    }
+
+    const configDepartments = this.config.get('departments');
+    const configCities = this.config.get('cities');
+    
+    this.logger.info(`🔧 Inicializando filtros de ubicación`, {
+      departments: configDepartments?.length || 0,
+      cities: configCities?.length || 0
+    });
+
+    // Si hay configuración específica de departamentos y ciudades
+    if (configDepartments && configDepartments.length === 1 && 
+        configCities && configCities.length === 1) {
+      
+      // Preseleccionar Colombia si solo hay configuración de departamentos/ciudades
+      this.state.updateField(Constants.FIELDS.COUNTRY, 'COL');
+      this.state.setFieldVisibility(Constants.FIELDS.COUNTRY, false);
+      
+      this.state.updateField(Constants.FIELDS.DEPARTMENT, configDepartments[0]);
+      this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
+      
+      this.state.updateField(Constants.FIELDS.CITY, configCities[0]);
+      this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
+      
+      this.logger.info(`🔧 Ubicación completamente preseleccionada y oculta`);
+    }
   }
 }

@@ -382,7 +382,7 @@ const academicConfig = {
   // Configuración académica específica
   typeAttendee: ["Aspirante"],
   faculties: ["Ingeniería", "Ciencias"],
-  programs: ["ISIST", "IINDS", "BIOQU"],
+  programs: ["ISIST", "IINDS", "BIOLG"],
   
   // Validación estricta para aspirantes
   validation: {

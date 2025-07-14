@@ -1,537 +1,548 @@
 /**
- * Ejemplos de configuraciones para FormManager
- *
- * Estos ejemplos muestran configuraciones desde las más simples hasta las más complejas,
- * basándose en las opciones disponibles en Config.js y Constants.js
+ * 🧪 ARCHIVO DE CONFIGURACIONES PARA PRUEBAS - FormManager
+ * 
+ * Este archivo contiene las configuraciones utilizadas en test.html
+ * Cada configuración demuestra diferentes tipos de filtros y configuraciones
+ * 
+ * ESTRUCTURA PROGRESIVA DE FILTROS:
+ * 1. Configuración base (Eventos y Open Day)
+ * 2. Filtro por Nivel académico
+ * 3. Filtro por Facultad(es)
+ * 4. Filtro por Programa(s)
+ * 5. Filtro por Países
+ * 6. Filtro por Departamentos
+ * 7. Filtro por Ciudades
+ * 8. Configuraciones adicionales (días múltiples, universidades, empresas, colegios)
  */
 
 import { FormManager } from "../modules/FormManager.js";
 
-// ==================================================
-// EJEMPLO 1: CONFIGURACIÓN MÍNIMA
-// ==================================================
-// Un formulario básico con configuración casi nula
-// Ideal para eventos simples donde no se necesita personalización
+// ============================================================================
+// 📝 PRUEBA 1: CONFIGURACIÓN BASE (EVENTOS Y OPEN DAY)
+// ============================================================================
+// Configuración mínima para demostrar comportamiento estándar sin filtros
+// ✅ Usado en: formMini (test.html)
 
 export const configMini = {
-  // Solo configuramos lo mínimo indispensable
-  eventName: "Formulario base",
+  // DATOS DEL EVENTO
+  eventName: "Open Day Javeriana 2024",
   eventDate: "2024-02-15",
-  campaign: "SIMPLE_EVENT",
-
-  // Sin configuraciones especiales - usará todos los valores por defecto
-  // - Mostrará todos los tipos de asistente
-  // - Mostrará todos los niveles académicos
-  // - Sin filtros de facultades o programas
-  // - Cache deshabilitado
-  // - Modo debug deshabilitado
-};
-
-// ==================================================
-// EJEMPLO 2: CONFIGURACIÓN BÁSICA CON PERSONALIZACIÓN
-// ==================================================
-// Formulario con algunas personalizaciones básicas
-// Configuración típica para un evento de pregrado específico
-
-export const configBase = {
-  // Datos del evento
-  eventName: "Open Day Pregrado",
-  eventDate: "2024-03-20",
-  campaign: "OPENDAY_PREG_2024",
-  source: "landing_page",
-  medium: "web",
-
-  // Configuración básica de tipos de asistente (solo aspirantes y familias)
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
-
-  // Solo programas de pregrado
-  academicLevels: [{ code: "PREG", name: "Pregrado" }],
-
-  // Días específicos del evento
-  attendanceDays: ["Sábado 20 de marzo", "Domingo 21 de marzo"],
-
-  // Configuración básica de desarrollo
-  sandboxMode: false,
-  debugMode: false,
-
-  // Habilitamos cache básico
-  cache: {
-    enabled: true,
-    expirationHours: 24,
-  },
-};
-
-// ==================================================
-// EJEMPLO 3: CONFIGURACIÓN INTERMEDIA CON FILTROS
-// ==================================================
-// Formulario con filtros de facultades y programas específicos
-// Ideal para eventos dirigidos a carreras específicas
-
-export const configMedium = {
-  // Datos del evento más detallados
-  eventName: "Feria de Ingenierías",
-  eventDate: "2024-04-15",
-  campaign: "FERIA_ING_2024",
-  article: "ingenieria_evento",
-  source: "google_ads",
-  subSource: "search_campaign",
-  medium: "cpc",
-  leadSource: "Digital Marketing",
-
-  // Tipos de asistente específicos para ingeniería
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Docente y/o psicoorientador"],
-
-  // Solo pregrado y posgrado
-  academicLevels: [
-    { code: "PREG", name: "Pregrado" },
-    { code: "GRAD", name: "Posgrado" },
-  ],
-
-  // Filtro específico: Solo facultad de Ingeniería
-  faculties: ["Ingeniería"],
-
-  // Filtro de programas específicos (códigos SAE de ingenierías)
-  programs: [
-    "IIND", // Ingeniería Industrial
-    "ISOF", // Ingeniería de Sistemas
-    "ICIV", // Ingeniería Civil
-    "IELE", // Ingeniería Electrónica
-  ],
-
-  // Días múltiples con horarios específicos
-  attendanceDays: [
-    "Lunes 15 de abril - 9:00 AM",
-    "Lunes 15 de abril - 2:00 PM",
-    "Martes 16 de abril - 9:00 AM",
-  ],
-
-  // Configuración de desarrollo intermedia
-  sandboxMode: false,
-  debugMode: true, // Habilitado para pruebas
-  devMode: false,
-  debugEmail: "eventos.test@javeriana.edu.co",
-
-  // Cache optimizado
-  cache: {
-    enabled: true,
-    expirationHours: 6, // Más frecuente para eventos específicos
-  },
-
-  // URLs específicas para datos
-  urls: {
-    locations: "https://cloud.cx.javeriana.edu.co/paises.json",
-    prefixes: "https://cloud.cx.javeriana.edu.co/codigos_pais.json",
-    programs: "https://cloud.cx.javeriana.edu.co/Programas_Ingenieria.json",
-    periods: "https://cloud.cx.javeriana.edu.co/periodos.json",
-  },
-};
-
-// ==================================================
-// EJEMPLO 4: CONFIGURACIÓN AVANZADA CON CALLBACKS
-// ==================================================
-// Formulario con lógica personalizada y callbacks
-// Para eventos que requieren comportamientos específicos
-
-export const configAdvance = {
-  // Datos completos del evento
-  eventName: "Simposio de Posgrados 2024",
-  eventDate: "2024-05-10",
-  campaign: "SIMP_POSG_2024",
-  article: "posgrados_premium",
-  source: "email_marketing",
-  subSource: "alumni_database",
-  medium: "email",
-  leadSource: "Alumni Relations",
-  originRequest: "evento_exclusivo",
-
-  // Lista completa de ubicaciones personalizadas
-  countries: ["Colombia", "Ecuador", "Perú", "México"],
-  departments: [], // Se cargarán dinámicamente
-  cities: [], // Se cargarán dinámicamente
-
-  // Tipos de asistente para audiencia de posgrado
+  campaign: "OPEN_DAY_2024",
+  article: "evento_general",
+  source: "web",
+  medium: "organico",
+  
+  // CONFIGURACIÓN BÁSICA DE EVENTO
   typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente",
     "Graduado",
-    "Profesional",
-    "Docente y/o psicoorientador",
-    "Administrativo PUJ",
-    "Empresario",
+    "Docente y/o psicoorientador"
   ],
+  attendanceDays: ["Jueves 15 de febrero de 2024"],
 
-  // Solo posgrados y programas eclesiásticos
-  academicLevels: [
-    { code: "GRAD", name: "Posgrado" },
-    { code: "ECLE", name: "Eclesiástico" },
-  ],
-
-  // Facultades específicas con programas de posgrado destacados
-  faculties: [
-    "Ciencias Sociales",
-    "Medicina",
-    "Ingeniería",
-    "Ciencias Económicas y Administrativas",
-    "Derecho",
-  ],
-
-  // Programas premium de posgrado
-  programs: [
-    "MBAG", // MBA Gerencial
-    "MACOM", // Maestría en Comunicación
-    "DDER", // Doctorado en Derecho
-    "MESP", // Maestría en Especialización Médica
-    "MING", // Maestría en Ingeniería
-  ],
-
-  // Días del simposio con sesiones específicas
-  attendanceDays: [
-    "Viernes 10 de mayo - Sesión Mañana (9:00-12:00)",
-    "Viernes 10 de mayo - Sesión Tarde (14:00-17:00)",
-    "Sábado 11 de mayo - Sesión Especial (9:00-15:00)",
-  ],
-
-  // Universidades para referencia cruzada
-  university: [
-    "Pontificia Universidad Javeriana",
-    "Universidad Nacional",
-    "Universidad de los Andes",
-    "Universidad del Rosario",
-  ],
-
-  // Configuración avanzada de desarrollo
-  sandboxMode: false,
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
   debugMode: true,
   devMode: false,
-  debugEmail: "posgrados.analytics@javeriana.edu.co",
+  debugEmail: "gavilanm-j@javeriana.edu.co",
 
-  // Cache optimizado para posgrados
-  cache: {
-    enabled: true,
-    expirationHours: 2, // Cache corto para datos dinámicos
-  },
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Sin filtros - Comportamiento estándar completo
+  // ✅ Muestra todos los tipos de asistente
+  // ✅ Muestra todos los niveles académicos disponibles
+  // ✅ Muestra todas las facultades por nivel académico
+  // ✅ Sin restricciones geográficas (países/departamentos/ciudades)
+  // ✅ Formulario completo con todas las opciones disponibles
+};
 
-  // URLs completas de servicios
-  urls: {
-    locations: "https://api.javeriana.edu.co/v2/ubicaciones",
-    prefixes: "https://api.javeriana.edu.co/v2/prefijos",
-    programs: "https://api.javeriana.edu.co/v2/posgrados",
-    periods: "https://api.javeriana.edu.co/v2/periodos",
-  },
+// ============================================================================
+// 🎓 PRUEBA 2: FILTRO POR NIVEL ACADÉMICO
+// ============================================================================
+// Demuestra filtros por nivel académico específico (solo Pregrado)
+// ✅ Usado en: formAcademicLevel (test.html)
 
-  // URL personalizada de agradecimiento
-  thankYouUrl: "https://posgrados.javeriana.edu.co/simposio-2024/gracias",
+export const configAcademicLevel = {
+  // DATOS DEL EVENTO
+  eventName: "Open Day Pregrado 2024",
+  eventDate: "2024-03-20",
+  campaign: "PREGRADO_ONLY_2024",
+  article: "evento_pregrado",
+  source: "landing_pregrado",
+  medium: "web",
 
-  // Configuración avanzada de logging
+  // 🎯 FILTRO PRINCIPAL: Solo nivel de Pregrado
+  academicLevels: [
+    { code: "PREG", name: "Pregrado" }
+  ],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente"
+  ],
+  attendanceDays: ["Miércoles 20 de marzo de 2024"],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Nivel académico: Oculto y preseleccionado automáticamente (Pregrado)
+  // ✅ Facultades: Solo las que tienen programas de pregrado
+  // ✅ Programas: Solo programas de pregrado disponibles
+  // ✅ Al seleccionar "Aspirante" → Aparecen campos académicos filtrados
+  // ✅ Optimizado para aspirantes a programas de pregrado
+};
+
+// ============================================================================
+// 🏛️ PRUEBA 3: FILTRO POR FACULTAD(ES)
+// ============================================================================
+// Demuestra filtros por facultades específicas (Ingeniería)
+// ✅ Usado en: formFaculty (test.html)
+
+export const configFaculty = {
+  // DATOS DEL EVENTO
+  eventName: "Feria de Ingenierías 2024",
+  eventDate: "2024-04-10",
+  campaign: "INGENIERIA_2024",
+  article: "evento_ingenieria",
+  source: "email_especializado",
+  medium: "email",
+
+  // 🎯 FILTRO PRINCIPAL: Solo Facultad de Ingeniería
+  faculties: ["Ingeniería"],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente",
+    "Graduado"
+  ],
+  attendanceDays: ["Miércoles 10 de abril de 2024"],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // Logging detallado
   logging: {
     enabled: true,
-    level: "debug", // Logging detallado
+    level: "debug",
     showTimestamp: true,
     showLevel: true,
   },
 
-  // Callbacks personalizados para lógica avanzada
-  callbacks: {
-    // Se ejecuta cuando el formulario termina de cargar
-    onFormLoad: function () {
-      console.log("Simposio: Formulario cargado correctamente");
-      // Lógica personalizada de inicialización
-    },
-
-    // Se ejecuta antes del envío del formulario
-    onFormSubmit: function (formData) {
-      console.log("Simposio: Enviando datos:", formData);
-      // Validaciones adicionales o tracking
-      return true; // Continuar con envío
-    },
-
-    // Se ejecuta cuando cambia cualquier campo
-    onFieldChange: function (fieldName, value) {
-      console.log(`Campo ${fieldName} cambió a: ${value}`);
-      // Lógica personalizada por campo
-    },
-
-    // Se ejecuta cuando hay errores de validación
-    onValidationError: function (errors) {
-      console.log("Errores de validación:", errors);
-      // Manejo personalizado de errores
-    },
-  },
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Nivel académico: Oculto y preseleccionado (Pregrado)
+  // ✅ Facultad: Oculta y preseleccionada (Ingeniería)
+  // ✅ Programas: Solo programas de Ingeniería disponibles
+  // ✅ Al seleccionar "Aspirante" → Solo aparece selector de programas de ingeniería
+  // ✅ Enfoque específico en programas de la Facultad de Ingeniería
 };
 
-// ==================================================
-// EJEMPLO 5: CONFIGURACIÓN COMPLEJA CON MÚLTIPLES ESCENARIOS
-// ==================================================
-// La configuración más completa posible
-// Para eventos grandes con múltiples audiencias y requisitos complejos
+// ============================================================================
+// 📚 PRUEBA 4: FILTRO POR PROGRAMA(S)
+// ============================================================================
+// Demuestra filtros por programas específicos de múltiples facultades
+// ✅ Usado en: formPrograms (test.html)
 
-export const configComplete = {
-  // Datos completos del evento con tracking avanzado
-  eventName: "Javeriana Expo 2024 - Encuentro Universitario",
-  eventDate: "2024-06-15",
-  campaign: "JAVE_EXPO_2024_MASTER",
-  article: "expo_universitaria_completa",
-  source: "omnicanal",
-  subSource: "integracion_completa",
-  medium: "mixto",
-  leadSource: "Marketing 360",
-  originRequest: "evento_institucional_mayor",
+export const configPrograms = {
+  // DATOS DEL EVENTO
+  eventName: "Feria Interdisciplinaria 2024",
+  eventDate: "2024-05-15",
+  campaign: "INTERDISCIPLINARIA_2024",
+  article: "evento_multifacultad",
+  source: "redes_sociales",
+  medium: "social",
 
-  // Configuración completa de ubicaciones
-  countries: [
-    "Colombia",
-    "Venezuela",
-    "Ecuador",
-    "Perú",
-    "Brasil",
-    "México",
-    "Estados Unidos",
-    "España",
-    "Francia",
+  // 🎯 FILTRO PRINCIPAL: Programas específicos de diferentes facultades
+  programs: [
+    "MEDIC", // Medicina
+    "DRCHO", // Derecho
+    "PSICO", // Psicología
+    "IINDS", // Ingeniería Industrial
+    "COMSC", // Comunicación Social
   ],
-  departments: [], // Carga dinámica desde API
-  cities: [], // Carga dinámica desde API
 
-  // Todos los tipos de asistente disponibles
+  // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
     "Aspirante",
     "Padre de familia y/o acudiente",
-    "Estudiante actual",
     "Graduado",
-    "Docente y/o psicoorientador",
-    "Visitante PUJ",
-    "Administrativo PUJ",
-    "Empresario",
+    "Docente y/o psicoorientador"
   ],
-
-  // Todos los niveles académicos
-  academicLevels: [
-    { code: "PREG", name: "Pregrado" },
-    { code: "GRAD", name: "Posgrado" },
-    { code: "ECLE", name: "Eclesiástico" },
-    { code: "ETDH", name: "Técnico" },
-    { code: "CONT", name: "Educación Continua" },
-  ],
-
-  // Todas las facultades (sin filtro - mostrar todas)
-  faculties: [],
-
-  // Programas destacados de todas las áreas
-  programs: [
-    // Pregrados destacados
-    "MEDI",
-    "DERE",
-    "IIND",
-    "ISOF",
-    "PSIC",
-    "COMU",
-    // Posgrados premium
-    "MBAG",
-    "MACOM",
-    "DDER",
-    "MESP",
-    "MING",
-    // Programas eclesiásticos
-    "TEOF",
-    "FILO",
-    "HIST",
-  ],
-
-  // Agenda completa del evento (múltiples días y sesiones)
   attendanceDays: [
-    "Jueves 13 de junio - Pre-evento Alumni (18:00-20:00)",
-    "Viernes 14 de junio - Jornada Académica (8:00-17:00)",
-    "Sábado 15 de junio - Expo Principal (9:00-18:00)",
-    "Domingo 16 de junio - Actividades Familiares (10:00-16:00)",
-    "Lunes 17 de junio - Sesiones Empresariales (9:00-15:00)",
+    "Miércoles 15 de mayo - Sesión Mañana (9:00-12:00)",
+    "Miércoles 15 de mayo - Sesión Tarde (14:00-17:00)"
   ],
 
-  // Lista completa de universidades para benchmarking
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Nivel académico: Oculto y preseleccionado (Pregrado)
+  // ✅ Facultad: Visible con opciones múltiples (Medicina, Derecho, Ciencias Sociales, Ingeniería, Comunicación)
+  // ✅ Programas: Solo los 5 programas configurados
+  // ✅ Al cambiar facultad → Solo aparecen programas de esa facultad
+  // ✅ Demuestra selección inteligente entre múltiples facultades
+};
+
+// ============================================================================
+// 🌍 PRUEBA 5: FILTRO POR PAÍSES
+// ============================================================================
+// Demuestra filtros por países específicos (internacionales)
+// ✅ Usado en: formCountries (test.html)
+
+export const configCountries = {
+  // DATOS DEL EVENTO
+  eventName: "Feria Internacional Javeriana 2024",
+  eventDate: "2024-06-20",
+  campaign: "INTERNACIONAL_2024",
+  article: "evento_internacional",
+  source: "internacional",
+  medium: "digital",
+
+  // 🎯 FILTRO PRINCIPAL: Solo países específicos
+  countries: ["Colombia", "México", "Ecuador", "Perú", "Estados Unidos"],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente",
+    "Graduado",
+    "Estudiante actual"
+  ],
+  attendanceDays: ["Jueves 20 de junio de 2024"],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Países: Solo los 5 países configurados disponibles
+  // ✅ Al seleccionar "Colombia" → Funcionamiento normal con departamentos/ciudades
+  // ✅ Al seleccionar otros países → Sin campos adicionales de ubicación
+  // ✅ Enfoque en audiencia internacional específica
+  // ✅ Optimizado para estudiantes internacionales
+};
+
+// ============================================================================
+// 🏛️ PRUEBA 6: FILTRO POR DEPARTAMENTOS
+// ============================================================================
+// Demuestra filtros por departamentos específicos de Colombia
+// ✅ Usado en: formDepartments (test.html)
+
+export const configDepartments = {
+  // DATOS DEL EVENTO
+  eventName: "Encuentro Regional Colombia 2024",
+  eventDate: "2024-07-25",
+  campaign: "REGIONAL_COLOMBIA_2024",
+  article: "evento_regional",
+  source: "campaña_regional",
+  medium: "mixto",
+
+  // 🎯 FILTRO PRINCIPAL: Solo departamentos específicos
+  departments: ["Cundinamarca", "Antioquia", "Valle del Cauca", "Atlántico", "Santander"],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente",
+    "Graduado"
+  ],
+  attendanceDays: [
+    "Jueves 25 de julio de 2024",
+    "Viernes 26 de julio de 2024"
+  ],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Países: Solo Colombia disponible (implícito)
+  // ✅ Departamentos: Solo los 5 departamentos configurados
+  // ✅ Ciudades: Solo ciudades de los departamentos configurados
+  // ✅ Enfoque en regiones específicas de Colombia
+  // ✅ Optimizado para audiencia regional colombiana
+};
+
+// ============================================================================
+// 🏙️ PRUEBA 7: FILTRO POR CIUDADES
+// ============================================================================
+// Demuestra filtros por ciudades específicas con filtrado automático de departamentos
+// ✅ Usado en: formCities (test.html)
+
+export const configCities = {
+  // DATOS DEL EVENTO
+  eventName: "Open Day Ciudades Principales 2024",
+  eventDate: "2024-08-30",
+  campaign: "CIUDADES_PRINCIPALES_2024",
+  article: "evento_ciudades",
+  source: "enfoque_urbano",
+  medium: "digital",
+
+  // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
+  cities: ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente"
+  ],
+  attendanceDays: ["Viernes 30 de agosto de 2024"],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Países: Todos disponibles (sin filtro)
+  // ✅ Al seleccionar "Colombia" → Solo 5 departamentos específicos:
+  //     • Cundinamarca (Bogotá) • Antioquia (Medellín) • Valle del Cauca (Cali)
+  //     • Atlántico (Barranquilla) • Bolívar (Cartagena)
+  // ✅ Al seleccionar departamento → Solo 1 ciudad configurada por departamento
+  // ✅ Lógica inteligente: Ciudades filtran automáticamente departamentos
+  // ✅ Otros países funcionan normalmente (sin filtros)
+};
+
+// ============================================================================
+// 🎯 PRUEBA 8: CONFIGURACIÓN ADICIONAL - DÍAS MÚLTIPLES
+// ============================================================================
+// Demuestra configuración con múltiples días y sesiones específicas
+// ✅ Usado en: formMultipleDays (test.html)
+
+export const configMultipleDays = {
+  // DATOS DEL EVENTO
+  eventName: "Semana Universitaria Javeriana 2024",
+  eventDate: "2024-09-02",
+  campaign: "SEMANA_UNIVERSITARIA_2024",
+  article: "evento_multiple_dias",
+  source: "institucional",
+  medium: "omnicanal",
+
+  // CONFIGURACIÓN DE DÍAS MÚLTIPLES
+  attendanceDays: [
+    "Lunes 2 de septiembre - Inauguración (18:00-20:00)",
+    "Martes 3 de septiembre - Jornada Académica (8:00-17:00)",
+    "Miércoles 4 de septiembre - Feria de Programas (9:00-18:00)",
+    "Jueves 5 de septiembre - Encuentro Alumni (19:00-22:00)",
+    "Viernes 6 de septiembre - Clausura y Networking (16:00-20:00)"
+  ],
+
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Aspirante",
+    "Padre de familia y/o acudiente",
+    "Graduado",
+    "Estudiante actual",
+    "Docente y/o psicoorientador",
+    "Administrativo PUJ"
+  ],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Días de asistencia: 5 opciones con horarios específicos
+  // ✅ Tipos de asistente: Amplia variedad para diferentes audiencias
+  // ✅ Sin filtros académicos o geográficos - evento general
+  // ✅ Configuración completa para evento institucional grande
+};
+
+// ============================================================================
+// 🎓 PRUEBA 9: CONFIGURACIÓN ADICIONAL - UNIVERSIDADES Y FILTROS
+// ============================================================================
+// Demuestra configuración con lista de universidades y filtros de referencia
+// ✅ Usado en: formUniversities (test.html)
+
+export const configUniversities = {
+  // DATOS DEL EVENTO
+  eventName: "Encuentro Interuniversitario 2024",
+  eventDate: "2024-10-15",
+  campaign: "INTERUNIVERSITARIO_2024",
+  article: "evento_universidades",
+  source: "alianzas_academicas",
+  medium: "referido",
+
+  // CONFIGURACIÓN DE UNIVERSIDADES
   university: [
     "Pontificia Universidad Javeriana",
     "Universidad Nacional de Colombia",
     "Universidad de los Andes",
     "Universidad del Rosario",
     "Universidad Externado",
-    "Universidad Católica",
+    "Universidad La Salle",
     "EAFIT",
-    "Universidad del Norte",
+    "Universidad del Norte"
   ],
 
-  // Lista de colegios para tracking de origen
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Graduado",
+    "Estudiante actual",
+    "Docente y/o psicoorientador",
+    "Administrativo PUJ"
+  ],
+  attendanceDays: ["Martes 15 de octubre de 2024"],
+
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Campo Universidad: Visible con lista específica de 8 universidades
+  // ✅ Enfoque en red de universidades aliadas
+  // ✅ Tipos de asistente: Orientado a comunidad académica
+  // ✅ Para eventos de intercambio académico y colaboración
+};
+
+// ============================================================================
+// 🏢 PRUEBA 10: CONFIGURACIÓN ADICIONAL - EMPRESAS Y COLEGIOS
+// ============================================================================
+// Demuestra configuración con empresas de convenio y colegios aliados
+// ✅ Usado en: formCompaniesSchools (test.html)
+
+export const configCompaniesSchools = {
+  // DATOS DEL EVENTO
+  eventName: "Encuentro Empresarial y Colegios 2024",
+  eventDate: "2024-11-20",
+  campaign: "EMPRESARIAL_COLEGIOS_2024",
+  article: "evento_convenios",
+  source: "convenios_institucionales",
+  medium: "invitacion",
+
+  // CONFIGURACIÓN DE EMPRESAS DE CONVENIO
   company: [
+    "Grupo Bancolombia",
+    "ECOPETROL",
+    "Grupo Nutresa",
+    "Bavaria - AB InBev",
+    "Grupo Argos",
+    "ETB",
+    "Microsoft Colombia",
+    "Google Colombia"
+  ],
+
+  // CONFIGURACIÓN DE COLEGIOS ALIADOS
+  school: [
     "Colegio San Patricio",
     "Gimnasio Moderno",
     "Colegio Anglo Colombiano",
-    "Liceo Francés",
+    "Liceo Francés Louis Pasteur",
     "Colegio Rochester",
+    "Colegio San Carlos",
+    "Gimnasio Los Caobos",
+    "Colegio Nueva Granada"
   ],
 
-  // Configuración de desarrollo para producción
-  sandboxMode: false, // Producción real
-  debugMode: false, // Sin debug en producción
-  devMode: false, // Modo producción
-  debugEmail: "", // Sin email debug en producción
+  // CONFIGURACIÓN DEL EVENTO
+  typeAttendee: [
+    "Empresario",
+    "Graduado",
+    "Docente y/o psicoorientador",
+    "Administrativo PUJ",
+    "Aspirante",
+    "Padre de familia y/o acudiente"
+  ],
+  attendanceDays: ["Miércoles 20 de noviembre de 2024"],
 
-  // Cache optimizado para alto tráfico
-  cache: {
-    enabled: true,
-    expirationHours: 1, // Cache muy corto para datos en tiempo real
-  },
+  // CONFIGURACIONES TÉCNICAS
+  sandboxMode: true,
+  debugMode: true,
+  devMode: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
 
-  // URLs de servicios de producción con alta disponibilidad
-  urls: {
-    locations: "https://api-prod.javeriana.edu.co/v3/ubicaciones",
-    prefixes: "https://api-prod.javeriana.edu.co/v3/prefijos-telefono",
-    programs: "https://api-prod.javeriana.edu.co/v3/programas-academicos",
-    periods: "https://api-prod.javeriana.edu.co/v3/periodos-admision",
-  },
-
-  // Configuración de logging para análisis avanzado
-  logging: {
-    enabled: true,
-    level: "info", // Nivel informativo para producción
-    showTimestamp: true,
-    showLevel: true,
-  },
-
-  // Callbacks avanzados con lógica de negocio compleja
-  callbacks: {
-    // Inicialización compleja del formulario
-    onFormLoad: function () {
-      console.log("EXPO 2024: Inicializando formulario avanzado");
-
-      // Configurar tracking de analytics
-      if (typeof gtag !== "undefined") {
-        gtag("event", "form_load", {
-          event_category: "expo2024",
-          event_label: "formulario_cargado",
-        });
-      }
-
-      // Personalizar interfaz según hora del día
-      const hora = new Date().getHours();
-      const saludoEl = document.querySelector(".saludo");
-      if (saludoEl) {
-        if (hora < 12) {
-          saludoEl.textContent = "¡Buenos días! Regístrate para Javeriana Expo 2024";
-        } else if (hora < 18) {
-          saludoEl.textContent = "¡Buenas tardes! Regístrate para Javeriana Expo 2024";
-        } else {
-          saludoEl.textContent = "¡Buenas noches! Regístrate para Javeriana Expo 2024";
-        }
-      }
-    },
-
-    // Lógica pre-envío con validaciones de negocio
-    onFormSubmit: function (formData) {
-      console.log("EXPO 2024: Procesando envío con datos:", formData);
-
-      // Validación de reglas de negocio específicas
-      if (formData.type_attendee === "Empresario" && !formData.company) {
-        alert("Los empresarios deben especificar su empresa");
-        return false;
-      }
-
-      // Tracking de conversión
-      if (typeof gtag !== "undefined") {
-        gtag("event", "form_submit", {
-          event_category: "expo2024",
-          event_label: "formulario_enviado",
-          value: 1,
-        });
-      }
-
-      // Guardado local para recuperación en caso de error
-      localStorage.setItem("expo2024_backup", JSON.stringify(formData));
-
-      return true;
-    },
-
-    // Tracking detallado de interacciones
-    onFieldChange: function (fieldName, value) {
-      console.log(`EXPO 2024: Campo ${fieldName} = ${value}`);
-
-      // Lógica específica por campo
-      switch (fieldName) {
-        case "type_attendee":
-          // Mostrar/ocultar campos según tipo de asistente
-          if (this.toggleFieldsBasedOnAttendeeType) {
-            this.toggleFieldsBasedOnAttendeeType(value);
-          }
-          break;
-
-        case "academic_level":
-          // Filtrar programas según nivel académico
-          if (this.filterProgramsByLevel) {
-            this.filterProgramsByLevel(value);
-          }
-          break;
-
-        case "country":
-          // Tracking de distribución geográfica
-          if (typeof gtag !== "undefined") {
-            gtag("event", "country_selection", {
-              event_category: "expo2024",
-              event_label: value,
-            });
-          }
-          break;
-      }
-    },
-
-    // Manejo avanzado de errores
-    onValidationError: function (errors) {
-      console.log("EXPO 2024: Errores detectados:", errors);
-
-      // Tracking de errores para optimización
-      if (typeof gtag !== "undefined") {
-        gtag("event", "form_error", {
-          event_category: "expo2024",
-          event_label: "errores_validacion",
-          value: errors.length,
-        });
-      }
-
-      // Análisis de patrones de error
-      const errorTypes = errors.map((e) => e.type);
-      localStorage.setItem(
-        "expo2024_errors",
-        JSON.stringify({
-          timestamp: new Date().toISOString(),
-          errors: errorTypes,
-        })
-      );
-
-      // Sugerencias contextuales
-      if (this.showContextualHelp) {
-        this.showContextualHelp(errors);
-      }
-    },
-  },
+  // 💡 COMPORTAMIENTO ESPERADO:
+  // ✅ Campo Empresa: Visible con 8 empresas de convenio
+  // ✅ Campo Colegio: Visible con 8 colegios aliados
+  // ✅ Tipos de asistente: Incluye empresarios y comunidad educativa
+  // ✅ Para eventos de networking empresarial y alianzas educativas
+  // ✅ Configuración completa para relaciones institucionales
 };
 
-// ==================================================
-// USAR LOS EJEMPLOS
-// ==================================================
+// ============================================================================
+// 🚀 AUTO-INICIALIZACIÓN DE FORMULARIOS DE PRUEBA
+// ============================================================================
+// Inicializa automáticamente todos los formularios cuando se carga la página
 
-// Auto-inicialización de ejemplos si están presentes en el DOM
 document.addEventListener("DOMContentLoaded", function () {
-  // Ejemplo 1: Configuración mínima
-  const formMini = new FormManager("formMini", configMini);
-  formMini.initialize();
+  // 📝 Prueba 1: Configuración Base
+  if (document.getElementById("formMini")) {
+    const formMini = new FormManager("formMini", configMini);
+    formMini.initialize();
+  }
 
-  // Ejemplo 2: Configuración básica
-  const formBase = new FormManager("formBase", configBase);
-  formBase.initialize();
+  // 🎓 Prueba 2: Filtro por Nivel Académico
+  if (document.getElementById("formAcademicLevel")) {
+    const formAcademicLevel = new FormManager("formAcademicLevel", configAcademicLevel);
+    formAcademicLevel.initialize();
+  }
 
-  // Ejemplo 3: Configuración intermedia
-  const formMedium = new FormManager("formMedium", configMedium);
-  formMedium.initialize();
+  // 🏛️ Prueba 3: Filtro por Facultad
+  if (document.getElementById("formFaculty")) {
+    const formFaculty = new FormManager("formFaculty", configFaculty);
+    formFaculty.initialize();
+  }
 
-  // Ejemplo 4: Configuración avanzada
-  const formAdvance = new FormManager("formAdvance", configAdvance);
-  formAdvance.initialize();
+  // 📚 Prueba 4: Filtro por Programas
+  if (document.getElementById("formPrograms")) {
+    const formPrograms = new FormManager("formPrograms", configPrograms);
+    formPrograms.initialize();
+  }
 
-  // Ejemplo 5: Configuración compleja
-  const formComplete = new FormManager("formComplete", configComplete);
-  formComplete.initialize();
+  // 🌍 Prueba 5: Filtro por Países
+  if (document.getElementById("formCountries")) {
+    const formCountries = new FormManager("formCountries", configCountries);
+    formCountries.initialize();
+  }
+
+  // 🏛️ Prueba 6: Filtro por Departamentos
+  if (document.getElementById("formDepartments")) {
+    const formDepartments = new FormManager("formDepartments", configDepartments);
+    formDepartments.initialize();
+  }
+
+  // 🏙️ Prueba 7: Filtro por Ciudades
+  if (document.getElementById("formCities")) {
+    const formCities = new FormManager("formCities", configCities);
+    formCities.initialize();
+  }
+
+  // 🎯 Prueba 8: Días Múltiples
+  if (document.getElementById("formMultipleDays")) {
+    const formMultipleDays = new FormManager("formMultipleDays", configMultipleDays);
+    formMultipleDays.initialize();
+  }
+
+  // 🎓 Prueba 9: Universidades
+  if (document.getElementById("formUniversities")) {
+    const formUniversities = new FormManager("formUniversities", configUniversities);
+    formUniversities.initialize();
+  }
+
+  // 🏢 Prueba 10: Empresas y Colegios
+  if (document.getElementById("formCompaniesSchools")) {
+    const formCompaniesSchools = new FormManager("formCompaniesSchools", configCompaniesSchools);
+    formCompaniesSchools.initialize();
+  }
 });

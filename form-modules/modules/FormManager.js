@@ -430,11 +430,11 @@ export class FormManager {
    * @private
    */
   async _setupModules() {
-    // Módulo académico
-    this.academic = new Academic(this.data, this.ui, this.state, this.logger);
+    // Módulo académico - IMPORTANTE: pasar configuración para filtros
+    this.academic = new Academic(this.data, this.ui, this.state, this.logger, this.config);
 
-    // Módulo de ubicaciones
-    this.locations = new Locations(this.data, this.ui, this.state, this.logger);
+    // Módulo de ubicaciones - IMPORTANTE: pasar configuración para filtros
+    this.locations = new Locations(this.data, this.ui, this.state, this.logger, this.config);
 
     // Módulo de parámetros UTM
     this.utmParameters = new UtmParameters(this.formElement, this.state, this.ui, this.logger);
@@ -617,10 +617,7 @@ export class FormManager {
       {
         selector: Constants.SELECTORS.COUNTRY,
         priorityItem: this.state.getField(Constants.FIELDS.COUNTRY),
-        options: this.data.getCountries().map((country) => ({
-          value: country.code,
-          text: country.name,
-        })),
+        options: this.locations.getFilteredCountries(),
       },
       {
         selector: Constants.SELECTORS.TYPE_ATTENDEE,
