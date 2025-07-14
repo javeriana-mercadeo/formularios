@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🧪 Pruebas Completas de Filtros - FormManager</title>
-    <link rel="stylesheet" href="../styles/form-styles.css" />
+    <link rel="stylesheet" href="../build/form-modules-style.css" />
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -12,28 +12,28 @@
         margin: 0;
         padding: 20px;
       }
-      
+
       .page-header {
         text-align: center;
         background: white;
         padding: 30px;
         border-radius: 15px;
         margin-bottom: 40px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
-      
+
       .page-header h1 {
         color: #2c3e50;
         margin-bottom: 15px;
         font-size: 2.2em;
       }
-      
+
       .page-header p {
         color: #7f8c8d;
         font-size: 1.1em;
         margin: 5px 0;
       }
-      
+
       .test-info {
         margin-top: 20px;
         padding: 20px;
@@ -42,44 +42,32 @@
         line-height: 1.6;
         border-left: 5px solid;
       }
-      
-      .test-basic { background: #fff8e1; border-color: #ff9800; }
-      .test-academic { background: #e3f2fd; border-color: #2196f3; }
-      .test-location { background: #e8f5e8; border-color: #4caf50; }
-      .test-additional { background: #f3e5f5; border-color: #9c27b0; }
-      
+
+      .test-basic {
+        background: #fff8e1;
+        border-color: #ff9800;
+      }
+      .test-academic {
+        background: #e3f2fd;
+        border-color: #2196f3;
+      }
+      .test-location {
+        background: #e8f5e8;
+        border-color: #4caf50;
+      }
+      .test-additional {
+        background: #f3e5f5;
+        border-color: #9c27b0;
+      }
+
       .config-highlight {
         background: #f8f9fa;
         padding: 12px;
         border-radius: 6px;
-        font-family: 'Courier New', monospace;
+        font-family: "Courier New", monospace;
         margin: 10px 0;
         border-left: 3px solid #007bff;
         font-size: 13px;
-      }
-      
-      .form-card {
-        background: white;
-        margin-bottom: 50px;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        border: 1px solid #e9ecef;
-      }
-      
-      .form-card h3 {
-        margin: 0 0 15px 0;
-        color: #2c3e50;
-        font-size: 1.4em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      
-      .form-card p {
-        margin: 0 0 20px 0;
-        color: #495057;
-        font-size: 15px;
       }
 
       .section-divider {
@@ -115,24 +103,6 @@
         left: 0;
         top: 0;
       }
-
-      .form-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #e9ecef;
-      }
-
-      .form-id {
-        background: #e9ecef;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        color: #495057;
-        font-weight: bold;
-      }
     </style>
   </head>
   <body>
@@ -153,100 +123,142 @@
     <!-- ========================================== -->
     <!-- PRUEBA 1: CONFIGURACIÓN BASE -->
     <!-- ========================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">📝</span>Prueba 1: Configuración Base (Open Day)</h3>
         <span class="form-id">formMini</span>
       </div>
-      <p><strong>Configuración usada:</strong> <code>configMini</code> - Sin filtros, comportamiento estándar completo</p>
-      
-      <form id="formMini" novalidate aria-label="Prueba 1: Configuración Base">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+      <p>
+        <strong>Configuración usada:</strong> <code>configMini</code> - Sin filtros, comportamiento
+        estándar completo
+      </p>
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Solo título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Inscripción Open Day</h2>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formMini" novalidate aria-label="Prueba 1: Configuración Base">
+            <!-- CONTENT: Descripción + campos + autorización con scroll -->
+            <div class="form-content">
+              <p class="form-description">
+                Completa el formulario para reservar tu lugar en nuestro evento
+              </p>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
-              <label for="auth_si_1">Sí</label>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
+
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
+
+              <!-- Autorización de datos dentro del scroll -->
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+                    <label for="auth_si_1">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+                    <label for="auth_no_1">No</label>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
-              <label for="auth_no_1">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Solo botón fijo -->
+            <div class="form-footer">
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-basic">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -263,7 +275,7 @@
     <!-- ================================================= -->
     <!-- PRUEBA 2: FILTRO POR NIVEL ACADÉMICO -->
     <!-- ================================================= -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🎓</span>Prueba 2: Filtro por Nivel Académico</h3>
         <span class="form-id">formAcademicLevel</span>
@@ -272,94 +284,136 @@
       <div class="config-highlight">
         academicLevels: [{ code: "PREG", name: "Pregrado" }] // Solo Pregrado
       </div>
-      
-      <form id="formAcademicLevel" novalidate aria-label="Prueba 2: Filtro por Nivel Académico">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Solo título fijo -->
+          <div class="form-header">
+            <h2 class="title-with-icon">
+              <span class="icon">🎓</span>
+              Pregrado - Inscripción
+            </h2>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formAcademicLevel" novalidate aria-label="Prueba 2: Filtro por Nivel Académico">
+            <!-- CONTENT: Descripción + campos + autorización con scroll -->
+            <div class="form-content">
+              <p class="form-description">
+                Formulario especializado para aspirantes a programas de pregrado
+              </p>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_2" name="authorization_data" value="1" />
-              <label for="auth_si_2">Sí</label>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
+
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
+
+              <!-- Autorización de datos dentro del scroll -->
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_2" name="authorization_data" value="1" />
+                    <label for="auth_si_2">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_2" name="authorization_data" value="0" />
+                    <label for="auth_no_2">No</label>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_2" name="authorization_data" value="0" />
-              <label for="auth_no_2">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Solo botón fijo -->
+            <div class="form-footer">
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-academic">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -375,103 +429,135 @@
     <!-- ============================================== -->
     <!-- PRUEBA 3: FILTRO POR FACULTAD -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🏛️</span>Prueba 3: Filtro por Facultad</h3>
         <span class="form-id">formFaculty</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configFaculty</code></p>
-      <div class="config-highlight">
-        faculties: ["Ingeniería"] // Solo Facultad de Ingeniería
+      <div class="config-highlight">faculties: ["Ingeniería"] // Solo Facultad de Ingeniería</div>
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="title-highlight">Facultad de Ingeniería</h2>
+            <p class="form-description">Únete a nuestra comunidad de ingenieros del futuro</p>
+          </div>
+
+          <form id="formFaculty" novalidate aria-label="Prueba 3">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
+
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
+
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
+
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
+
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
+
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
+
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
+
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
+
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_3" name="authorization_data" value="1" />
+                    <label for="auth_si_3">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_3" name="authorization_data" value="0" />
+                    <label for="auth_no_3">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
       </div>
-      
-      <form id="formFaculty" novalidate aria-label="Prueba 3: Filtro por Facultad">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
-          </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
-
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
-
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
-
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
-
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
-
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
-
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
-
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
-
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
-
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
-
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
-
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_3" name="authorization_data" value="1" />
-              <label for="auth_si_3">Sí</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_3" name="authorization_data" value="0" />
-              <label for="auth_no_3">No</label>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
       <div class="test-info test-academic">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -487,7 +573,7 @@
     <!-- ============================================== -->
     <!-- PRUEBA 4: FILTRO POR PROGRAMAS -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">📚</span>Prueba 4: Filtro por Programas</h3>
         <span class="form-id">formPrograms</span>
@@ -496,99 +582,141 @@
       <div class="config-highlight">
         programs: ["MEDIC", "DRCHO", "PSICO", "IINDS", "COMSC"] // Programas interdisciplinarios
       </div>
-      
-      <form id="formPrograms" novalidate aria-label="Prueba 4: Filtro por Programas">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
-          </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
-
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
-
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
-
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
-
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
-
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
-
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
-
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
-
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
-
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
-
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
-
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_4" name="authorization_data" value="1" />
-              <label for="auth_si_4">Sí</label>
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title title-primary">Programas Interdisciplinarios</h2>
+            <div class="form-steps">
+              <span class="step active">1</span>
+              <span class="step">2</span>
+              <span class="step">3</span>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_4" name="authorization_data" value="0" />
-              <label for="auth_no_4">No</label>
-            </div>
+            <p class="form-description">Descubre nuestros programas más innovadores y versátiles</p>
           </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+          <form id="formPrograms" novalidate aria-label="Prueba 4">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
+
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
+
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
+
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
+
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
+
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
+
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
+
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
+
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_4" name="authorization_data" value="1" />
+                    <label for="auth_si_4">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_4" name="authorization_data" value="0" />
+                    <label for="auth_no_4">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-academic">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
           <li>Nivel académico: Oculto y preseleccionado (Pregrado)</li>
-          <li>Facultad: Visible con opciones múltiples (Medicina, Derecho, Ciencias Sociales, Ingeniería, Comunicación)</li>
+          <li>
+            Facultad: Visible con opciones múltiples (Medicina, Derecho, Ciencias Sociales,
+            Ingeniería, Comunicación)
+          </li>
           <li>Programas: Solo los 5 programas configurados</li>
           <li>Al cambiar facultad → Solo aparecen programas de esa facultad</li>
           <li>Demuestra selección inteligente entre múltiples facultades</li>
@@ -606,103 +734,138 @@
     <!-- ============================================== -->
     <!-- PRUEBA 5: FILTRO POR PAÍSES -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🌍</span>Prueba 5: Filtro por Países</h3>
         <span class="form-id">formCountries</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configCountries</code></p>
       <div class="config-highlight">
-        countries: ["Colombia", "México", "Ecuador", "Perú", "Estados Unidos"] // Cobertura internacional
+        countries: ["Colombia", "México", "Ecuador", "Perú", "Estados Unidos"] // Cobertura
+        internacional
       </div>
-      
-      <form id="formCountries" novalidate aria-label="Prueba 5: Filtro por Países">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Cobertura Internacional</h2>
+            <p class="form-description">Formulario para estudiantes de diferentes países</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formCountries" novalidate aria-label="Prueba 5">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_5" name="authorization_data" value="1" />
-              <label for="auth_si_5">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_5" name="authorization_data" value="0" />
-              <label for="auth_no_5">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_5" name="authorization_data" value="1" />
+                    <label for="auth_si_5">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_5" name="authorization_data" value="0" />
+                    <label for="auth_no_5">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-location">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -718,103 +881,138 @@
     <!-- ============================================== -->
     <!-- PRUEBA 6: FILTRO POR DEPARTAMENTOS -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🏛️</span>Prueba 6: Filtro por Departamentos</h3>
         <span class="form-id">formDepartments</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configDepartments</code></p>
       <div class="config-highlight">
-        departments: ["Cundinamarca", "Antioquia", "Valle del Cauca", "Atlántico", "Santander"] // Regiones clave
+        departments: ["Cundinamarca", "Antioquia", "Valle del Cauca", "Atlántico", "Santander"] //
+        Regiones clave
       </div>
-      
-      <form id="formDepartments" novalidate aria-label="Prueba 6: Filtro por Departamentos">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Regiones de Colombia</h2>
+            <p class="form-description">Enfoque en departamentos específicos del país</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formDepartments" novalidate aria-label="Prueba 6">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_6" name="authorization_data" value="1" />
-              <label for="auth_si_6">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_6" name="authorization_data" value="0" />
-              <label for="auth_no_6">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_6" name="authorization_data" value="1" />
+                    <label for="auth_si_6">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_6" name="authorization_data" value="0" />
+                    <label for="auth_no_6">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-location">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -830,7 +1028,7 @@
     <!-- ============================================== -->
     <!-- PRUEBA 7: FILTRO POR CIUDADES -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🏙️</span>Prueba 7: Filtro por Ciudades</h3>
         <span class="form-id">formCities</span>
@@ -839,94 +1037,128 @@
       <div class="config-highlight">
         cities: ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"] // Ciudades principales
       </div>
-      
-      <form id="formCities" novalidate aria-label="Prueba 7: Filtro por Ciudades">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Ciudades Principales</h2>
+            <p class="form-description">Eventos urbanos en las principales ciudades del país</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formCities" novalidate aria-label="Prueba 7">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_7" name="authorization_data" value="1" />
-              <label for="auth_si_7">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_7" name="authorization_data" value="0" />
-              <label for="auth_no_7">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_7" name="authorization_data" value="1" />
+                    <label for="auth_si_7">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_7" name="authorization_data" value="0" />
+                    <label for="auth_no_7">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-location">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -949,109 +1181,140 @@
     <!-- ============================================== -->
     <!-- PRUEBA 8: DÍAS MÚLTIPLES -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🎯</span>Prueba 8: Configuración - Días Múltiples</h3>
         <span class="form-id">formMultipleDays</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configMultipleDays</code></p>
       <div class="config-highlight">
-        attendanceDays: [ // Semana completa con horarios específicos
-          "Lunes - Inauguración (18:00-20:00)",
-          "Martes - Jornada Académica (8:00-17:00)",
-          "Miércoles - Feria de Programas (9:00-18:00)",
-          "Jueves - Encuentro Alumni (19:00-22:00)",
-          "Viernes - Clausura y Networking (16:00-20:00)"
-        ]
+        attendanceDays: [ // Semana completa con horarios específicos "Lunes - Inauguración
+        (18:00-20:00)", "Martes - Jornada Académica (8:00-17:00)", "Miércoles - Feria de Programas
+        (9:00-18:00)", "Jueves - Encuentro Alumni (19:00-22:00)", "Viernes - Clausura y Networking
+        (16:00-20:00)" ]
       </div>
-      
-      <form id="formMultipleDays" novalidate aria-label="Prueba 8: Días Múltiples">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Evento de Múltiples Días</h2>
+            <p class="form-description">Semana completa de actividades con horarios específicos</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formMultipleDays" novalidate aria-label="Prueba 8">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_8" name="authorization_data" value="1" />
-              <label for="auth_si_8">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_8" name="authorization_data" value="0" />
-              <label for="auth_no_8">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_8" name="authorization_data" value="1" />
+                    <label for="auth_si_8">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_8" name="authorization_data" value="0" />
+                    <label for="auth_no_8">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-additional">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -1066,112 +1329,146 @@
     <!-- ============================================== -->
     <!-- PRUEBA 9: UNIVERSIDADES -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🎓</span>Prueba 9: Configuración - Universidades</h3>
         <span class="form-id">formUniversities</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configUniversities</code></p>
       <div class="config-highlight">
-        university: [ // Red de universidades aliadas
-          "Pontificia Universidad Javeriana", "Universidad Nacional",
-          "Universidad de los Andes", "Universidad del Rosario",
-          "Universidad Externado", "Universidad La Salle", "EAFIT", "Universidad del Norte"
-        ]
+        university: [ // Red de universidades aliadas "Pontificia Universidad Javeriana",
+        "Universidad Nacional", "Universidad de los Andes", "Universidad del Rosario", "Universidad
+        Externado", "Universidad La Salle", "EAFIT", "Universidad del Norte" ]
       </div>
-      
-      <form id="formUniversities" novalidate aria-label="Prueba 9: Universidades">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Red de Universidades Aliadas</h2>
+            <p class="form-description">Eventos de intercambio académico y colaboración</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formUniversities" novalidate aria-label="Prueba 9">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Universidad -->
-        <select name="university">
-          <option value="">Universidad de origen (opcional)</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Universidad -->
+              <div class="field">
+                <select name="university">
+                  <option value="">Universidad de origen (opcional)</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_9" name="authorization_data" value="1" />
-              <label for="auth_si_9">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_9" name="authorization_data" value="0" />
-              <label for="auth_no_9">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_9" name="authorization_data" value="1" />
+                    <label for="auth_si_9">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_9" name="authorization_data" value="0" />
+                    <label for="auth_no_9">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-additional">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -1186,123 +1483,160 @@
     <!-- ============================================== -->
     <!-- PRUEBA 10: EMPRESAS Y COLEGIOS -->
     <!-- ============================================== -->
-    <div class="form-card">
+    <div class="demo-form">
       <div class="form-header">
         <h3><span class="emoji-icon">🏢</span>Prueba 10: Configuración - Empresas y Colegios</h3>
         <span class="form-id">formCompaniesSchools</span>
       </div>
       <p><strong>Configuración usada:</strong> <code>configCompaniesSchools</code></p>
       <div class="config-highlight">
-        company: [ // Empresas de convenio
-          "Grupo Bancolombia", "ECOPETROL", "Grupo Nutresa", "Bavaria", "Grupo Argos"
-        ]
-        school: [ // Colegios aliados
-          "Colegio San Patricio", "Gimnasio Moderno", "Colegio Anglo Colombiano"
-        ]
+        company: [ // Empresas de convenio "Grupo Bancolombia", "ECOPETROL", "Grupo Nutresa",
+        "Bavaria", "Grupo Argos" ] school: [ // Colegios aliados "Colegio San Patricio", "Gimnasio
+        Moderno", "Colegio Anglo Colombiano" ]
       </div>
-      
-      <form id="formCompaniesSchools" novalidate aria-label="Prueba 10: Empresas y Colegios">
-        <!-- Nombres y apellidos -->
-        <div class="name-row">
-          <div class="name-field">
-            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+
+      <div class="form-container">
+        <div class="form-card">
+          <!-- HEADER: Título fijo -->
+          <div class="form-header">
+            <h2 class="form-title">Empresas y Colegios Aliados</h2>
+            <p class="form-description">Networking empresarial y alianzas educativas</p>
           </div>
-          <div class="name-field">
-            <input type="text" placeholder="*Apellidos" name="last_name" />
-          </div>
-        </div>
 
-        <!-- Email -->
-        <input type="email" placeholder="*Email" name="email" />
+          <form id="formCompaniesSchools" novalidate aria-label="Prueba 10">
+            <!-- FIELDS: Área con scroll -->
+            <div class="form-fields">
+              <!-- Nombres y apellidos -->
+              <div class="field-group">
+                <div class="field">
+                  <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="*Apellidos" name="last_name" />
+                </div>
+              </div>
 
-        <!-- Teléfono -->
-        <div class="phone-row">
-          <div class="prefix-field">
-            <select name="phone_code">
-              <option value="">(+) Indicativo</option>
-            </select>
-          </div>
-          <div class="mobile-field">
-            <input type="text" placeholder="*Teléfono celular" name="mobile" />
-          </div>
-        </div>
+              <!-- Email -->
+              <div class="field">
+                <input type="email" placeholder="*Email" name="email" />
+              </div>
 
-        <!-- Ubicación -->
-        <select name="country">
-          <option value="">*País de residencia</option>
-        </select>
+              <!-- Teléfono -->
+              <div class="field-group">
+                <div class="field field-prefix">
+                  <select name="phone_code">
+                    <option value="">(+) Indicativo</option>
+                  </select>
+                </div>
+                <div class="field field-main">
+                  <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                </div>
+              </div>
 
-        <select name="department" style="display: none">
-          <option value="">*Selecciona el departamento</option>
-        </select>
+              <!-- Ubicación -->
+              <div class="field">
+                <select name="country">
+                  <option value="">*País de residencia</option>
+                </select>
+              </div>
 
-        <select name="city" style="display: none">
-          <option value="">*Selecciona la Ciudad</option>
-        </select>
+              <div class="field">
+                <select name="department" style="display: none">
+                  <option value="">*Selecciona el departamento</option>
+                </select>
+              </div>
 
-        <!-- Día de asistencia -->
-        <select name="attendance_day">
-          <option value="">*Día de asistencia</option>
-        </select>
+              <div class="field">
+                <select name="city" style="display: none">
+                  <option value="">*Selecciona la Ciudad</option>
+                </select>
+              </div>
 
-        <!-- Tipo de asistente -->
-        <select name="type_attendee">
-          <option value="">*Tipo de asistente</option>
-        </select>
+              <!-- Día de asistencia -->
+              <div class="field">
+                <select name="attendance_day">
+                  <option value="">*Día de asistencia</option>
+                </select>
+              </div>
 
-        <!-- Colegio -->
-        <select name="school">
-          <option value="">Colegio de origen (opcional)</option>
-        </select>
+              <!-- Tipo de asistente -->
+              <div class="field">
+                <select name="type_attendee">
+                  <option value="">*Tipo de asistente</option>
+                </select>
+              </div>
 
-        <!-- Universidad -->
-        <select name="university">
-          <option value="">Universidad de origen (opcional)</option>
-        </select>
+              <!-- Colegio -->
+              <div class="field">
+                <select name="school">
+                  <option value="">Colegio de origen (opcional)</option>
+                </select>
+              </div>
 
-        <!-- Empresa -->
-        <select name="company">
-          <option value="">Empresa (opcional)</option>
-        </select>
+              <!-- Universidad -->
+              <div class="field">
+                <select name="university">
+                  <option value="">Universidad de origen (opcional)</option>
+                </select>
+              </div>
 
-        <!-- Nivel académico -->
-        <select name="academic_level" style="display: none">
-          <option value="">*Nivel académico</option>
-        </select>
+              <!-- Empresa -->
+              <div class="field">
+                <select name="company">
+                  <option value="">Empresa (opcional)</option>
+                </select>
+              </div>
 
-        <!-- Facultad -->
-        <select name="faculty" style="display: none">
-          <option value="">*Facultad de interés</option>
-        </select>
+              <!-- Nivel académico -->
+              <div class="field">
+                <select name="academic_level" style="display: none">
+                  <option value="">*Nivel académico</option>
+                </select>
+              </div>
 
-        <!-- Programa -->
-        <select name="program" style="display: none">
-          <option value="">*Programa de interés</option>
-        </select>
+              <!-- Facultad -->
+              <div class="field">
+                <select name="faculty" style="display: none">
+                  <option value="">*Facultad de interés</option>
+                </select>
+              </div>
 
-        <!-- Período de ingreso -->
-        <select name="admission_period" style="display: none">
-          <option value="">*Periodo esperado de Ingreso de interés</option>
-        </select>
+              <!-- Programa -->
+              <div class="field">
+                <select name="program" style="display: none">
+                  <option value="">*Programa de interés</option>
+                </select>
+              </div>
 
-        <!-- Autorización de datos -->
-        <div>
-          <p>¿Autorizas el tratamiento de tus datos personales?</p>
-          <div class="radio-inline-group">
-            <div class="radio-option">
-              <input type="radio" id="auth_si_10" name="authorization_data" value="1" />
-              <label for="auth_si_10">Sí</label>
+              <!-- Período de ingreso -->
+              <div class="field">
+                <select name="admission_period" style="display: none">
+                  <option value="">*Periodo esperado de Ingreso de interés</option>
+                </select>
+              </div>
             </div>
-            <div class="radio-option">
-              <input type="radio" id="auth_no_10" name="authorization_data" value="0" />
-              <label for="auth_no_10">No</label>
-            </div>
-          </div>
-        </div>
 
-        <button type="submit" disabled>Inscríbete</button>
-      </form>
-      
+            <!-- FOOTER: Autorización y botón fijos -->
+            <div class="form-footer">
+              <div class="authorization-section">
+                <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="auth_si_10" name="authorization_data" value="1" />
+                    <label for="auth_si_10">Sí</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="auth_no_10" name="authorization_data" value="0" />
+                    <label for="auth_no_10">No</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">Inscríbete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="test-info test-additional">
         <strong>💡 Comportamiento esperado:</strong>
         <ul class="behavior-list">
@@ -1318,9 +1652,17 @@
     <!-- ========================================== -->
     <!-- INFORMACIÓN ADICIONAL -->
     <!-- ========================================== -->
-    <div style="background: white; padding: 30px; border-radius: 15px; margin-top: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+    <div
+      style="
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 50px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      "
+    >
       <h3>📋 Guía Completa de Pruebas</h3>
-      
+
       <h4>🔧 Filtros Básicos:</h4>
       <ul>
         <li><strong>Configuración Base:</strong> Sin filtros - comportamiento estándar completo</li>
@@ -1328,21 +1670,21 @@
         <li><strong>Facultad:</strong> Solo Ingeniería - programas específicos de la facultad</li>
         <li><strong>Programas:</strong> Selección interdisciplinaria - múltiples facultades</li>
       </ul>
-      
+
       <h4>🌍 Filtros Geográficos:</h4>
       <ul>
         <li><strong>Países:</strong> Cobertura internacional - eventos globales</li>
         <li><strong>Departamentos:</strong> Regiones de Colombia - enfoque nacional</li>
         <li><strong>Ciudades:</strong> Ciudades principales - eventos urbanos</li>
       </ul>
-      
+
       <h4>🎯 Configuraciones Adicionales:</h4>
       <ul>
         <li><strong>Días Múltiples:</strong> Eventos de varios días con horarios específicos</li>
         <li><strong>Universidades:</strong> Red de universidades aliadas - eventos académicos</li>
         <li><strong>Empresas y Colegios:</strong> Convenios institucionales - networking</li>
       </ul>
-      
+
       <h4>🔧 Configuraciones Técnicas Disponibles:</h4>
       <ul>
         <li><code>configMini</code> - Configuración básica</li>
@@ -1358,6 +1700,7 @@
       </ul>
     </div>
 
-    <script type="module" src="examples.js"></script>
+    <script src="../build/form-modules-script.js"></script>
+    <script type="module" src="./examples.js"></script>
   </body>
 </html>

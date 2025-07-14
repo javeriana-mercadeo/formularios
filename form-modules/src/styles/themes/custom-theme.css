@@ -1,0 +1,38 @@
+/* Custom theme example - shows how to override default styles */
+
+:root {
+  /* Override primary colors */
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #3b82f6;
+
+  /* Override form-specific variables */
+  --form-background: #f8fafc;
+  --form-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --form-border-radius: 12px;
+  --form-max-width: 500px;
+  --form-padding: 40px;
+  --form-gap: 20px;
+}
+
+/* Custom button styling */
+.form-card button {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Custom input focus */
+.form-card input:focus,
+.form-card select:focus {
+  border-bottom: 2px solid var(--primary-color);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Custom card styling */
+.form-card {
+  background: var(--form-background);
+  border: 1px solid #e2e8f0;
+}

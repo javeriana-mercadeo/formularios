@@ -1,9 +1,9 @@
 /**
  * 🧪 ARCHIVO DE CONFIGURACIONES PARA PRUEBAS - FormManager
- * 
+ *
  * Este archivo contiene las configuraciones utilizadas en test.html
  * Cada configuración demuestra diferentes tipos de filtros y configuraciones
- * 
+ *
  * ESTRUCTURA PROGRESIVA DE FILTROS:
  * 1. Configuración base (Eventos y Open Day)
  * 2. Filtro por Nivel académico
@@ -14,8 +14,6 @@
  * 7. Filtro por Ciudades
  * 8. Configuraciones adicionales (días múltiples, universidades, empresas, colegios)
  */
-
-import { FormManager } from "../modules/FormManager.js";
 
 // ============================================================================
 // 📝 PRUEBA 1: CONFIGURACIÓN BASE (EVENTOS Y OPEN DAY)
@@ -31,13 +29,13 @@ export const configMini = {
   article: "evento_general",
   source: "web",
   medium: "organico",
-  
+
   // CONFIGURACIÓN BÁSICA DE EVENTO
   typeAttendee: [
     "Aspirante",
     "Padre de familia y/o acudiente",
     "Graduado",
-    "Docente y/o psicoorientador"
+    "Docente y/o psicoorientador",
   ],
   attendanceDays: ["Jueves 15 de febrero de 2024"],
 
@@ -72,15 +70,10 @@ export const configAcademicLevel = {
   medium: "web",
 
   // 🎯 FILTRO PRINCIPAL: Solo nivel de Pregrado
-  academicLevels: [
-    { code: "PREG", name: "Pregrado" }
-  ],
+  academicLevels: [{ code: "PREG", name: "Pregrado" }],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente"
-  ],
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
   attendanceDays: ["Miércoles 20 de marzo de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
@@ -116,11 +109,7 @@ export const configFaculty = {
   faculties: ["Ingeniería"],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado"
-  ],
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado"],
   attendanceDays: ["Miércoles 10 de abril de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
@@ -174,11 +163,11 @@ export const configPrograms = {
     "Aspirante",
     "Padre de familia y/o acudiente",
     "Graduado",
-    "Docente y/o psicoorientador"
+    "Docente y/o psicoorientador",
   ],
   attendanceDays: [
     "Miércoles 15 de mayo - Sesión Mañana (9:00-12:00)",
-    "Miércoles 15 de mayo - Sesión Tarde (14:00-17:00)"
+    "Miércoles 15 de mayo - Sesión Tarde (14:00-17:00)",
   ],
 
   // CONFIGURACIONES TÉCNICAS
@@ -214,12 +203,7 @@ export const configCountries = {
   countries: ["Colombia", "México", "Ecuador", "Perú", "Estados Unidos"],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado",
-    "Estudiante actual"
-  ],
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado", "Estudiante actual"],
   attendanceDays: ["Jueves 20 de junio de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
@@ -255,15 +239,8 @@ export const configDepartments = {
   departments: ["Cundinamarca", "Antioquia", "Valle del Cauca", "Atlántico", "Santander"],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado"
-  ],
-  attendanceDays: [
-    "Jueves 25 de julio de 2024",
-    "Viernes 26 de julio de 2024"
-  ],
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado"],
+  attendanceDays: ["Jueves 25 de julio de 2024", "Viernes 26 de julio de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
   sandboxMode: true,
@@ -298,10 +275,7 @@ export const configCities = {
   cities: ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente"
-  ],
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
   attendanceDays: ["Viernes 30 de agosto de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
@@ -341,7 +315,7 @@ export const configMultipleDays = {
     "Martes 3 de septiembre - Jornada Académica (8:00-17:00)",
     "Miércoles 4 de septiembre - Feria de Programas (9:00-18:00)",
     "Jueves 5 de septiembre - Encuentro Alumni (19:00-22:00)",
-    "Viernes 6 de septiembre - Clausura y Networking (16:00-20:00)"
+    "Viernes 6 de septiembre - Clausura y Networking (16:00-20:00)",
   ],
 
   // CONFIGURACIÓN DEL EVENTO
@@ -351,7 +325,7 @@ export const configMultipleDays = {
     "Graduado",
     "Estudiante actual",
     "Docente y/o psicoorientador",
-    "Administrativo PUJ"
+    "Administrativo PUJ",
   ],
 
   // CONFIGURACIONES TÉCNICAS
@@ -391,7 +365,7 @@ export const configUniversities = {
     "Universidad Externado",
     "Universidad La Salle",
     "EAFIT",
-    "Universidad del Norte"
+    "Universidad del Norte",
   ],
 
   // CONFIGURACIÓN DEL EVENTO
@@ -399,7 +373,7 @@ export const configUniversities = {
     "Graduado",
     "Estudiante actual",
     "Docente y/o psicoorientador",
-    "Administrativo PUJ"
+    "Administrativo PUJ",
   ],
   attendanceDays: ["Martes 15 de octubre de 2024"],
 
@@ -440,7 +414,7 @@ export const configCompaniesSchools = {
     "Grupo Argos",
     "ETB",
     "Microsoft Colombia",
-    "Google Colombia"
+    "Google Colombia",
   ],
 
   // CONFIGURACIÓN DE COLEGIOS ALIADOS
@@ -452,7 +426,7 @@ export const configCompaniesSchools = {
     "Colegio Rochester",
     "Colegio San Carlos",
     "Gimnasio Los Caobos",
-    "Colegio Nueva Granada"
+    "Colegio Nueva Granada",
   ],
 
   // CONFIGURACIÓN DEL EVENTO
@@ -462,7 +436,7 @@ export const configCompaniesSchools = {
     "Docente y/o psicoorientador",
     "Administrativo PUJ",
     "Aspirante",
-    "Padre de familia y/o acudiente"
+    "Padre de familia y/o acudiente",
   ],
   attendanceDays: ["Miércoles 20 de noviembre de 2024"],
 
@@ -488,61 +462,61 @@ export const configCompaniesSchools = {
 document.addEventListener("DOMContentLoaded", function () {
   // 📝 Prueba 1: Configuración Base
   if (document.getElementById("formMini")) {
-    const formMini = new FormManager("formMini", configMini);
+    const formMini = new FormModules("formMini", configMini);
     formMini.initialize();
   }
 
   // 🎓 Prueba 2: Filtro por Nivel Académico
   if (document.getElementById("formAcademicLevel")) {
-    const formAcademicLevel = new FormManager("formAcademicLevel", configAcademicLevel);
+    const formAcademicLevel = new FormModules("formAcademicLevel", configAcademicLevel);
     formAcademicLevel.initialize();
   }
 
   // 🏛️ Prueba 3: Filtro por Facultad
   if (document.getElementById("formFaculty")) {
-    const formFaculty = new FormManager("formFaculty", configFaculty);
+    const formFaculty = new FormModules("formFaculty", configFaculty);
     formFaculty.initialize();
   }
 
   // 📚 Prueba 4: Filtro por Programas
   if (document.getElementById("formPrograms")) {
-    const formPrograms = new FormManager("formPrograms", configPrograms);
+    const formPrograms = new FormModules("formPrograms", configPrograms);
     formPrograms.initialize();
   }
 
   // 🌍 Prueba 5: Filtro por Países
   if (document.getElementById("formCountries")) {
-    const formCountries = new FormManager("formCountries", configCountries);
+    const formCountries = new FormModules("formCountries", configCountries);
     formCountries.initialize();
   }
 
   // 🏛️ Prueba 6: Filtro por Departamentos
   if (document.getElementById("formDepartments")) {
-    const formDepartments = new FormManager("formDepartments", configDepartments);
+    const formDepartments = new FormModules("formDepartments", configDepartments);
     formDepartments.initialize();
   }
 
   // 🏙️ Prueba 7: Filtro por Ciudades
   if (document.getElementById("formCities")) {
-    const formCities = new FormManager("formCities", configCities);
+    const formCities = new FormModules("formCities", configCities);
     formCities.initialize();
   }
 
   // 🎯 Prueba 8: Días Múltiples
   if (document.getElementById("formMultipleDays")) {
-    const formMultipleDays = new FormManager("formMultipleDays", configMultipleDays);
+    const formMultipleDays = new FormModules("formMultipleDays", configMultipleDays);
     formMultipleDays.initialize();
   }
 
   // 🎓 Prueba 9: Universidades
   if (document.getElementById("formUniversities")) {
-    const formUniversities = new FormManager("formUniversities", configUniversities);
+    const formUniversities = new FormModules("formUniversities", configUniversities);
     formUniversities.initialize();
   }
 
   // 🏢 Prueba 10: Empresas y Colegios
   if (document.getElementById("formCompaniesSchools")) {
-    const formCompaniesSchools = new FormManager("formCompaniesSchools", configCompaniesSchools);
+    const formCompaniesSchools = new FormModules("formCompaniesSchools", configCompaniesSchools);
     formCompaniesSchools.initialize();
   }
 });

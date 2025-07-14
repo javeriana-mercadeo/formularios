@@ -1,0 +1,176 @@
+/* Layout styles for the form module */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: transparent;
+}
+
+/* Form container - new optimized class */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: transparent;
+}
+
+.form-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  width: 100%;
+  max-width: 427px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  height: 90vh;
+  max-height: 90vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form header - stays fixed at top (only title) */
+.form-header {
+  flex-shrink: 0;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Form container to control form height */
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Form content container - scrollable area (description + fields + authorization) */
+.form-content {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  min-height: 0;
+  margin-right: -15px;
+  padding-right: 15px;
+}
+
+/* Custom scrollbar for form content - Positioned in padding area */
+.form-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.form-content::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+.form-content::-webkit-scrollbar-thumb {
+  background: var(--primary-color, #4d7fcb);
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.form-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover, #3f6fb5);
+}
+
+/* Firefox scrollbar - Only when needed */
+.form-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #4d7fcb) transparent;
+}
+
+/* Form footer - stays fixed at bottom (only button) */
+.form-footer {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 12px;
+}
+
+/* =================================================================== */
+/* UTILITY CLASSES */
+/* =================================================================== */
+
+/* Spacing utilities */
+.mt-small {
+  margin-top: 10px;
+}
+.mt-medium {
+  margin-top: 20px;
+}
+.mt-large {
+  margin-top: 30px;
+}
+
+.mb-small {
+  margin-bottom: 10px;
+}
+.mb-medium {
+  margin-bottom: 20px;
+}
+.mb-large {
+  margin-bottom: 30px;
+}
+
+/* Display utilities */
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+
+/* Text alignment */
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+/* Width utilities */
+.w-full {
+  width: 100%;
+}
+.w-half {
+  width: 50%;
+}
+
+/* =================================================================== */
+/* RESPONSIVE DESIGN */
+/* =================================================================== */
+
+@media (max-width: 768px) {
+  .container,
+  .form-container {
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .form-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .form-container {
+    padding: 15px;
+  }
+
+  .form-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+}
