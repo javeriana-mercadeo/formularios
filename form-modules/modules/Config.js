@@ -68,8 +68,8 @@ export class Config {
 
       // LOGGING
       logging: {
-        prefix: `${selector} | ${config.eventName || defaultConfig.eventName}` || "form-manager",
-        enabled: true,
+        prefix: `${selector} | ${config.eventName || ""}` || "form-manager",
+        enabled: false,
         level: "info",
         showTimestamp: true,
         showLevel: true,

@@ -159,22 +159,22 @@ export class FormManager {
     e.preventDefault();
 
     if (this.isSubmitting) {
-      this.logger.error.warn("⚠️ Envío ya en progreso, ignorando intento adicional");
+      this.logger.warn("⚠️ Envío ya en progreso, ignorando intento adicional");
       return;
     }
 
-    this.logger.error.info("🚀 Iniciando proceso de envío del formulario");
+    this.logger.info("🚀 Iniciando proceso de envío del formulario");
 
     // 1. Detectar y validar campos requeridos presentes en el DOM
-    this.logger.error.debug("🔍 Ejecutando validación de campos requeridos...");
+    this.logger.debug("🔍 Ejecutando validación de campos requeridos...");
     const requiredFieldsValidation = this.validator.validateAllRequiredFields(this.formElement);
-    this.logger.error.debug(
+    this.logger.debug(
       "📊 Resultado de validación de campos requeridos:",
       requiredFieldsValidation
     );
 
     if (!requiredFieldsValidation.isValid) {
-      this.logger.error.warn(
+      this.logger.warn(
         `❌ Campos requeridos faltantes: ${requiredFieldsValidation.missingCount}/${requiredFieldsValidation.totalRequired}`
       );
       this._handleMissingRequiredFields(requiredFieldsValidation.missingFields);
@@ -182,7 +182,7 @@ export class FormManager {
       return;
     }
 
-    this.logger.error.info(
+    this.logger.info(
       `✅ Todos los campos requeridos están completos (${requiredFieldsValidation.totalRequired} campos)`
     );
 

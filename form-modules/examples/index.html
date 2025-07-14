@@ -234,60 +234,51 @@
     <section class="gh-examples-section" id="examples">
       <div class="gh-container">
         <div class="gh-section-header">
-          <h2 class="gh-section-title">Ejemplos de Uso</h2>
-          <p class="gh-section-subtitle">Explora diferentes configuraciones y casos de uso</p>
+          <h2 class="gh-section-title">Ejemplos de Configuración</h2>
+          <p class="gh-section-subtitle">
+            5 ejemplos que van desde configuraciones básicas hasta complejas
+          </p>
         </div>
 
         <div class="gh-examples-grid">
-          <!-- Example 1: Advanced Configuration -->
+          <!-- Example 1: Configuración Mínima -->
           <div class="gh-example-card" id="example-1">
             <div class="gh-example-header">
               <div class="gh-example-title-section">
-                <h3 class="gh-example-title">Configuración Completa</h3>
-                <span class="gh-example-badge gh-badge-advanced">Avanzado</span>
+                <h3 class="gh-example-title">1. Configuración Mínima</h3>
+                <span class="gh-example-badge gh-badge-basic">Básico</span>
               </div>
-              <div class="gh-example-actions"></div>
             </div>
 
             <div class="gh-example-content">
               <div class="gh-example-description">
                 <p>
-                  Este ejemplo muestra todas las configuraciones disponibles en el sistema. Ideal
-                  para entender todas las opciones y capacidades del Form Manager.
+                  Formulario con estructura base completa pero configuración mínima. Incluye todos
+                  los campos estándar del sistema con valores por defecto.
                 </p>
               </div>
 
               <div class="gh-example-features">
-                <div class="gh-feature-tag">Todas las configuraciones</div>
-                <div class="gh-feature-tag">Múltiples tipos de asistente</div>
-                <div class="gh-feature-tag">Días de asistencia</div>
-                <div class="gh-feature-tag">Niveles académicos</div>
-                <div class="gh-feature-tag">Filtros avanzados</div>
-                <div class="gh-feature-tag">Logging completo</div>
+                <div class="gh-feature-tag">Estructura base completa</div>
+                <div class="gh-feature-tag">Configuración mínima</div>
+                <div class="gh-feature-tag">Valores por defecto</div>
+                <div class="gh-feature-tag">Sin filtros personalizados</div>
+                <div class="gh-feature-tag">Cache deshabilitado</div>
               </div>
 
               <div class="gh-form-and-code-container">
                 <div class="gh-form-demo">
                   <div class="gh-form-title-section">
-                    <h4 class="gh-form-title">Formulario de Ejemplo</h4>
+                    <h4 class="gh-form-title">Ejemplo 1 - Formulario</h4>
                     <div class="gh-form-status">
                       <span class="gh-status-dot gh-status-ready"></span>
                       <span class="gh-status-text">Listo</span>
                     </div>
                   </div>
-                  <div class="gh-form-actions-section">
-                    <div class="gh-form-actions">
-                      <button class="gh-action-tab" onclick="resetForm()">Limpiar</button>
-                      <button class="gh-action-tab" onclick="toggleDebugMode()">Debug</button>
-                      <button class="gh-action-tab" onclick="toggleDevMode()">Dev Mode</button>
-                      <button class="gh-action-tab" onclick="showFormData()">Ver Datos</button>
-                      <button class="gh-action-tab" onclick="showLogs()">Ver Logs</button>
-                    </div>
-                  </div>
                   <div class="gh-form-container">
                     <div class="form-card">
-                      <form id="advanced_form" novalidate aria-label="Formulario de contacto">
-                        <!-- Información del participante -->
+                      <form id="formMini" novalidate aria-label="Ejemplo 1: Configuración Mínima">
+                        <!-- Nombres y apellidos -->
                         <div class="name-row">
                           <div class="name-field">
                             <input type="text" placeholder="*Nombre(s)" name="first_name" />
@@ -297,26 +288,10 @@
                           </div>
                         </div>
 
-                        <!-- Documento de identidad -->
-                        <div class="document-row">
-                          <div class="document-type-field">
-                            <select name="type_doc">
-                              <option value="">*Tipo de documento</option>
-                              <option value="CC">Cédula Ciudadanía</option>
-                              <option value="CE">Cédula Extranjería</option>
-                              <option value="PA">Pasaporte</option>
-                              <option value="TI">Tarjeta Identidad</option>
-                            </select>
-                          </div>
-                          <div class="document-number-field">
-                            <input type="text" placeholder="*Número de documento" name="document" />
-                          </div>
-                        </div>
-
                         <!-- Email -->
                         <input type="email" placeholder="*Email" name="email" />
 
-                        <!-- Phone row -->
+                        <!-- Teléfono -->
                         <div class="phone-row">
                           <div class="prefix-field">
                             <select name="phone_code">
@@ -383,40 +358,30 @@
 
                         <!-- Autorización de datos -->
                         <div>
-                          <p>
-                            ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
-                            <a
-                              href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
-                              target="_blank"
-                            >
-                              autorización de privacidad
-                            </a>
-                            ?
-                          </p>
-
+                          <p>¿Autorizas el tratamiento de tus datos personales?</p>
                           <div class="radio-inline-group">
                             <div class="radio-option">
                               <input
                                 type="radio"
-                                id="autorizacion_si"
+                                id="auth_si_1"
                                 name="authorization_data"
                                 value="1"
                               />
-                              <label for="autorizacion_si">Sí</label>
+                              <label for="auth_si_1">Sí</label>
                             </div>
                             <div class="radio-option">
                               <input
                                 type="radio"
-                                id="autorizacion_no"
+                                id="auth_no_1"
                                 name="authorization_data"
                                 value="0"
                               />
-                              <label for="autorizacion_no">No</label>
+                              <label for="auth_no_1">No</label>
                             </div>
                           </div>
                         </div>
 
-                        <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
+                        <button type="submit" disabled>Inscríbete</button>
                       </form>
                     </div>
                   </div>
@@ -424,7 +389,7 @@
 
                 <div class="gh-code-demo">
                   <div class="gh-code-title-section">
-                    <h4 class="gh-code-title">Código de Ejemplo</h4>
+                    <h4 class="gh-code-title">Código de Configuración</h4>
                     <div class="gh-code-status">
                       <span class="gh-status-dot gh-status-ready"></span>
                       <span class="gh-status-text">Listo</span>
@@ -435,15 +400,15 @@
                       <div class="gh-code-tabs">
                         <button
                           class="gh-code-tab gh-code-tab-active"
-                          onclick="showCodeTab('advanced', 'js')"
+                          onclick="showCodeTab('ejemplo1', 'js')"
                         >
                           JavaScript
                         </button>
-                        <button class="gh-code-tab" onclick="showCodeTab('advanced', 'html')">
+                        <button class="gh-code-tab" onclick="showCodeTab('ejemplo1', 'html')">
                           HTML
                         </button>
                       </div>
-                      <button class="gh-copy-btn" onclick="copyCode('advanced', this)">
+                      <button class="gh-copy-btn" onclick="copyCode('ejemplo1', this)">
                         <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
                           <path
                             d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
@@ -458,12 +423,11 @@
                   </div>
                   <div class="gh-code-container">
                     <div class="gh-code-section">
-                      <div id="advanced-js-code" class="gh-code-content">
-                        <pre id="advanced-js-content"></pre>
+                      <div id="ejemplo1-js-code" class="gh-code-content">
+                        <pre id="ejemplo1-js-content"></pre>
                       </div>
-
-                      <div id="advanced-html-code" class="gh-code-content gh-code-hidden">
-                        <pre id="advanced-html-content"></pre>
+                      <div id="ejemplo1-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="ejemplo1-html-content"></pre>
                       </div>
                     </div>
                   </div>
@@ -472,51 +436,43 @@
             </div>
           </div>
 
-          <!-- Example 2: Program Filters -->
+          <!-- Example 2: Configuración Básica -->
           <div class="gh-example-card" id="example-2">
             <div class="gh-example-header">
               <div class="gh-example-title-section">
-                <h3 class="gh-example-title">Filtros de Programas</h3>
-                <span class="gh-example-badge gh-badge-basic">Especializado</span>
+                <h3 class="gh-example-title">2. Configuración Básica</h3>
+                <span class="gh-example-badge gh-badge-intermediate">Intermedio</span>
               </div>
-              <div class="gh-example-actions"></div>
             </div>
 
             <div class="gh-example-content">
               <div class="gh-example-description">
                 <p>
-                  Demuestra cómo configurar filtros de programas por facultades específicas. Ideal
-                  para eventos enfocados en áreas académicas particulares como Ingeniería.
+                  Formulario con personalizaciones básicas. Configuración típica para un evento de
+                  pregrado específico.
                 </p>
               </div>
 
               <div class="gh-example-features">
-                <div class="gh-feature-tag">Filtros por facultad</div>
-                <div class="gh-feature-tag">Programas específicos</div>
-                <div class="gh-feature-tag">Auto-selección</div>
-                <div class="gh-feature-tag">Validación académica</div>
+                <div class="gh-feature-tag">Tipos de asistente filtrados</div>
+                <div class="gh-feature-tag">Solo pregrado</div>
+                <div class="gh-feature-tag">Días específicos</div>
+                <div class="gh-feature-tag">Cache habilitado</div>
               </div>
 
               <div class="gh-form-and-code-container">
                 <div class="gh-form-demo">
                   <div class="gh-form-title-section">
-                    <h4 class="gh-form-title">Filtros de Programas</h4>
+                    <h4 class="gh-form-title">Ejemplo 2 - Formulario</h4>
                     <div class="gh-form-status">
                       <span class="gh-status-dot gh-status-ready"></span>
                       <span class="gh-status-text">Listo</span>
                     </div>
                   </div>
-                  <div class="gh-form-actions-section">
-                    <div class="gh-form-actions">
-                      <button class="gh-action-tab" onclick="resetForm()">Limpiar</button>
-                      <button class="gh-action-tab" onclick="toggleDebugMode()">Debug</button>
-                      <button class="gh-action-tab" onclick="showFormData()">Ver Datos</button>
-                      <button class="gh-action-tab" onclick="showLogs()">Ver Logs</button>
-                    </div>
-                  </div>
                   <div class="gh-form-container">
                     <div class="form-card">
-                      <form id="programs_demo_form" novalidate aria-label="Filtros de Programas">
+                      <form id="formBase" novalidate aria-label="Ejemplo 2: Configuración Básica">
+                        <!-- Nombres y apellidos -->
                         <div class="name-row">
                           <div class="name-field">
                             <input type="text" placeholder="*Nombre(s)" name="first_name" />
@@ -526,60 +482,115 @@
                           </div>
                         </div>
 
+                        <!-- Email -->
                         <input type="email" placeholder="*Email" name="email" />
 
+                        <!-- Teléfono -->
+                        <div class="phone-row">
+                          <div class="prefix-field">
+                            <select name="phone_code">
+                              <option value="">(+) Indicativo</option>
+                              <!-- Las opciones se cargan de forma dinámica -->
+                            </select>
+                          </div>
+                          <div class="mobile-field">
+                            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                          </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <select name="country">
+                          <option value="">*País de residencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="department" style="display: none">
+                          <option value="">*Selecciona el departamento</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="city" style="display: none">
+                          <option value="">*Selecciona la Ciudad</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Día de asistencia -->
+                        <select name="attendance_day">
+                          <option value="">*Día de asistencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Tipo de asistente -->
                         <select name="type_attendee">
                           <option value="">*Tipo de asistente</option>
-                          <option value="Aspirante">Aspirante</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <select name="academic_level">
+                        <!-- Nivel académico -->
+                        <select name="academic_level" style="display: none">
                           <option value="">*Nivel académico</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <select name="faculty">
+                        <!-- Facultad -->
+                        <select name="faculty" style="display: none">
                           <option value="">*Facultad de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <select name="program">
+                        <!-- Programa -->
+                        <select name="program" style="display: none">
                           <option value="">*Programa de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
                         </select>
 
-                        <div>
-                          <p>
-                            ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
-                            <a
-                              href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
-                              target="_blank"
-                            >
-                              autorización de privacidad
-                            </a>
-                            ?
-                          </p>
+                        <!-- Período de ingreso -->
+                        <select name="admission_period" style="display: none">
+                          <option value="">*Periodo esperado de Ingreso de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
 
+                        <!-- Colegio -->
+                        <select name="school">
+                          <option value="">Colegio de origen</option>
+                        </select>
+
+                        <!-- Universidad -->
+                        <select name="university">
+                          <option value="">Universidad de origen</option>
+                        </select>
+
+                        <!-- Empresa -->
+                        <select name="company">
+                          <option value="">Empresa</option>
+                        </select>
+
+                        <!-- Autorización de datos -->
+                        <div>
+                          <p>¿Autorizas el tratamiento de tus datos personales?</p>
                           <div class="radio-inline-group">
                             <div class="radio-option">
                               <input
                                 type="radio"
-                                id="autorizacion_si_programs"
+                                id="auth_si_1"
                                 name="authorization_data"
                                 value="1"
                               />
-                              <label for="autorizacion_si_programs">Sí</label>
+                              <label for="auth_si_1">Sí</label>
                             </div>
                             <div class="radio-option">
                               <input
                                 type="radio"
-                                id="autorizacion_no_programs"
+                                id="auth_no_1"
                                 name="authorization_data"
                                 value="0"
                               />
-                              <label for="autorizacion_no_programs">No</label>
+                              <label for="auth_no_1">No</label>
                             </div>
                           </div>
                         </div>
 
-                        <button type="submit" id="submit_btn" disabled>Inscríbete ahora</button>
+                        <button type="submit" disabled>Inscríbete</button>
                       </form>
                     </div>
                   </div>
@@ -587,7 +598,7 @@
 
                 <div class="gh-code-demo">
                   <div class="gh-code-title-section">
-                    <h4 class="gh-code-title">Código de Ejemplo</h4>
+                    <h4 class="gh-code-title">Código de Configuración</h4>
                     <div class="gh-code-status">
                       <span class="gh-status-dot gh-status-ready"></span>
                       <span class="gh-status-text">Listo</span>
@@ -598,15 +609,15 @@
                       <div class="gh-code-tabs">
                         <button
                           class="gh-code-tab gh-code-tab-active"
-                          onclick="showCodeTab('programs', 'js')"
+                          onclick="showCodeTab('ejemplo2', 'js')"
                         >
                           JavaScript
                         </button>
-                        <button class="gh-code-tab" onclick="showCodeTab('programs', 'html')">
+                        <button class="gh-code-tab" onclick="showCodeTab('ejemplo2', 'html')">
                           HTML
                         </button>
                       </div>
-                      <button class="gh-copy-btn" onclick="copyCode('programs', this)">
+                      <button class="gh-copy-btn" onclick="copyCode('ejemplo2', this)">
                         <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
                           <path
                             d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
@@ -621,12 +632,631 @@
                   </div>
                   <div class="gh-code-container">
                     <div class="gh-code-section">
-                      <div id="programs-js-code" class="gh-code-content">
-                        <pre id="programs-js-content"></pre>
+                      <div id="ejemplo2-js-code" class="gh-code-content">
+                        <pre id="ejemplo2-js-content"></pre>
                       </div>
+                      <div id="ejemplo2-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="ejemplo2-html-content"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                      <div id="programs-html-code" class="gh-code-content gh-code-hidden">
-                        <pre id="programs-html-content"></pre>
+          <!-- Example 3: Configuración Intermedia -->
+          <div class="gh-example-card" id="example-3">
+            <div class="gh-example-header">
+              <div class="gh-example-title-section">
+                <h3 class="gh-example-title">3. Configuración Intermedia</h3>
+                <span class="gh-example-badge gh-badge-advanced">Avanzado</span>
+              </div>
+            </div>
+
+            <div class="gh-example-content">
+              <div class="gh-example-description">
+                <p>
+                  Formulario con filtros de facultades y programas específicos. Ideal para eventos
+                  dirigidos a carreras específicas como Ingeniería.
+                </p>
+              </div>
+
+              <div class="gh-example-features">
+                <div class="gh-feature-tag">Filtros por facultad</div>
+                <div class="gh-feature-tag">Programas específicos</div>
+                <div class="gh-feature-tag">URLs personalizadas</div>
+                <div class="gh-feature-tag">UI personalizada</div>
+                <div class="gh-feature-tag">Debug habilitado</div>
+              </div>
+
+              <div class="gh-form-and-code-container">
+                <div class="gh-form-demo">
+                  <div class="gh-form-title-section">
+                    <h4 class="gh-form-title">Ejemplo 3 - Formulario</h4>
+                    <div class="gh-form-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-form-container">
+                    <div class="form-card">
+                      <form
+                        id="formMedium"
+                        novalidate
+                        aria-label="Ejemplo 3: Configuración Intermedia"
+                      >
+                        <!-- Nombres y apellidos -->
+                        <div class="name-row">
+                          <div class="name-field">
+                            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                          </div>
+                          <div class="name-field">
+                            <input type="text" placeholder="*Apellidos" name="last_name" />
+                          </div>
+                        </div>
+
+                        <!-- Email -->
+                        <input type="email" placeholder="*Email" name="email" />
+
+                        <!-- Teléfono -->
+                        <div class="phone-row">
+                          <div class="prefix-field">
+                            <select name="phone_code">
+                              <option value="">(+) Indicativo</option>
+                              <!-- Las opciones se cargan de forma dinámica -->
+                            </select>
+                          </div>
+                          <div class="mobile-field">
+                            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                          </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <select name="country">
+                          <option value="">*País de residencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="department" style="display: none">
+                          <option value="">*Selecciona el departamento</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="city" style="display: none">
+                          <option value="">*Selecciona la Ciudad</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Día de asistencia -->
+                        <select name="attendance_day">
+                          <option value="">*Día de asistencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Tipo de asistente -->
+                        <select name="type_attendee">
+                          <option value="">*Tipo de asistente</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Nivel académico -->
+                        <select name="academic_level" style="display: none">
+                          <option value="">*Nivel académico</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Facultad -->
+                        <select name="faculty" style="display: none">
+                          <option value="">*Facultad de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Programa -->
+                        <select name="program" style="display: none">
+                          <option value="">*Programa de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Período de ingreso -->
+                        <select name="admission_period" style="display: none">
+                          <option value="">*Periodo esperado de Ingreso de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Autorización de datos -->
+                        <div>
+                          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                          <div class="radio-inline-group">
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_si_1"
+                                name="authorization_data"
+                                value="1"
+                              />
+                              <label for="auth_si_1">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_no_1"
+                                name="authorization_data"
+                                value="0"
+                              />
+                              <label for="auth_no_1">No</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button type="submit" disabled>Inscríbete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gh-code-demo">
+                  <div class="gh-code-title-section">
+                    <h4 class="gh-code-title">Código de Configuración</h4>
+                    <div class="gh-code-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-code-actions-section">
+                    <div class="gh-code-actions">
+                      <div class="gh-code-tabs">
+                        <button
+                          class="gh-code-tab gh-code-tab-active"
+                          onclick="showCodeTab('ejemplo3', 'js')"
+                        >
+                          JavaScript
+                        </button>
+                        <button class="gh-code-tab" onclick="showCodeTab('ejemplo3', 'html')">
+                          HTML
+                        </button>
+                      </div>
+                      <button class="gh-copy-btn" onclick="copyCode('ejemplo3', this)">
+                        <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+                          <path
+                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+                          />
+                          <path
+                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-code-container">
+                    <div class="gh-code-section">
+                      <div id="ejemplo3-js-code" class="gh-code-content">
+                        <pre id="ejemplo3-js-content"></pre>
+                      </div>
+                      <div id="ejemplo3-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="ejemplo3-html-content"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 4: Configuración Avanzada -->
+          <div class="gh-example-card" id="example-4">
+            <div class="gh-example-header">
+              <div class="gh-example-title-section">
+                <h3 class="gh-example-title">4. Configuración Avanzada</h3>
+                <span class="gh-example-badge gh-badge-expert">Experto</span>
+              </div>
+            </div>
+
+            <div class="gh-example-content">
+              <div class="gh-example-description">
+                <p>
+                  Formulario con lógica personalizada y callbacks. Para eventos que requieren
+                  comportamientos específicos como simposios de posgrado.
+                </p>
+              </div>
+
+              <div class="gh-example-features">
+                <div class="gh-feature-tag">Callbacks personalizados</div>
+                <div class="gh-feature-tag">Posgrados y eclesiásticos</div>
+                <div class="gh-feature-tag">Múltiples universidades</div>
+                <div class="gh-feature-tag">Logging avanzado</div>
+                <div class="gh-feature-tag">URLs de servicios</div>
+                <div class="gh-feature-tag">UI completamente personalizada</div>
+              </div>
+
+              <div class="gh-form-and-code-container">
+                <div class="gh-form-demo">
+                  <div class="gh-form-title-section">
+                    <h4 class="gh-form-title">Ejemplo 4 - Formulario</h4>
+                    <div class="gh-form-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-form-container">
+                    <div class="form-card">
+                      <form
+                        id="formAdvance"
+                        novalidate
+                        aria-label="Ejemplo 4: Configuración Avanzada"
+                      >
+                        <!-- Nombres y apellidos -->
+                        <div class="name-row">
+                          <div class="name-field">
+                            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                          </div>
+                          <div class="name-field">
+                            <input type="text" placeholder="*Apellidos" name="last_name" />
+                          </div>
+                        </div>
+
+                        <!-- Email -->
+                        <input type="email" placeholder="*Email" name="email" />
+
+                        <!-- Teléfono -->
+                        <div class="phone-row">
+                          <div class="prefix-field">
+                            <select name="phone_code">
+                              <option value="">(+) Indicativo</option>
+                              <!-- Las opciones se cargan de forma dinámica -->
+                            </select>
+                          </div>
+                          <div class="mobile-field">
+                            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                          </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <select name="country">
+                          <option value="">*País de residencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="department" style="display: none">
+                          <option value="">*Selecciona el departamento</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="city" style="display: none">
+                          <option value="">*Selecciona la Ciudad</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Día de asistencia -->
+                        <select name="attendance_day">
+                          <option value="">*Día de asistencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Tipo de asistente -->
+                        <select name="type_attendee">
+                          <option value="">*Tipo de asistente</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Nivel académico -->
+                        <select name="academic_level" style="display: none">
+                          <option value="">*Nivel académico</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Facultad -->
+                        <select name="faculty" style="display: none">
+                          <option value="">*Facultad de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Programa -->
+                        <select name="program" style="display: none">
+                          <option value="">*Programa de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Período de ingreso -->
+                        <select name="admission_period" style="display: none">
+                          <option value="">*Periodo esperado de Ingreso de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="university">
+                          <option value="">Universidad de origen (opcional)</option>
+                        </select>
+
+                        <!-- Autorización de datos -->
+                        <div>
+                          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                          <div class="radio-inline-group">
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_si_1"
+                                name="authorization_data"
+                                value="1"
+                              />
+                              <label for="auth_si_1">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_no_1"
+                                name="authorization_data"
+                                value="0"
+                              />
+                              <label for="auth_no_1">No</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button type="submit" disabled>Inscríbete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gh-code-demo">
+                  <div class="gh-code-title-section">
+                    <h4 class="gh-code-title">Código de Configuración</h4>
+                    <div class="gh-code-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-code-actions-section">
+                    <div class="gh-code-actions">
+                      <div class="gh-code-tabs">
+                        <button
+                          class="gh-code-tab gh-code-tab-active"
+                          onclick="showCodeTab('ejemplo4', 'js')"
+                        >
+                          JavaScript
+                        </button>
+                        <button class="gh-code-tab" onclick="showCodeTab('ejemplo4', 'html')">
+                          HTML
+                        </button>
+                      </div>
+                      <button class="gh-copy-btn" onclick="copyCode('ejemplo4', this)">
+                        <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+                          <path
+                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+                          />
+                          <path
+                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-code-container">
+                    <div class="gh-code-section">
+                      <div id="ejemplo4-js-code" class="gh-code-content">
+                        <pre id="ejemplo4-js-content"></pre>
+                      </div>
+                      <div id="ejemplo4-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="ejemplo4-html-content"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 5: Configuración Compleja -->
+          <div class="gh-example-card" id="example-5">
+            <div class="gh-example-header">
+              <div class="gh-example-title-section">
+                <h3 class="gh-example-title">5. Configuración Compleja</h3>
+                <span class="gh-example-badge gh-badge-master">Master</span>
+              </div>
+            </div>
+
+            <div class="gh-example-content">
+              <div class="gh-example-description">
+                <p>
+                  La configuración más completa posible. Para eventos grandes con múltiples
+                  audiencias y requisitos complejos como Javeriana Expo.
+                </p>
+              </div>
+
+              <div class="gh-example-features">
+                <div class="gh-feature-tag">Múltiples países</div>
+                <div class="gh-feature-tag">Todos los tipos de asistente</div>
+                <div class="gh-feature-tag">Todos los niveles académicos</div>
+                <div class="gh-feature-tag">Agenda completa</div>
+                <div class="gh-feature-tag">Analytics avanzado</div>
+                <div class="gh-feature-tag">Callbacks complejos</div>
+                <div class="gh-feature-tag">URLs de producción</div>
+                <div class="gh-feature-tag">Modo producción</div>
+              </div>
+
+              <div class="gh-form-and-code-container">
+                <div class="gh-form-demo">
+                  <div class="gh-form-title-section">
+                    <h4 class="gh-form-title">Ejemplo 5 - Formulario</h4>
+                    <div class="gh-form-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-form-container">
+                    <div class="form-card">
+                      <form
+                        id="formComplete"
+                        novalidate
+                        aria-label="Ejemplo 5: Configuración Compleja"
+                      >
+                        <!-- Nombres y apellidos -->
+                        <div class="name-row">
+                          <div class="name-field">
+                            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+                          </div>
+                          <div class="name-field">
+                            <input type="text" placeholder="*Apellidos" name="last_name" />
+                          </div>
+                        </div>
+
+                        <!-- Email -->
+                        <input type="email" placeholder="*Email" name="email" />
+
+                        <!-- Teléfono -->
+                        <div class="phone-row">
+                          <div class="prefix-field">
+                            <select name="phone_code">
+                              <option value="">(+) Indicativo</option>
+                              <!-- Las opciones se cargan de forma dinámica -->
+                            </select>
+                          </div>
+                          <div class="mobile-field">
+                            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+                          </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <select name="country">
+                          <option value="">*País de residencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="department" style="display: none">
+                          <option value="">*Selecciona el departamento</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <select name="city" style="display: none">
+                          <option value="">*Selecciona la Ciudad</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Día de asistencia -->
+                        <select name="attendance_day">
+                          <option value="">*Día de asistencia</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Tipo de asistente -->
+                        <select name="type_attendee">
+                          <option value="">*Tipo de asistente</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Nivel académico -->
+                        <select name="academic_level" style="display: none">
+                          <option value="">*Nivel académico</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Facultad -->
+                        <select name="faculty" style="display: none">
+                          <option value="">*Facultad de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Programa -->
+                        <select name="program" style="display: none">
+                          <option value="">*Programa de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Período de ingreso -->
+                        <select name="admission_period" style="display: none">
+                          <option value="">*Periodo esperado de Ingreso de interés</option>
+                          <!-- Las opciones se cargan de forma dinámica -->
+                        </select>
+
+                        <!-- Colegio -->
+                        <select name="school">
+                          <option value="">Colegio de origen</option>
+                        </select>
+
+                        <!-- Universidad -->
+                        <select name="university">
+                          <option value="">Universidad de origen</option>
+                        </select>
+
+                        <!-- Empresa -->
+                        <select name="company">
+                          <option value="">Empresa</option>
+                        </select>
+
+                        <!-- Autorización de datos -->
+                        <div>
+                          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+                          <div class="radio-inline-group">
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_si_1"
+                                name="authorization_data"
+                                value="1"
+                              />
+                              <label for="auth_si_1">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                              <input
+                                type="radio"
+                                id="auth_no_1"
+                                name="authorization_data"
+                                value="0"
+                              />
+                              <label for="auth_no_1">No</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button type="submit" disabled>Inscríbete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gh-code-demo">
+                  <div class="gh-code-title-section">
+                    <h4 class="gh-code-title">Código de Configuración</h4>
+                    <div class="gh-code-status">
+                      <span class="gh-status-dot gh-status-ready"></span>
+                      <span class="gh-status-text">Listo</span>
+                    </div>
+                  </div>
+                  <div class="gh-code-actions-section">
+                    <div class="gh-code-actions">
+                      <div class="gh-code-tabs">
+                        <button
+                          class="gh-code-tab gh-code-tab-active"
+                          onclick="showCodeTab('ejemplo5', 'js')"
+                        >
+                          JavaScript
+                        </button>
+                        <button class="gh-code-tab" onclick="showCodeTab('ejemplo5', 'html')">
+                          HTML
+                        </button>
+                      </div>
+                      <button class="gh-copy-btn" onclick="copyCode('ejemplo5', this)">
+                        <svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor">
+                          <path
+                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+                          />
+                          <path
+                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="gh-code-container">
+                    <div class="gh-code-section">
+                      <div id="ejemplo5-js-code" class="gh-code-content">
+                        <pre id="ejemplo5-js-content"></pre>
+                      </div>
+                      <div id="ejemplo5-html-code" class="gh-code-content gh-code-hidden">
+                        <pre id="ejemplo5-html-content"></pre>
                       </div>
                     </div>
                   </div>

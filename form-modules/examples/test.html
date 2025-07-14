@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/form-styles.css" />
+  </head>
+  <body>
+    <div class="form-card">
+      <form id="formMini" novalidate aria-label="Ejemplo 1: Configuración Mínima">
+        <!-- Nombres y apellidos -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" name="last_name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <input type="email" placeholder="*Email" name="email" />
+
+        <!-- Teléfono -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select name="phone_code">
+              <option value="">(+) Indicativo</option>
+              <!-- Las opciones se cargan de forma dinámica -->
+            </select>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <select name="country">
+          <option value="">*País de residencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="department" style="display: none">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="city" style="display: none">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Día de asistencia -->
+        <select name="attendance_day">
+          <option value="">*Día de asistencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Tipo de asistente -->
+        <select name="type_attendee">
+          <option value="">*Tipo de asistente</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Nivel académico -->
+        <select name="academic_level" style="display: none">
+          <option value="">*Nivel académico</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Facultad -->
+        <select name="faculty" style="display: none">
+          <option value="">*Facultad de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Programa -->
+        <select name="program" style="display: none">
+          <option value="">*Programa de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Período de ingreso -->
+        <select name="admission_period" style="display: none">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Autorización de datos -->
+        <div>
+          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+              <label for="auth_si_1">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+              <label for="auth_no_1">No</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled>Inscríbete</button>
+      </form>
+    </div>
+
+    <div class="form-card">
+      <form id="formBase" novalidate aria-label="Ejemplo 2: Configuración Básica">
+        <!-- Nombres y apellidos -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" name="last_name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <input type="email" placeholder="*Email" name="email" />
+
+        <!-- Teléfono -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select name="phone_code">
+              <option value="">(+) Indicativo</option>
+              <!-- Las opciones se cargan de forma dinámica -->
+            </select>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <select name="country">
+          <option value="">*País de residencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="department" style="display: none">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="city" style="display: none">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Día de asistencia -->
+        <select name="attendance_day">
+          <option value="">*Día de asistencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Tipo de asistente -->
+        <select name="type_attendee">
+          <option value="">*Tipo de asistente</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Nivel académico -->
+        <select name="academic_level" style="display: none">
+          <option value="">*Nivel académico</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Facultad -->
+        <select name="faculty" style="display: none">
+          <option value="">*Facultad de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Programa -->
+        <select name="program" style="display: none">
+          <option value="">*Programa de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Período de ingreso -->
+        <select name="admission_period" style="display: none">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Colegio -->
+        <select name="school">
+          <option value="">Colegio de origen</option>
+        </select>
+
+        <!-- Universidad -->
+        <select name="university">
+          <option value="">Universidad de origen</option>
+        </select>
+
+        <!-- Empresa -->
+        <select name="company">
+          <option value="">Empresa</option>
+        </select>
+
+        <!-- Autorización de datos -->
+        <div>
+          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+              <label for="auth_si_1">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+              <label for="auth_no_1">No</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled>Inscríbete</button>
+      </form>
+    </div>
+
+    <div class="form-card">
+      <form id="formMedium" novalidate aria-label="Ejemplo 3: Configuración Intermedia">
+        <!-- Nombres y apellidos -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" name="last_name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <input type="email" placeholder="*Email" name="email" />
+
+        <!-- Teléfono -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select name="phone_code">
+              <option value="">(+) Indicativo</option>
+              <!-- Las opciones se cargan de forma dinámica -->
+            </select>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <select name="country">
+          <option value="">*País de residencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="department" style="display: none">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="city" style="display: none">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Día de asistencia -->
+        <select name="attendance_day">
+          <option value="">*Día de asistencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Tipo de asistente -->
+        <select name="type_attendee">
+          <option value="">*Tipo de asistente</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Nivel académico -->
+        <select name="academic_level" style="display: none">
+          <option value="">*Nivel académico</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Facultad -->
+        <select name="faculty" style="display: none">
+          <option value="">*Facultad de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Programa -->
+        <select name="program" style="display: none">
+          <option value="">*Programa de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Período de ingreso -->
+        <select name="admission_period" style="display: none">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Autorización de datos -->
+        <div>
+          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+              <label for="auth_si_1">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+              <label for="auth_no_1">No</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled>Inscríbete</button>
+      </form>
+    </div>
+
+    <div class="form-card">
+      <form id="formAdvance" novalidate aria-label="Ejemplo 4: Configuración Avanzada">
+        <!-- Nombres y apellidos -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" name="last_name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <input type="email" placeholder="*Email" name="email" />
+
+        <!-- Teléfono -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select name="phone_code">
+              <option value="">(+) Indicativo</option>
+              <!-- Las opciones se cargan de forma dinámica -->
+            </select>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <select name="country">
+          <option value="">*País de residencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="department" style="display: none">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="city" style="display: none">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Día de asistencia -->
+        <select name="attendance_day">
+          <option value="">*Día de asistencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Tipo de asistente -->
+        <select name="type_attendee">
+          <option value="">*Tipo de asistente</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Nivel académico -->
+        <select name="academic_level" style="display: none">
+          <option value="">*Nivel académico</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Facultad -->
+        <select name="faculty" style="display: none">
+          <option value="">*Facultad de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Programa -->
+        <select name="program" style="display: none">
+          <option value="">*Programa de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Período de ingreso -->
+        <select name="admission_period" style="display: none">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="university">
+          <option value="">Universidad de origen (opcional)</option>
+        </select>
+
+        <!-- Autorización de datos -->
+        <div>
+          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+              <label for="auth_si_1">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+              <label for="auth_no_1">No</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled>Inscríbete</button>
+      </form>
+    </div>
+
+    <div class="form-card">
+      <form id="formComplete" novalidate aria-label="Ejemplo 5: Configuración Compleja">
+        <!-- Nombres y apellidos -->
+        <div class="name-row">
+          <div class="name-field">
+            <input type="text" placeholder="*Nombre(s)" name="first_name" />
+          </div>
+          <div class="name-field">
+            <input type="text" placeholder="*Apellidos" name="last_name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <input type="email" placeholder="*Email" name="email" />
+
+        <!-- Teléfono -->
+        <div class="phone-row">
+          <div class="prefix-field">
+            <select name="phone_code">
+              <option value="">(+) Indicativo</option>
+              <!-- Las opciones se cargan de forma dinámica -->
+            </select>
+          </div>
+          <div class="mobile-field">
+            <input type="text" placeholder="*Teléfono celular" name="mobile" />
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <select name="country">
+          <option value="">*País de residencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="department" style="display: none">
+          <option value="">*Selecciona el departamento</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <select name="city" style="display: none">
+          <option value="">*Selecciona la Ciudad</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Día de asistencia -->
+        <select name="attendance_day">
+          <option value="">*Día de asistencia</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Tipo de asistente -->
+        <select name="type_attendee">
+          <option value="">*Tipo de asistente</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Nivel académico -->
+        <select name="academic_level" style="display: none">
+          <option value="">*Nivel académico</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Facultad -->
+        <select name="faculty" style="display: none">
+          <option value="">*Facultad de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Programa -->
+        <select name="program" style="display: none">
+          <option value="">*Programa de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Período de ingreso -->
+        <select name="admission_period" style="display: none">
+          <option value="">*Periodo esperado de Ingreso de interés</option>
+          <!-- Las opciones se cargan de forma dinámica -->
+        </select>
+
+        <!-- Colegio -->
+        <select name="school">
+          <option value="">Colegio de origen</option>
+        </select>
+
+        <!-- Universidad -->
+        <select name="university">
+          <option value="">Universidad de origen</option>
+        </select>
+
+        <!-- Empresa -->
+        <select name="company">
+          <option value="">Empresa</option>
+        </select>
+
+        <!-- Autorización de datos -->
+        <div>
+          <p>¿Autorizas el tratamiento de tus datos personales?</p>
+          <div class="radio-inline-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+              <label for="auth_si_1">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+              <label for="auth_no_1">No</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled>Inscríbete</button>
+      </form>
+    </div>
+
+    <script type="module" src="examples.js"></script>
+  </body>
+</html>

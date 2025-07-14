@@ -15,7 +15,14 @@ export class Ui {
     // Configuración por defecto
     this.config = config;
     this.logger = logger;
-    this.formContext = document.getElementById(this.config.selector) || document;
+    
+    // Buscar el elemento del formulario
+    const formElement = document.getElementById(this.config.selector);
+    if (!formElement && this.logger) {
+      this.logger.warn(`⚠️ No se encontró el elemento con ID: ${this.config.selector}`);
+    }
+    
+    this.formContext = formElement || document;
   }
 
   /**
