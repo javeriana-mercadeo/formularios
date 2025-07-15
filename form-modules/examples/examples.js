@@ -31,12 +31,8 @@ export const configMini = {
   medium: "organico",
 
   // CONFIGURACIÓN BÁSICA DE EVENTO
-  typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado",
-    "Docente y/o psicoorientador",
-  ],
+  typeAttendee: ["Aspirante"], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
+
   attendanceDays: ["Jueves 15 de febrero de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
@@ -46,12 +42,12 @@ export const configMini = {
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
-  // ✅ Sin filtros - Comportamiento estándar completo
-  // ✅ Muestra todos los tipos de asistente
-  // ✅ Muestra todos los niveles académicos disponibles
-  // ✅ Muestra todas las facultades por nivel académico
+  // ⭐ AUTO-SELECCIÓN ASPIRANTE: Como solo hay "Aspirante", se auto-selecciona y aparecen los campos académicos automáticamente
+  // ✅ Campo "tipo de asistente" se oculta (ya preseleccionado)
+  // ✅ Campos académicos aparecen inmediatamente sin necesidad de selección manual
+  // ✅ Comportamiento optimizado para formularios dirigidos específicamente a aspirantes
   // ✅ Sin restricciones geográficas (países/departamentos/ciudades)
-  // ✅ Formulario completo con todas las opciones disponibles
+  // ✅ Formulario completo con todas las opciones académicas disponibles
 };
 
 // ============================================================================

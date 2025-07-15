@@ -15,24 +15,24 @@
   --form-gap: 20px;
 }
 
-/* Custom button styling */
-.form-card button {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-  border-radius: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Custom input focus */
-.form-card input:focus,
-.form-card select:focus {
-  border-bottom: 2px solid var(--primary-color);
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
-}
-
 /* Custom card styling */
 .form-card {
   background: var(--form-background);
   border: 1px solid #e2e8f0;
+
+  /* Custom button styling */
+  button {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Custom input focus */
+  input:focus,
+  select:focus {
+    border-bottom: 2px solid var(--primary-color);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+  }
 }

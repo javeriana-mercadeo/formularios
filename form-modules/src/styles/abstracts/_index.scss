@@ -1,0 +1,11 @@
+// =================================================================
+// ÍNDICE DE ABSTRACTS - Reenvía todos los módulos abstractos
+// =================================================================
+
+// Reenvía todos los abstracts para que puedan ser importados como un solo módulo
+@forward "variables";
+@forward "functions";
+@forward "mixins";
+
+// Esto nos permite usar: @use 'abstracts' as *;
+// En lugar de importar cada archivo individualmente

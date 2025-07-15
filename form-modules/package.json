@@ -10,13 +10,20 @@
     "clean": "rimraf build"
   },
   "devDependencies": {
-    "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.4",
     "css-loader": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
-    "rimraf": "^5.0.1"
+    "rimraf": "^5.0.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4"
   },
-  "keywords": ["formularios", "javascript", "css", "webpack"],
+  "keywords": [
+    "formularios",
+    "javascript",
+    "css",
+    "webpack"
+  ],
   "author": "PUJ",
   "license": "MIT"
 }

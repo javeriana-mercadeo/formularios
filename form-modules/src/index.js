@@ -1,9 +1,5 @@
-// Import all CSS files
-import "./styles/base.css";
-import "./styles/form-elements.css";
-import "./styles/form-fields.css";
-import "./styles/layout.css";
-import "./styles/validation.css";
+// Import main SASS file (which imports all modules)
+import "./styles/main.scss";
 
 // Import main FormManager and all modules
 import { FormManager } from "./modules/FormManager.js";

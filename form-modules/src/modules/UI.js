@@ -15,13 +15,13 @@ export class Ui {
     // Configuración por defecto
     this.config = config;
     this.logger = logger;
-    
+
     // Buscar el elemento del formulario
     const formElement = document.getElementById(this.config.selector);
     if (!formElement && this.logger) {
       this.logger.warn(`⚠️ No se encontró el elemento con ID: ${this.config.selector}`);
     }
-    
+
     this.formContext = formElement || document;
   }
 
@@ -603,12 +603,7 @@ export class Ui {
       `;
 
       // Insertar al inicio del formulario
-      const firstElement = this.formContext.querySelector("input, select, textarea, button");
-      if (firstElement) {
-        firstElement.parentNode.insertBefore(errorContainer, firstElement);
-      } else {
-        this.formContext.insertAdjacentElement("afterbegin", errorContainer);
-      }
+      this.formContext.insertAdjacentElement("afterbegin", errorContainer);
     }
 
     // Mostrar el mensaje

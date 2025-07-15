@@ -1,0 +1,222 @@
+// =================================================================
+// GRID SYSTEM - Layout grid and positioning utilities
+// =================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =================================================================
+// GRID SYSTEM
+// =================================================================
+
+.grid {
+  display: grid;
+  gap: map.get($spacing, 'md');
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+// =================================================================
+// FLEX UTILITIES
+// =================================================================
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-xs {
+  gap: map.get($spacing, 'xs');
+}
+
+.gap-sm {
+  gap: map.get($spacing, 'sm');
+}
+
+.gap-md {
+  gap: map.get($spacing, 'md');
+}
+
+.gap-lg {
+  gap: map.get($spacing, 'lg');
+}
+
+.gap-xl {
+  gap: map.get($spacing, 'xl');
+}
+
+// =================================================================
+// RESPONSIVE GRID
+// =================================================================
+
+@include responsive($breakpoint-md) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-cols-6,
+  .grid-cols-12 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@include responsive($breakpoint-sm) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .grid-cols-6,
+  .grid-cols-12 {
+    grid-template-columns: 1fr;
+  }
+}
+
+// =================================================================
+// UTILITY CLASSES
+// =================================================================
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+// =================================================================
+// SPACING UTILITIES
+// =================================================================
+
+.mt-xs { margin-top: map.get($spacing, 'xs'); }
+.mt-sm { margin-top: map.get($spacing, 'sm'); }
+.mt-md { margin-top: map.get($spacing, 'md'); }
+.mt-lg { margin-top: map.get($spacing, 'lg'); }
+.mt-xl { margin-top: map.get($spacing, 'xl'); }
+
+.mb-xs { margin-bottom: map.get($spacing, 'xs'); }
+.mb-sm { margin-bottom: map.get($spacing, 'sm'); }
+.mb-md { margin-bottom: map.get($spacing, 'md'); }
+.mb-lg { margin-bottom: map.get($spacing, 'lg'); }
+.mb-xl { margin-bottom: map.get($spacing, 'xl'); }
+
+.ml-xs { margin-left: map.get($spacing, 'xs'); }
+.ml-sm { margin-left: map.get($spacing, 'sm'); }
+.ml-md { margin-left: map.get($spacing, 'md'); }
+.ml-lg { margin-left: map.get($spacing, 'lg'); }
+.ml-xl { margin-left: map.get($spacing, 'xl'); }
+
+.mr-xs { margin-right: map.get($spacing, 'xs'); }
+.mr-sm { margin-right: map.get($spacing, 'sm'); }
+.mr-md { margin-right: map.get($spacing, 'md'); }
+.mr-lg { margin-right: map.get($spacing, 'lg'); }
+.mr-xl { margin-right: map.get($spacing, 'xl'); }
+
+.pt-xs { padding-top: map.get($spacing, 'xs'); }
+.pt-sm { padding-top: map.get($spacing, 'sm'); }
+.pt-md { padding-top: map.get($spacing, 'md'); }
+.pt-lg { padding-top: map.get($spacing, 'lg'); }
+.pt-xl { padding-top: map.get($spacing, 'xl'); }
+
+.pb-xs { padding-bottom: map.get($spacing, 'xs'); }
+.pb-sm { padding-bottom: map.get($spacing, 'sm'); }
+.pb-md { padding-bottom: map.get($spacing, 'md'); }
+.pb-lg { padding-bottom: map.get($spacing, 'lg'); }
+.pb-xl { padding-bottom: map.get($spacing, 'xl'); }
+
+.pl-xs { padding-left: map.get($spacing, 'xs'); }
+.pl-sm { padding-left: map.get($spacing, 'sm'); }
+.pl-md { padding-left: map.get($spacing, 'md'); }
+.pl-lg { padding-left: map.get($spacing, 'lg'); }
+.pl-xl { padding-left: map.get($spacing, 'xl'); }
+
+.pr-xs { padding-right: map.get($spacing, 'xs'); }
+.pr-sm { padding-right: map.get($spacing, 'sm'); }
+.pr-md { padding-right: map.get($spacing, 'md'); }
+.pr-lg { padding-right: map.get($spacing, 'lg'); }
+.pr-xl { padding-right: map.get($spacing, 'xl'); }
