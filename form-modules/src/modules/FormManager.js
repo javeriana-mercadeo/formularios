@@ -47,6 +47,9 @@ export class FormManager {
         throw new Error(`No se encontró elemento del formulario con selector: ${this.selector}`);
       }
 
+      // Añadir data attribute para mayor especificidad CSS
+      this.formElement.setAttribute('data-form-module', 'true');
+
       // Crear Event ahora que formElement está disponible
       this.event = new Event({
         formElement: this.formElement,

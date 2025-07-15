@@ -82,7 +82,7 @@ export class Config {
         errorClass: "error",
         validClass: "validated",
         errorTextClass: "error_text",
-        hiddenClass: "hidden",
+        hiddenClass: "fm-hidden",
 
         // Configuración de animaciones
         animationDuration: 300,

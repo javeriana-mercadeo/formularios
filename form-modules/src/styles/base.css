@@ -7,7 +7,12 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-.form-card:root {
+/* Namespace específico para el form-module */
+.form-card[data-form-module] {
+  isolation: isolate;
+}
+
+.form-card {
   --primary-color: #4d7fcb;
   --primary-hover: #3f6fb5;
   --primary-light: #759bd7;

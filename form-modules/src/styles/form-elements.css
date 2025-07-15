@@ -37,7 +37,8 @@
   border-bottom-color: #999;
 }
 
-.form button {
+.form button,
+.form-card button {
   background-color: var(--primary-color);
   color: white;
   padding: 12px 24px;
@@ -51,20 +52,23 @@
   margin-top: 10px;
 }
 
-.form button:hover:not(:disabled) {
+.form button:hover:not(:disabled),
+.form-card button:hover:not(:disabled) {
   background-color: var(--primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(77, 127, 203, 0.3);
 }
 
-.form button:disabled {
+.form button:disabled,
+.form-card button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-.form label {
+.form label,
+.form-card label {
   font-size: var(--font-size-paragraph);
   color: #333;
   margin-left: 5px;
@@ -72,37 +76,41 @@
   transition: color 0.2s ease;
 }
 
-.form label:hover {
+.form label:hover,
+.form-card label:hover {
   color: var(--primary-color);
 }
 
-.form label.required::after {
+.form label.required::after,
+.form-card label.required::after {
   content: " *";
   color: var(--danger-500);
   font-weight: 600;
 }
 
-.form h5 {
+.form h5,
+.form-card h5 {
   color: var(--primary-color);
   margin: 20px 0 10px 0;
   font-size: var(--font-size-heading);
   font-weight: var(--font-weight-medium);
 }
 
-.form p {
+.form p,
+.form-card p {
   color: #666;
   font-size: var(--font-size-paragraph);
   margin-bottom: 10px;
   line-height: var(--line-height-base);
 }
 
-.note {
+.form-card .note {
   margin-top: 15px;
   font-size: var(--font-size-small);
   color: #333;
 }
 
-.note a {
+.form-card .note a {
   color: var(--primary-color);
   text-decoration: underline;
 }
@@ -112,7 +120,7 @@
 /* =================================================================== */
 
 /* Primary button - for submit actions */
-.btn-primary {
+.form-card .btn-primary {
   background: var(--primary-color, #4d7fcb);
   color: white;
   padding: 12px 24px;
@@ -126,13 +134,13 @@
   margin-top: 10px;
 }
 
-.btn-primary:hover:not(:disabled) {
+.form-card .btn-primary:hover:not(:disabled) {
   background: var(--primary-hover, #3f6fb5);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(77, 127, 203, 0.3);
 }
 
-.btn-primary:disabled {
+.form-card .btn-primary:disabled {
   background: #ccc;
   cursor: not-allowed;
   transform: none;
@@ -140,7 +148,7 @@
 }
 
 /* Secondary button - for alternative actions */
-.btn-secondary {
+.form-card .btn-secondary {
   background: transparent;
   color: var(--primary-color, #4d7fcb);
   border: 1px solid var(--primary-color, #4d7fcb);
@@ -151,7 +159,7 @@
   transition: all 0.3s ease;
 }
 
-.btn-secondary:hover {
+.form-card .btn-secondary:hover {
   background: var(--primary-color, #4d7fcb);
   color: white;
 }
@@ -161,7 +169,7 @@
 /* =================================================================== */
 
 /* Main form title - principal heading */
-.form-title {
+.form-card .form-title {
   color: var(--primary-color, #4d7fcb);
   margin: 0;
   font-size: 1.5rem;
@@ -172,7 +180,7 @@
 }
 
 /* Form subtitle - secondary heading */
-.form-subtitle {
+.form-card .form-subtitle {
   color: var(--primary-color, #4d7fcb);
   margin: 24px 0 16px 0;
   font-size: 1.125rem;
@@ -182,7 +190,7 @@
 }
 
 /* Section title - for form sections */
-.section-title {
+.form-card .section-title {
   color: #2c3e50;
   margin: 20px 0 12px 0;
   font-size: 1rem;
@@ -193,7 +201,7 @@
 }
 
 /* Mini title - for small sections */
-.mini-title {
+.form-card .mini-title {
   color: #495057;
   margin: 16px 0 8px 0;
   font-size: 0.95rem;
@@ -203,7 +211,7 @@
 }
 
 /* Title with icon support */
-.title-with-icon {
+.form-card .title-with-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,14 +223,14 @@
   text-align: center;
 }
 
-.title-with-icon .icon {
+.form-card .title-with-icon .icon {
   font-size: 1.5em;
   display: inline-flex;
   align-items: center;
 }
 
 /* Title with background */
-.title-highlight {
+.form-card .title-highlight {
   background: linear-gradient(135deg, var(--primary-color, #4d7fcb), var(--primary-light, #759bd7));
   color: white;
   padding: 12px 20px;
@@ -235,7 +243,7 @@
 }
 
 /* Form description - complementary text */
-.form-description {
+.form-card .form-description {
   color: #6c757d;
   margin: 0 0 12px 0;
   font-size: 0.85rem;
@@ -246,7 +254,7 @@
 }
 
 /* Form steps indicator */
-.form-steps {
+.form-card .form-steps {
   display: flex;
   justify-content: center;
   margin: 0 0 24px 0;
@@ -254,41 +262,41 @@
   color: #6c757d;
 }
 
-.form-steps .step {
+.form-card .form-steps .step {
   padding: 4px 12px;
   border-radius: 12px;
   background: #e9ecef;
   margin: 0 4px;
 }
 
-.form-steps .step.active {
+.form-card .form-steps .step.active {
   background: var(--primary-color, #4d7fcb);
   color: white;
 }
 
 /* Title color variants */
-.title-primary {
+.form-card .title-primary {
   color: var(--primary-color, #4d7fcb);
 }
 
-.title-dark {
+.form-card .title-dark {
   color: #2c3e50;
 }
 
-.title-muted {
+.form-card .title-muted {
   color: #6c757d;
 }
 
 /* Title alignment variants */
-.title-center {
+.form-card .title-center {
   text-align: center;
 }
 
-.title-left {
+.form-card .title-left {
   text-align: left;
 }
 
-.title-right {
+.form-card .title-right {
   text-align: right;
 }
 
@@ -297,22 +305,22 @@
 /* =================================================================== */
 
 @media (max-width: 768px) {
-  .form-title {
+  .form-card .form-title {
     font-size: 1.375rem;
     margin-bottom: 20px;
   }
   
-  .form-subtitle {
+  .form-card .form-subtitle {
     font-size: 1.0625rem;
     margin: 20px 0 12px 0;
   }
   
-  .title-with-icon {
+  .form-card .title-with-icon {
     font-size: 1.25rem;
     margin-bottom: 20px;
   }
   
-  .title-highlight {
+  .form-card .title-highlight {
     font-size: 1.125rem;
     padding: 10px 16px;
   }
@@ -320,34 +328,37 @@
 
 @media (max-width: 480px) {
   .form input,
-  .form select {
+  .form select,
+  .form-card input,
+  .form-card select {
     font-size: 16px; /* Prevents zoom on iOS */
     padding: 12px 5px;
   }
 
   .form button,
-  .btn-primary {
+  .form-card button,
+  .form-card .btn-primary {
     padding: 15px 24px;
     font-size: 16px;
   }
   
-  .form-title {
+  .form-card .form-title {
     font-size: 1.25rem;
     margin-bottom: 16px;
   }
   
-  .form-subtitle {
+  .form-card .form-subtitle {
     font-size: 1rem;
     margin: 16px 0 10px 0;
   }
   
-  .title-with-icon {
+  .form-card .title-with-icon {
     font-size: 1.125rem;
     flex-direction: column;
     gap: 4px;
   }
   
-  .title-highlight {
+  .form-card .title-highlight {
     font-size: 1rem;
     padding: 8px 12px;
   }
