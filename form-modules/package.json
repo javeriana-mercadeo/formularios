@@ -5,16 +5,26 @@
   "main": "form-modules/modules/FormManager.js",
   "scripts": {
     "dev": "webpack --mode=development --watch",
-    "build": "webpack --mode=production",
-    "build:dev": "webpack --mode=development",
+    "build": "webpack --mode=production && npm run build:tailwind",
+    "build:dev": "webpack --mode=development && npm run build:tailwind",
+    "build:style": "npx postcss ./src/styles/form-modules.scss -o ./build/form-modules-style.css",
+    "build:tailwind-legacy": "npx tailwindcss -i ./src/styles-tailwind/main.css -o ./build/form-modules-tailwind-legacy.css --content './examples/**/*.html' --content './src/**/*.js' --minify",
     "clean": "rimraf build"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
+    "autoprefixer": "^10.4.21",
     "css-loader": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-loader": "^8.1.1",
+    "postcss-scss": "^4.0.9",
     "rimraf": "^5.0.1",
     "sass": "^1.89.2",
     "sass-loader": "^16.0.5",
+    "tailwindcss": "^3.4.17",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.4"
   },

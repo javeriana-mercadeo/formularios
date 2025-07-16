@@ -1,0 +1,49 @@
+// ==========================================
+// VALIDACIÓN - ESTILOS BÁSICOS Y CLASES JS
+// ==========================================
+
+// CLASES CRÍTICAS UTILIZADAS POR JAVASCRIPT - NO ELIMINAR
+
+// Mensajes de error - utilizados por Validation.js
+.error_text {
+  @apply text-sm mt-1 flex items-center gap-2 p-2 bg-red-50 rounded-md text-red-500;
+  font-size: 12px;
+  animation: errorSlideIn 0.3s ease-out;
+
+  &::before {
+    content: '⚠ ';
+    @apply text-xs flex-shrink-0 text-red-500;
+  }
+}
+
+// Animación para mensajes de error
+@keyframes errorSlideIn {
+  from {
+    @apply opacity-0;
+    transform: translateY(-10px);
+  }
+  to {
+    @apply opacity-100;
+    transform: translateY(0);
+  }
+}
+
+// Estados de error en inputs - utilizados por Validation.js
+input.error,
+select.error {
+  @apply border-red-500 bg-red-50;
+
+  &:focus {
+    border-bottom-color: #ef4444 !important;
+  }
+}
+
+// Estados validados en inputs - utilizados por Validation.js
+input.validated,
+select.validated {
+  @apply border-green-600 bg-green-50;
+
+  &:focus {
+    border-bottom-color: #16a34a !important;
+  }
+}

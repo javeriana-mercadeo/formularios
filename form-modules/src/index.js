@@ -1,5 +1,5 @@
 // Import main SASS file (which imports all modules)
-import "./styles/main.scss";
+import "./styles/form-modules.scss";
 
 // Import main FormManager and all modules
 import { FormManager } from "./modules/FormManager.js";

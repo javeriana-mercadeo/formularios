@@ -87,6 +87,11 @@ export class FormManager {
       this.event.destroy();
     }
 
+    // Limpiar animaciones de flechas
+    if (this.ui && typeof this.ui.cleanupSelectArrowAnimations === 'function') {
+      this.ui.cleanupSelectArrowAnimations();
+    }
+
     this.formElement = null;
     this.isInitialized = false;
 
@@ -449,13 +454,15 @@ export class FormManager {
    */
   async _configureForm() {
     this._addHiddenFields();
-    this._setInitialFormValues();
     this._initializeFormHiddenFields();
     this.academic.initializeAcademicFields();
     this.locations.initializeLocationFields();
+    // Establecer valores iniciales DESPUÉS de que se hayan poblado los selects
+    this._setInitialFormValues();
     this.event.setupAllEvents();
     this._setupStateValidation();
     this._processUrlParameters();
+    this._initializeSelectArrowAnimations();
   }
 
   // ===============================
@@ -714,6 +721,20 @@ export class FormManager {
     }
 
     return summary;
+  }
+
+  /**
+   * Inicializar animaciones de flechas para elementos select
+   * @private
+   */
+  _initializeSelectArrowAnimations() {
+    this.logger.info("🎯 Inicializando animaciones de flechas para elementos select");
+    
+    if (this.ui && typeof this.ui.initializeSelectArrowAnimations === 'function') {
+      this.ui.initializeSelectArrowAnimations();
+    } else {
+      this.logger.warn("⚠️ UI module no disponible o método initializeSelectArrowAnimations no encontrado");
+    }
   }
 
   // ===============================

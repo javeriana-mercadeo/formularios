@@ -824,4 +824,137 @@ export class Ui {
     element.disabled = false;
     element.classList.remove("disabled");
   }
+
+  /**
+   * Inicializar animaciones de flechas para elementos select
+   * Maneja la rotación de flechas cuando los select se abren/cierran
+   */
+  initializeSelectArrowAnimations() {
+    const selectElements = this.scopedQueryAll("select");
+    
+    selectElements.forEach((select) => {
+      this.setupSelectArrowAnimation(select);
+    });
+
+    this.logger.debug(`Animaciones de flecha inicializadas para ${selectElements.length} selects`);
+  }
+
+  /**
+   * Configurar animación de flecha para un select específico
+   * @param {HTMLElement} selectElement - Elemento select
+   */
+  setupSelectArrowAnimation(selectElement) {
+    if (!selectElement) return;
+
+    // Remover listeners existentes para evitar duplicados
+    this.removeSelectArrowListeners(selectElement);
+
+    // Variables para rastrear el estado del dropdown
+    let isOpen = false;
+    let clickCount = 0;
+    let clickTimeout = null;
+
+    // Función para actualizar la flecha
+    const updateArrow = (open) => {
+      if (open) {
+        selectElement.classList.add("select-open");
+      } else {
+        selectElement.classList.remove("select-open");
+      }
+      isOpen = open;
+    };
+
+    // Evento click - maneja la lógica de apertura/cierre
+    const handleClick = (event) => {
+      clickCount++;
+      
+      // Limpiar timeout anterior
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+      }
+      
+      // Esperar un poco para detectar doble click
+      clickTimeout = setTimeout(() => {
+        if (clickCount === 1) {
+          // Single click - alternar estado
+          updateArrow(!isOpen);
+        } else if (clickCount === 2) {
+          // Double click - cerrar
+          updateArrow(false);
+        }
+        clickCount = 0;
+      }, 250);
+    };
+
+    // Evento blur - cerrar cuando pierde el foco
+    const handleBlur = (event) => {
+      // Pequeño delay para permitir que el click se procese
+      setTimeout(() => {
+        updateArrow(false);
+        clickCount = 0;
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+        }
+      }, 100);
+    };
+
+    // Evento keydown - manejar teclas
+    const handleKeydown = (event) => {
+      if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown" || event.key === "ArrowUp") {
+        updateArrow(true);
+      } else if (event.key === "Escape") {
+        updateArrow(false);
+      }
+    };
+
+    // Evento change - cerrar después de seleccionar
+    const handleChange = (event) => {
+      setTimeout(() => {
+        updateArrow(false);
+      }, 100);
+    };
+
+    // Agregar event listeners
+    selectElement.addEventListener("click", handleClick);
+    selectElement.addEventListener("blur", handleBlur);
+    selectElement.addEventListener("keydown", handleKeydown);
+    selectElement.addEventListener("change", handleChange);
+
+    // Guardar referencias para poder removerlos después
+    selectElement._arrowListeners = {
+      click: handleClick,
+      blur: handleBlur,
+      keydown: handleKeydown,
+      change: handleChange
+    };
+  }
+
+  /**
+   * Remover listeners de animación de flecha de un select
+   * @param {HTMLElement} selectElement - Elemento select
+   */
+  removeSelectArrowListeners(selectElement) {
+    if (!selectElement || !selectElement._arrowListeners) return;
+
+    const listeners = selectElement._arrowListeners;
+    selectElement.removeEventListener("click", listeners.click);
+    selectElement.removeEventListener("blur", listeners.blur);
+    selectElement.removeEventListener("keydown", listeners.keydown);
+    selectElement.removeEventListener("change", listeners.change);
+
+    delete selectElement._arrowListeners;
+  }
+
+  /**
+   * Limpiar todas las animaciones de flechas
+   */
+  cleanupSelectArrowAnimations() {
+    const selectElements = this.scopedQueryAll("select");
+    
+    selectElements.forEach((select) => {
+      this.removeSelectArrowListeners(select);
+      select.classList.remove("select-open");
+    });
+  }
 }

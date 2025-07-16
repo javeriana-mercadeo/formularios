@@ -101,40 +101,81 @@ export class Academic {
    */
   _showAcademicFields() {
     const filteredLevels = this.getFilteredAcademicLevels();
+    
+    // Verificar si tenemos configuración de programas específicos
+    const configPrograms = this.config ? this.config.get("programs") : null;
+    const shouldApplyProgramLogic = configPrograms && configPrograms.length > 0;
 
-    if (filteredLevels.length === 1) {
-      // Solo una opción: ocultar campo y preseleccionar
-      this.Ui.populateSelect({
-        selector: Constants.SELECTORS.ACADEMIC_LEVEL,
-        options: [{ value: filteredLevels[0].code, text: filteredLevels[0].name }],
-      });
+    if (shouldApplyProgramLogic) {
+      this.logger.info(`🎯 Aplicando lógica especial para niveles académicos con programas configurados`);
+      
+      // Analizar los programas para determinar el comportamiento de niveles
+      const programsAnalysis = this.analyzeProgramsConfiguration(configPrograms);
+      
+      if (programsAnalysis.levels.length === 1) {
+        // Solo un nivel: ocultar campo y preseleccionar
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+          options: [{ value: filteredLevels[0].code, text: filteredLevels[0].name }],
+        });
 
-      // Preseleccionar automáticamente
-      this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, filteredLevels[0].code);
-      this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
+        this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, filteredLevels[0].code);
+        this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
 
-      this.logger.info(
-        `🔧 Nivel académico preseleccionado automáticamente: ${filteredLevels[0].name}`
-      );
+        this.logger.info(
+          `🔧 Nivel académico preseleccionado automáticamente (programas configurados): ${filteredLevels[0].name}`
+        );
 
-      // Cargar facultades automáticamente
-      setTimeout(() => this._loadFacultiesForLevel(filteredLevels[0].code), 100);
-    } else if (filteredLevels.length === 0) {
-      // Sin opciones disponibles
-      this.logger.warn("⚠️ No hay niveles académicos disponibles con la configuración actual");
-      this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
+        // Cargar facultades automáticamente
+        setTimeout(() => this._loadFacultiesForLevel(filteredLevels[0].code), 100);
+      } else {
+        // Múltiples niveles: mostrar select normalmente
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+          options: filteredLevels.map((level) => ({
+            value: level.code,
+            text: level.name,
+          })),
+        });
+
+        this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, true);
+        this.logger.info(`📋 Select de nivel académico con ${filteredLevels.length} opciones (múltiples niveles en programas configurados)`);
+      }
     } else {
-      // Múltiples opciones: mostrar select normalmente
-      this.Ui.populateSelect({
-        selector: Constants.SELECTORS.ACADEMIC_LEVEL,
-        options: filteredLevels.map((level) => ({
-          value: level.code,
-          text: level.name,
-        })),
-      });
+      // Lógica estándar sin configuración de programas específicos
+      if (filteredLevels.length === 1) {
+        // Solo una opción: ocultar campo y preseleccionar
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+          options: [{ value: filteredLevels[0].code, text: filteredLevels[0].name }],
+        });
 
-      this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, true);
-      this.logger.info(`📋 Select de nivel académico con ${filteredLevels.length} opciones`);
+        this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, filteredLevels[0].code);
+        this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
+
+        this.logger.info(
+          `🔧 Nivel académico preseleccionado automáticamente: ${filteredLevels[0].name}`
+        );
+
+        // Cargar facultades automáticamente
+        setTimeout(() => this._loadFacultiesForLevel(filteredLevels[0].code), 100);
+      } else if (filteredLevels.length === 0) {
+        // Sin opciones disponibles
+        this.logger.warn("⚠️ No hay niveles académicos disponibles con la configuración actual");
+        this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
+      } else {
+        // Múltiples opciones: mostrar select normalmente
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+          options: filteredLevels.map((level) => ({
+            value: level.code,
+            text: level.name,
+          })),
+        });
+
+        this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, true);
+        this.logger.info(`📋 Select de nivel académico con ${filteredLevels.length} opciones`);
+      }
     }
   }
 
@@ -242,35 +283,71 @@ export class Academic {
    */
   _loadFacultiesForLevel(academicLevel) {
     const filteredFaculties = this.getFilteredFaculties(academicLevel);
+    
+    // Verificar si tenemos configuración de programas específicos
+    const configPrograms = this.config ? this.config.get("programs") : null;
+    const shouldApplyProgramLogic = configPrograms && configPrograms.length > 0;
 
-    if (filteredFaculties.length === 1) {
-      // Solo una facultad: ocultar campo y preseleccionar
-      this.Ui.populateSelect({
-        selector: Constants.SELECTORS.FACULTY,
-        options: [{ value: filteredFaculties[0].value, text: filteredFaculties[0].text }],
-      });
+    if (shouldApplyProgramLogic) {
+      this.logger.info(`🎯 Aplicando lógica especial para programas configurados`);
+      
+      // Analizar los programas para determinar el comportamiento de facultades
+      const programsAnalysis = this.analyzeProgramsConfiguration(configPrograms);
+      
+      if (programsAnalysis.faculties.length === 1) {
+        // Solo una facultad: ocultar campo y preseleccionar
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.FACULTY,
+          options: [{ value: filteredFaculties[0].value, text: filteredFaculties[0].text }],
+        });
 
-      // Preseleccionar automáticamente
-      this.state.updateField(Constants.FIELDS.FACULTY, filteredFaculties[0].value);
-      this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
+        this.state.updateField(Constants.FIELDS.FACULTY, filteredFaculties[0].value);
+        this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
 
-      this.logger.info(`🔧 Facultad preseleccionada automáticamente: ${filteredFaculties[0].text}`);
+        this.logger.info(`🔧 Facultad preseleccionada automáticamente (programas configurados): ${filteredFaculties[0].text}`);
 
-      // Cargar programas automáticamente
-      setTimeout(() => this._loadProgramsForFaculty(filteredFaculties[0].value), 100);
-    } else if (filteredFaculties.length === 0) {
-      // Sin facultades disponibles
-      this.logger.warn("⚠️ No hay facultades disponibles para este nivel académico");
-      this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
+        // Cargar programas automáticamente
+        setTimeout(() => this._loadProgramsForFaculty(filteredFaculties[0].value), 100);
+      } else {
+        // Múltiples facultades: mostrar select normalmente
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.FACULTY,
+          options: filteredFaculties,
+        });
+
+        this.state.setFieldVisibility(Constants.FIELDS.FACULTY, true);
+        this.logger.info(`📋 Select de facultades con ${filteredFaculties.length} opciones (programas de múltiples facultades)`);
+      }
     } else {
-      // Múltiples facultades: mostrar select normalmente
-      this.Ui.populateSelect({
-        selector: Constants.SELECTORS.FACULTY,
-        options: filteredFaculties,
-      });
+      // Lógica estándar sin configuración de programas específicos
+      if (filteredFaculties.length === 1) {
+        // Solo una facultad: ocultar campo y preseleccionar
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.FACULTY,
+          options: [{ value: filteredFaculties[0].value, text: filteredFaculties[0].text }],
+        });
 
-      this.state.setFieldVisibility(Constants.FIELDS.FACULTY, true);
-      this.logger.info(`📋 Select de facultades con ${filteredFaculties.length} opciones`);
+        this.state.updateField(Constants.FIELDS.FACULTY, filteredFaculties[0].value);
+        this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
+
+        this.logger.info(`🔧 Facultad preseleccionada automáticamente: ${filteredFaculties[0].text}`);
+
+        // Cargar programas automáticamente
+        setTimeout(() => this._loadProgramsForFaculty(filteredFaculties[0].value), 100);
+      } else if (filteredFaculties.length === 0) {
+        // Sin facultades disponibles
+        this.logger.warn("⚠️ No hay facultades disponibles para este nivel académico");
+        this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
+      } else {
+        // Múltiples facultades: mostrar select normalmente
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.FACULTY,
+          options: filteredFaculties,
+        });
+
+        this.state.setFieldVisibility(Constants.FIELDS.FACULTY, true);
+        this.logger.info(`📋 Select de facultades con ${filteredFaculties.length} opciones`);
+      }
     }
   }
 
@@ -289,20 +366,36 @@ export class Academic {
     const filteredPrograms = this.getFilteredPrograms(currentAcademicLevel, facultyValue);
 
     if (filteredPrograms.length === 1) {
-      // Solo un programa: ocultar campo y preseleccionar
+      // Solo un programa: mostrar como informativo y preseleccionar
       this.Ui.populateSelect({
         selector: Constants.SELECTORS.PROGRAM,
         options: [{ value: filteredPrograms[0].value, text: filteredPrograms[0].text }],
+        autoHide: false, // No ocultar automáticamente - mostrar como informativo
       });
 
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.PROGRAM, filteredPrograms[0].value);
-      this.state.setFieldVisibility(Constants.FIELDS.PROGRAM, false);
+      // Mantener visible pero deshabilitado para mostrar como informativo
+      this.state.setFieldVisibility(Constants.FIELDS.PROGRAM, true);
+      
+      // Deshabilitar el select para que sea solo informativo
+      const programElement = this.Ui.scopedQuery(Constants.SELECTORS.PROGRAM);
+      if (programElement) {
+        this.Ui.disableElement(programElement);
+        // Agregar estilo visual para indicar que es informativo
+        programElement.style.backgroundColor = '#f8f9fa';
+        programElement.style.border = '1px solid #e9ecef';
+        programElement.style.color = '#6c757d';
+      }
 
-      this.logger.info(`🔧 Programa preseleccionado automáticamente: ${filteredPrograms[0].text}`);
+      this.logger.info(`🔧 Programa mostrado como informativo: ${filteredPrograms[0].text}`);
 
-      // Cargar períodos automáticamente
-      setTimeout(() => this._loadPeriodsForLevel(currentAcademicLevel), 100);
+      // Cargar períodos automáticamente para mostrar el siguiente paso
+      // Aumentar timeout para dar tiempo al DOM
+      setTimeout(() => {
+        this.logger.info(`📅 Iniciando carga de períodos para programa único: ${filteredPrograms[0].text}`);
+        this._loadPeriodsForLevel(currentAcademicLevel, true); // true = forceShow
+      }, 200);
     } else if (filteredPrograms.length === 0) {
       // Sin programas disponibles
       this.logger.warn("⚠️ No hay programas disponibles para esta facultad");
@@ -322,9 +415,19 @@ export class Academic {
   /**
    * Cargar períodos de admisión para un nivel académico
    * @private
+   * @param {string} academicLevel - Código del nivel académico
+   * @param {boolean} forceShow - Forzar mostrar el campo (para programa único)
    */
-  _loadPeriodsForLevel(academicLevel) {
+  _loadPeriodsForLevel(academicLevel, forceShow = false) {
     const periods = this.Data.getPeriods(academicLevel);
+
+    if (!periods || periods.length === 0) {
+      this.logger.warn("⚠️ No hay períodos de admisión disponibles para este nivel académico");
+      this.state.setFieldVisibility(Constants.FIELDS.ADMISSION_PERIOD, false);
+      return;
+    }
+
+    this.logger.info(`📅 Cargando ${periods.length} períodos de admisión${forceShow ? ' (forzado por programa único)' : ''}`);
 
     this.Ui.populateSelect({
       selector: Constants.SELECTORS.ADMISSION_PERIOD,
@@ -334,7 +437,22 @@ export class Academic {
       })),
     });
 
+    // Asegurar que el campo sea visible en el estado
     this.state.setFieldVisibility(Constants.FIELDS.ADMISSION_PERIOD, true);
+    
+    // Asegurar que el elemento sea visible en la UI
+    const periodElement = this.Ui.scopedQuery(Constants.SELECTORS.ADMISSION_PERIOD);
+    if (periodElement) {
+      // Forzar visibilidad si viene de programa único
+      if (forceShow) {
+        periodElement.style.display = 'block';
+        periodElement.classList.remove('hidden');
+      }
+      this.Ui.showElement(periodElement);
+      this.logger.info(`👁️ Campo período de admisión mostrado con ${periods.length} opciones`);
+    } else {
+      this.logger.warn("⚠️ No se encontró el elemento período de admisión en el DOM");
+    }
   }
 
   // ===============================
@@ -439,12 +557,30 @@ export class Academic {
     // Si hay programas específicos, obtener facultades de esos programas
     if (configPrograms && configPrograms.length > 0) {
       const facultiesFromPrograms = this.getFacultiesFromPrograms(academicLevel, configPrograms);
+      
+      // Enriquecer el texto de las facultades que tienen un solo programa
+      const enrichedFaculties = facultiesFromPrograms.map((faculty) => {
+        const facultyPrograms = this.getFilteredPrograms(academicLevel, faculty.value);
+        
+        if (facultyPrograms.length === 1) {
+          // Una sola programa: mostrar "Facultad - Programa" en el texto
+          return {
+            value: faculty.value, // IMPORTANTE: mantener solo el valor de la facultad
+            text: `${faculty.text} - ${facultyPrograms[0].text}`, // UI enriquecida
+            singleProgram: facultyPrograms[0] // Metadata para auto-selección
+          };
+        } else {
+          // Múltiples programas: mantener texto original
+          return faculty;
+        }
+      });
+      
       this.logger.info(
-        `🏛️ Facultades desde programas configurados: ${facultiesFromPrograms
+        `🏛️ Facultades desde programas configurados (enriquecidas): ${enrichedFaculties
           .map((f) => f.text)
           .join(", ")}`
       );
-      return facultiesFromPrograms;
+      return enrichedFaculties;
     }
 
     // Si hay facultades específicas en configuración, filtrar por esas

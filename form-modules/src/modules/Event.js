@@ -4,7 +4,6 @@
  * @version 1.0
  */
 
-import { Logger } from "./Logger.js";
 import { Constants } from "./Constants.js";
 
 export class Event {

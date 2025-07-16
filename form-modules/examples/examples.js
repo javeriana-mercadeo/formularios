@@ -151,15 +151,15 @@ export const configPrograms = {
     "DRCHO", // Derecho
     "PSICO", // Psicología
     "IINDS", // Ingeniería Industrial
-    "COMSC", // Comunicación Social
+    //"COMSC", // Comunicación Social
   ],
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
     "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado",
-    "Docente y/o psicoorientador",
+    //"Padre de familia y/o acudiente",
+    //"Graduado",
+    //"Docente y/o psicoorientador",
   ],
   attendanceDays: [
     "Miércoles 15 de mayo - Sesión Mañana (9:00-12:00)",

@@ -1,0 +1,15 @@
+@use "./vars" as *;
+
+// ==========================================
+// UTILIDADES DE TAILWIND SOLO PARA NUESTRO PREFIJO
+// ==========================================
+
+// Solo importamos las utilidades que necesitamos
+@tailwind utilities;
+
+// Configuración para que las utilidades solo se generen
+// cuando se usen dentro del contexto .form-modules
+.#{$selector-prefix} {
+  // Las utilidades se generarán automáticamente aquí
+  // cuando se usen @apply en nuestros módulos
+}

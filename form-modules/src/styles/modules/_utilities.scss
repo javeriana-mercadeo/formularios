@@ -1,0 +1,79 @@
+// ==========================================
+// UTILIDADES - CLASES UTILIZADAS EN HTML Y JS
+// ==========================================
+
+// Clases para grupos de radio - utilizadas en authorization-section (compacta)
+.radio-group {
+  @apply flex gap-6 items-center;
+}
+
+.radio-option {
+  @apply flex items-center gap-2;
+}
+
+// CLASES CRÍTICAS PARA JAVASCRIPT - NO ELIMINAR
+// Clases para mostrar/ocultar elementos (UI.js)
+.fm-hidden {
+  @apply hidden;
+}
+
+// Clases para errores generales (UI.js)
+.form-general-error {
+  @apply bg-red-50 text-red-800 p-3 border border-red-200 rounded-md mb-4;
+  @apply transition-opacity duration-300;
+}
+
+// Clases para campos de formulario con contexto (FormManager.js)
+.field-container {
+  @apply mb-4;
+}
+
+.form-group {
+  @apply mb-4;
+}
+
+.input-group {
+  @apply flex gap-2;
+}
+
+// Clases para grupos de radio inline (UI.js)
+.radio-inline-group {
+  @apply flex gap-6 mt-3 items-center;
+  
+  .radio-option {
+    @apply flex items-center gap-2;
+    
+    input[type="radio"] {
+      @apply mr-1 w-4 h-4;
+    }
+
+    label {
+      @apply cursor-pointer text-sm text-gray-700 transition-colors duration-200;
+
+      &:hover {
+        @apply text-blue-600;
+      }
+    }
+  }
+}
+
+// Contenedores específicos para campos de teléfono (UI.js)
+.phone-row {
+  @apply flex gap-4 w-full;
+}
+
+.name-row {
+  @apply flex gap-4 w-full;
+}
+
+.name-field {
+  @apply flex-1;
+}
+
+.prefix-field {
+  @apply w-32 flex-shrink-0;
+}
+
+.mobile-field {
+  @apply flex-1;
+}
