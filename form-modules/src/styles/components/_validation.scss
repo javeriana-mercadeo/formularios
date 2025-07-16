@@ -2,7 +2,7 @@
 // VALIDATION STYLES - Error messages, states, and feedback
 // =================================================================
 
-@use '../abstracts' as *;
+@use "../abstracts" as *;
 
 /* =================================================================== */
 /* OPTIMIZED ERROR MESSAGES */
@@ -11,18 +11,18 @@
 /* New standardized error message class */
 .form-card {
   .error-message {
-    font-size: var(--font-size-xs, #{font-size('xs')});
-    color: var(--danger-500, #{default-color('danger')});
-    margin-top: spacing('sm');
+    font-size: var(--font-size-xs, #{font-size("xs")});
+    color: var(--danger-500, #{default-color("danger")});
+    margin-top: spacing("sm");
     display: flex;
     align-items: center;
-    gap: spacing('sm');
-    padding: spacing('xs') spacing('sm');
+    gap: spacing("sm");
+    padding: spacing("xs") spacing("sm");
     background: rgba(var(--danger-rgb, 255, 89, 77), 0.05);
-    border-radius: var(--border-radius-md, #{get($radius, 'md')});
-    animation: errorSlideIn get($durations, 'base') ease-out;
+    border-radius: var(--border-radius-md, #{get($radius, "md")});
+    animation: errorSlideIn get($durations, "base") ease-out;
     @include animate(opacity);
-    
+
     &::before {
       content: "⚠ ";
       font-size: 11px;

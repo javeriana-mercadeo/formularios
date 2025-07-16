@@ -1,323 +1,331 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ejemplos de Botones - Form Modules</title>
-    <link rel="stylesheet" href="../build/form-modules-style.css">
+    <link rel="stylesheet" href="../build/form-modules-style.css" />
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 2rem;
-            background-color: #f8fafc;
-            color: #1f2937;
-        }
-        
-        .section {
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .section h2 {
-            margin-bottom: 1rem;
-            color: #4d7fcb;
-            font-size: 1.5rem;
-        }
-        
-        .section h3 {
-            margin: 1.5rem 0 0.5rem 0;
-            color: #6b7280;
-            font-size: 1.125rem;
-        }
-        
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .button-inline {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        code {
-            background: #f3f4f6;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.875rem;
-        }
-        
-        .demo-card {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        padding: 2rem;
+        background-color: #f8fafc;
+        color: #1f2937;
+      }
+
+      .section {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .section h2 {
+        margin-bottom: 1rem;
+        color: #4d7fcb;
+        font-size: 1.5rem;
+      }
+
+      .section h3 {
+        margin: 1.5rem 0 0.5rem 0;
+        color: #6b7280;
+        font-size: 1.125rem;
+      }
+
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .button-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      code {
+        background: #f3f4f6;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-family: "Monaco", "Menlo", monospace;
+        font-size: 0.875rem;
+      }
+
+      .demo-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Sistema de Botones - Form Modules</h1>
-    
+
     <div class="form-card">
-        <!-- Variantes de estilo -->
-        <div class="section">
-            <h2>Variantes de Estilo</h2>
-            
-            <h3>Solid (Por defecto)</h3>
-            <div class="button-inline">
-                <button class="btn btn-solid">Solid</button>
-                <button class="btn">Default</button>
-                <code>&lt;button class="btn btn-solid"&gt;Solid&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Faded (Translúcido)</h3>
-            <div class="button-inline">
-                <button class="btn btn-faded">Faded</button>
-                <code>&lt;button class="btn btn-faded"&gt;Faded&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Bordered (Solo borde)</h3>
-            <div class="button-inline">
-                <button class="btn btn-bordered">Bordered</button>
-                <code>&lt;button class="btn btn-bordered"&gt;Bordered&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Light (Fondo sutil)</h3>
-            <div class="button-inline">
-                <button class="btn btn-light">Light</button>
-                <code>&lt;button class="btn btn-light"&gt;Light&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Flat (Menos énfasis)</h3>
-            <div class="button-inline">
-                <button class="btn btn-flat">Flat</button>
-                <code>&lt;button class="btn btn-flat"&gt;Flat&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Ghost (Transición a sólido)</h3>
-            <div class="button-inline">
-                <button class="btn btn-ghost">Ghost</button>
-                <code>&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Shadow (Con sombra prominente)</h3>
-            <div class="button-inline">
-                <button class="btn btn-shadow">Shadow</button>
-                <code>&lt;button class="btn btn-shadow"&gt;Shadow&lt;/button&gt;</code>
-            </div>
-            
-            <h3>Link (Estilo enlace)</h3>
-            <div class="button-inline">
-                <button class="btn btn-link">Link</button>
-                <code>&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;</code>
-            </div>
+      <!-- Variantes de estilo -->
+      <div class="section">
+        <h2>Variantes de Estilo</h2>
+
+        <h3>Solid (Por defecto)</h3>
+        <div class="button-inline">
+          <button class="btn btn-solid">Solid</button>
+          <button class="btn">Default</button>
+          <code>&lt;button class="btn btn-solid"&gt;Solid&lt;/button&gt;</code>
         </div>
-        
-        <!-- Variantes de color -->
-        <div class="section">
-            <h2>Variantes de Color</h2>
-            
-            <h3>Primary (Por defecto)</h3>
-            <div class="button-inline">
-                <button class="btn">Primary</button>
-                <button class="btn btn-bordered">Primary</button>
-                <button class="btn btn-light">Primary</button>
-            </div>
-            
-            <h3>Secondary</h3>
-            <div class="button-inline">
-                <button class="btn btn-secondary">Secondary</button>
-                <button class="btn btn-secondary btn-bordered">Secondary</button>
-                <button class="btn btn-secondary btn-light">Secondary</button>
-            </div>
-            
-            <h3>Danger</h3>
-            <div class="button-inline">
-                <button class="btn btn-danger">Danger</button>
-                <button class="btn btn-danger btn-bordered">Danger</button>
-                <button class="btn btn-danger btn-light">Danger</button>
-            </div>
-            
-            <h3>Success</h3>
-            <div class="button-inline">
-                <button class="btn btn-success">Success</button>
-                <button class="btn btn-success btn-bordered">Success</button>
-                <button class="btn btn-success btn-light">Success</button>
-            </div>
-            
-            <h3>Warning</h3>
-            <div class="button-inline">
-                <button class="btn btn-warning">Warning</button>
-                <button class="btn btn-warning btn-bordered">Warning</button>
-                <button class="btn btn-warning btn-light">Warning</button>
-            </div>
-            
-            <h3>Info</h3>
-            <div class="button-inline">
-                <button class="btn btn-info">Info</button>
-                <button class="btn btn-info btn-bordered">Info</button>
-                <button class="btn btn-info btn-light">Info</button>
-            </div>
+
+        <h3>Faded (Translúcido)</h3>
+        <div class="button-inline">
+          <button class="btn btn-faded">Faded</button>
+          <code>&lt;button class="btn btn-faded"&gt;Faded&lt;/button&gt;</code>
         </div>
-        
-        <!-- Tamaños -->
-        <div class="section">
-            <h2>Tamaños</h2>
-            
-            <div class="button-inline">
-                <button class="btn btn-sm">Small</button>
-                <button class="btn">Medium</button>
-                <button class="btn btn-lg">Large</button>
-            </div>
-            
-            <code>&lt;button class="btn btn-sm"&gt;Small&lt;/button&gt;</code>
-            <code>&lt;button class="btn"&gt;Medium&lt;/button&gt;</code>
-            <code>&lt;button class="btn btn-lg"&gt;Large&lt;/button&gt;</code>
+
+        <h3>Bordered (Solo borde)</h3>
+        <div class="button-inline">
+          <button class="btn btn-bordered">Bordered</button>
+          <code>&lt;button class="btn btn-bordered"&gt;Bordered&lt;/button&gt;</code>
         </div>
-        
-        <!-- Botones con iconos -->
-        <div class="section">
-            <h2>Botones con Iconos</h2>
-            
-            <h3>Con texto e icono</h3>
-            <div class="button-inline">
-                <button class="btn">
-                    <span class="btn-icon">📧</span>
-                    <span class="btn-text">Email</span>
-                </button>
-                <button class="btn btn-bordered">
-                    <span class="btn-icon">📥</span>
-                    <span class="btn-text">Descargar</span>
-                </button>
-            </div>
-            
-            <h3>Solo icono</h3>
-            <div class="button-inline">
-                <button class="btn btn-icon-only">
-                    <span class="btn-icon btn-icon-only">⚙️</span>
-                </button>
-                <button class="btn btn-icon-only btn-sm">
-                    <span class="btn-icon btn-icon-only">❤️</span>
-                </button>
-                <button class="btn btn-icon-only btn-lg">
-                    <span class="btn-icon btn-icon-only">🔍</span>
-                </button>
-            </div>
+
+        <h3>Light (Fondo sutil)</h3>
+        <div class="button-inline">
+          <button class="btn btn-light">Light</button>
+          <code>&lt;button class="btn btn-light"&gt;Light&lt;/button&gt;</code>
         </div>
-        
-        <!-- Estados -->
-        <div class="section">
-            <h2>Estados</h2>
-            
-            <h3>Normal, Disabled, Loading</h3>
-            <div class="button-inline">
-                <button class="btn">Normal</button>
-                <button class="btn" disabled>Disabled</button>
-                <button class="btn btn-loading">Loading</button>
-            </div>
-            
-            <h3>Diferentes variantes disabled</h3>
-            <div class="button-inline">
-                <button class="btn btn-bordered" disabled>Bordered</button>
-                <button class="btn btn-light" disabled>Light</button>
-                <button class="btn btn-link" disabled>Link</button>
-            </div>
+
+        <h3>Flat (Menos énfasis)</h3>
+        <div class="button-inline">
+          <button class="btn btn-flat">Flat</button>
+          <code>&lt;button class="btn btn-flat"&gt;Flat&lt;/button&gt;</code>
         </div>
-        
-        <!-- Ancho completo -->
-        <div class="section">
-            <h2>Ancho Completo</h2>
-            
-            <div class="demo-card">
-                <button class="btn btn-full-width">Botón de ancho completo</button>
-            </div>
-            
-            <div class="demo-card">
-                <button class="btn btn-bordered btn-full-width">Bordered ancho completo</button>
-            </div>
-            
-            <code>&lt;button class="btn btn-full-width"&gt;Ancho completo&lt;/button&gt;</code>
+
+        <h3>Ghost (Transición a sólido)</h3>
+        <div class="button-inline">
+          <button class="btn btn-ghost">Ghost</button>
+          <code>&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;</code>
         </div>
-        
-        <!-- Formulario ejemplo -->
-        <div class="section">
-            <h2>Ejemplo en Formulario</h2>
-            
-            <form class="demo-card">
-                <div style="margin-bottom: 1rem;">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">
-                </div>
-                
-                <div style="margin-bottom: 1rem;">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">
-                </div>
-                
-                <div style="display: flex; gap: 0.5rem;">
-                    <button type="submit" class="btn btn-full-width">Iniciar Sesión</button>
-                    <button type="button" class="btn btn-light">Cancelar</button>
-                </div>
-            </form>
+
+        <h3>Shadow (Con sombra prominente)</h3>
+        <div class="button-inline">
+          <button class="btn btn-shadow">Shadow</button>
+          <code>&lt;button class="btn btn-shadow"&gt;Shadow&lt;/button&gt;</code>
         </div>
-        
-        <!-- Grupos de botones -->
-        <div class="section">
-            <h2>Grupos de Botones</h2>
-            
-            <div class="btn-group">
-                <button class="btn">Izquierda</button>
-                <button class="btn">Centro</button>
-                <button class="btn">Derecha</button>
-            </div>
-            
-            <br><br>
-            
-            <div class="btn-group">
-                <button class="btn btn-bordered">Opción 1</button>
-                <button class="btn btn-bordered">Opción 2</button>
-                <button class="btn btn-bordered">Opción 3</button>
-            </div>
-            
-            <br><br>
-            
-            <code>&lt;div class="btn-group"&gt;...&lt;/div&gt;</code>
+
+        <h3>Link (Estilo enlace)</h3>
+        <div class="button-inline">
+          <button class="btn btn-link">Link</button>
+          <code>&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;</code>
         </div>
+      </div>
+
+      <!-- Variantes de color -->
+      <div class="section">
+        <h2>Variantes de Color</h2>
+
+        <h3>Primary (Por defecto)</h3>
+        <div class="button-inline">
+          <button class="btn">Primary</button>
+          <button class="btn btn-bordered">Primary</button>
+          <button class="btn btn-light">Primary</button>
+        </div>
+
+        <h3>Secondary</h3>
+        <div class="button-inline">
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-secondary btn-bordered">Secondary</button>
+          <button class="btn btn-secondary btn-light">Secondary</button>
+        </div>
+
+        <h3>Danger</h3>
+        <div class="button-inline">
+          <button class="btn btn-danger">Danger</button>
+          <button class="btn btn-danger btn-bordered">Danger</button>
+          <button class="btn btn-danger btn-light">Danger</button>
+        </div>
+
+        <h3>Success</h3>
+        <div class="button-inline">
+          <button class="btn btn-success">Success</button>
+          <button class="btn btn-success btn-bordered">Success</button>
+          <button class="btn btn-success btn-light">Success</button>
+        </div>
+
+        <h3>Warning</h3>
+        <div class="button-inline">
+          <button class="btn btn-warning">Warning</button>
+          <button class="btn btn-warning btn-bordered">Warning</button>
+          <button class="btn btn-warning btn-light">Warning</button>
+        </div>
+
+        <h3>Info</h3>
+        <div class="button-inline">
+          <button class="btn btn-info">Info</button>
+          <button class="btn btn-info btn-bordered">Info</button>
+          <button class="btn btn-info btn-light">Info</button>
+        </div>
+      </div>
+
+      <!-- Tamaños -->
+      <div class="section">
+        <h2>Tamaños</h2>
+
+        <div class="button-inline">
+          <button class="btn btn-sm">Small</button>
+          <button class="btn">Medium</button>
+          <button class="btn btn-lg">Large</button>
+        </div>
+
+        <code>&lt;button class="btn btn-sm"&gt;Small&lt;/button&gt;</code>
+        <code>&lt;button class="btn"&gt;Medium&lt;/button&gt;</code>
+        <code>&lt;button class="btn btn-lg"&gt;Large&lt;/button&gt;</code>
+      </div>
+
+      <!-- Botones con iconos -->
+      <div class="section">
+        <h2>Botones con Iconos</h2>
+
+        <h3>Con texto e icono</h3>
+        <div class="button-inline">
+          <button class="btn">
+            <span class="btn-icon">📧</span>
+            <span class="btn-text">Email</span>
+          </button>
+          <button class="btn btn-bordered">
+            <span class="btn-icon">📥</span>
+            <span class="btn-text">Descargar</span>
+          </button>
+        </div>
+
+        <h3>Solo icono</h3>
+        <div class="button-inline">
+          <button class="btn btn-icon-only">
+            <span class="btn-icon btn-icon-only">⚙️</span>
+          </button>
+          <button class="btn btn-icon-only btn-sm">
+            <span class="btn-icon btn-icon-only">❤️</span>
+          </button>
+          <button class="btn btn-icon-only btn-lg">
+            <span class="btn-icon btn-icon-only">🔍</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Estados -->
+      <div class="section">
+        <h2>Estados</h2>
+
+        <h3>Normal, Disabled, Loading</h3>
+        <div class="button-inline">
+          <button class="btn">Normal</button>
+          <button class="btn" disabled>Disabled</button>
+          <button class="btn btn-loading">Loading</button>
+        </div>
+
+        <h3>Diferentes variantes disabled</h3>
+        <div class="button-inline">
+          <button class="btn btn-bordered" disabled>Bordered</button>
+          <button class="btn btn-light" disabled>Light</button>
+          <button class="btn btn-link" disabled>Link</button>
+        </div>
+      </div>
+
+      <!-- Ancho completo -->
+      <div class="section">
+        <h2>Ancho Completo</h2>
+
+        <div class="demo-card">
+          <button class="btn btn-full-width">Botón de ancho completo</button>
+        </div>
+
+        <div class="demo-card">
+          <button class="btn btn-bordered btn-full-width">Bordered ancho completo</button>
+        </div>
+
+        <code>&lt;button class="btn btn-full-width"&gt;Ancho completo&lt;/button&gt;</code>
+      </div>
+
+      <!-- Formulario ejemplo -->
+      <div class="section">
+        <h2>Ejemplo en Formulario</h2>
+
+        <form class="demo-card">
+          <div style="margin-bottom: 1rem">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              style="width: 100%; padding: 0.5rem; margin-top: 0.25rem"
+            />
+          </div>
+
+          <div style="margin-bottom: 1rem">
+            <label for="password">Contraseña:</label>
+            <input
+              type="password"
+              id="password"
+              style="width: 100%; padding: 0.5rem; margin-top: 0.25rem"
+            />
+          </div>
+
+          <div style="display: flex; gap: 0.5rem">
+            <button type="submit" class="btn btn-full-width">Iniciar Sesión</button>
+            <button type="button" class="btn btn-light">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Grupos de botones -->
+      <div class="section">
+        <h2>Grupos de Botones</h2>
+
+        <div class="btn-group">
+          <button class="btn">Izquierda</button>
+          <button class="btn">Centro</button>
+          <button class="btn">Derecha</button>
+        </div>
+
+        <br /><br />
+
+        <div class="btn-group">
+          <button class="btn btn-bordered">Opción 1</button>
+          <button class="btn btn-bordered">Opción 2</button>
+          <button class="btn btn-bordered">Opción 3</button>
+        </div>
+
+        <br /><br />
+
+        <code>&lt;div class="btn-group"&gt;...&lt;/div&gt;</code>
+      </div>
     </div>
-    
+
     <script>
-        // Ejemplo de efecto ripple (opcional)
-        document.querySelectorAll('.btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Solo para botones que no son link
-                if (this.classList.contains('btn-link')) return;
-                
-                const ripple = document.createElement('span');
-                ripple.className = 'btn-ripple-effect';
-                
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
+      // Ejemplo de efecto ripple (opcional)
+      document.querySelectorAll(".btn").forEach((button) => {
+        button.addEventListener("click", function (e) {
+          // Solo para botones que no son link
+          if (this.classList.contains("btn-link")) return;
+
+          const ripple = document.createElement("span");
+          ripple.className = "btn-ripple-effect";
+
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          ripple.style.left = x + "px";
+          ripple.style.top = y + "px";
+
+          this.appendChild(ripple);
+
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
         });
+      });
     </script>
-</body>
+  </body>
 </html>

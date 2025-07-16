@@ -1,22 +1,22 @@
 // ==========================================
 // BOTONES
 // ==========================================
-@use 'sass:map';
-@use '../abstracts' as *;
+@use "sass:map";
+@use "../abstracts" as *;
 
 // ==========================================
 // VARIABLES DEL BOTÓN
 // ==========================================
-$btn-border-radius: map.get($border-radius, 'md');
-$btn-transition: map.get($transitions, 'normal');
-$btn-font-weight: map.get($font-weights, 'medium');
+$btn-border-radius: map.get($border-radius, "md");
+$btn-transition: map.get($transitions, "normal");
+$btn-font-weight: map.get($font-weights, "medium");
 $btn-line-height: 1.5;
-$btn-gap: map.get($spacing, 'sm');
+$btn-gap: map.get($spacing, "sm");
 
 // Tamaños
-$btn-padding-sm: map.get($spacing, 'sm') map.get($spacing, 'lg');
-$btn-padding-md: map.get($spacing, 'lg') map.get($spacing, 'xl');
-$btn-padding-lg: map.get($spacing, 'xl') map.get($spacing, '2xl');
+$btn-padding-sm: map.get($spacing, "sm") map.get($spacing, "lg");
+$btn-padding-md: map.get($spacing, "lg") map.get($spacing, "xl");
+$btn-padding-lg: map.get($spacing, "xl") map.get($spacing, "2xl");
 
 // Estados
 $btn-opacity-disabled: 0.6;
@@ -27,7 +27,7 @@ $btn-transform-hover: translateY(rem(-2px));
 // ==========================================
 .btn {
   @include button-reset;
-  
+
   // Estilos propios del componente
   position: relative;
   display: inline-flex;
@@ -36,10 +36,10 @@ $btn-transform-hover: translateY(rem(-2px));
   gap: $btn-gap;
   min-width: rem(80px);
   min-height: rem(48px);
-  
+
   font-weight: $btn-font-weight;
   line-height: $btn-line-height;
-  font-size: map.get($font-sizes, 'base');
+  font-size: map.get($font-sizes, "base");
   border-radius: $btn-border-radius;
   padding: $btn-padding-md;
   @include transition(all);
@@ -59,9 +59,9 @@ $btn-transform-hover: translateY(rem(-2px));
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: map.get($font-sizes, 'lg');
-    height: map.get($font-sizes, 'lg');
-    font-size: map.get($font-sizes, 'lg');
+    width: map.get($font-sizes, "lg");
+    height: map.get($font-sizes, "lg");
+    font-size: map.get($font-sizes, "lg");
 
     svg,
     i {
@@ -82,19 +82,19 @@ $btn-transform-hover: translateY(rem(-2px));
   &.btn-sm {
     min-height: rem(32px);
     padding: $btn-padding-sm;
-    font-size: map.get($font-sizes, 'xs');
+    font-size: map.get($font-sizes, "xs");
 
     .btn-icon {
-      width: map.get($font-sizes, 'sm');
-      height: map.get($font-sizes, 'sm');
-      font-size: map.get($font-sizes, 'sm');
+      width: map.get($font-sizes, "sm");
+      height: map.get($font-sizes, "sm");
+      font-size: map.get($font-sizes, "sm");
     }
   }
 
   &.btn-lg {
     min-height: rem(48px);
     padding: $btn-padding-lg;
-    font-size: map.get($font-sizes, 'base');
+    font-size: map.get($font-sizes, "base");
 
     .btn-icon {
       width: rem(20px);
@@ -106,62 +106,62 @@ $btn-transform-hover: translateY(rem(-2px));
   // ==========================================
   // VARIANTES
   // ==========================================
-  
+
   // Solid (por defecto)
   &.btn-solid,
   &:not([class*="btn-"]) {
-    background: map.get($color-base, 'primary');
-    color: map.get($color-base, 'white');
-    border-color: map.get($color-base, 'primary');
-    @include shadow('sm');
+    background: map.get($color-base, "primary");
+    color: map.get($color-base, "white");
+    border-color: map.get($color-base, "primary");
+    @include shadow("sm");
 
     &:hover:not(:disabled) {
-      background: darken(map.get($color-base, 'primary'), 10%);
-      border-color: darken(map.get($color-base, 'primary'), 10%);
+      background: darken(map.get($color-base, "primary"), 10%);
+      border-color: darken(map.get($color-base, "primary"), 10%);
       transform: $btn-transform-hover;
     }
 
     &:active:not(:disabled) {
-      background: map.get($color-base, 'primary');
+      background: map.get($color-base, "primary");
       transform: translateY(0);
     }
 
     &:focus-visible {
-      @include focus-ring(map.get($color-base, 'primary'));
+      @include focus-ring(map.get($color-base, "primary"));
     }
   }
 
   // Bordered
   &.btn-bordered {
     background: transparent;
-    color: map.get($color-base, 'primary');
-    border-color: map.get($color-base, 'primary');
+    color: map.get($color-base, "primary");
+    border-color: map.get($color-base, "primary");
 
     &:hover:not(:disabled) {
-      border-color: darken(map.get($color-base, 'primary'), 10%);
-      color: darken(map.get($color-base, 'primary'), 10%);
+      border-color: darken(map.get($color-base, "primary"), 10%);
+      color: darken(map.get($color-base, "primary"), 10%);
       transform: $btn-transform-hover;
     }
 
     &:active:not(:disabled) {
-      border-color: map.get($color-base, 'primary');
-      color: map.get($color-base, 'primary');
+      border-color: map.get($color-base, "primary");
+      color: map.get($color-base, "primary");
       transform: translateY(0);
     }
 
     &:focus-visible {
-      @include focus-ring(map.get($color-base, 'primary'));
+      @include focus-ring(map.get($color-base, "primary"));
     }
   }
 
   // Light
   &.btn-light {
     background: transparent;
-    color: map.get($color-base, 'primary');
+    color: map.get($color-base, "primary");
 
     &:hover:not(:disabled) {
       background: rgba(77, 127, 203, 0.1);
-      color: darken(map.get($color-base, 'primary'), 10%);
+      color: darken(map.get($color-base, "primary"), 10%);
       transform: $btn-transform-hover;
     }
 
@@ -171,37 +171,37 @@ $btn-transform-hover: translateY(rem(-2px));
     }
 
     &:focus-visible {
-      @include focus-ring(map.get($color-base, 'primary'));
+      @include focus-ring(map.get($color-base, "primary"));
     }
   }
 
   // Ghost
   &.btn-ghost {
     background: transparent;
-    color: map.get($color-base, 'primary');
-    border-color: map.get($color-base, 'primary');
+    color: map.get($color-base, "primary");
+    border-color: map.get($color-base, "primary");
 
     &:hover:not(:disabled) {
-      background: map.get($color-base, 'primary');
-      color: map.get($color-base, 'white');
+      background: map.get($color-base, "primary");
+      color: map.get($color-base, "white");
       transform: $btn-transform-hover;
     }
 
     &:active:not(:disabled) {
-      background: darken(map.get($color-base, 'primary'), 10%);
-      color: map.get($color-base, 'white');
+      background: darken(map.get($color-base, "primary"), 10%);
+      color: map.get($color-base, "white");
       transform: translateY(0);
     }
 
     &:focus-visible {
-      @include focus-ring(map.get($color-base, 'primary'));
+      @include focus-ring(map.get($color-base, "primary"));
     }
   }
 
   // Link
   &.btn-link {
     background: transparent;
-    color: map.get($color-base, 'primary');
+    color: map.get($color-base, "primary");
     border: none;
     padding: 0;
     min-height: auto;
@@ -209,18 +209,18 @@ $btn-transform-hover: translateY(rem(-2px));
     text-decoration: underline;
 
     &:hover:not(:disabled) {
-      color: darken(map.get($color-base, 'primary'), 10%);
+      color: darken(map.get($color-base, "primary"), 10%);
       text-decoration-thickness: rem(2px);
       transform: none;
     }
 
     &:active:not(:disabled) {
-      color: map.get($color-base, 'primary');
+      color: map.get($color-base, "primary");
       transform: none;
     }
 
     &:focus-visible {
-      @include focus-ring(map.get($color-base, 'primary'));
+      @include focus-ring(map.get($color-base, "primary"));
       text-decoration: none;
     }
   }
@@ -228,15 +228,15 @@ $btn-transform-hover: translateY(rem(-2px));
   // ==========================================
   // VARIANTES DE COLOR
   // ==========================================
-  @include button-color-variant('danger');
-  @include button-color-variant('success');
-  @include button-color-variant('warning', map.get($color-base, 'black'));
-  @include button-color-variant('secondary');
+  @include button-color-variant("danger");
+  @include button-color-variant("success");
+  @include button-color-variant("warning", map.get($color-base, "black"));
+  @include button-color-variant("secondary");
 
   // ==========================================
   // MODIFICADORES
   // ==========================================
-  
+
   // Ancho completo
   &.btn-full-width {
     width: 100%;
@@ -245,7 +245,7 @@ $btn-transform-hover: translateY(rem(-2px));
   // Estados disabled
   &:disabled,
   &.btn-disabled,
-  &[aria-disabled='true'] {
+  &[aria-disabled="true"] {
     opacity: $btn-opacity-disabled;
     pointer-events: none;
     cursor: not-allowed;
@@ -257,9 +257,9 @@ $btn-transform-hover: translateY(rem(-2px));
     position: relative;
     color: transparent;
     pointer-events: none;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -282,10 +282,10 @@ $btn-transform-hover: translateY(rem(-2px));
   button:not([class*="btn-"]) {
     @extend .btn;
     width: 100%;
-    margin-top: map.get($spacing, 'md');
-    
+    margin-top: map.get($spacing, "md");
+
     @include responsive($breakpoint-sm) {
-      margin-top: map.get($spacing, 'sm');
+      margin-top: map.get($spacing, "sm");
     }
   }
 

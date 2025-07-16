@@ -260,7 +260,6 @@ export class Logger {
     }
   }
 
-
   /**
    * Crear grupo de logs
    * @param {string} groupName - Nombre del grupo

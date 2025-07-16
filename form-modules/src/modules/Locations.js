@@ -70,21 +70,21 @@ export class Locations {
         selector: Constants.SELECTORS.DEPARTMENT,
         options: [{ value: filteredDepartments[0].value, text: filteredDepartments[0].text }],
       });
-      
+
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.DEPARTMENT, filteredDepartments[0].value);
       this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
-      
-      this.logger.info(`🔧 Departamento preseleccionado automáticamente: ${filteredDepartments[0].text}`);
-      
+
+      this.logger.info(
+        `🔧 Departamento preseleccionado automáticamente: ${filteredDepartments[0].text}`
+      );
+
       // Cargar ciudades automáticamente
       setTimeout(() => this._populateCities(filteredDepartments[0].value), 100);
-      
     } else if (filteredDepartments.length === 0) {
       // Sin departamentos disponibles
       this.logger.warn("⚠️ No hay departamentos disponibles con la configuración actual");
       this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
-      
     } else {
       // Múltiples departamentos: mostrar select normalmente
       this.Ui.populateSelect({
@@ -174,18 +174,16 @@ export class Locations {
         selector: Constants.SELECTORS.CITY,
         options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
       });
-      
+
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.CITY, filteredCities[0].value);
       this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
-      
+
       this.logger.info(`🔧 Ciudad preseleccionada automáticamente: ${filteredCities[0].text}`);
-      
     } else if (filteredCities.length === 0) {
       // Sin ciudades disponibles
       this.logger.warn("⚠️ No hay ciudades disponibles para este departamento");
       this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
-      
     } else {
       // Múltiples ciudades: mostrar select normalmente
       this.Ui.populateSelect({
@@ -296,7 +294,7 @@ export class Locations {
   initializeLocationFields() {
     // Si hay configuración específica de país, aplicarla
     this.initializeFromCountryConfiguration();
-    
+
     const currentCountry = this.state.getField(Constants.FIELDS.COUNTRY);
     const defaultCountry = this.state._getInitialState()[Constants.FIELDS.COUNTRY];
 
@@ -379,25 +377,30 @@ export class Locations {
    */
   getFilteredCountries() {
     const allCountries = this.Data.getCountries();
-    
+
     if (!this.config) {
-      return allCountries.map(country => ({ value: country.code, text: country.name }));
+      return allCountries.map((country) => ({ value: country.code, text: country.name }));
     }
 
-    const configCountries = this.config.get('countries');
+    const configCountries = this.config.get("countries");
 
     // Si hay países específicos en configuración, filtrar por esos
     if (configCountries && configCountries.length > 0) {
       const filteredCountries = allCountries
-        .filter(country => configCountries.includes(country.name) || configCountries.includes(country.code))
-        .map(country => ({ value: country.code, text: country.name }));
-      
-      this.logger.info(`🌍 Países filtrados por configuración: ${filteredCountries.map(c => c.text).join(', ')}`);
+        .filter(
+          (country) =>
+            configCountries.includes(country.name) || configCountries.includes(country.code)
+        )
+        .map((country) => ({ value: country.code, text: country.name }));
+
+      this.logger.info(
+        `🌍 Países filtrados por configuración: ${filteredCountries.map((c) => c.text).join(", ")}`
+      );
       return filteredCountries;
     }
 
     this.logger.info(`🌍 Mostrando todos los países disponibles`);
-    return allCountries.map(country => ({ value: country.code, text: country.name }));
+    return allCountries.map((country) => ({ value: country.code, text: country.name }));
   }
 
   /**
@@ -405,36 +408,44 @@ export class Locations {
    */
   getFilteredDepartments() {
     const allDepartments = this.Data.getDepartments();
-    
+
     if (!this.config) {
-      return allDepartments.map(dept => ({ value: dept.codigo, text: dept.nombre }));
+      return allDepartments.map((dept) => ({ value: dept.codigo, text: dept.nombre }));
     }
 
-    const configDepartments = this.config.get('departments');
-    const configCities = this.config.get('cities');
+    const configDepartments = this.config.get("departments");
+    const configCities = this.config.get("cities");
 
     // Si hay ciudades específicas, obtener departamentos de esas ciudades
     if (configCities && configCities.length > 0) {
       const departmentsFromCities = this.getDepartmentsFromCities(configCities);
-      this.logger.info(`🏛️ Departamentos desde ciudades configuradas: ${departmentsFromCities.map(d => d.text).join(', ')}`);
+      this.logger.info(
+        `🏛️ Departamentos desde ciudades configuradas: ${departmentsFromCities
+          .map((d) => d.text)
+          .join(", ")}`
+      );
       return departmentsFromCities;
     }
 
     // Si hay departamentos específicos en configuración, filtrar por esos
     if (configDepartments && configDepartments.length > 0) {
       const filteredDepartments = allDepartments
-        .filter(dept => 
-          configDepartments.includes(dept.nombre) || 
-          configDepartments.includes(dept.codigo)
+        .filter(
+          (dept) =>
+            configDepartments.includes(dept.nombre) || configDepartments.includes(dept.codigo)
         )
-        .map(dept => ({ value: dept.codigo, text: dept.nombre }));
-      
-      this.logger.info(`🏛️ Departamentos filtrados por configuración: ${filteredDepartments.map(d => d.text).join(', ')}`);
+        .map((dept) => ({ value: dept.codigo, text: dept.nombre }));
+
+      this.logger.info(
+        `🏛️ Departamentos filtrados por configuración: ${filteredDepartments
+          .map((d) => d.text)
+          .join(", ")}`
+      );
       return filteredDepartments;
     }
 
     this.logger.info(`🏛️ Mostrando todos los departamentos disponibles`);
-    return allDepartments.map(dept => ({ value: dept.codigo, text: dept.nombre }));
+    return allDepartments.map((dept) => ({ value: dept.codigo, text: dept.nombre }));
   }
 
   /**
@@ -442,28 +453,27 @@ export class Locations {
    */
   getFilteredCities(departmentCode) {
     const allCities = this.Data.getCities(departmentCode);
-    
+
     if (!this.config) {
-      return allCities.map(city => ({ value: city.codigo, text: city.nombre }));
+      return allCities.map((city) => ({ value: city.codigo, text: city.nombre }));
     }
 
-    const configCities = this.config.get('cities');
+    const configCities = this.config.get("cities");
 
     // Si hay ciudades específicas en configuración, filtrar por esas
     if (configCities && configCities.length > 0) {
       const filteredCities = allCities
-        .filter(city => 
-          configCities.includes(city.nombre) || 
-          configCities.includes(city.codigo)
-        )
-        .map(city => ({ value: city.codigo, text: city.nombre }));
-      
-      this.logger.info(`🏙️ Ciudades filtradas por configuración: ${filteredCities.map(c => c.text).join(', ')}`);
+        .filter((city) => configCities.includes(city.nombre) || configCities.includes(city.codigo))
+        .map((city) => ({ value: city.codigo, text: city.nombre }));
+
+      this.logger.info(
+        `🏙️ Ciudades filtradas por configuración: ${filteredCities.map((c) => c.text).join(", ")}`
+      );
       return filteredCities;
     }
 
     this.logger.info(`🏙️ Mostrando todas las ciudades para departamento ${departmentCode}`);
-    return allCities.map(city => ({ value: city.codigo, text: city.nombre }));
+    return allCities.map((city) => ({ value: city.codigo, text: city.nombre }));
   }
 
   /**
@@ -473,22 +483,21 @@ export class Locations {
     const allDepartments = this.Data.getDepartments();
     const departmentsSet = new Set();
 
-    allDepartments.forEach(department => {
+    allDepartments.forEach((department) => {
       const cities = this.Data.getCities(department.codigo);
-      const hasConfiguredCity = cities.some(city => 
-        configCities.includes(city.nombre) || configCities.includes(city.codigo)
+      const hasConfiguredCity = cities.some(
+        (city) => configCities.includes(city.nombre) || configCities.includes(city.codigo)
       );
-      
+
       if (hasConfiguredCity) {
         departmentsSet.add(department.codigo);
       }
     });
 
-    return Array.from(departmentsSet)
-      .map(deptCode => {
-        const dept = allDepartments.find(d => d.codigo === deptCode);
-        return { value: dept.codigo, text: dept.nombre };
-      });
+    return Array.from(departmentsSet).map((deptCode) => {
+      const dept = allDepartments.find((d) => d.codigo === deptCode);
+      return { value: dept.codigo, text: dept.nombre };
+    });
   }
 
   /**
@@ -500,18 +509,18 @@ export class Locations {
       return;
     }
 
-    const configCountries = this.config.get('countries');
-    
+    const configCountries = this.config.get("countries");
+
     if (!configCountries || configCountries.length === 0) {
       this.logger.info("No hay países específicos configurados, usando lógica estándar");
       return;
     }
 
-    this.logger.info(`🔧 Inicializando desde países configurados: ${configCountries.join(', ')}`);
+    this.logger.info(`🔧 Inicializando desde países configurados: ${configCountries.join(", ")}`);
 
     // Analizar los países configurados para determinar comportamiento
     const countriesAnalysis = this.analyzeCountriesConfiguration(configCountries);
-    
+
     this.logger.info(`📊 Análisis de países:`, countriesAnalysis);
 
     // Aplicar lógica según el análisis
@@ -534,9 +543,9 @@ export class Locations {
     const allCountries = this.Data.getCountries();
     const matchedCountries = [];
 
-    configCountries.forEach(configCountry => {
-      const country = allCountries.find(c => 
-        c.name === configCountry || c.code === configCountry
+    configCountries.forEach((configCountry) => {
+      const country = allCountries.find(
+        (c) => c.name === configCountry || c.code === configCountry
       );
       if (country) {
         matchedCountries.push(country.code);
@@ -544,7 +553,7 @@ export class Locations {
     });
 
     return {
-      countries: matchedCountries
+      countries: matchedCountries,
     };
   }
 
@@ -557,28 +566,31 @@ export class Locations {
       return;
     }
 
-    const configDepartments = this.config.get('departments');
-    const configCities = this.config.get('cities');
-    
+    const configDepartments = this.config.get("departments");
+    const configCities = this.config.get("cities");
+
     this.logger.info(`🔧 Inicializando filtros de ubicación`, {
       departments: configDepartments?.length || 0,
-      cities: configCities?.length || 0
+      cities: configCities?.length || 0,
     });
 
     // Si hay configuración específica de departamentos y ciudades
-    if (configDepartments && configDepartments.length === 1 && 
-        configCities && configCities.length === 1) {
-      
+    if (
+      configDepartments &&
+      configDepartments.length === 1 &&
+      configCities &&
+      configCities.length === 1
+    ) {
       // Preseleccionar Colombia si solo hay configuración de departamentos/ciudades
-      this.state.updateField(Constants.FIELDS.COUNTRY, 'COL');
+      this.state.updateField(Constants.FIELDS.COUNTRY, "COL");
       this.state.setFieldVisibility(Constants.FIELDS.COUNTRY, false);
-      
+
       this.state.updateField(Constants.FIELDS.DEPARTMENT, configDepartments[0]);
       this.state.setFieldVisibility(Constants.FIELDS.DEPARTMENT, false);
-      
+
       this.state.updateField(Constants.FIELDS.CITY, configCities[0]);
       this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
-      
+
       this.logger.info(`🔧 Ubicación completamente preseleccionada y oculta`);
     }
   }

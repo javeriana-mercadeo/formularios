@@ -1,13 +1,13 @@
 // ==========================================
 // FUNCIONES
 // ==========================================
-@use 'sass:color';
-@use 'sass:map';
-@use 'sass:list';
-@use 'sass:math';
-@use 'sass:meta';
-@use 'sass:string';
-@use 'variables' as *;
+@use "sass:color";
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "variables" as *;
 
 // ==========================================
 // MEDIDAS
@@ -20,7 +20,8 @@
 // COLORES - UTILIDADES
 // ==========================================
 @function color-to-rgb($color) {
-  @return #{color.channel($color, 'red', $space: rgb)}, #{color.channel($color, 'green', $space: rgb)}, #{color.channel($color, 'blue', $space: rgb)};
+  @return #{color.channel($color, "red", $space: rgb)},
+    #{color.channel($color, "green", $space: rgb)}, #{color.channel($color, "blue", $space: rgb)};
 }
 
 // ==========================================
@@ -28,20 +29,20 @@
 // ==========================================
 @function generate-color-scale($base-color) {
   $color-scale: ();
-  
+
   // Color base
-  $color-scale: map.set($color-scale, '', $base-color);
-  $color-scale: map.set($color-scale, 'rgb', color-to-rgb($base-color));
-  
+  $color-scale: map.set($color-scale, "", $base-color);
+  $color-scale: map.set($color-scale, "rgb", color-to-rgb($base-color));
+
   // Escalas básicas
   @each $step, $lightness in $lightness-steps {
-    $hue: color.channel($base-color, 'hue', $space: hsl);
-    $saturation: color.channel($base-color, 'saturation', $space: hsl);
+    $hue: color.channel($base-color, "hue", $space: hsl);
+    $saturation: color.channel($base-color, "saturation", $space: hsl);
     $step-color: hsl($hue, $saturation, $lightness);
     $color-scale: map.set($color-scale, $step, $step-color);
-    $color-scale: map.set($color-scale, '#{$step}-rgb', color-to-rgb($step-color));
+    $color-scale: map.set($color-scale, "#{$step}-rgb", color-to-rgb($step-color));
   }
-  
+
   @return $color-scale;
 }
 

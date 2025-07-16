@@ -1,28 +1,28 @@
 // ==========================================
 // MIXINS
 // ==========================================
-@use 'sass:meta';
-@use 'sass:map';
-@use 'variables' as *;
-@use 'functions' as *;
+@use "sass:meta";
+@use "sass:map";
+@use "variables" as *;
+@use "functions" as *;
 
 // ==========================================
 // TEMAS - SELECTORES
 // ==========================================
 @mixin dark-theme {
-  [data-theme-base='dark'] & {
+  [data-theme-base="dark"] & {
     @content;
   }
 }
 
 @mixin faculty-theme($faculty-name) {
-  [data-theme-faculty='#{$faculty-name}'] & {
+  [data-theme-faculty="#{$faculty-name}"] & {
     @content;
   }
 }
 
 @mixin combined-theme($base: null, $faculty: null) {
-  $selector: '';
+  $selector: "";
 
   @if $base and $faculty {
     $selector: '[data-theme-base="#{$base}"][data-theme-faculty="#{$faculty}"]';
@@ -32,7 +32,7 @@
     $selector: '[data-theme-faculty="#{$faculty}"]';
   }
 
-  @if $selector != '' {
+  @if $selector != "" {
     #{$selector} & {
       @content;
     }
@@ -52,7 +52,7 @@
 // COMPONENTES - COLORES
 // ==========================================
 @mixin colors-variants($base-class, $mixin-ref) {
-  $color-names: ('primary', 'secondary', 'tertiary', 'neutral', 'success', 'warning', 'danger');
+  $color-names: ("primary", "secondary", "tertiary", "neutral", "success", "warning", "danger");
 
   @each $color-name in $color-names {
     .#{$base-class}-#{$color-name} {
@@ -66,7 +66,7 @@
 // ==========================================
 @mixin text-style(
   $size,
-  $weight: map.get($font-weights, 'normal'),
+  $weight: map.get($font-weights, "normal"),
   $spacing: normal,
   $line-height: 1.5
 ) {
@@ -85,7 +85,7 @@
 }
 
 @mixin only-dev-mode {
-  [data-env='development'] & {
+  [data-env="development"] & {
     @content;
   }
 }
@@ -137,8 +137,8 @@
 @mixin container($max-width: null) {
   width: 100%;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'md');
-  
+  padding: 0 map.get($spacing, "md");
+
   @if $max-width {
     max-width: $max-width;
   }
@@ -147,13 +147,17 @@
 // ==========================================
 // ANIMACIONES
 // ==========================================
-@mixin transition($properties: all, $duration: map.get($transitions, 'normal'), $timing: ease-in-out) {
+@mixin transition(
+  $properties: all,
+  $duration: map.get($transitions, "normal"),
+  $timing: ease-in-out
+) {
   transition: $properties $duration $timing;
 }
 
 @mixin hover-lift {
   @include transition(transform);
-  
+
   &:hover {
     transform: translateY(rem(-2px));
   }
@@ -162,11 +166,11 @@
 // ==========================================
 // SOMBRAS
 // ==========================================
-@mixin shadow($level: 'sm') {
+@mixin shadow($level: "sm") {
   box-shadow: map.get($shadows, $level);
 }
 
-@mixin focus-ring($color: map.get($color-base, 'primary')) {
+@mixin focus-ring($color: map.get($color-base, "primary")) {
   outline: #{rem(2px)} solid $color;
   outline-offset: #{rem(2px)};
 }
@@ -215,8 +219,8 @@
 
 @mixin button-color-variant($color-name, $text-color: white) {
   $color: map.get($color-base, $color-name);
-  $hover-color: if($color-name == 'warning', darken($color, 15%), darken($color, 10%));
-  
+  $hover-color: if($color-name == "warning", darken($color, 15%), darken($color, 10%));
+
   &.btn-#{$color-name} {
     // Solid variant
     &.btn-solid,

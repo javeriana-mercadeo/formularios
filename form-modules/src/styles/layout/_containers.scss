@@ -2,8 +2,8 @@
 // CONTAINERS - Layout containers and wrappers
 // =================================================================
 
-@use 'sass:map';
-@use '../abstracts' as *;
+@use "sass:map";
+@use "../abstracts" as *;
 
 // =================================================================
 // MAIN CONTAINERS
@@ -12,15 +12,15 @@
 .form-module-container {
   @include flex-center;
   min-height: 100vh;
-  padding: map.get($spacing, 'xl');
+  padding: map.get($spacing, "xl");
   background: transparent;
-  
+
   @include responsive($breakpoint-md) {
-    padding: map.get($spacing, 'lg');
+    padding: map.get($spacing, "lg");
   }
-  
+
   @include responsive($breakpoint-sm) {
-    padding: map.get($spacing, 'md');
+    padding: map.get($spacing, "md");
   }
 }
 
@@ -28,15 +28,15 @@
 .form-container {
   @include flex-center;
   min-height: 100vh;
-  padding: map.get($spacing, 'xl');
+  padding: map.get($spacing, "xl");
   background: transparent;
-  
+
   @include responsive($breakpoint-md) {
-    padding: map.get($spacing, 'lg');
+    padding: map.get($spacing, "lg");
   }
-  
+
   @include responsive($breakpoint-sm) {
-    padding: map.get($spacing, 'md');
+    padding: map.get($spacing, "md");
   }
 }
 
@@ -48,27 +48,27 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'lg');
-  
+  padding: 0 map.get($spacing, "lg");
+
   @include responsive($breakpoint-md) {
-    padding: 0 map.get($spacing, 'md');
+    padding: 0 map.get($spacing, "md");
   }
-  
+
   @include responsive($breakpoint-sm) {
-    padding: 0 map.get($spacing, 'sm');
+    padding: 0 map.get($spacing, "sm");
   }
 }
 
 .container-fluid {
   width: 100%;
-  padding: 0 map.get($spacing, 'lg');
-  
+  padding: 0 map.get($spacing, "lg");
+
   @include responsive($breakpoint-md) {
-    padding: 0 map.get($spacing, 'md');
+    padding: 0 map.get($spacing, "md");
   }
-  
+
   @include responsive($breakpoint-sm) {
-    padding: 0 map.get($spacing, 'sm');
+    padding: 0 map.get($spacing, "sm");
   }
 }
 
@@ -76,26 +76,26 @@
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'lg');
+  padding: 0 map.get($spacing, "lg");
 }
 
 .container-md {
   width: 100%;
   max-width: 768px;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'lg');
+  padding: 0 map.get($spacing, "lg");
 }
 
 .container-lg {
   width: 100%;
   max-width: 1024px;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'lg');
+  padding: 0 map.get($spacing, "lg");
 }
 
 .container-xl {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 map.get($spacing, 'lg');
+  padding: 0 map.get($spacing, "lg");
 }

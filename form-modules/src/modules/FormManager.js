@@ -48,7 +48,7 @@ export class FormManager {
       }
 
       // Añadir data attribute para mayor especificidad CSS
-      this.formElement.setAttribute('data-form-module', 'true');
+      this.formElement.setAttribute("data-form-module", "true");
 
       // Crear Event ahora que formElement está disponible
       this.event = new Event({
@@ -171,10 +171,7 @@ export class FormManager {
     // 1. Detectar y validar campos requeridos presentes en el DOM
     this.logger.debug("🔍 Ejecutando validación de campos requeridos...");
     const requiredFieldsValidation = this.validator.validateAllRequiredFields(this.formElement);
-    this.logger.debug(
-      "📊 Resultado de validación de campos requeridos:",
-      requiredFieldsValidation
-    );
+    this.logger.debug("📊 Resultado de validación de campos requeridos:", requiredFieldsValidation);
 
     if (!requiredFieldsValidation.isValid) {
       this.logger.warn(
@@ -653,18 +650,18 @@ export class FormManager {
   _handleTypeAttendeeAutoSelection() {
     const { config } = this.config;
     const typeAttendeeOptions = config.typeAttendee || [];
-    
+
     // Verificar si solo hay "Aspirante" como opción
     const aspiranteValue = Constants.ATTENDEE_TYPES.APPLICANT;
-    const hasOnlyAspiranteOption = typeAttendeeOptions.length === 1 && 
-                                   typeAttendeeOptions.includes(aspiranteValue);
-    
+    const hasOnlyAspiranteOption =
+      typeAttendeeOptions.length === 1 && typeAttendeeOptions.includes(aspiranteValue);
+
     if (hasOnlyAspiranteOption) {
       this.logger.info(`🔧 Auto-seleccionando único tipo de asistente: ${aspiranteValue}`);
-      
+
       // Actualizar el estado con "Aspirante"
       this.state.updateField(Constants.FIELDS.TYPE_ATTENDEE, aspiranteValue);
-      
+
       // Ocultar el campo de tipo de asistente si existe
       const typeAttendeeElement = this.ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
       if (typeAttendeeElement) {
@@ -672,12 +669,14 @@ export class FormManager {
         this.state.setFieldVisibility(Constants.FIELDS.TYPE_ATTENDEE, false);
         this.logger.info(`👁️ Campo tipo de asistente ocultado y preseleccionado`);
       }
-      
+
       // Mostrar automáticamente los campos académicos
       this.logger.info(`🎓 Mostrando automáticamente campos académicos para Aspirante`);
       this.academic.handleTypeAttendeeChange(aspiranteValue);
     } else {
-      this.logger.info(`📋 Múltiples tipos de asistente disponibles (${typeAttendeeOptions.length}), mostrando selector normal`);
+      this.logger.info(
+        `📋 Múltiples tipos de asistente disponibles (${typeAttendeeOptions.length}), mostrando selector normal`
+      );
     }
   }
 
@@ -698,7 +697,6 @@ export class FormManager {
 
     this.logger.info("🔧 Validación automática configurada en State:", this.config.validation);
   }
-
 
   /**
    * Procesar parámetros URL usando el módulo UTM

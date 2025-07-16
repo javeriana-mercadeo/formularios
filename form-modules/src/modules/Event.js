@@ -59,14 +59,14 @@ export class Event {
     this.fieldConfigs.forEach((config) => {
       // Verificar si el elemento existe en el DOM usando la utilidad de UI
       const { exists } = this.ui.checkElementExists(config.selector);
-      
+
       if (!exists) {
         return; // El logging ya se maneja en checkElementExists
       }
 
       // Determinar el callback apropiado
       let callback;
-      
+
       if (config.handler && this.specialHandlers[config.handler]) {
         // Usar handler especial
         callback = this.specialHandlers[config.handler];
@@ -94,7 +94,6 @@ export class Event {
       }
     });
   }
-
 
   /**
    * Configurar listener para envío del formulario
@@ -428,10 +427,10 @@ export class Event {
     element.addEventListener("blur", (e) => {
       const fieldName = e.target.name || e.target.id;
       const value = this.ui.getFieldValue(e.target);
-      
+
       if (fieldName && this.state) {
         // Si el campo está vacío y es requerido, ejecutar validación
-        if (!value || value.trim() === '') {
+        if (!value || value.trim() === "") {
           this.state.updateField(fieldName, value);
         }
       }
@@ -483,10 +482,10 @@ export class Event {
     element.addEventListener("blur", (e) => {
       const fieldName = e.target.name || e.target.id;
       const value = this.ui.getFieldValue(e.target);
-      
+
       if (fieldName && this.state) {
         // Si el campo está vacío y es requerido, ejecutar validación
-        if (!value || value.trim() === '') {
+        if (!value || value.trim() === "") {
           this.state.updateField(fieldName, value);
         }
       }

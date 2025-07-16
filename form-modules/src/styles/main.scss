@@ -5,12 +5,12 @@
 // ==========================================
 // IMPORTS
 // ==========================================
-@use 'sass:map';
-@use 'abstracts' as *;
-@use 'layout';
-@use 'components/forms';
-@use 'components/fields';
-@use 'components/buttons';
+@use "sass:map";
+@use "abstracts" as *;
+@use "layout";
+@use "components/forms";
+@use "components/fields";
+@use "components/buttons";
 
 // ==========================================
 // BASE RESET
@@ -34,18 +34,18 @@ body {
 
 // Solo estilos que necesitamos y que no chocan con Tailwind
 code:not(.hljs) {
-  font-family: 'Courier New', Consolas, Monaco, monospace;
-  font-size: map.get($font-sizes, 'xs');
-  background: rgba(map.get($color-base, 'secondary'), 0.1);
+  font-family: "Courier New", Consolas, Monaco, monospace;
+  font-size: map.get($font-sizes, "xs");
+  background: rgba(map.get($color-base, "secondary"), 0.1);
   padding: rem(2px) rem(4px);
-  border-radius: map.get($border-radius, 'xs');
+  border-radius: map.get($border-radius, "xs");
 }
 
 // Focus específico para nuestro sistema
-:focus-visible:not(.focus\:outline-none):not([class*='focus:']) {
-  outline: rem(2px) solid map.get($color-base, 'primary');
+:focus-visible:not(.focus\:outline-none):not([class*="focus:"]) {
+  outline: rem(2px) solid map.get($color-base, "primary");
   outline-offset: rem(2px);
-  border-radius: map.get($border-radius, 'xs');
+  border-radius: map.get($border-radius, "xs");
 }
 
 // Screen reader only
@@ -58,23 +58,23 @@ code:not(.hljs) {
 // ==========================================
 :root {
   // Colores base
-  --primary: #{map.get($color-base, 'primary')};
-  --secondary: #{map.get($color-base, 'secondary')};
-  --tertiary: #{map.get($color-base, 'tertiary')};
-  --neutral: #{map.get($color-base, 'neutral')};
-  --success: #{map.get($color-base, 'success')};
-  --warning: #{map.get($color-base, 'warning')};
-  --danger: #{map.get($color-base, 'danger')};
-  --info: #{map.get($color-base, 'info')};
-  --white: #{map.get($color-base, 'white')};
-  --black: #{map.get($color-base, 'black')};
+  --primary: #{map.get($color-base, "primary")};
+  --secondary: #{map.get($color-base, "secondary")};
+  --tertiary: #{map.get($color-base, "tertiary")};
+  --neutral: #{map.get($color-base, "neutral")};
+  --success: #{map.get($color-base, "success")};
+  --warning: #{map.get($color-base, "warning")};
+  --danger: #{map.get($color-base, "danger")};
+  --info: #{map.get($color-base, "info")};
+  --white: #{map.get($color-base, "white")};
+  --black: #{map.get($color-base, "black")};
 
   // Escalas generadas automáticamente
   @each $color-name, $color-value in $color-base {
-    @if $color-name != 'white' and $color-name != 'black' {
+    @if $color-name != "white" and $color-name != "black" {
       $scale: generate-color-scale($color-value);
       @each $step, $step-value in $scale {
-        @if $step == '' {
+        @if $step == "" {
           --#{$color-name}: #{$step-value};
         } @else {
           --#{$color-name}-#{$step}: #{$step-value};
@@ -119,29 +119,10 @@ code:not(.hljs) {
 }
 
 // ==========================================
-// COMPONENTES
-// ==========================================
-
-// ==========================================
-// ELEMENTOS ESPECÍFICOS DE LIFERAY
-// ==========================================
-lfr-editable {
-  display: block;
-  min-height: rem(20px);
-
-  &:empty::before {
-    content: attr(data-lfr-editable-id);
-    opacity: 0.5;
-    font-style: italic;
-    color: rgba(map.get($color-base, 'secondary'), 0.7);
-  }
-}
-
-// ==========================================
 // UTILIDADES DE ACCESIBILIDAD
 // ==========================================
 @media (prefers-reduced-motion: reduce) {
-  *:not([class*='animate-']):not([class*='transition-']) {
+  *:not([class*="animate-"]):not([class*="transition-"]) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -155,49 +136,44 @@ lfr-editable {
 }
 
 // ==========================================
-// COMPATIBILIDAD LEGACY
-// ==========================================
-// Ya no es necesario el sistema de legacy classes con prefijos
-
-// ==========================================
 // MODOS ESPECIALES
 // ==========================================
 .form-card {
   @include liferay-edit-mode {
-    border: rem(2px) dashed rgba(map.get($color-base, 'primary'), 0.5);
+    border: rem(2px) dashed rgba(map.get($color-base, "primary"), 0.5);
     position: relative;
 
     &::before {
-      content: 'Modo Edición Liferay';
+      content: "Modo Edición Liferay";
       position: absolute;
       top: rem(-30px);
       left: 0;
-      background: rgba(map.get($color-base, 'warning'), 0.9);
-      color: map.get($color-base, 'black');
-      padding: map.get($spacing, 'xs') map.get($spacing, 'sm');
-      border-radius: map.get($border-radius, 'xs');
-      font-size: map.get($font-sizes, 'xs');
-      font-weight: map.get($font-weights, 'medium');
-      z-index: map.get($z-index, 'tooltip');
+      background: rgba(map.get($color-base, "warning"), 0.9);
+      color: map.get($color-base, "black");
+      padding: map.get($spacing, "xs") map.get($spacing, "sm");
+      border-radius: map.get($border-radius, "xs");
+      font-size: map.get($font-sizes, "xs");
+      font-weight: map.get($font-weights, "medium");
+      z-index: map.get($z-index, "tooltip");
     }
   }
 
   @include only-dev-mode {
-    border: rem(2px) solid rgba(map.get($color-base, 'info'), 0.5);
+    border: rem(2px) solid rgba(map.get($color-base, "info"), 0.5);
     position: relative;
 
     &::after {
-      content: 'DEV MODE';
+      content: "DEV MODE";
       position: absolute;
       top: rem(5px);
       right: rem(5px);
-      background: rgba(map.get($color-base, 'info'), 0.9);
-      color: map.get($color-base, 'white');
-      padding: map.get($spacing, 'xs');
-      border-radius: map.get($border-radius, 'xs');
-      font-size: map.get($font-sizes, 'xs');
-      font-weight: map.get($font-weights, 'bold');
-      z-index: map.get($z-index, 'tooltip');
+      background: rgba(map.get($color-base, "info"), 0.9);
+      color: map.get($color-base, "white");
+      padding: map.get($spacing, "xs");
+      border-radius: map.get($border-radius, "xs");
+      font-size: map.get($font-sizes, "xs");
+      font-weight: map.get($font-weights, "bold");
+      z-index: map.get($z-index, "tooltip");
     }
   }
 }

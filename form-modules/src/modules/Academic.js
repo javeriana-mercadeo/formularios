@@ -108,21 +108,21 @@ export class Academic {
         selector: Constants.SELECTORS.ACADEMIC_LEVEL,
         options: [{ value: filteredLevels[0].code, text: filteredLevels[0].name }],
       });
-      
+
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, filteredLevels[0].code);
       this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
-      
-      this.logger.info(`🔧 Nivel académico preseleccionado automáticamente: ${filteredLevels[0].name}`);
-      
+
+      this.logger.info(
+        `🔧 Nivel académico preseleccionado automáticamente: ${filteredLevels[0].name}`
+      );
+
       // Cargar facultades automáticamente
       setTimeout(() => this._loadFacultiesForLevel(filteredLevels[0].code), 100);
-      
     } else if (filteredLevels.length === 0) {
       // Sin opciones disponibles
       this.logger.warn("⚠️ No hay niveles académicos disponibles con la configuración actual");
       this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
-      
     } else {
       // Múltiples opciones: mostrar select normalmente
       this.Ui.populateSelect({
@@ -249,21 +249,19 @@ export class Academic {
         selector: Constants.SELECTORS.FACULTY,
         options: [{ value: filteredFaculties[0].value, text: filteredFaculties[0].text }],
       });
-      
+
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.FACULTY, filteredFaculties[0].value);
       this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
-      
+
       this.logger.info(`🔧 Facultad preseleccionada automáticamente: ${filteredFaculties[0].text}`);
-      
+
       // Cargar programas automáticamente
       setTimeout(() => this._loadProgramsForFaculty(filteredFaculties[0].value), 100);
-      
     } else if (filteredFaculties.length === 0) {
       // Sin facultades disponibles
       this.logger.warn("⚠️ No hay facultades disponibles para este nivel académico");
       this.state.setFieldVisibility(Constants.FIELDS.FACULTY, false);
-      
     } else {
       // Múltiples facultades: mostrar select normalmente
       this.Ui.populateSelect({
@@ -296,21 +294,19 @@ export class Academic {
         selector: Constants.SELECTORS.PROGRAM,
         options: [{ value: filteredPrograms[0].value, text: filteredPrograms[0].text }],
       });
-      
+
       // Preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.PROGRAM, filteredPrograms[0].value);
       this.state.setFieldVisibility(Constants.FIELDS.PROGRAM, false);
-      
+
       this.logger.info(`🔧 Programa preseleccionado automáticamente: ${filteredPrograms[0].text}`);
-      
+
       // Cargar períodos automáticamente
       setTimeout(() => this._loadPeriodsForLevel(currentAcademicLevel), 100);
-      
     } else if (filteredPrograms.length === 0) {
       // Sin programas disponibles
       this.logger.warn("⚠️ No hay programas disponibles para esta facultad");
       this.state.setFieldVisibility(Constants.FIELDS.PROGRAM, false);
-      
     } else {
       // Múltiples programas: mostrar select normalmente
       this.Ui.populateSelect({
@@ -389,30 +385,37 @@ export class Academic {
    */
   getFilteredAcademicLevels() {
     const allLevels = this.Data.getAcademicLevels();
-    
+
     if (!this.config) {
       return allLevels;
     }
 
-    const configLevels = this.config.get('academicLevels');
-    const configFaculties = this.config.get('faculties');
-    const configPrograms = this.config.get('programs');
+    const configLevels = this.config.get("academicLevels");
+    const configFaculties = this.config.get("faculties");
+    const configPrograms = this.config.get("programs");
 
     // Si hay niveles específicos en configuración, filtrar por esos
     if (configLevels && configLevels.length > 0) {
-      const filteredByConfig = allLevels.filter(level => 
-        configLevels.some(configLevel => configLevel.code === level.code)
+      const filteredByConfig = allLevels.filter((level) =>
+        configLevels.some((configLevel) => configLevel.code === level.code)
       );
-      this.logger.info(`🎓 Niveles filtrados por configuración: ${filteredByConfig.map(l => l.name).join(', ')}`);
+      this.logger.info(
+        `🎓 Niveles filtrados por configuración: ${filteredByConfig.map((l) => l.name).join(", ")}`
+      );
       return filteredByConfig;
     }
 
     // Si hay facultades o programas específicos, filtrar niveles que tengan contenido válido
-    if ((configFaculties && configFaculties.length > 0) || (configPrograms && configPrograms.length > 0)) {
-      const filteredLevels = allLevels.filter(level => 
+    if (
+      (configFaculties && configFaculties.length > 0) ||
+      (configPrograms && configPrograms.length > 0)
+    ) {
+      const filteredLevels = allLevels.filter((level) =>
         this.levelHasValidContent(level.code, configFaculties, configPrograms)
       );
-      this.logger.info(`🎓 Niveles filtrados por contenido: ${filteredLevels.map(l => l.name).join(', ')}`);
+      this.logger.info(
+        `🎓 Niveles filtrados por contenido: ${filteredLevels.map((l) => l.name).join(", ")}`
+      );
       return filteredLevels;
     }
 
@@ -425,32 +428,40 @@ export class Academic {
    */
   getFilteredFaculties(academicLevel) {
     const allFaculties = this.Data.getFaculties(academicLevel);
-    
+
     if (!this.config) {
-      return allFaculties.map(faculty => ({ value: faculty, text: faculty }));
+      return allFaculties.map((faculty) => ({ value: faculty, text: faculty }));
     }
 
-    const configFaculties = this.config.get('faculties');
-    const configPrograms = this.config.get('programs');
+    const configFaculties = this.config.get("faculties");
+    const configPrograms = this.config.get("programs");
 
     // Si hay programas específicos, obtener facultades de esos programas
     if (configPrograms && configPrograms.length > 0) {
       const facultiesFromPrograms = this.getFacultiesFromPrograms(academicLevel, configPrograms);
-      this.logger.info(`🏛️ Facultades desde programas configurados: ${facultiesFromPrograms.map(f => f.text).join(', ')}`);
+      this.logger.info(
+        `🏛️ Facultades desde programas configurados: ${facultiesFromPrograms
+          .map((f) => f.text)
+          .join(", ")}`
+      );
       return facultiesFromPrograms;
     }
 
     // Si hay facultades específicas en configuración, filtrar por esas
     if (configFaculties && configFaculties.length > 0) {
       const filteredFaculties = allFaculties
-        .filter(faculty => configFaculties.includes(faculty))
-        .map(faculty => ({ value: faculty, text: faculty }));
-      this.logger.info(`🏛️ Facultades filtradas por configuración: ${filteredFaculties.map(f => f.text).join(', ')}`);
+        .filter((faculty) => configFaculties.includes(faculty))
+        .map((faculty) => ({ value: faculty, text: faculty }));
+      this.logger.info(
+        `🏛️ Facultades filtradas por configuración: ${filteredFaculties
+          .map((f) => f.text)
+          .join(", ")}`
+      );
       return filteredFaculties;
     }
 
     this.logger.info(`🏛️ Mostrando todas las facultades para nivel ${academicLevel}`);
-    return allFaculties.map(faculty => ({ value: faculty, text: faculty }));
+    return allFaculties.map((faculty) => ({ value: faculty, text: faculty }));
   }
 
   /**
@@ -458,34 +469,38 @@ export class Academic {
    */
   getFilteredPrograms(academicLevel, faculty) {
     const allPrograms = this.Data.getPrograms(academicLevel, faculty);
-    
+
     if (!this.config) {
-      return allPrograms.map(program => ({
+      return allPrograms.map((program) => ({
         value: program.Codigo || program.codigo,
         text: program.Nombre || program.nombre,
       }));
     }
 
-    const configPrograms = this.config.get('programs');
+    const configPrograms = this.config.get("programs");
 
     // Si hay programas específicos en configuración, filtrar por esos
     if (configPrograms && configPrograms.length > 0) {
       const filteredPrograms = allPrograms
-        .filter(program => {
+        .filter((program) => {
           const programCode = program.Codigo || program.codigo;
           return configPrograms.includes(programCode);
         })
-        .map(program => ({
+        .map((program) => ({
           value: program.Codigo || program.codigo,
           text: program.Nombre || program.nombre,
         }));
-      
-      this.logger.info(`📚 Programas filtrados por configuración: ${filteredPrograms.map(p => p.text).join(', ')}`);
+
+      this.logger.info(
+        `📚 Programas filtrados por configuración: ${filteredPrograms
+          .map((p) => p.text)
+          .join(", ")}`
+      );
       return filteredPrograms;
     }
 
     this.logger.info(`📚 Mostrando todos los programas para ${faculty} en ${academicLevel}`);
-    return allPrograms.map(program => ({
+    return allPrograms.map((program) => ({
       value: program.Codigo || program.codigo,
       text: program.Nombre || program.nombre,
     }));
@@ -496,7 +511,7 @@ export class Academic {
    */
   levelHasValidContent(levelCode, configFaculties, configPrograms) {
     const allPrograms = this.Data.getAllPrograms();
-    
+
     if (!allPrograms || !allPrograms[levelCode]) {
       return false;
     }
@@ -520,19 +535,19 @@ export class Academic {
    * Verificar si un nivel tiene programas configurados
    */
   levelHasConfiguredPrograms(levelData, configPrograms) {
-    if (typeof levelData === 'object' && !Array.isArray(levelData)) {
+    if (typeof levelData === "object" && !Array.isArray(levelData)) {
       // Estructura: programs.PREG.FACULTAD.Programas
       for (const facultyCode in levelData) {
         const facultyPrograms = levelData[facultyCode].Programas || [];
-        if (facultyPrograms.some(program => configPrograms.includes(program.Codigo))) {
+        if (facultyPrograms.some((program) => configPrograms.includes(program.Codigo))) {
           return true;
         }
       }
     } else if (Array.isArray(levelData)) {
       // Estructura: array de programas
-      return levelData.some(program => configPrograms.includes(program.Codigo || program.codigo));
+      return levelData.some((program) => configPrograms.includes(program.Codigo || program.codigo));
     }
-    
+
     return false;
   }
 
@@ -540,17 +555,18 @@ export class Academic {
    * Verificar si un nivel tiene facultades configuradas
    */
   levelHasConfiguredFaculties(levelData, configFaculties) {
-    if (typeof levelData === 'object' && !Array.isArray(levelData)) {
+    if (typeof levelData === "object" && !Array.isArray(levelData)) {
       // Estructura: programs.PREG.FACULTAD
-      return Object.keys(levelData).some(facultyCode => 
-        configFaculties.includes(facultyCode) || 
-        configFaculties.includes(levelData[facultyCode].FacultadCodigo)
+      return Object.keys(levelData).some(
+        (facultyCode) =>
+          configFaculties.includes(facultyCode) ||
+          configFaculties.includes(levelData[facultyCode].FacultadCodigo)
       );
     } else if (Array.isArray(levelData)) {
       // Estructura: array de programas con propiedad facultad
-      return levelData.some(program => configFaculties.includes(program.facultad));
+      return levelData.some((program) => configFaculties.includes(program.facultad));
     }
-    
+
     return false;
   }
 
@@ -559,7 +575,7 @@ export class Academic {
    */
   getFacultiesFromPrograms(academicLevel, configPrograms) {
     const allPrograms = this.Data.getAllPrograms();
-    
+
     if (!allPrograms || !allPrograms[academicLevel]) {
       return [];
     }
@@ -567,17 +583,17 @@ export class Academic {
     const levelData = allPrograms[academicLevel];
     const facultiesSet = new Set();
 
-    if (typeof levelData === 'object' && !Array.isArray(levelData)) {
+    if (typeof levelData === "object" && !Array.isArray(levelData)) {
       // Estructura: programs.PREG.FACULTAD.Programas
       for (const facultyCode in levelData) {
         const facultyPrograms = levelData[facultyCode].Programas || [];
-        if (facultyPrograms.some(program => configPrograms.includes(program.Codigo))) {
+        if (facultyPrograms.some((program) => configPrograms.includes(program.Codigo))) {
           facultiesSet.add(facultyCode);
         }
       }
     } else if (Array.isArray(levelData)) {
       // Estructura: array de programas con propiedad facultad
-      levelData.forEach(program => {
+      levelData.forEach((program) => {
         const programCode = program.Codigo || program.codigo;
         if (configPrograms.includes(programCode) && program.facultad) {
           facultiesSet.add(program.facultad);
@@ -585,7 +601,7 @@ export class Academic {
       });
     }
 
-    return Array.from(facultiesSet).map(faculty => ({ value: faculty, text: faculty }));
+    return Array.from(facultiesSet).map((faculty) => ({ value: faculty, text: faculty }));
   }
 
   /**
@@ -598,18 +614,18 @@ export class Academic {
       return;
     }
 
-    const configPrograms = this.config.get('programs');
-    
+    const configPrograms = this.config.get("programs");
+
     if (!configPrograms || configPrograms.length === 0) {
       this.logger.info("No hay programas específicos configurados, usando lógica estándar");
       return;
     }
 
-    this.logger.info(`🔧 Inicializando desde programas configurados: ${configPrograms.join(', ')}`);
+    this.logger.info(`🔧 Inicializando desde programas configurados: ${configPrograms.join(", ")}`);
 
     // Analizar los programas configurados para determinar niveles y facultades
     const programsAnalysis = this.analyzeProgramsConfiguration(configPrograms);
-    
+
     this.logger.info(`📊 Análisis de programas:`, programsAnalysis);
 
     // Aplicar lógica según el análisis
@@ -617,7 +633,9 @@ export class Academic {
       // Un solo nivel académico
       this.state.updateField(Constants.FIELDS.ACADEMIC_LEVEL, programsAnalysis.levels[0]);
       this.state.setFieldVisibility(Constants.FIELDS.ACADEMIC_LEVEL, false);
-      this.logger.info(`🔧 Nivel académico oculto y preseleccionado: ${programsAnalysis.levels[0]}`);
+      this.logger.info(
+        `🔧 Nivel académico oculto y preseleccionado: ${programsAnalysis.levels[0]}`
+      );
 
       if (programsAnalysis.faculties.length === 1) {
         // Una sola facultad
@@ -645,7 +663,7 @@ export class Academic {
     const faculties = new Set();
     const programDetails = [];
 
-    configPrograms.forEach(programCode => {
+    configPrograms.forEach((programCode) => {
       const programDetail = this.Data.findProgramByCode(programCode);
       if (programDetail) {
         levels.add(programDetail.nivel_academico);
@@ -657,7 +675,7 @@ export class Academic {
     return {
       levels: Array.from(levels),
       faculties: Array.from(faculties),
-      programs: programDetails
+      programs: programDetails,
     };
   }
 }
