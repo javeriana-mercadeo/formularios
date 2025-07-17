@@ -9,11 +9,11 @@ import { Constants } from "./Constants.js";
 export class State {
   constructor({ config, event, validator, ui, formElement, logger }) {
     this.config = config;
-    this.event = event;
-    this.validator = validator;
     this.ui = ui;
-    this.formElement = formElement;
+    this.validator = validator;
     this.logger = logger;
+    this.formElement = formElement;
+    this.event = event;
 
     this.state = this._getInitialState();
     this.uiState = this._getInitialUiState();
@@ -365,8 +365,8 @@ export class State {
    * Establecer modo de desarrollo
    * @param {boolean} enabled - Si está habilitado
    */
-  setDevMode(enabled) {
-    this.setSystemState("devMode", enabled);
+  setDevelopmentMode(enabled) {
+    this.setSystemState("developmentMode", enabled);
 
     this.logger.info(`🔧 Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
@@ -375,10 +375,10 @@ export class State {
    * Establecer modo sandbox
    * @param {boolean} enabled - Si está habilitado
    */
-  setSandboxMode(enabled) {
-    this.setSystemState("sandboxMode", enabled);
+  setTestMode(enabled) {
+    this.setSystemState("testMode", enabled);
 
-    this.logger.info(`🧪 Modo sandbox: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🧪 Modo test: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
   }
 
   /**
@@ -396,15 +396,15 @@ export class State {
    * @returns {boolean}
    */
   isDevMode() {
-    return this.systemState.devMode;
+    return this.systemState.developmentMode;
   }
 
   /**
    * Verificar si está en modo sandbox
    * @returns {boolean}
    */
-  isSandboxMode() {
-    return this.systemState.sandboxMode;
+  isTestMode() {
+    return this.systemState.testMode;
   }
 
   /**
@@ -494,15 +494,14 @@ export class State {
     return {
       // Campos ocultos
       [FIELDS.OID]: "",
-      [FIELDS.RET_URL]: "",
+      [FIELDS.RET_URL]: this.config.retUrl || "",
       [FIELDS.DEBUG]: "0",
-      [FIELDS.DEBUG_EMAIL]: "",
+      [FIELDS.DEBUG_EMAIL]: this.config.debugEmail || "",
 
       // Campos ocultos obligatorios para el flujo en Salesforce
-      [FIELDS.AUTHORIZATION_SOURCE]: "Landing Eventos",
-      [FIELDS.REQUEST_ORIGIN]: "Web to Lead",
-      [FIELDS.LEAD_SOURCE]: "Landing Pages",
-      [FIELDS.COMPANY]: "NA",
+      [FIELDS.AUTHORIZATION_SOURCE]: this.config.authorizationSource || "Landing Eventos",
+      [FIELDS.REQUEST_ORIGIN]: this.config.requestOrigin || "web_to_lead_eventos",
+      [FIELDS.LEAD_SOURCE]: this.config.leadSource || "Landing Pages",
 
       // Campos personales
       [FIELDS.FIRST_NAME]: "",
@@ -525,19 +524,21 @@ export class State {
       [FIELDS.ADMISSION_PERIOD]: "",
 
       // Campos del evento
-      [FIELDS.TYPE_ATTENDEE]: "",
+      [FIELDS.TYPE_ATTENDEE]: "Aspirante",
       [FIELDS.ATTENDANCE_DAY]: "",
       [FIELDS.COLLEGE]: "",
       [FIELDS.UNIVERSITY]: "",
+      [FIELDS.COMPANY]: "NA",
       [FIELDS.DATA_AUTHORIZATION]: "",
 
-      // Campos parámetros URL
-      [FIELDS.SOURCE]: "Javeriana",
-      [FIELDS.SUB_SOURCE]: "Organico",
-      [FIELDS.MEDIUM]: "Landing",
-      [FIELDS.ARTICLE]: "",
-      [FIELDS.EVENT_NAME]: "",
-      [FIELDS.EVENT_DATE]: "",
+      // Campos parámetros URL - PRIORIDAD: configuración > valores por defecto
+      [FIELDS.SOURCE]: this.config.source || "Javeriana",
+      [FIELDS.SUB_SOURCE]: this.config.subSource || "Organico",
+      [FIELDS.MEDIUM]: this.config.medium || "Landing",
+      [FIELDS.CAMPAIGN]: this.config.campaign || "",
+      [FIELDS.ARTICLE]: this.config.article || "",
+      [FIELDS.EVENT_NAME]: this.config.eventName || "",
+      [FIELDS.EVENT_DATE]: this.config.eventDate || "",
     };
   }
 
@@ -584,8 +585,8 @@ export class State {
       isInitialized: false,
       isSubmitting: false,
       isLoading: false,
-      devMode: false,
-      sandboxMode: false,
+      developmentMode: false,
+      testMode: false,
       debugMode: false,
     };
   }

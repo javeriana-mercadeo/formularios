@@ -20,12 +20,45 @@ import { Constants } from "./Constants.js";
 export class FormManager {
   constructor(selector, config = {}) {
     this.selector = selector;
-    this.formElement = null;
     this.isInitialized = false;
     this.isSubmitting = false;
 
-    // Inicializar gestores principales
-    this._initializeManagers(config);
+    // Módulos
+    this.config = new Config({ config, selector });
+    this.logger = new Logger({ config: this.config.getLoggingConfig() });
+    this.ui = new Ui({ config: this.config.getUiConfig(), logger: this.logger });
+    this.validator = new Validation({ logger: this.logger });
+
+    this.state = new State({
+      config: this.config,
+      ui: this.ui,
+      validator: this.validator,
+      logger: this.logger,
+      formElement: this.ui.getFormContext(),
+      event: null, // Se asignará después de crear el Event
+    });
+
+    this.event = new Event({
+      formElement: this.ui.getFormContext(),
+      state: this.state,
+      ui: this.ui,
+      logger: this.logger,
+    });
+
+    this.state.setEventManager(this.event); // Configurar Event en State
+
+    this.data = new Data({
+      cache: this.config.getConfig().cache,
+      urls: this.config.getConfig().urls,
+      logger: this.logger,
+    });
+
+    this.service = new Service({
+      config: this.config,
+      logger: this.logger,
+    });
+
+    this.formElement = this.ui.getFormContext();
   }
 
   // ===============================
@@ -40,27 +73,6 @@ export class FormManager {
       this.logger.info(
         `Inicializando FormManager para: ${this.selector} (${this.config.getConfig().eventName})`
       );
-
-      // Inicializar elemento del formulario
-      this.formElement = document.getElementById(this.selector);
-      if (!this.formElement) {
-        throw new Error(`No se encontró elemento del formulario con selector: ${this.selector}`);
-      }
-
-      // Añadir data attribute para mayor especificidad CSS
-      this.formElement.setAttribute("data-form-module", "true");
-
-      // Crear Event ahora que formElement está disponible
-      this.event = new Event({
-        formElement: this.formElement,
-        state: this.state,
-        ui: this.ui,
-        logger: this.logger,
-      });
-
-      // Configurar Event en State y actualizar formElement
-      this.state.setEventManager(this.event);
-      this.state.formElement = this.formElement;
 
       await this._loadData();
       await this._setupModules();
@@ -88,7 +100,7 @@ export class FormManager {
     }
 
     // Limpiar animaciones de flechas
-    if (this.ui && typeof this.ui.cleanupSelectArrowAnimations === 'function') {
+    if (this.ui && typeof this.ui.cleanupSelectArrowAnimations === "function") {
       this.ui.cleanupSelectArrowAnimations();
     }
 
@@ -144,10 +156,6 @@ export class FormManager {
   // ===============================
 
   /**
-   * Manejar cambio de tipo de asistente
-   */
-
-  /**
    * Alternar estado del botón de envío
    */
   toggleSubmitButton(enabled) {
@@ -173,32 +181,20 @@ export class FormManager {
 
     this.logger.info("🚀 Iniciando proceso de envío del formulario");
 
-    // 1. Detectar y validar campos requeridos presentes en el DOM
-    this.logger.debug("🔍 Ejecutando validación de campos requeridos...");
-    const requiredFieldsValidation = this.validator.validateAllRequiredFields(this.formElement);
-    this.logger.debug("📊 Resultado de validación de campos requeridos:", requiredFieldsValidation);
+    // Validación completa del formulario
+    const rawFormData = this.state.getFormData();
+    const validationResult = this.validator.validateFormComplete(this.formElement, rawFormData);
 
-    if (!requiredFieldsValidation.isValid) {
-      this.logger.warn(
-        `❌ Campos requeridos faltantes: ${requiredFieldsValidation.missingCount}/${requiredFieldsValidation.totalRequired}`
-      );
-      this._handleMissingRequiredFields(requiredFieldsValidation.missingFields);
+    if (!validationResult.isValid) {
+      this._handleMissingRequiredFields(validationResult.missingFields);
+      this._handleValidationErrors(validationResult.errors);
       this.ui.showGeneralError("Por favor completa todos los campos requeridos");
       return;
     }
 
-    this.logger.info(
-      `✅ Todos los campos requeridos están completos (${requiredFieldsValidation.totalRequired} campos)`
-    );
-
-    // 2. Validación completa de formato y reglas de negocio
-    const formData = this.state.getFormData();
-    const validationResult = this.validator.validateFullForm(this.formElement, formData);
-
-    if (!validationResult.isValid) {
-      this._handleValidationErrors(validationResult.errors);
-      return;
-    }
+    // 3. Filtrar campos vacíos antes del envío
+    const formData = this._filterEmptyFields(rawFormData);
+    console.log(formData);
 
     await this._processFormSubmission(formData);
   }
@@ -212,24 +208,24 @@ export class FormManager {
    */
   setDebugMode(enabled) {
     this.state.setDebugMode(enabled);
-    this.config = Config.getConfig(); // Refrescar config local
+    this.config = Config.getConfig();
     this._addHiddenFields();
   }
 
   /**
    * Cambiar modo de desarrollo
    */
-  setDevMode(enabled) {
-    this.state.setDevMode(enabled);
-    this.config = Config.getConfig(); // Refrescar config local
+  setDevelopmentMode(enabled) {
+    this.state.setDevelopmentMode(enabled);
+    this.config = Config.getConfig();
   }
 
   /**
    * Cambiar modo sandbox
    */
-  setSandboxMode(enabled) {
-    this.state.setSandboxMode(enabled);
-    this.config = Config.getConfig(); // Refrescar config local
+  setTestMode(enabled) {
+    this.state.setTestMode(enabled);
+    this.config = Config.getConfig();
     this._addHiddenFields();
   }
 
@@ -305,46 +301,6 @@ export class FormManager {
   // ===============================
   // MÉTODOS PRIVADOS - INICIALIZACIÓN
   // ===============================
-
-  /**
-   * Inicializar gestores de configuración y estado
-   * @private
-   */
-  _initializeManagers(config) {
-    this.config = new Config({
-      config: config,
-      selector: this.selector,
-    });
-
-    this.logger = new Logger({
-      config: this.config.getLoggingConfig(),
-    });
-
-    this.ui = new Ui({
-      config: this.config.getUiConfig(),
-      logger: this.logger,
-    });
-
-    this.validator = new Validation({
-      logger: this.logger,
-    });
-
-    this.state = new State({
-      event: null,
-      validator: this.validator,
-      ui: this.ui,
-      formElement: null, // Se asignará después en initialize()
-      logger: this.logger,
-    });
-
-    // Event se creará después en initialize() cuando formElement esté disponible
-    this.event = null;
-
-    const configData = this.config.getConfig();
-    this.data = new Data(configData.cache, configData.urls, this.logger);
-
-    this.service = new Service(this.config, this.logger);
-  }
 
   /**
    * Cargar solo los datos necesarios basado en los campos presentes en el formulario
@@ -454,9 +410,7 @@ export class FormManager {
    * @private
    */
   async _configureForm() {
-    // Configurar modos desde la configuración
     this._initializeModes();
-    
     this._addHiddenFields();
     this._initializeFormHiddenFields();
     this.academic.initializeAcademicFields();
@@ -467,6 +421,16 @@ export class FormManager {
     this._setupStateValidation();
     this._processUrlParameters();
     this._initializeSelectArrowAnimations();
+
+    // Configurar form action con la URL correcta según el modo
+    const isSandboxMode = this.state.isTestMode();
+    const salesforceUrl = this._getSalesforceUrl(isSandboxMode);
+    this.formElement.action = salesforceUrl;
+    this.formElement.method = "POST";
+    this.formElement.enctype = "multipart/form-data";
+
+    this.logger.info(`🔗 Form action configurado: ${salesforceUrl}`);
+    this.logger.info(`📝 Modo sandbox: ${isSandboxMode ? "SÍ" : "NO"}`);
   }
 
   // ===============================
@@ -479,21 +443,27 @@ export class FormManager {
    */
   _initializeModes() {
     const config = this.config.getConfig();
-    
-    if (config.devMode !== undefined) {
-      this.state.setDevMode(config.devMode);
-      this.logger.info(`🔧 DevMode configurado: ${config.devMode}`);
+
+    if (config.development) {
+      this.state.setDevelopmentMode(config.development);
+      this.logger.info(`development configurado: ${config.development}`);
+      this.logger.warn("ADVERTENCIA: development está ACTIVO - Los formularios NO se enviarán");
     }
-    
-    if (config.debugMode !== undefined) {
-      this.state.setDebugMode(config.debugMode);
-      this.logger.info(`🔍 DebugMode configurado: ${config.debugMode}`);
+
+    if (config.debug) {
+      this.state.setDebugMode(config.debug);
+      this.logger.info(`DebugMode configurado: ${config.debug}`);
     }
-    
-    if (config.sandboxMode !== undefined) {
-      this.state.setSandboxMode(config.sandboxMode);
-      this.logger.info(`📦 SandboxMode configurado: ${config.sandboxMode}`);
+
+    if (config.test !== undefined) {
+      this.state.setTestMode(config.test);
+      this.logger.info(`TestMode configurado: ${config.test}`);
     }
+
+    // Log final del estado de modos
+    this.logger.info(
+      `🔍 Estado final de modos - Desarrollo: ${this.state.isDevMode()}, Test: ${this.state.isTestMode()}, Debug: ${this.state.isDebugMode()}`
+    );
   }
 
   /**
@@ -503,18 +473,17 @@ export class FormManager {
   _addHiddenFields() {
     const { FIELDS, FIELD_MAPPING } = Constants;
     const config = this.config.getConfig();
-    const env = this.state.isSandboxMode() ? "test" : "prod";
 
     const fields = [
       {
         info: FIELD_MAPPING.OID.name,
         name: FIELD_MAPPING.OID.field,
-        value: FIELD_MAPPING.OID.id[env],
+        value: this.state.isTestMode() ? "00D7j0000004eQD" : "00Df4000003l8Bf",
       },
       {
         info: FIELD_MAPPING.RET_URL.name,
         name: FIELD_MAPPING.RET_URL.field,
-        value: config.thankYouUrl,
+        value: config.retUrl,
       },
       {
         info: FIELD_MAPPING.DEBUG.name,
@@ -590,7 +559,6 @@ export class FormManager {
       .forEach((field) => {
         if (field) {
           this.ui.addHiddenField(this.formElement, field.name, field.value, field.info);
-          // Actualizar el estado - ahora todos los campos Salesforce están incluidos
           this.state.updateField(field.name, field.value);
         }
       });
@@ -757,11 +725,13 @@ export class FormManager {
    */
   _initializeSelectArrowAnimations() {
     this.logger.info("🎯 Inicializando animaciones de flechas para elementos select");
-    
-    if (this.ui && typeof this.ui.initializeSelectArrowAnimations === 'function') {
+
+    if (this.ui && typeof this.ui.initializeSelectArrowAnimations === "function") {
       this.ui.initializeSelectArrowAnimations();
     } else {
-      this.logger.warn("⚠️ UI module no disponible o método initializeSelectArrowAnimations no encontrado");
+      this.logger.warn(
+        "⚠️ UI module no disponible o método initializeSelectArrowAnimations no encontrado"
+      );
     }
   }
 
@@ -877,57 +847,97 @@ export class FormManager {
   }
 
   /**
+   * Filtrar campos vacíos, null o undefined antes del envío
+   * @private
+   * @param {Object} formData - Datos del formulario sin filtrar
+   * @returns {Object} - Datos del formulario filtrados
+   */
+  _filterEmptyFields(formData) {
+    const filteredData = {};
+    let filteredCount = 0;
+    const originalCount = Object.keys(formData).length;
+
+    Object.entries(formData).forEach(([fieldName, fieldValue]) => {
+      // Incluir el campo si tiene un valor válido
+      const isValidValue =
+        fieldValue !== null &&
+        fieldValue !== undefined &&
+        fieldValue !== "" &&
+        (typeof fieldValue !== "string" || fieldValue.trim() !== "");
+
+      if (isValidValue) {
+        filteredData[fieldName] = fieldValue;
+      } else {
+        filteredCount++;
+        this.logger.debug(`Campo filtrado (vacío): ${fieldName} = "${fieldValue}"`);
+      }
+    });
+
+    this.logger.info(
+      `🧹 Campos filtrados: ${filteredCount} campos vacíos removidos de ${originalCount} total`
+    );
+    this.logger.debug(
+      `📊 Campos que se enviarán: ${Object.keys(filteredData).length}`,
+      Object.keys(filteredData)
+    );
+
+    return filteredData;
+  }
+
+  /**
    * Registrar detalles del envío del formulario en formato tabla
    * @private
    * @param {Object} formData - Datos del formulario
    * @param {string} mode - Modo de envío (DEV_MODE, PRODUCTION, etc.)
    */
   _logFormSubmissionDetails(formData, mode) {
-    // Preparar datos para la tabla
-    const tableData = [];
-    const metadata = {
-      'Modo de envío': mode,
-      'Timestamp': new Date().toISOString(),
-      'Total de campos': Object.keys(formData).length,
-      'Form ID': this.formElement.id || 'N/A',
-      'Form Action': this.formElement.action || 'N/A'
-    };
-
-    // Agregar metadatos al inicio
-    Object.entries(metadata).forEach(([key, value]) => {
-      tableData.push({
-        Tipo: 'METADATA',
-        'Campo (Label)': key,
-        'Campo (Name)': '-',
-        Valor: value,
-        'Tipo de dato': typeof value
-      });
-    });
+    // Preparar datos del formulario (solo datos enviados)
+    const formTableData = [];
 
     // Agregar campos del formulario
     Object.entries(formData).forEach(([fieldName, fieldValue]) => {
       const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`);
-      const fieldType = fieldElement ? fieldElement.type || fieldElement.tagName.toLowerCase() : 'unknown';
       const fieldLabel = this._getFieldLabel(fieldName, fieldElement);
-      const fieldId = this._getFieldId(fieldName);
-      
-      tableData.push({
-        Tipo: 'FORM_FIELD',
-        'Campo (Label)': fieldLabel,
-        'Campo (Name)': fieldName,
-        'Campo (ID)': fieldId,
+      const fieldId = fieldElement ? fieldElement.id || fieldName : fieldName;
+
+      formTableData.push({
+        "Campo (Label)": fieldLabel,
+        "Campo (Name)": fieldName,
+        "Campo (ID)": fieldId,
         Valor: fieldValue,
-        'Tipo de dato': typeof fieldValue,
-        'Tipo de campo': fieldType,
-        'Requerido': fieldElement ? fieldElement.required : false
       });
     });
 
-    // Log usando el método table del logger
-    this.logger.table("📋 Detalles del envío del formulario", tableData);
-    
+    // Preparar datos del estado
+    const stateTableData = [];
+    const metadata = {
+      "Modo de envío": mode,
+      Timestamp: new Date().toISOString(),
+      "Total de campos": Object.keys(formData).length,
+      "Form ID": this.formElement.id || "N/A",
+      "Form Action": this.formElement.action || "N/A",
+      "Modo Dev": this.state.isDevMode(),
+      "Modo Sandbox": this.state.isTestMode(),
+    };
+
+    // Agregar metadatos del estado
+    Object.entries(metadata).forEach(([key, value]) => {
+      stateTableData.push({
+        Propiedad: key,
+        Valor: value,
+      });
+    });
+
+    // Mostrar tabla de datos del formulario
+    this.logger.table("📋 Datos enviados del formulario", formTableData);
+
+    // Mostrar tabla de datos del estado
+    this.logger.table("⚙️ Estado del sistema", stateTableData);
+
     // Log adicional con resumen
-    this.logger.debug(`📊 Resumen: ${Object.keys(formData).length} campos enviados en modo ${mode}`);
+    this.logger.debug(
+      `📊 Resumen: ${Object.keys(formData).length} campos enviados en modo ${mode}`
+    );
   }
 
   /**
@@ -939,7 +949,7 @@ export class FormManager {
   _getFieldId(fieldName) {
     // Buscar el campo en FIELD_MAPPING por su field value
     const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-      mapping => mapping.field === fieldName
+      (mapping) => mapping.field === fieldName
     );
 
     if (!fieldMapping) {
@@ -947,8 +957,8 @@ export class FormManager {
     }
 
     // Si el ID es un objeto con test/prod, usar el ambiente apropiado
-    if (typeof fieldMapping.id === 'object' && fieldMapping.id.test && fieldMapping.id.prod) {
-      const isSandbox = this.state.isSandboxMode();
+    if (typeof fieldMapping.id === "object" && fieldMapping.id.test && fieldMapping.id.prod) {
+      const isSandbox = this.state.isTestMode();
       return isSandbox ? fieldMapping.id.test : fieldMapping.id.prod;
     }
 
@@ -966,8 +976,10 @@ export class FormManager {
   _getFieldLabel(fieldName, fieldElement) {
     // Primero intentar obtener el nombre del FIELD_MAPPING
     const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-      mapping => mapping.field === fieldName
+      (mapping) => mapping.field === fieldName
     );
+
+    console.log(fieldMapping);
 
     if (fieldMapping && fieldMapping.name) {
       return fieldMapping.name;
@@ -976,13 +988,13 @@ export class FormManager {
     // Mapeo de respaldo para campos que no estén en FIELD_MAPPING
     const fieldLabels = {
       // Campos UTM que pueden no estar en FIELD_MAPPING
-      'utm_source': 'UTM Source',
-      'utm_subsource': 'UTM Subsource',
-      'utm_medium': 'UTM Medium',
-      'utm_campaign': 'UTM Campaign',
-      'utm_article': 'UTM Article',
-      'utm_eventname': 'UTM Event Name',
-      'utm_eventdate': 'UTM Event Date'
+      utm_source: "UTM Source",
+      utm_subsource: "UTM Subsource",
+      utm_medium: "UTM Medium",
+      utm_campaign: "UTM Campaign",
+      utm_article: "UTM Article",
+      utm_eventname: "UTM Event Name",
+      utm_eventdate: "UTM Event Date",
     };
 
     // Intentar obtener la etiqueta del mapeo de respaldo
@@ -994,9 +1006,9 @@ export class FormManager {
     if (fieldElement) {
       const labelElement = this.formElement.querySelector(`label[for="${fieldElement.id}"]`);
       if (labelElement && labelElement.textContent.trim()) {
-        return labelElement.textContent.trim().replace('*', '').trim();
+        return labelElement.textContent.trim().replace("*", "").trim();
       }
-      
+
       // Verificar si el campo tiene un placeholder descriptivo
       if (fieldElement.placeholder && fieldElement.placeholder.trim()) {
         return fieldElement.placeholder.trim();
@@ -1005,11 +1017,108 @@ export class FormManager {
 
     // Fallback: convertir el nombre del campo a título
     return fieldName
-      .replace(/_/g, ' ')
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .replace(/_/g, " ")
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
+  /**
+   * Obtener URL de Salesforce según el modo
+   * @param {boolean} isSandboxMode - Si está en modo sandbox
+   * @returns {string} - URL de Salesforce
+   * @private
+   */
+  _getSalesforceUrl(isSandboxMode) {
+    return isSandboxMode
+      ? Constants.SALESFORCE_SUBMIT_URLS.test
+      : Constants.SALESFORCE_SUBMIT_URLS.prod;
+  }
+
+  /**
+   * Preparar datos del formulario con las keys correctas según el entorno
+   * @param {Object} formData - Datos del formulario
+   * @param {boolean} isSandboxMode - Si está en modo sandbox
+   * @returns {Object} - Datos preparados con las keys correctas
+   * @private
+   */
+  _prepareFormDataForEnvironment(formData, isSandboxMode) {
+    const { FIELD_MAPPING } = Constants;
+    const preparedData = {};
+
+    this.logger.info(
+      `🔧 Preparando datos para entorno: ${isSandboxMode ? "SANDBOX" : "PRODUCTION"}`
+    );
+
+    // Iterar sobre los datos del formulario
+    Object.entries(formData).forEach(([fieldName, value]) => {
+      // Buscar el mapping correspondiente
+      const mapping = Object.values(FIELD_MAPPING).find((m) => m.field === fieldName);
+
+      if (mapping && mapping.id) {
+        let correctId;
+
+        if (typeof mapping.id === "object" && mapping.id.test && mapping.id.prod) {
+          // Mapping con diferentes IDs para test/prod
+          correctId = isSandboxMode ? mapping.id.test : mapping.id.prod;
+          this.logger.debug(
+            `📝 Campo mapeado (${
+              isSandboxMode ? "test" : "prod"
+            }): ${fieldName} -> ${correctId} = ${value}`
+          );
+        } else {
+          // Mapping con ID único (string)
+          correctId = mapping.id;
+          this.logger.debug(`📝 Campo mapeado (único): ${fieldName} -> ${correctId} = ${value}`);
+        }
+
+        preparedData[correctId] = value;
+      } else {
+        // Si no hay mapping específico, usar el nombre original
+        preparedData[fieldName] = value;
+        this.logger.debug(`📝 Campo sin mapeo: ${fieldName} = ${value}`);
+      }
+    });
+
+    this.logger.info(`✅ Datos preparados: ${Object.keys(preparedData).length} campos`);
+    return preparedData;
+  }
+
+  /**
+   * Configurar formulario para envío nativo con datos preparados
+   * @param {Object} preparedData - Datos preparados con keys correctas
+   * @param {string} salesforceUrl - URL de Salesforce
+   * @private
+   */
+  _configureFormForNativeSubmit(preparedData, salesforceUrl) {
+    // Configurar action del formulario
+    this.formElement.action = salesforceUrl;
+    this.formElement.method = "POST";
+    this.formElement.enctype = "multipart/form-data";
+
+    // PASO 1: Remover todos los campos existentes (para evitar duplicados)
+    const existingFields = this.formElement.querySelectorAll("input, select, textarea");
+    existingFields.forEach((field) => {
+      // Deshabilitar el campo en lugar de eliminarlo (para no romper la UI)
+      field.disabled = true;
+      field.name = ""; // Limpiar name para que no se envíe
+    });
+
+    // PASO 2: Crear nuevos campos hidden con los datos preparados
+    Object.entries(preparedData).forEach(([key, value]) => {
+      const hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.name = key;
+      hiddenField.value = value;
+      this.formElement.appendChild(hiddenField);
+
+      this.logger.debug(`Campo agregado para envío: ${key} = ${value}`);
+    });
+
+    this.logger.debug(
+      `🔧 Formulario configurado para envío nativo: ${Object.keys(preparedData).length} campos`
+    );
   }
 
   /**
@@ -1031,34 +1140,54 @@ export class FormManager {
       if (this.config.callbacks?.onFormSubmit) {
         const shouldContinue = await this.config.callbacks.onFormSubmit(formData, this);
         if (!shouldContinue) {
-          this.logger.info("📋 Envío cancelado por callback personalizado");
+          this.logger.info("Envío cancelado por callback personalizado");
           return;
         }
       }
 
-      // Modo desarrollo
-      if (this.state.isDevMode()) {
-        this.logger.info("🔧 DEV_MODE: Simulando envío exitoso");
-        this._logFormSubmissionDetails(formData, 'DEV_MODE');
-        return;
-      }
+      // Verificar estado de modos antes del envío
+      const isDevelopmentMode = this.state.isDevMode();
+      const isTestMode = this.state.isTestMode();
 
-      // Envío real usando método nativo del formulario
-      this.logger.info("📡 Enviando datos a Salesforce usando método nativo...");
-      this._logFormSubmissionDetails(formData, 'PRODUCTION');
-      this.service.submitFormNative(this.formElement);
-      this.logger.info("✅ Formulario enviado exitosamente");
-      
-      if (this.config.callbacks?.onFormSuccess) {
-        this.config.callbacks.onFormSuccess({ method: 'native' }, this);
+      // MODO DESARROLLO: Solo imprime en consola, NO envía
+      if (isDevelopmentMode) {
+        this.logger.info("DEV_MODE: Datos del formulario - NO SE ENVIARÁ");
+        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode);
+        this._logFormSubmissionDetails(preparedData, "DEV_MODE");
+        this.logger.warn("FORMULARIO NO ENVIADO - MODO DESARROLLO ACTIVO");
+        return;
+      } else {
+        // MODO PRODUCCIÓN o SANDBOX: Envío real
+        const targetEnv = isTestMode ? "SANDBOX" : "PRODUCCIÓN";
+        this.logger.info(`Enviando formulario a ${targetEnv}...`);
+        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode);
+        const salesforceUrl = this._getSalesforceUrl(isTestMode);
+        
+        // Crear formulario temporal con los datos preparados
+        const tempForm = document.createElement('form');
+        tempForm.method = 'POST';
+        tempForm.action = salesforceUrl;
+        tempForm.style.display = 'none';
+        
+        // Agregar todos los campos como inputs hidden
+        Object.entries(preparedData).forEach(([key, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          tempForm.appendChild(input);
+        });
+        
+        // Agregar al DOM, enviar y remover
+        document.body.appendChild(tempForm);
+        tempForm.submit();
+        document.body.removeChild(tempForm);
+
+        this.logger.info(`✅ Formulario enviado exitosamente a ${targetEnv}: ${salesforceUrl}`);
+        return;
       }
     } catch (error) {
       this.logger.error("❌ Error durante el envío:", error);
-
-      if (this.config.callbacks?.onValidationError) {
-        this.config.callbacks.onValidationError(error, this);
-      }
-
       this.ui.showGeneralError("Error al enviar el formulario. Por favor, intente nuevamente.");
     } finally {
       this.isSubmitting = false;

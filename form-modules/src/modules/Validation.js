@@ -313,6 +313,32 @@ export class Validation {
   }
 
   /**
+   * Validación unificada para el formulario - Simplifica las dos validaciones en una
+   * @param {HTMLElement} formElement - Elemento del formulario
+   * @param {Object} formData - Datos del formulario
+   * @returns {Object} - Resultado completo de validación
+   */
+  validateFormComplete(formElement, formData) {
+    this.logger.debug("🔍 Ejecutando validación completa del formulario...");
+    
+    const validationResult = this.validateFullForm(formElement, formData);
+    
+    this.logger.debug("📊 Resultado de validación completa:", validationResult);
+
+    if (!validationResult.isValid) {
+      this.logger.warn(
+        `❌ Formulario inválido: ${validationResult.missingCount} campos faltantes, ${Object.keys(validationResult.errors).length} errores totales`
+      );
+    } else {
+      this.logger.info(
+        `✅ Formulario válido: ${validationResult.totalRequired} campos completados correctamente`
+      );
+    }
+
+    return validationResult;
+  }
+
+  /**
    * Validar valores iniciales de múltiples campos
    * @param {Object} fieldsData - Objeto con fieldName: {element, value}
    * @param {Object} options - Opciones de validación

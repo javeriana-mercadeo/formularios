@@ -23,22 +23,15 @@
 
 export const configMini = {
   // DATOS DEL EVENTO
-  eventName: "Open Day Javeriana 2024",
-  eventDate: "2024-02-15",
-  campaign: "OPEN_DAY_2024",
-  article: "evento_general",
-  source: "web",
-  medium: "organico",
-
   // CONFIGURACIÓN BÁSICA DE EVENTO
   typeAttendee: ["Aspirante"], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
 
   attendanceDays: ["Jueves 15 de febrero de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: true,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // Logging detallado
@@ -78,9 +71,9 @@ export const configAcademicLevel = {
   attendanceDays: ["Miércoles 20 de marzo de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -114,9 +107,9 @@ export const configFaculty = {
   attendanceDays: ["Miércoles 10 de abril de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -164,9 +157,9 @@ export const configPrograms = {
   ],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: true,
+  test: true,
+  debug: true,
+  development: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -200,9 +193,9 @@ export const configCountries = {
   attendanceDays: ["Jueves 20 de junio de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -236,9 +229,9 @@ export const configDepartments = {
   attendanceDays: ["Jueves 25 de julio de 2024", "Viernes 26 de julio de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -272,9 +265,9 @@ export const configCities = {
   attendanceDays: ["Viernes 30 de agosto de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -322,9 +315,9 @@ export const configMultipleDays = {
   ],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -371,9 +364,9 @@ export const configUniversities = {
   attendanceDays: ["Martes 15 de octubre de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
@@ -434,9 +427,9 @@ export const configCompaniesSchools = {
   attendanceDays: ["Miércoles 20 de noviembre de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  sandboxMode: true,
-  debugMode: true,
-  devMode: false,
+  test: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:

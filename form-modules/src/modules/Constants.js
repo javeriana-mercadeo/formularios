@@ -8,14 +8,14 @@
  */
 
 export class Constants {
-  // Nombres de campos para validación y estado
+  // Nombres de campos base
   static FIELDS = {
     // Campos ocultos
     OID: "oid",
     RET_URL: "retURL",
     DEBUG: "debug",
     DEBUG_EMAIL: "debugEmail",
-    AUTHORIZATION_SOURCE: "authorizationSource", // Verificar campo en html
+    AUTHORIZATION_SOURCE: "authorizationSource",
     REQUEST_ORIGIN: "requestOrigin",
     LEAD_SOURCE: "lead_source",
     COMPANY: "company",
@@ -48,16 +48,15 @@ export class Constants {
     DATA_AUTHORIZATION: "authorization_data",
 
     // Campos parámetros URL
-    SOURCE: "utm_source",
-    SUB_SOURCE: "utm_subsource",
-    MEDIUM: "utm_medium",
-    CAMPAIGN: "utm_campaign",
-    ARTICLE: "utm_article",
-    EVENT_NAME: "utm_eventname",
-    EVENT_DATE: "utm_eventdate",
+    SOURCE: "source",
+    SUB_SOURCE: "subsource",
+    MEDIUM: "medium",
+    CAMPAIGN: "campaign",
+    ARTICLE: "article",
+    EVENT_NAME: "eventname",
+    EVENT_DATE: "eventdate",
   };
 
-  // Selectores de campos del formulario (incluye TODOS los campos de FIELDS)
   static SELECTORS = {
     // Campos ocultos
     OID: `[name="${Constants.FIELDS.OID}"]`,
@@ -109,189 +108,14 @@ export class Constants {
     SUBMIT_BUTTON: '[type="submit"]',
   };
 
-  static DATA_FILES = {
-    LOCATIONS: "location",
-    PREFIXES: "prefixes",
-    PROGRAMS: "programs",
-    PERIODS: "periods",
-    UNIVERSITIES: "universities",
-    COLLEGES: "colleges",
-  };
-
-  static ATTENDEE_TYPES = {
-    APPLICANT: "Aspirante",
-    FAMILY_MEMBER: "Padre de familia y/o acudiente",
-    CURRENT_STUDENT: "Estudiante actual",
-    GRADUATE: "Graduado",
-    TEACHER: "Docente y/o psicoorientador",
-    VISITOR: "Visitante PUJ",
-    ADMINISTRATIVE: "Administrativo PUJ",
-    BUSINESS: "Empresario",
-  };
-
-  // Handler types para eventos de formulario
-  static HANDLER_TYPES = {
-    COUNTRY_CHANGE: "countryChange",
-    DEPARTMENT_CHANGE: "departmentChange",
-    TYPE_ATTENDEE_CHANGE: "typeAttendeeChange",
-    ACADEMIC_LEVEL_CHANGE: "academicLevelChange",
-    FACULTY_CHANGE: "facultyChange",
-    PROGRAM_CHANGE: "programChange",
-    AUTHORIZATION_CHANGE: "authorizationChange",
-    FORM_SUBMIT: "formSubmit",
-  };
-
-  // Configuración de campos del formulario para Events
-  static FIELD_CONFIGS = [
-    // Campos de datos personales
-    {
-      selector: Constants.SELECTORS.FIRST_NAME,
-      stateKey: Constants.FIELDS.FIRST_NAME,
-      type: "text",
-      cleanMethod: "cleanText",
-    },
-    {
-      selector: Constants.SELECTORS.LAST_NAME,
-      stateKey: Constants.FIELDS.LAST_NAME,
-      type: "text",
-      cleanMethod: "cleanText",
-    },
-    {
-      selector: Constants.SELECTORS.TYPE_DOC,
-      stateKey: Constants.FIELDS.TYPE_DOC,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.DOCUMENT,
-      stateKey: Constants.FIELDS.DOCUMENT,
-      type: "text",
-      cleanMethod: "cleanNumbers",
-    },
-    {
-      selector: Constants.SELECTORS.EMAIL,
-      stateKey: Constants.FIELDS.EMAIL,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.PHONE_CODE,
-      stateKey: Constants.FIELDS.PHONE_CODE,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.PHONE,
-      stateKey: Constants.FIELDS.PHONE,
-      type: "text",
-      cleanMethod: "cleanNumbers",
-    },
-
-    // Campos de ubicación
-    {
-      selector: Constants.SELECTORS.COUNTRY,
-      stateKey: Constants.FIELDS.COUNTRY,
-      type: "select",
-      handler: "country", // Handler especial para cascada de ubicaciones
-    },
-    {
-      selector: Constants.SELECTORS.DEPARTMENT,
-      stateKey: Constants.FIELDS.DEPARTMENT,
-      type: "select",
-      handler: "department", // Handler especial para cascada de ubicaciones
-    },
-    {
-      selector: Constants.SELECTORS.CITY,
-      stateKey: Constants.FIELDS.CITY,
-      type: "select",
-    },
-
-    // Campos académicos
-    {
-      selector: Constants.SELECTORS.ACADEMIC_LEVEL,
-      stateKey: Constants.FIELDS.ACADEMIC_LEVEL,
-      type: "select",
-      handler: "academicLevel", // Handler especial para cascada académica
-    },
-    {
-      selector: Constants.SELECTORS.FACULTY,
-      stateKey: Constants.FIELDS.FACULTY,
-      type: "select",
-      handler: "faculty", // Handler especial para cascada académica
-    },
-    {
-      selector: Constants.SELECTORS.PROGRAM,
-      stateKey: Constants.FIELDS.PROGRAM,
-      type: "select",
-      handler: "program", // Handler especial para cascada académica
-    },
-    {
-      selector: Constants.SELECTORS.ADMISSION_PERIOD,
-      stateKey: Constants.FIELDS.ADMISSION_PERIOD,
-      type: "select",
-    },
-
-    // Campos de evento
-    {
-      selector: Constants.SELECTORS.TYPE_ATTENDEE,
-      stateKey: Constants.FIELDS.TYPE_ATTENDEE,
-      type: "select",
-      handler: "typeAttendee", // Handler especial para lógica de tipo de asistente
-    },
-    {
-      selector: Constants.SELECTORS.ATTENDANCE_DAY,
-      stateKey: Constants.FIELDS.ATTENDANCE_DAY,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.COLLEGE,
-      stateKey: Constants.FIELDS.COLLEGE,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.UNIVERSITY,
-      stateKey: Constants.FIELDS.UNIVERSITY,
-      type: "select",
-    },
-    {
-      selector: Constants.SELECTORS.DATA_AUTHORIZATION,
-      stateKey: Constants.FIELDS.DATA_AUTHORIZATION,
-      type: "radio", // Es radio button, no checkbox
-      handler: "authorization", // Handler especial para autorización
-    },
-  ];
-
-  // Configuración de animaciones
-  static ANIMATION_CONFIG = {
-    DURATION: 300,
-    ENABLED: true,
-  };
-
-  // Textos de interfaz
-  static Ui_TEXTS = {
-    LOADING: "Cargando...",
-    SUCCESS: "Enviado correctamente",
-    ERROR: "Error al procesar",
-  };
-
-  // Configuración de logs por defecto
-  static LOG_CONFIG = {
-    LEVEL: "info",
-    ENABLED: true,
-    PERSIST: false,
-    MAX_LOGS: 1000,
-  };
-
-  // Tipos de campos que deben excluirse de la validación automática
-  static EXCLUDED_FIELD_TYPES = {
-    HIDDEN: "hidden",
-    BUTTON: "button",
-    SUBMIT: "submit",
-    RESET: "reset",
-  };
-
-  static THANK_YOU_PAGE = "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY";
-
-  static SALESFORCE_SUBMIT_URLS = {
-    test: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
-    prod: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+  static UTM_PARAMS = {
+    SOURCE: `utm_${Constants.FIELDS.SOURCE}`,
+    SUB_SOURCE: `utm_${Constants.FIELDS.SUB_SOURCE}`,
+    MEDIUM: `utm_${Constants.FIELDS.MEDIUM}`,
+    CAMPAIGN: `utm_${Constants.FIELDS.CAMPAIGN}`,
+    ARTICLE: `utm_${Constants.FIELDS.ARTICLE}`,
+    EVENT_NAME: `utm_${Constants.FIELDS.EVENT_NAME}`,
+    EVENT_DATE: `utm_${Constants.FIELDS.EVENT_DATE}`,
   };
 
   // Mapeo de campos de Salesforce para Service
@@ -300,12 +124,9 @@ export class Constants {
     // CAMPOS OCULTOS
     // ==========================
     OID: {
-      name: Constants.FIELDS.OID,
+      name: "Id de Salesforce",
       field: Constants.FIELDS.OID,
-      id: {
-        test: "00D7j0000004eQD",
-        prod: "00Df4000003l8Bf",
-      },
+      id: Constants.FIELDS.OID,
     },
 
     RET_URL: {
@@ -401,7 +222,7 @@ export class Constants {
       name: "Código de país",
       field: Constants.FIELDS.PHONE_CODE,
       id: {
-        test: "00NO4000002IUPh",
+        test: "00NO4000002lUPh",
         prod: "00NJw000002mzb7",
       },
     },
@@ -557,7 +378,7 @@ export class Constants {
       name: "Campaña UTM",
       field: Constants.FIELDS.CAMPAIGN,
       id: {
-        test: "00N7j000002BfKF",
+        test: "00N7j000002BfkF",
         prod: "00N5G00000Wmi8X",
       },
     },
@@ -588,5 +409,232 @@ export class Constants {
         prod: "00NJw000006f1BE",
       },
     },
+  };
+
+  static DATA_FILES = {
+    LOCATIONS: "location",
+    PREFIXES: "prefixes",
+    PROGRAMS: "programs",
+    PERIODS: "periods",
+    UNIVERSITIES: "universities",
+    COLLEGES: "colleges",
+  };
+
+  static ATTENDEE_TYPES = {
+    APPLICANT: "Aspirante",
+    FAMILY_MEMBER: "Padre de familia y/o acudiente",
+    CURRENT_STUDENT: "Estudiante actual",
+    GRADUATE: "Graduado",
+    TEACHER: "Docente y/o psicoorientador",
+    VISITOR: "Visitante PUJ",
+    ADMINISTRATIVE: "Administrativo PUJ",
+    BUSINESS: "Empresario",
+  };
+
+  // Handler types para eventos de formulario
+  static HANDLER_TYPES = {
+    COUNTRY_CHANGE: "countryChange",
+    DEPARTMENT_CHANGE: "departmentChange",
+    TYPE_ATTENDEE_CHANGE: "typeAttendeeChange",
+    ACADEMIC_LEVEL_CHANGE: "academicLevelChange",
+    FACULTY_CHANGE: "facultyChange",
+    PROGRAM_CHANGE: "programChange",
+    AUTHORIZATION_CHANGE: "authorizationChange",
+    FORM_SUBMIT: "formSubmit",
+  };
+
+  // Configuración de campos del formulario para Events
+  static FIELD_CONFIGS = [
+    // Campos ocultos
+    {
+      selector: Constants.SELECTORS.OID,
+      stateKey: Constants.FIELDS.OID,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.RET_URL,
+      stateKey: Constants.FIELDS.RET_URL,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.DEBUG,
+      stateKey: Constants.FIELDS.DEBUG,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.DEBUG_EMAIL,
+      stateKey: Constants.FIELDS.DEBUG_EMAIL,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.AUTHORIZATION_SOURCE,
+      stateKey: Constants.FIELDS.AUTHORIZATION_SOURCE,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.REQUEST_ORIGIN,
+      stateKey: Constants.FIELDS.REQUEST_ORIGIN,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.LEAD_SOURCE,
+      stateKey: Constants.FIELDS.LEAD_SOURCE,
+      type: "hidden",
+    },
+    {
+      selector: Constants.SELECTORS.COMPANY,
+      stateKey: Constants.FIELDS.COMPANY,
+      type: "hidden",
+    },
+
+    // Campos de datos personales
+    {
+      selector: Constants.SELECTORS.FIRST_NAME,
+      stateKey: Constants.FIELDS.FIRST_NAME,
+      type: "text",
+      cleanMethod: "cleanText",
+    },
+    {
+      selector: Constants.SELECTORS.LAST_NAME,
+      stateKey: Constants.FIELDS.LAST_NAME,
+      type: "text",
+      cleanMethod: "cleanText",
+    },
+    {
+      selector: Constants.SELECTORS.TYPE_DOC,
+      stateKey: Constants.FIELDS.TYPE_DOC,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.DOCUMENT,
+      stateKey: Constants.FIELDS.DOCUMENT,
+      type: "text",
+      cleanMethod: "cleanNumbers",
+    },
+    {
+      selector: Constants.SELECTORS.EMAIL,
+      stateKey: Constants.FIELDS.EMAIL,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.PHONE_CODE,
+      stateKey: Constants.FIELDS.PHONE_CODE,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.PHONE,
+      stateKey: Constants.FIELDS.PHONE,
+      type: "text",
+      cleanMethod: "cleanNumbers",
+    },
+
+    // Campos de ubicación
+    {
+      selector: Constants.SELECTORS.COUNTRY,
+      stateKey: Constants.FIELDS.COUNTRY,
+      type: "select",
+      handler: "country", // Handler especial para cascada de ubicaciones
+    },
+    {
+      selector: Constants.SELECTORS.DEPARTMENT,
+      stateKey: Constants.FIELDS.DEPARTMENT,
+      type: "select",
+      handler: "department", // Handler especial para cascada de ubicaciones
+    },
+    {
+      selector: Constants.SELECTORS.CITY,
+      stateKey: Constants.FIELDS.CITY,
+      type: "select",
+    },
+
+    // Campos académicos
+    {
+      selector: Constants.SELECTORS.ACADEMIC_LEVEL,
+      stateKey: Constants.FIELDS.ACADEMIC_LEVEL,
+      type: "select",
+      handler: "academicLevel", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.FACULTY,
+      stateKey: Constants.FIELDS.FACULTY,
+      type: "select",
+      handler: "faculty", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.PROGRAM,
+      stateKey: Constants.FIELDS.PROGRAM,
+      type: "select",
+      handler: "program", // Handler especial para cascada académica
+    },
+    {
+      selector: Constants.SELECTORS.ADMISSION_PERIOD,
+      stateKey: Constants.FIELDS.ADMISSION_PERIOD,
+      type: "select",
+    },
+
+    // Campos de evento
+    {
+      selector: Constants.SELECTORS.TYPE_ATTENDEE,
+      stateKey: Constants.FIELDS.TYPE_ATTENDEE,
+      type: "select",
+      handler: "typeAttendee", // Handler especial para lógica de tipo de asistente
+    },
+    {
+      selector: Constants.SELECTORS.ATTENDANCE_DAY,
+      stateKey: Constants.FIELDS.ATTENDANCE_DAY,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.COLLEGE,
+      stateKey: Constants.FIELDS.COLLEGE,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.UNIVERSITY,
+      stateKey: Constants.FIELDS.UNIVERSITY,
+      type: "select",
+    },
+    {
+      selector: Constants.SELECTORS.DATA_AUTHORIZATION,
+      stateKey: Constants.FIELDS.DATA_AUTHORIZATION,
+      type: "radio", // Es radio button, no checkbox
+      handler: "authorization", // Handler especial para autorización
+    },
+  ];
+
+  // Configuración de animaciones
+  static ANIMATION_CONFIG = {
+    DURATION: 300,
+    ENABLED: true,
+  };
+
+  // Textos de interfaz
+  static Ui_TEXTS = {
+    LOADING: "Cargando...",
+    SUCCESS: "Enviado correctamente",
+    ERROR: "Error al procesar",
+  };
+
+  // Configuración de logs por defecto
+  static LOG_CONFIG = {
+    LEVEL: "info",
+    ENABLED: true,
+    PERSIST: false,
+    MAX_LOGS: 1000,
+  };
+
+  // Tipos de campos que deben excluirse de la validación automática
+  static EXCLUDED_FIELD_TYPES = {
+    HIDDEN: "hidden",
+    BUTTON: "button",
+    SUBMIT: "submit",
+    RESET: "reset",
+  };
+
+  static THANK_YOU_PAGE = "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY";
+
+  static SALESFORCE_SUBMIT_URLS = {
+    test: "https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+    prod: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
   };
 }

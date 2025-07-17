@@ -16,7 +16,7 @@ import { Constants } from "./Constants.js";
 import { Config } from "./Config.js";
 
 export class Service {
-  constructor(config = null, logger = null) {
+  constructor({ config = null, logger = null }) {
     this.isSubmitting = false;
     this.submitHistory = [];
     this.config = config;
@@ -35,7 +35,12 @@ export class Service {
       return "";
     }
 
-    return this.config?.sandboxMode ? mapping.test : mapping.prod;
+    // Manejar diferentes estructuras de mapeo
+    if (typeof mapping.id === "object" && mapping.id.test && mapping.id.prod) {
+      return this.config?.sandboxMode ? mapping.id.test : mapping.id.prod;
+    } else {
+      return mapping.id;
+    }
   }
 
   /**
@@ -70,7 +75,9 @@ export class Service {
       // Campos académicos
       academic_level: isTest ? mapping.ACADEMIC_LEVEL?.id?.test : mapping.ACADEMIC_LEVEL?.id?.prod,
       program: isTest ? mapping.PROGRAM?.id?.test : mapping.PROGRAM?.id?.prod,
-      admission_period: isTest ? mapping.ADMISSION_PERIOD?.id?.test : mapping.ADMISSION_PERIOD?.id?.prod,
+      admission_period: isTest
+        ? mapping.ADMISSION_PERIOD?.id?.test
+        : mapping.ADMISSION_PERIOD?.id?.prod,
 
       // Autorización
       authorization_data: isTest
@@ -88,7 +95,9 @@ export class Service {
       campaign: isTest ? mapping.CAMPAIGN?.id?.test : mapping.CAMPAIGN?.id?.prod,
 
       // Campos de empresa (si existen)
-      empresaConvenio: isTest ? mapping.PARTNER_COMPANY?.id?.test : mapping.PARTNER_COMPANY?.id?.prod,
+      empresaConvenio: isTest
+        ? mapping.PARTNER_COMPANY?.id?.test
+        : mapping.PARTNER_COMPANY?.id?.prod,
     };
   }
 
@@ -211,7 +220,9 @@ export class Service {
         throw error;
       }
 
-      this.logger?.warn(`⚠️ Intento ${attempt} falló, reintentando en ${this.config?.retryDelay || 1000}ms...`);
+      this.logger?.warn(
+        `⚠️ Intento ${attempt} falló, reintentando en ${this.config?.retryDelay || 1000}ms...`
+      );
 
       await new Promise((resolve) => setTimeout(resolve, this.config?.retryDelay || 1000));
 
@@ -259,6 +270,207 @@ export class Service {
   }
 
   /**
+   * Configurar el form action con la URL correcta según el modo
+   * @param {HTMLElement} formElement - Formulario a configurar
+   */
+  configureFormAction(formElement) {
+    if (!formElement) {
+      this.logger?.warn("⚠️ Elemento de formulario no encontrado para configurar action");
+      return;
+    }
+
+    const salesforceUrl = this.getSalesforceUrl();
+
+    // Configurar acción del formulario
+    formElement.action = salesforceUrl;
+    formElement.method = "POST";
+    formElement.enctype = "multipart/form-data";
+
+    this.logger?.info(`🔗 Form action configurado: ${salesforceUrl}`);
+    this.logger?.info(`📝 Modo sandbox: ${this.config?.sandboxMode ? "SÍ" : "NO"}`);
+  }
+
+  /**
+   * Transformar campos del formulario para usar IDs de Salesforce
+   * @param {HTMLElement} formElement - Formulario a transformar
+   * @private
+   */
+  _transformFormFieldsForSalesforce(formElement) {
+    if (!formElement) return;
+
+    const isTest = this.config?.sandboxMode;
+    const transformedFields = [];
+
+    this.logger?.info(
+      `🔧 Transformando campos para Salesforce - Modo: ${isTest ? "TEST/SANDBOX" : "PRODUCCIÓN"}`
+    );
+
+    // Iterar sobre todos los campos del formulario
+    const formFields = formElement.querySelectorAll("input, select, textarea");
+
+    formFields.forEach((field) => {
+      const fieldName = field.name;
+      if (!fieldName) return;
+
+      // Buscar el mapeo correspondiente
+      const mappingKey = Object.keys(Constants.FIELD_MAPPING).find(
+        (key) => Constants.FIELD_MAPPING[key].field === fieldName
+      );
+
+      if (mappingKey) {
+        // Usar el método getFieldId para obtener el ID correcto según el ambiente
+        const salesforceId = this.getFieldId(mappingKey);
+        this.logger?.debug(`📋 ${fieldName}: ${isTest ? "TEST" : "PROD"} -> ${salesforceId}`);
+
+        // Solo transformar si el ID es diferente al nombre del campo
+        // Esto evita transformar campos como 'oid', 'email', 'first_name', etc.
+        // El campo OID nunca debe ser transformado, debe mantener su nombre como "oid"
+        if (salesforceId && salesforceId !== fieldName && fieldName !== "oid") {
+          this.logger?.debug(`Transformando campo: ${fieldName} → ${salesforceId}`);
+          field.name = salesforceId;
+          transformedFields.push({
+            original: fieldName,
+            transformed: salesforceId,
+            value: field.value,
+          });
+        } else {
+          this.logger?.debug(`Campo mantiene su nombre: ${fieldName} (ID: ${salesforceId})`);
+        }
+      }
+    });
+
+    if (transformedFields.length > 0) {
+      this.logger?.info(`✅ ${transformedFields.length} campos transformados para Salesforce`);
+      this.logger?.debug("Campos transformados:", transformedFields);
+    }
+  }
+
+  /**
+   * Enviar datos del formulario a Salesforce
+   * @param {Object} formData - Datos del formulario preparados
+   * @param {string} salesforceUrl - URL de Salesforce para envío
+   * @returns {Promise} - Promesa con resultado del envío
+   */
+  async submitFormData(formData, salesforceUrl) {
+    if (this.isSubmitting) {
+      throw new Error("⚠️ Formulario ya está siendo enviado");
+    }
+
+    this.isSubmitting = true;
+
+    try {
+      this.logger?.info("🚀 Enviando datos del formulario a Salesforce...");
+      this.logger?.debug(`📡 URL de destino: ${salesforceUrl}`);
+
+      // Preparar FormData para envío
+      const formDataToSend = new FormData();
+
+      // Agregar todos los campos al FormData
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, value);
+        this.logger?.debug(`📝 Campo agregado: ${key} = ${value}`);
+      });
+
+      // Log de datos en modo debug
+      if (this.logger) {
+        this.logger.debug(`📊 Total de campos a enviar: ${Object.keys(formData).length}`);
+      }
+
+      // Enviar con reintentos usando la URL específica
+      const result = await this.submitWithRetryToUrl(formDataToSend, salesforceUrl);
+
+      // Registrar envío exitoso
+      this.submitHistory.push({
+        timestamp: new Date().toISOString(),
+        status: "success",
+        data: formData,
+        url: salesforceUrl,
+        response: result,
+      });
+
+      this.logger?.info("✅ Datos enviados exitosamente a Salesforce");
+      return result;
+    } catch (error) {
+      // Registrar error
+      this.submitHistory.push({
+        timestamp: new Date().toISOString(),
+        status: "error",
+        data: formData,
+        url: salesforceUrl,
+        error: error.message,
+      });
+
+      this.logger?.error("❌ Error al enviar datos a Salesforce:", error);
+      throw error;
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
+
+  /**
+   * Ejecutar envío con lógica de reintentos automáticos a URL específica
+   * @param {FormData} formData - Datos a enviar
+   * @param {string} url - URL de destino
+   * @param {number} attempt - Número de intento actual
+   * @returns {Promise} - Promesa con resultado del envío
+   */
+  async submitWithRetryToUrl(formData, url, attempt = 1) {
+    try {
+      return await this.performSubmitToUrl(formData, url);
+    } catch (error) {
+      if (attempt >= (this.config?.maxRetries || 3)) {
+        throw error;
+      }
+
+      this.logger?.warn(
+        `⚠️ Intento ${attempt} falló, reintentando en ${this.config?.retryDelay || 1000}ms...`
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, this.config?.retryDelay || 1000));
+
+      return this.submitWithRetryToUrl(formData, url, attempt + 1);
+    }
+  }
+
+  /**
+   * Ejecutar una sola petición HTTP a URL específica
+   * @param {FormData} formData - Datos a enviar
+   * @param {string} url - URL de destino
+   * @returns {Promise} - Promesa con respuesta HTTP
+   */
+  async performSubmitToUrl(formData, url) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      // Configurar timeout
+      xhr.timeout = this.config?.timeout || 30000;
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            response: xhr.responseText,
+          });
+        } else {
+          reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error("Error de red al enviar formulario"));
+      };
+
+      xhr.ontimeout = () => {
+        reject(new Error("Timeout al enviar formulario"));
+      };
+
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    });
+  }
+
+  /**
    * Método de respaldo: envío tradicional con submit del formulario
    * @param {HTMLElement} formElement - Formulario a enviar
    */
@@ -267,17 +479,14 @@ export class Service {
       throw new Error("Elemento de formulario no encontrado");
     }
 
-    const salesforceUrl = this.getSalesforceUrl();
-    this.logger?.info(`🔗 Configurando envío a: ${salesforceUrl}`);
-    this.logger?.info(`📝 Modo sandbox: ${this.config?.sandboxMode ? 'SÍ' : 'NO'}`);
+    // Configurar el form action antes del envío
+    this.configureFormAction(formElement);
 
-    // Configurar acción del formulario
-    formElement.action = salesforceUrl;
-    formElement.method = "POST";
-    formElement.enctype = "multipart/form-data";
+    // Transformar campos para usar IDs de Salesforce
+    this._transformFormFieldsForSalesforce(formElement);
 
     this.logger?.info("🚀 Ejecutando submit nativo del formulario...");
-    
+
     // Enviar formulario
     formElement.submit();
   }

@@ -7,11 +7,15 @@
 import { Cache } from "./Cache.js";
 
 export class Data {
-  constructor(config = {}, urls = {}, logger) {
-    this.logger = logger;
+  constructor({ cache = {}, urls = {}, logger }) {
+    this.cacheEnabled = cache.enabled;
+    this.cacheExpirationHours = cache.expirationHours;
+
     this.urls = {
       ...urls,
     };
+
+    this.logger = logger;
 
     // URLs de fallback en orden de prioridad
     this.fallbackUrls = {
@@ -46,9 +50,6 @@ export class Data {
         "../data/Colegios PRD.json",
       ],
     };
-
-    this.cacheEnabled = config.enabled;
-    this.cacheExpirationHours = config.expirationHours;
 
     // Obtener instancia global del cache
     this.cache = Cache.getInstance();

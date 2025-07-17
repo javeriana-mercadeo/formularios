@@ -4,23 +4,19 @@
  * @version 2.0 - Eliminado patrón singleton
  */
 
-import { Constants } from "./Constants.js";
-
 export class Config {
   constructor({ config = {}, selector }) {
     const defaultConfig = {
       // DATOS DE EVENTO
-      eventName: "",
-      eventDate: "",
-      campaign: "",
-      article: "",
-      source: "",
-      subSource: "",
-      medium: "",
-      leadSource: "",
-      originRequest: "",
+      retUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
+      debugEmail: "",
 
-      // LISTAS
+      // CAMPOS OCULTOS
+      authorizationSource: "",
+      requestOrigin: "",
+      leadSource: "Landing Pages",
+
+      // FILTROS
       // Ubicaciones
       countries: [],
       departments: [],
@@ -40,14 +36,23 @@ export class Config {
         "Administrativo PUJ",
       ],
       attendanceDays: [],
-      university: [],
-      company: [],
+      colleges: [],
+      universities: [],
+      companies: [],
+
+      // UTMs
+      source: "",
+      subSource: "",
+      medium: "",
+      campaign: "",
+      article: "",
+      eventName: "",
+      eventDate: "",
 
       // CONFIGURACIONES
-      sandboxMode: false,
-      debugMode: false,
-      devMode: false,
-      debugEmail: "",
+      test: false,
+      debug: false,
+      development: false,
 
       cache: {
         enabled: false,
@@ -62,7 +67,6 @@ export class Config {
         periods: "",
       },
 
-      thankYouUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
       privacyPolicyUrl:
         "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
 
