@@ -38,8 +38,13 @@ export const configMini = {
   // CONFIGURACIONES TÉCNICAS
   sandboxMode: true,
   debugMode: true,
-  devMode: false,
+  devMode: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // Logging detallado
+  logging: {
+    enabled: true,
+  },
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ⭐ AUTO-SELECCIÓN ASPIRANTE: Como solo hay "Aspirante", se auto-selecciona y aparecen los campos académicos automáticamente
@@ -114,14 +119,6 @@ export const configFaculty = {
   devMode: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
-  // Logging detallado
-  logging: {
-    enabled: true,
-    level: "debug",
-    showTimestamp: true,
-    showLevel: true,
-  },
-
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Nivel académico: Oculto y preseleccionado (Pregrado)
   // ✅ Facultad: Oculta y preseleccionada (Ingeniería)
@@ -169,7 +166,7 @@ export const configPrograms = {
   // CONFIGURACIONES TÉCNICAS
   sandboxMode: true,
   debugMode: true,
-  devMode: false,
+  devMode: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:

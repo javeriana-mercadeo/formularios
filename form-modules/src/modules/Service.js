@@ -16,9 +16,11 @@ import { Constants } from "./Constants.js";
 import { Config } from "./Config.js";
 
 export class Service {
-  constructor() {
+  constructor(config = null, logger = null) {
     this.isSubmitting = false;
     this.submitHistory = [];
+    this.config = config;
+    this.logger = logger;
   }
 
   /**
@@ -29,12 +31,11 @@ export class Service {
   getFieldId(fieldKey) {
     const mapping = Constants.FIELD_MAPPING[fieldKey];
     if (!mapping) {
-      Logger.warn(`Campo no encontrado en mapeo: ${fieldKey}`);
+      this.logger?.warn(`Campo no encontrado en mapeo: ${fieldKey}`);
       return "";
     }
 
-    const config = Config.getConfig();
-    return config.sandboxMode ? mapping.test : mapping.prod;
+    return this.config?.sandboxMode ? mapping.test : mapping.prod;
   }
 
   /**
@@ -44,50 +45,50 @@ export class Service {
    */
   createFieldMapping() {
     const mapping = Constants.FIELD_MAPPING;
-    const isTest = Config.getConfig().sandboxMode;
+    const isTest = this.config?.sandboxMode || false;
 
     return {
       // Campos personales
-      oid: isTest ? mapping.OID.test : mapping.OID.prod,
-      first_name: mapping.NAME,
-      last_name: mapping.LAST_NAME,
-      type_doc: isTest ? mapping.DOCUMENT_TYPE.test : mapping.DOCUMENT_TYPE.prod,
-      document: isTest ? mapping.DOCUMENT_NUMBER.test : mapping.DOCUMENT_NUMBER.prod,
-      email: mapping.EMAIL,
-      phone_prefix: isTest ? mapping.PHONE_PREFIX.test : mapping.PHONE_PREFIX.prod,
-      phone: mapping.PHONE,
+      oid: isTest ? mapping.OID?.id?.test : mapping.OID?.id?.prod,
+      first_name: mapping.NAME?.id || mapping.NAME?.field,
+      last_name: mapping.LAST_NAME?.id || mapping.LAST_NAME?.field,
+      type_doc: isTest ? mapping.DOCUMENT_TYPE?.id?.test : mapping.DOCUMENT_TYPE?.id?.prod,
+      document: isTest ? mapping.DOCUMENT_NUMBER?.id?.test : mapping.DOCUMENT_NUMBER?.id?.prod,
+      email: mapping.EMAIL?.id || mapping.EMAIL?.field,
+      phone_prefix: isTest ? mapping.PHONE_PREFIX?.id?.test : mapping.PHONE_PREFIX?.id?.prod,
+      phone: mapping.PHONE?.id || mapping.PHONE?.field,
 
       // Campos de ubicación
-      country: isTest ? mapping.COUNTRY_RESIDENCE.test : mapping.COUNTRY_RESIDENCE.prod,
-      department: isTest ? mapping.DEPARTMENT_RESIDENCE.test : mapping.DEPARTMENT_RESIDENCE.prod,
-      city: isTest ? mapping.CITY_RESIDENCE.test : mapping.CITY_RESIDENCE.prod,
+      country: isTest ? mapping.COUNTRY?.id?.test : mapping.COUNTRY?.id?.prod,
+      department: isTest ? mapping.DEPARTMENT?.id?.test : mapping.DEPARTMENT?.id?.prod,
+      city: isTest ? mapping.CITY?.id?.test : mapping.CITY?.id?.prod,
 
       // Campos de evento
-      type_attendee: isTest ? mapping.ATTENDEE_TYPE.test : mapping.ATTENDEE_TYPE.prod,
-      attendance_day: isTest ? mapping.ATTENDANCE_DAY.test : mapping.ATTENDANCE_DAY.prod,
+      type_attendee: isTest ? mapping.ATTENDEE_TYPE?.id?.test : mapping.ATTENDEE_TYPE?.id?.prod,
+      attendance_day: isTest ? mapping.ATTENDANCE_DAY?.id?.test : mapping.ATTENDANCE_DAY?.id?.prod,
 
       // Campos académicos
-      academic_level: isTest ? mapping.ACADEMIC_LEVEL.test : mapping.ACADEMIC_LEVEL.prod,
-      program: isTest ? mapping.SAE_CODE.test : mapping.SAE_CODE.prod,
-      admission_period: isTest ? mapping.ADMISSION_PERIOD.test : mapping.ADMISSION_PERIOD.prod,
+      academic_level: isTest ? mapping.ACADEMIC_LEVEL?.id?.test : mapping.ACADEMIC_LEVEL?.id?.prod,
+      program: isTest ? mapping.PROGRAM?.id?.test : mapping.PROGRAM?.id?.prod,
+      admission_period: isTest ? mapping.ADMISSION_PERIOD?.id?.test : mapping.ADMISSION_PERIOD?.id?.prod,
 
       // Autorización
       authorization_data: isTest
-        ? mapping.DATA_AUTHORIZATION.test
-        : mapping.DATA_AUTHORIZATION.prod,
+        ? mapping.DATA_AUTHORIZATION?.id?.test
+        : mapping.DATA_AUTHORIZATION?.id?.prod,
 
       // Campos adicionales del evento
-      event_name: isTest ? mapping.EVENT_NAME.test : mapping.EVENT_NAME.prod,
-      event_date: isTest ? mapping.EVENT_DATE.test : mapping.EVENT_DATE.prod,
-      university: isTest ? mapping.UNIVERSITY.test : mapping.UNIVERSITY.prod,
-      article: isTest ? mapping.ARTICLE.test : mapping.ARTICLE.prod,
-      source: isTest ? mapping.SOURCE.test : mapping.SOURCE.prod,
-      subSource: isTest ? mapping.SUB_SOURCE.test : mapping.SUB_SOURCE.prod,
-      medium: isTest ? mapping.MEDIUM.test : mapping.MEDIUM.prod,
-      campaign: isTest ? mapping.CAMPAIGN.test : mapping.CAMPAIGN.prod,
+      event_name: isTest ? mapping.EVENT_NAME?.id?.test : mapping.EVENT_NAME?.id?.prod,
+      event_date: isTest ? mapping.EVENT_DATE?.id?.test : mapping.EVENT_DATE?.id?.prod,
+      university: isTest ? mapping.UNIVERSITY?.id?.test : mapping.UNIVERSITY?.id?.prod,
+      article: isTest ? mapping.ARTICLE?.id?.test : mapping.ARTICLE?.id?.prod,
+      source: isTest ? mapping.SOURCE?.id?.test : mapping.SOURCE?.id?.prod,
+      subSource: isTest ? mapping.SUB_SOURCE?.id?.test : mapping.SUB_SOURCE?.id?.prod,
+      medium: isTest ? mapping.MEDIUM?.id?.test : mapping.MEDIUM?.id?.prod,
+      campaign: isTest ? mapping.CAMPAIGN?.id?.test : mapping.CAMPAIGN?.id?.prod,
 
       // Campos de empresa (si existen)
-      empresaConvenio: isTest ? mapping.PARTNER_COMPANY?.test : mapping.PARTNER_COMPANY?.prod,
+      empresaConvenio: isTest ? mapping.PARTNER_COMPANY?.id?.test : mapping.PARTNER_COMPANY?.id?.prod,
     };
   }
 
@@ -96,7 +97,7 @@ export class Service {
    * @returns {string} - URL de Salesforce Web-to-Lead
    */
   getSalesforceUrl() {
-    return Config.sandboxMode
+    return this.config?.sandboxMode
       ? Constants.SALESFORCE_SUBMIT_URLS.test
       : Constants.SALESFORCE_SUBMIT_URLS.prod;
   }
@@ -106,7 +107,7 @@ export class Service {
    * @returns {string} - OID de Salesforce
    */
   getOID() {
-    return Config.sandboxMode ? Config.oids.test : Config.oids.prod;
+    return this.config?.sandboxMode ? this.config.oids?.test : this.config.oids?.prod;
   }
 
   /**
@@ -120,7 +121,8 @@ export class Service {
     const originalFormData = new FormData(formElement);
     const preparedData = new FormData();
 
-    console.log("@@@@@@@@@@@@@", originalFormData);
+    this.logger?.debug("📋 Preparando datos del formulario para envío");
+    this.logger?.debug(`📋 Número de campos en formulario: ${formElement.elements.length}`);
 
     // Crear mapeo inverso: nombre del campo → nombre Salesforce
     const fieldMapping = this.createFieldMapping();
@@ -146,23 +148,23 @@ export class Service {
    */
   async submitForm(formElement, formData) {
     if (this.isSubmitting) {
-      Logger.warn("⚠️ Formulario ya está siendo enviado");
+      this.logger?.warn("⚠️ Formulario ya está siendo enviado");
       return;
     }
 
     this.isSubmitting = true;
 
     try {
-      Logger.log("🚀 Enviando formulario...");
+      this.logger?.info("🚀 Enviando formulario...");
 
       // Preparar datos del DOM
       const preparedData = this.prepareFormData(formElement);
 
       // Log de datos en modo debug
-      if (Config.sandboxMode) {
-        Logger.log("🔍 Datos preparados para envío:");
+      if (this.config?.sandboxMode) {
+        this.logger?.debug("🔍 Datos preparados para envío:");
         for (let [key, value] of preparedData.entries()) {
-          Logger.log(`  ${key}: ${value}`);
+          this.logger?.debug(`  ${key}: ${value}`);
         }
       }
 
@@ -177,7 +179,7 @@ export class Service {
         response: result,
       });
 
-      Logger.log("✅ Formulario enviado exitosamente");
+      this.logger?.info("✅ Formulario enviado exitosamente");
       return result;
     } catch (error) {
       // Registrar error
@@ -188,7 +190,7 @@ export class Service {
         error: error.message,
       });
 
-      Logger.error("❌ Error al enviar formulario:", error);
+      this.logger?.error("❌ Error al enviar formulario:", error);
       throw error;
     } finally {
       this.isSubmitting = false;
@@ -205,13 +207,13 @@ export class Service {
     try {
       return await this.performSubmit(formData);
     } catch (error) {
-      if (attempt >= Config.maxRetries) {
+      if (attempt >= (this.config?.maxRetries || 3)) {
         throw error;
       }
 
-      Logger.log(`⚠️ Intento ${attempt} falló, reintentando en ${Config.retryDelay}ms...`);
+      this.logger?.warn(`⚠️ Intento ${attempt} falló, reintentando en ${this.config?.retryDelay || 1000}ms...`);
 
-      await new Promise((resolve) => setTimeout(resolve, Config.retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, this.config?.retryDelay || 1000));
 
       return this.submitWithRetry(formData, attempt + 1);
     }
@@ -229,7 +231,7 @@ export class Service {
       const xhr = new XMLHttpRequest();
 
       // Configurar timeout
-      xhr.timeout = Config.timeout;
+      xhr.timeout = this.config?.timeout || 30000;
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -265,11 +267,17 @@ export class Service {
       throw new Error("Elemento de formulario no encontrado");
     }
 
+    const salesforceUrl = this.getSalesforceUrl();
+    this.logger?.info(`🔗 Configurando envío a: ${salesforceUrl}`);
+    this.logger?.info(`📝 Modo sandbox: ${this.config?.sandboxMode ? 'SÍ' : 'NO'}`);
+
     // Configurar acción del formulario
-    formElement.action = this.getSalesforceUrl();
+    formElement.action = salesforceUrl;
     formElement.method = "POST";
     formElement.enctype = "multipart/form-data";
 
+    this.logger?.info("🚀 Ejecutando submit nativo del formulario...");
+    
     // Enviar formulario
     formElement.submit();
   }
@@ -286,11 +294,11 @@ export class Service {
       errors.push("URLs de Salesforce no configuradas correctamente");
     }
 
-    if (!Config.oids.test || !Config.oids.prod) {
+    if (!this.config?.oids?.test || !this.config?.oids?.prod) {
       errors.push("OIDs de Salesforce no configurados correctamente");
     }
 
-    if (!Config.thankYouUrl) {
+    if (!this.config?.thankYouUrl) {
       errors.push("URL de agradecimiento no configurada");
     }
 
@@ -310,14 +318,14 @@ export class Service {
       const testData = new FormData();
       testData.append("oid", this.getOID());
       testData.append("debug", "1");
-      testData.append("debugEmail", Config.debugEmail || "test@example.com");
+      testData.append("debugEmail", this.config?.debugEmail || "test@example.com");
 
       const response = await this.performSubmit(testData);
 
-      Logger.log("✅ Conexión con Salesforce exitosa");
+      this.logger?.info("✅ Conexión con Salesforce exitosa");
       return response;
     } catch (error) {
-      Logger.error("❌ Error de conexión con Salesforce:", error);
+      this.logger?.error("❌ Error de conexión con Salesforce:", error);
       throw error;
     }
   }
@@ -363,9 +371,9 @@ export class Service {
     Config.sandboxMode = enabled;
     Config.debugEmail = debugEmail;
 
-    Logger.log(`🔧 Modo debug API: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger?.info(`🔧 Modo debug API: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
     if (enabled && debugEmail) {
-      Logger.log(`📧 Email debug: ${debugEmail}`);
+      this.logger?.info(`📧 Email debug: ${debugEmail}`);
     }
   }
 
@@ -437,9 +445,9 @@ export class Service {
     try {
       const newConfig = JSON.parse(configJson);
       this.updateConfig(newConfig);
-      Logger.log("✅ Configuración importada exitosamente");
+      this.logger?.info("✅ Configuración importada exitosamente");
     } catch (error) {
-      Logger.error("❌ Error al importar configuración:", error);
+      this.logger?.error("❌ Error al importar configuración:", error);
       throw error;
     }
   }

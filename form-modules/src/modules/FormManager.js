@@ -38,7 +38,7 @@ export class FormManager {
   async initialize() {
     try {
       this.logger.info(
-        `Inicializando FormManager para: ${this.selector} (${this.config.eventName})`
+        `Inicializando FormManager para: ${this.selector} (${this.config.getConfig().eventName})`
       );
 
       // Inicializar elemento del formulario
@@ -340,9 +340,10 @@ export class FormManager {
     // Event se creará después en initialize() cuando formElement esté disponible
     this.event = null;
 
-    this.data = new Data(this.config.cache, this.config.urls, this.logger);
+    const configData = this.config.getConfig();
+    this.data = new Data(configData.cache, configData.urls, this.logger);
 
-    this.service = new Service();
+    this.service = new Service(this.config, this.logger);
   }
 
   /**
@@ -453,6 +454,9 @@ export class FormManager {
    * @private
    */
   async _configureForm() {
+    // Configurar modos desde la configuración
+    this._initializeModes();
+    
     this._addHiddenFields();
     this._initializeFormHiddenFields();
     this.academic.initializeAcademicFields();
@@ -470,11 +474,35 @@ export class FormManager {
   // ===============================
 
   /**
+   * Inicializar modos desde la configuración
+   * @private
+   */
+  _initializeModes() {
+    const config = this.config.getConfig();
+    
+    if (config.devMode !== undefined) {
+      this.state.setDevMode(config.devMode);
+      this.logger.info(`🔧 DevMode configurado: ${config.devMode}`);
+    }
+    
+    if (config.debugMode !== undefined) {
+      this.state.setDebugMode(config.debugMode);
+      this.logger.info(`🔍 DebugMode configurado: ${config.debugMode}`);
+    }
+    
+    if (config.sandboxMode !== undefined) {
+      this.state.setSandboxMode(config.sandboxMode);
+      this.logger.info(`📦 SandboxMode configurado: ${config.sandboxMode}`);
+    }
+  }
+
+  /**
    * Añadir campos ocultos requeridos para Salesforce
    * @private
    */
   _addHiddenFields() {
     const { FIELDS, FIELD_MAPPING } = Constants;
+    const config = this.config.getConfig();
     const env = this.state.isSandboxMode() ? "test" : "prod";
 
     const fields = [
@@ -486,17 +514,17 @@ export class FormManager {
       {
         info: FIELD_MAPPING.RET_URL.name,
         name: FIELD_MAPPING.RET_URL.field,
-        value: this.config.thankYouUrl,
+        value: config.thankYouUrl,
       },
       {
         info: FIELD_MAPPING.DEBUG.name,
         name: FIELD_MAPPING.DEBUG.field,
-        value: this.state.getField(FIELDS.DEBUG),
+        value: this.state.isDebugMode() ? "1" : "0",
       },
       {
         info: FIELD_MAPPING.DEBUG_EMAIL.name,
         name: FIELD_MAPPING.DEBUG_EMAIL.field,
-        value: this.state.isDebugMode() ? this.config.debugEmail : "",
+        value: this.state.isDebugMode() ? config.debugEmail : "",
       },
       {
         info: FIELD_MAPPING.AUTHORIZATION_SOURCE.name,
@@ -849,6 +877,142 @@ export class FormManager {
   }
 
   /**
+   * Registrar detalles del envío del formulario en formato tabla
+   * @private
+   * @param {Object} formData - Datos del formulario
+   * @param {string} mode - Modo de envío (DEV_MODE, PRODUCTION, etc.)
+   */
+  _logFormSubmissionDetails(formData, mode) {
+    // Preparar datos para la tabla
+    const tableData = [];
+    const metadata = {
+      'Modo de envío': mode,
+      'Timestamp': new Date().toISOString(),
+      'Total de campos': Object.keys(formData).length,
+      'Form ID': this.formElement.id || 'N/A',
+      'Form Action': this.formElement.action || 'N/A'
+    };
+
+    // Agregar metadatos al inicio
+    Object.entries(metadata).forEach(([key, value]) => {
+      tableData.push({
+        Tipo: 'METADATA',
+        'Campo (Label)': key,
+        'Campo (Name)': '-',
+        Valor: value,
+        'Tipo de dato': typeof value
+      });
+    });
+
+    // Agregar campos del formulario
+    Object.entries(formData).forEach(([fieldName, fieldValue]) => {
+      const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`);
+      const fieldType = fieldElement ? fieldElement.type || fieldElement.tagName.toLowerCase() : 'unknown';
+      const fieldLabel = this._getFieldLabel(fieldName, fieldElement);
+      const fieldId = this._getFieldId(fieldName);
+      
+      tableData.push({
+        Tipo: 'FORM_FIELD',
+        'Campo (Label)': fieldLabel,
+        'Campo (Name)': fieldName,
+        'Campo (ID)': fieldId,
+        Valor: fieldValue,
+        'Tipo de dato': typeof fieldValue,
+        'Tipo de campo': fieldType,
+        'Requerido': fieldElement ? fieldElement.required : false
+      });
+    });
+
+    // Log usando el método table del logger
+    this.logger.table("📋 Detalles del envío del formulario", tableData);
+    
+    // Log adicional con resumen
+    this.logger.debug(`📊 Resumen: ${Object.keys(formData).length} campos enviados en modo ${mode}`);
+  }
+
+  /**
+   * Obtener ID del campo según el entorno (test/prod)
+   * @private
+   * @param {string} fieldName - Nombre del campo
+   * @returns {string} ID del campo o el nombre si no se encuentra
+   */
+  _getFieldId(fieldName) {
+    // Buscar el campo en FIELD_MAPPING por su field value
+    const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
+      mapping => mapping.field === fieldName
+    );
+
+    if (!fieldMapping) {
+      return fieldName; // Si no se encuentra en el mapeo, devolver el nombre original
+    }
+
+    // Si el ID es un objeto con test/prod, usar el ambiente apropiado
+    if (typeof fieldMapping.id === 'object' && fieldMapping.id.test && fieldMapping.id.prod) {
+      const isSandbox = this.state.isSandboxMode();
+      return isSandbox ? fieldMapping.id.test : fieldMapping.id.prod;
+    }
+
+    // Si es un string simple, devolverlo
+    return fieldMapping.id;
+  }
+
+  /**
+   * Obtener etiqueta legible para un campo
+   * @private
+   * @param {string} fieldName - Nombre del campo
+   * @param {HTMLElement} fieldElement - Elemento del campo
+   * @returns {string} Etiqueta legible
+   */
+  _getFieldLabel(fieldName, fieldElement) {
+    // Primero intentar obtener el nombre del FIELD_MAPPING
+    const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
+      mapping => mapping.field === fieldName
+    );
+
+    if (fieldMapping && fieldMapping.name) {
+      return fieldMapping.name;
+    }
+
+    // Mapeo de respaldo para campos que no estén en FIELD_MAPPING
+    const fieldLabels = {
+      // Campos UTM que pueden no estar en FIELD_MAPPING
+      'utm_source': 'UTM Source',
+      'utm_subsource': 'UTM Subsource',
+      'utm_medium': 'UTM Medium',
+      'utm_campaign': 'UTM Campaign',
+      'utm_article': 'UTM Article',
+      'utm_eventname': 'UTM Event Name',
+      'utm_eventdate': 'UTM Event Date'
+    };
+
+    // Intentar obtener la etiqueta del mapeo de respaldo
+    if (fieldLabels[fieldName]) {
+      return fieldLabels[fieldName];
+    }
+
+    // Intentar obtener el label asociado desde el DOM
+    if (fieldElement) {
+      const labelElement = this.formElement.querySelector(`label[for="${fieldElement.id}"]`);
+      if (labelElement && labelElement.textContent.trim()) {
+        return labelElement.textContent.trim().replace('*', '').trim();
+      }
+      
+      // Verificar si el campo tiene un placeholder descriptivo
+      if (fieldElement.placeholder && fieldElement.placeholder.trim()) {
+        return fieldElement.placeholder.trim();
+      }
+    }
+
+    // Fallback: convertir el nombre del campo a título
+    return fieldName
+      .replace(/_/g, ' ')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  /**
    * Procesar envío del formulario
    * @private
    */
@@ -875,17 +1039,18 @@ export class FormManager {
       // Modo desarrollo
       if (this.state.isDevMode()) {
         this.logger.info("🔧 DEV_MODE: Simulando envío exitoso");
-        this.logger.debug("Datos que se enviarían:", formData);
+        this._logFormSubmissionDetails(formData, 'DEV_MODE');
         return;
       }
 
-      // Envío real
-      this.logger.info("📡 Enviando datos a Salesforce...");
-      const result = await this.service.submitForm(this.formElement);
-
+      // Envío real usando método nativo del formulario
+      this.logger.info("📡 Enviando datos a Salesforce usando método nativo...");
+      this._logFormSubmissionDetails(formData, 'PRODUCTION');
+      this.service.submitFormNative(this.formElement);
       this.logger.info("✅ Formulario enviado exitosamente");
+      
       if (this.config.callbacks?.onFormSuccess) {
-        this.config.callbacks.onFormSuccess(result, this);
+        this.config.callbacks.onFormSuccess({ method: 'native' }, this);
       }
     } catch (error) {
       this.logger.error("❌ Error durante el envío:", error);
@@ -894,7 +1059,7 @@ export class FormManager {
         this.config.callbacks.onValidationError(error, this);
       }
 
-      this.ui.showErrorMessage("Error al enviar el formulario. Por favor, intente nuevamente.");
+      this.ui.showGeneralError("Error al enviar el formulario. Por favor, intente nuevamente.");
     } finally {
       this.isSubmitting = false;
       this.state.setSystemState("isSubmitting", false);

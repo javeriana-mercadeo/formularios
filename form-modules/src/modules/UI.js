@@ -603,7 +603,9 @@ export class Ui {
       `;
 
       // Insertar al inicio del formulario
-      this.formContext.insertAdjacentElement("afterbegin", errorContainer);
+      const content = this.formContext.querySelector(".form-content") || this.formContext;
+      content.insertAdjacentElement("afterbegin", errorContainer);
+      this.logger.debug("🆕 Contenedor de error general creado y agregado al formulario");
     }
 
     // Mostrar el mensaje
@@ -831,7 +833,7 @@ export class Ui {
    */
   initializeSelectArrowAnimations() {
     const selectElements = this.scopedQueryAll("select");
-    
+
     selectElements.forEach((select) => {
       this.setupSelectArrowAnimation(select);
     });
@@ -867,12 +869,12 @@ export class Ui {
     // Evento click - maneja la lógica de apertura/cierre
     const handleClick = (event) => {
       clickCount++;
-      
+
       // Limpiar timeout anterior
       if (clickTimeout) {
         clearTimeout(clickTimeout);
       }
-      
+
       // Esperar un poco para detectar doble click
       clickTimeout = setTimeout(() => {
         if (clickCount === 1) {
@@ -901,7 +903,12 @@ export class Ui {
 
     // Evento keydown - manejar teclas
     const handleKeydown = (event) => {
-      if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown" || event.key === "ArrowUp") {
+      if (
+        event.key === "Enter" ||
+        event.key === " " ||
+        event.key === "ArrowDown" ||
+        event.key === "ArrowUp"
+      ) {
         updateArrow(true);
       } else if (event.key === "Escape") {
         updateArrow(false);
@@ -926,7 +933,7 @@ export class Ui {
       click: handleClick,
       blur: handleBlur,
       keydown: handleKeydown,
-      change: handleChange
+      change: handleChange,
     };
   }
 
@@ -951,7 +958,7 @@ export class Ui {
    */
   cleanupSelectArrowAnimations() {
     const selectElements = this.scopedQueryAll("select");
-    
+
     selectElements.forEach((select) => {
       this.removeSelectArrowListeners(select);
       select.classList.remove("select-open");
