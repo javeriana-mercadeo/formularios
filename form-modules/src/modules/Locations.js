@@ -169,17 +169,33 @@ export class Locations {
     const filteredCities = this.getFilteredCities(departmentCode);
 
     if (filteredCities.length === 1) {
-      // Solo una ciudad: ocultar campo y preseleccionar
-      this.Ui.populateSelect({
-        selector: Constants.SELECTORS.CITY,
-        options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
-      });
-
-      // Preseleccionar automáticamente
+      // Solo una ciudad: preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.CITY, filteredCities[0].value);
-      this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
-
-      this.logger.info(`🔧 Ciudad preseleccionada automáticamente: ${filteredCities[0].text}`);
+      
+      // Verificar si viene de un departamento con singleCity (información ya está en la UI)
+      const filteredDepartments = this.getFilteredDepartments();
+      const currentDepartment = filteredDepartments.find(dept => dept.value === departmentCode);
+      
+      if (currentDepartment && currentDepartment.singleCity) {
+        // Viene de departamento con una sola ciudad: ocultar campo ciudad
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.CITY,
+          options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
+        });
+        
+        this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
+        this.logger.info(`🔧 Ciudad preseleccionada automáticamente y ocultada (desde departamento con ciudad única): ${filteredCities[0].text}`);
+      } else {
+        // Departamento regular con una sola ciudad: mantener visible pero preseleccionado
+        this.Ui.populateSelect({
+          selector: Constants.SELECTORS.CITY,
+          options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
+        });
+        
+        this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.CITY));
+        this.state.setFieldVisibility(Constants.FIELDS.CITY, true);
+        this.logger.info(`🔧 Ciudad preseleccionada automáticamente (departamento regular): ${filteredCities[0].text}`);
+      }
     } else if (filteredCities.length === 0) {
       // Sin ciudades disponibles
       this.logger.warn("⚠️ No hay ciudades disponibles para este departamento");
@@ -419,12 +435,30 @@ export class Locations {
     // Si hay ciudades específicas, obtener departamentos de esas ciudades
     if (configCities && configCities.length > 0) {
       const departmentsFromCities = this.getDepartmentsFromCities(configCities);
+      
+      // Enriquecer el texto de los departamentos que tienen una sola ciudad
+      const enrichedDepartments = departmentsFromCities.map((department) => {
+        const departmentCities = this.getFilteredCities(department.value);
+        
+        if (departmentCities.length === 1) {
+          // Una sola ciudad: mostrar "Departamento - Ciudad" en el texto
+          return {
+            value: department.value, // IMPORTANTE: mantener solo el valor del departamento
+            text: `${department.text} - ${departmentCities[0].text}`, // UI enriquecida
+            singleCity: departmentCities[0] // Metadata para auto-selección
+          };
+        } else {
+          // Múltiples ciudades: mantener texto original
+          return department;
+        }
+      });
+      
       this.logger.info(
-        `🏛️ Departamentos desde ciudades configuradas: ${departmentsFromCities
+        `🏛️ Departamentos desde ciudades configuradas (enriquecidos): ${enrichedDepartments
           .map((d) => d.text)
           .join(", ")}`
       );
-      return departmentsFromCities;
+      return enrichedDepartments;
     }
 
     // Si hay departamentos específicos en configuración, filtrar por esos

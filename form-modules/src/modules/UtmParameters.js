@@ -153,38 +153,38 @@ export class UtmParameters {
     const { FIELDS, FIELD_MAPPING } = Constants;
 
     return {
-      // Parámetros UTM estándar - usando descripciones de FIELD_MAPPING
-      [FIELDS.SOURCE]: {
+      // Parámetros UTM estándar - usando nombres correctos de URL
+      [`utm_${FIELDS.SOURCE}`]: {
         field: FIELDS.SOURCE,
         description: FIELD_MAPPING.SOURCE.name,
         salesforceIds: FIELD_MAPPING.SOURCE.id,
       },
-      [FIELDS.SUB_SOURCE]: {
+      [`utm_${FIELDS.SUB_SOURCE}`]: {
         field: FIELDS.SUB_SOURCE,
         description: FIELD_MAPPING.SUB_SOURCE.name,
         salesforceIds: FIELD_MAPPING.SUB_SOURCE.id,
       },
-      [FIELDS.MEDIUM]: {
+      [`utm_${FIELDS.MEDIUM}`]: {
         field: FIELDS.MEDIUM,
         description: FIELD_MAPPING.MEDIUM.name,
         salesforceIds: FIELD_MAPPING.MEDIUM.id,
       },
-      [FIELDS.CAMPAIGN]: {
+      [`utm_${FIELDS.CAMPAIGN}`]: {
         field: FIELDS.CAMPAIGN,
         description: FIELD_MAPPING.CAMPAIGN.name,
         salesforceIds: FIELD_MAPPING.CAMPAIGN.id,
       },
-      [FIELDS.ARTICLE]: {
+      [`utm_${FIELDS.ARTICLE}`]: {
         field: FIELDS.ARTICLE,
         description: FIELD_MAPPING.ARTICLE.name,
         salesforceIds: FIELD_MAPPING.ARTICLE.id,
       },
-      [FIELDS.EVENT_NAME]: {
+      [`utm_${FIELDS.EVENT_NAME}`]: {
         field: FIELDS.EVENT_NAME,
         description: FIELD_MAPPING.EVENT_NAME.name,
         salesforceIds: FIELD_MAPPING.EVENT_NAME.id,
       },
-      [FIELDS.EVENT_DATE]: {
+      [`utm_${FIELDS.EVENT_DATE}`]: {
         field: FIELDS.EVENT_DATE,
         description: FIELD_MAPPING.EVENT_DATE.name,
         salesforceIds: FIELD_MAPPING.EVENT_DATE.id,

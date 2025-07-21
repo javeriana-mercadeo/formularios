@@ -899,10 +899,32 @@ export class FormManager {
       const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`);
       const fieldLabel = this._getFieldLabel(fieldName, fieldElement);
       const fieldId = fieldElement ? fieldElement.id || fieldName : fieldName;
+      
+      // Para modo dev, mostrar el name del FIELD_MAPPING en lugar del fieldName
+      let displayName = fieldName;
+      if (this.state.isDevMode()) {
+        // Buscar el name en FIELD_MAPPING
+        const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
+          (mapping) => {
+            // Buscar por field
+            if (mapping.field === fieldName) return true;
+            // Buscar por ID
+            if (typeof mapping.id === 'string' && mapping.id === fieldName) return true;
+            if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
+              return mapping.id.test === fieldName || mapping.id.prod === fieldName;
+            }
+            return false;
+          }
+        );
+        
+        if (fieldMapping && fieldMapping.name) {
+          displayName = fieldMapping.name;
+        }
+      }
 
       formTableData.push({
         "Campo (Label)": fieldLabel,
-        "Campo (Name)": fieldName,
+        "Campo (Name)": displayName,
         "Campo (ID)": fieldId,
         Valor: fieldValue,
       });
@@ -974,12 +996,27 @@ export class FormManager {
    * @returns {string} Etiqueta legible
    */
   _getFieldLabel(fieldName, fieldElement) {
-    // Primero intentar obtener el nombre del FIELD_MAPPING
-    const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
+    // Primero intentar obtener el nombre del FIELD_MAPPING por el campo (field)
+    let fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
       (mapping) => mapping.field === fieldName
     );
 
-    console.log(fieldMapping);
+    // Si no se encuentra por field, intentar buscar por ID
+    if (!fieldMapping) {
+      fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
+        (mapping) => {
+          // Verificar si el ID es un string simple
+          if (typeof mapping.id === 'string') {
+            return mapping.id === fieldName;
+          }
+          // Verificar si el ID es un objeto con test/prod
+          if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
+            return mapping.id.test === fieldName || mapping.id.prod === fieldName;
+          }
+          return false;
+        }
+      );
+    }
 
     if (fieldMapping && fieldMapping.name) {
       return fieldMapping.name;

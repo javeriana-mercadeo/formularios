@@ -29,7 +29,7 @@ export const configMini = {
   attendanceDays: ["Jueves 15 de febrero de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  test: true,
+  test: false,
   debug: true,
   development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
