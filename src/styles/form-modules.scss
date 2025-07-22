@@ -1,0 +1,46 @@
+@use "sass:meta";
+@use "./vars" as *;
+
+// ==========================================
+// PREFIJO PARA AISLAMIENTO DEL CSS
+// ==========================================
+.#{$selector-prefix} {
+  // ==========================================
+  // ESTILOS GENERALES DEL MÓDULO
+  // ==========================================
+  
+  @apply font-segoe bg-[var(--form-modules-container-background)];
+  @apply rounded-[var(--form-modules-container-border-radius)];
+  @apply p-[var(--form-modules-container-padding)] my-0 mx-auto w-full;
+  @apply max-w-[var(--form-modules-container-max-width)] flex flex-col max-h-[90vh];
+  @apply overflow-y-auto box-border;
+  box-shadow: var(--form-modules-container-shadow);
+
+  // ==========================================
+  // BASE - RESET Y TIPOGRAFÍA
+  // ==========================================
+  @include meta.load-css("modules/base");
+
+  // ==========================================
+  // LAYOUT - CONTENEDORES Y GRID
+  // ==========================================
+  @include meta.load-css("modules/layout");
+
+  // ==========================================
+  // COMPONENTES - FORMULARIOS Y CAMPOS
+  // ==========================================
+  @include meta.load-css("modules/forms");
+  @include meta.load-css("modules/fields");
+  @include meta.load-css("modules/buttons");
+  @include meta.load-css("modules/validation");
+
+  // ==========================================
+  // UTILIDADES - ESPACIADO Y DISPLAY
+  // ==========================================
+  @include meta.load-css("modules/utilities");
+
+  // ==========================================
+  // TEMAS - ESTILOS ESPECÍFICOS
+  // ==========================================
+  @include meta.load-css("modules/demo-theme");
+}

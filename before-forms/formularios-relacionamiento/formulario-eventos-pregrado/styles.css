@@ -1,0 +1,669 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('./assets/2. eventos_pregrado.JPG') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+}
+
+.left-section {
+  color: white;
+  max-width: 40%;
+}
+
+.left-section .logo {
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+.left-section h1 {
+  font-size: 3em;
+  line-height: 1.2;
+}
+
+.form-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  width: 427px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-card h2 {
+  color: #4d7fcb;
+  margin-bottom: 20px;
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-card input,
+.form-card select {
+  border: none;
+  border-bottom: 1px solid #aaa;
+  padding: 10px 5px;
+  outline: none;
+  font-size: var(--font-size-paragraph, 0.875rem);
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.form-card button {
+  background-color: #4d7fcb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--font-size-heading, 1rem);
+}
+
+.form-card button:hover {
+  background-color: #3f6fb5;
+}
+
+.note {
+  margin-top: 15px;
+  font-size: var(--font-size-small, 0.6875rem);
+  color: #333;
+}
+
+.note a {
+  color: #4d7fcb;
+  text-decoration: underline;
+}
+
+/* Validation Error Styles - Based on 0_encabezado_fix */
+:root {
+  --danger-500: #ff594d;
+  --danger-rgb: 255, 18, 0;
+  --success-600: #28a368;
+  --success-rgb: 40, 163, 104;
+}
+
+/* Field Error Messages */
+.field-error {
+  font-size: 12px;
+  color: var(--danger-500);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(var(--danger-rgb), 0.05);
+  border-radius: 6px;
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+.field-error::before {
+  content: '⚠ ';
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Legacy error_text support - Updated to match 0_encabezado_fix exactly */
+.error_text {
+  font-size: 12px;
+  color: var(--danger-500);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(var(--danger-rgb), 0.1);
+  border-radius: 6px;
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+.error_text::before {
+  content: '⚠ ';
+  font-size: 11px;
+  flex-shrink: 0;
+  color: var(--danger-500);
+}
+
+/* Input Error States */
+.form-card input.error,
+.form-card select.error {
+  border-bottom-color: var(--danger-500) !important;
+  background: rgba(var(--danger-rgb), .09) !important;
+}
+
+/* Input Validated States */
+.form-card input.validated,
+.form-card select.validated {
+  border-bottom-color: var(--success-600) !important;
+  background: rgba(var(--success-rgb), 0.02);
+}
+
+/* Label Error States */
+.form-card label.error {
+  color: var(--danger-500);
+}
+
+/* Required Field Indicators */
+.form-card label.required::after {
+  content: ' *';
+  color: var(--danger-500);
+  font-weight: 600;
+}
+
+/* Animation for error messages */
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* College selection styles */
+.form-card ul {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  font-size: var(--font-size-paragraph, 0.875rem);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-card ul li {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: all 0.2s ease;
+}
+
+.form-card ul li:hover {
+  background-color: rgba(0, 75, 145, 0.05);
+  color: #004b91;
+}
+
+.form-card ul li:last-child {
+  border-bottom: none;
+}
+
+/* Headings in form */
+.form-card h5 {
+  color: #4d7fcb;
+  margin: 20px 0 10px 0;
+  font-size: var(--font-size-heading, 1rem);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.form-card p {
+  color: #666;
+  font-size: var(--font-size-paragraph, 0.875rem);
+  margin-bottom: 10px;
+  line-height: var(--line-height-base, 1.5);
+}
+
+/* Enhanced form input styling */
+.form-card input:focus,
+.form-card select:focus {
+  border-bottom: 1px solid #759bd7;
+  background: rgba(117, 155, 215, 0.02);
+  transition: all 0.3s ease;
+}
+
+.form-card input:hover:not(:focus),
+.form-card select:hover:not(:focus) {
+  border-bottom-color: #999;
+  transition: all 0.2s ease;
+}
+
+/* Radio buttons styling */
+.form-card input[type="radio"] {
+  margin-right: 8px;
+  border: none;
+  accent-color: #4d7fcb;
+  width: 16px;
+  height: 16px;
+}
+
+.form-card label {
+  font-size: var(--font-size-paragraph, 0.875rem);
+  color: #333;
+  margin-left: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.form-card label:hover {
+  color: #4d7fcb;
+}
+
+/* Button disabled state */
+.form-card button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Success message */
+#successMsg {
+  border: 2px solid green;
+  background-color: lightgrey;
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+  margin-top: 10px;
+  font-size: var(--font-size-paragraph, 0.875rem);
+  color: #006600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 2vh 20px;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    max-width: 100%;
+    height: 100%;
+  }
+  
+  .left-section {
+    max-width: 100%;
+    text-align: center;
+    order: 1;
+    flex-shrink: 0;
+    height: 25vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left-section .logo {
+    width: 12vw;
+    min-width: 120px;
+    max-width: 200px;
+    margin-bottom: 1vh;
+  }
+  
+  .left-section h1 {
+    font-size: 4vw;
+    min-font-size: 1.5rem;
+    max-font-size: 2.5rem;
+    margin-bottom: 1vh;
+    line-height: 1.2;
+  }
+  
+  .form-card {
+    width: 100%;
+    max-width: 400px;
+    order: 2;
+    padding: 3vh 25px;
+    height: 73vh;
+    overflow-y: auto;
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1vh 15px;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .content-wrapper {
+    gap: 1vh;
+  }
+  
+  .left-section {
+    height: 20vh;
+  }
+  
+  .left-section .logo {
+    width: 15vw;
+    min-width: 100px;
+    max-width: 150px;
+    margin-bottom: 0.5vh;
+  }
+  
+  .left-section h1 {
+    font-size: 5vw;
+    min-font-size: 1.2rem;
+    max-font-size: 2rem;
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+  
+  .form-card {
+    padding: 2vh 20px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    height: 79vh;
+    overflow-y: auto;
+  }
+  
+  .form-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+  
+  .form-card input,
+  .form-card select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 5px;
+  }
+  
+  .form-card button {
+    padding: 15px;
+    font-size: 16px;
+  }
+  
+  /* College filter selects in mobile */
+  #colegio_section select {
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 10px;
+  }
+  
+  #colegio_section #selectedDepartment {
+    margin-bottom: 10px;
+  }
+}
+
+/* ========================================== */
+/* HIDDEN FIELDS FULL WIDTH STYLES */
+/* ========================================== */
+
+/* Hidden field sections */
+#colegio_section,
+#programa_section,
+#periodo_section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* All hidden field selects */
+#colegio_section select,
+#programa_section select,
+#periodo_section select,
+#nivelacademico {
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+/* College search input */
+#colegio_section input[type="text"],
+#searchTerm {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Error messages for hidden fields - full width */
+#error_nivelacademico,
+#error_facultad,
+#error_programa,
+#error_periodo_esperado,
+#error_colegio {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+/* College filter selects - ensure full width */
+#selectedDepartment,
+#selectedCity {
+  width: 100% !important;
+  margin-bottom: 15px !important;
+  box-sizing: border-box;
+}
+
+/* College list full width */
+#colegios_list {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* ========================================== */
+/* NAME FIELDS SIDE BY SIDE */
+/* ========================================== */
+
+/* Name row container */
+.name-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Individual name field containers */
+.name-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Ensure inputs within name fields take full width of their container */
+.name-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Error messages within name fields */
+.name-field .error_text {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+/* Keep name fields side by side on all screen sizes */
+
+/* ========================================== */
+/* DOCUMENT FIELDS SIDE BY SIDE */
+/* ========================================== */
+
+/* Document row container */
+.document-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Document type field - half width (50%) */
+.document-type-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Document number field - half width (50%) */
+.document-number-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Ensure inputs and selects within document fields take full width of their container */
+.document-type-field select,
+.document-number-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Error messages within document fields */
+.document-type-field .error_text,
+.document-number-field .error_text {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+/* ========================================== */
+/* PHONE FIELDS SIDE BY SIDE */
+/* ========================================== */
+
+/* Phone row container */
+.phone-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prefix field - 30% width */
+.prefix-field {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Mobile number field - 70% width */
+.mobile-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Ensure inputs and selects within phone fields take full width of their container */
+.prefix-field select,
+.mobile-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Error messages within phone fields */
+.prefix-field .error_text,
+.mobile-field .error_text {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+/* Keep phone fields side by side on all screen sizes */
+
+/* Keep document fields side by side on all screen sizes */
+
+/* ========================================== */
+/* FOCUS VISIBLE ACCESSIBILITY */
+/* ========================================== */
+
+/* Focus específico para accesibilidad - replicado de 0_encabezado_fix */
+:focus-visible:not(.focus\:outline-none):not([class*='focus:']) {
+  outline: 2px solid #759bd7;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ========================================== */
+/* RADIO BUTTONS INLINE */
+/* ========================================== */
+
+/* Radio group container - inline layout */
+.radio-inline-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+/* Individual radio option */
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Radio button styling */
+.radio-option input[type="radio"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Radio label styling */
+.radio-option label {
+  margin: 0;
+  cursor: pointer;
+  font-size: var(--font-size-paragraph, 0.875rem);
+  color: #333;
+}
+
+/* Keep radio buttons horizontal on all screen sizes */
+
+/* ========================================== */
+/* CUSTOM SCROLLBAR STYLING */
+/* ========================================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4d7fcb;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f6fb5;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4d7fcb #f1f1f1;
+}

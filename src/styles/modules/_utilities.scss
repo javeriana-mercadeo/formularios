@@ -1,0 +1,137 @@
+// ==========================================
+// UTILIDADES - CLASES UTILIZADAS EN HTML Y JS
+// ==========================================
+
+// Clases para grupos de radio - utilizadas en authorization-section (compacta)
+.radio-group {
+  // Layout flex
+  @apply flex items-center;
+  
+  // Espaciado
+  @apply gap-6;
+}
+
+.radio-option {
+  // Layout flex
+  @apply flex items-center;
+  
+  // Espaciado
+  @apply gap-2;
+}
+
+// CLASES CRÍTICAS PARA JAVASCRIPT - NO ELIMINAR
+// Clases para mostrar/ocultar elementos (UI.js)
+.fm-hidden {
+  // Visibilidad
+  @apply hidden;
+}
+
+// Clases para errores generales (UI.js)
+.form-general-error {
+  // Colores de fondo y texto
+  @apply bg-red-50 text-red-800;
+  
+  // Espaciado
+  @apply p-3 mb-4;
+  
+  // Bordes y forma
+  @apply border border-red-200 rounded-md;
+  
+  // Animaciones
+  @apply transition-opacity duration-300;
+}
+
+// Clases para campos de formulario con contexto (FormManager.js)
+.field-container {
+  // Espaciado
+  @apply mb-4;
+}
+
+.form-group {
+  // Espaciado
+  @apply mb-4;
+}
+
+.input-group {
+  // Layout flex
+  @apply flex;
+  
+  // Espaciado
+  @apply gap-2;
+}
+
+// Clases para grupos de radio inline (UI.js)
+.radio-inline-group {
+  // Layout flex
+  @apply flex items-center;
+  
+  // Espaciado
+  @apply gap-6 mt-3;
+
+  .radio-option {
+    // Layout flex
+    @apply flex items-center;
+    
+    // Espaciado
+    @apply gap-2;
+
+    input[type="radio"] {
+      // Espaciado
+      @apply mr-1;
+      
+      // Dimensiones
+      @apply w-4 h-4;
+    }
+
+    label {
+      // Interacción
+      @apply cursor-pointer;
+      
+      // Tipografía
+      @apply text-sm text-gray-700;
+      
+      // Animaciones
+      @apply transition-colors duration-200;
+
+      &:hover {
+        // Colores hover
+        @apply text-primary-600;
+      }
+    }
+  }
+}
+
+// Contenedores específicos para campos de teléfono (UI.js)
+.phone-row {
+  // Layout flex
+  @apply flex w-full;
+  
+  // Espaciado
+  @apply gap-4;
+}
+
+.name-row {
+  // Layout flex
+  @apply flex w-full;
+  
+  // Espaciado
+  @apply gap-4;
+}
+
+.name-field {
+  // Comportamiento flex
+  @apply flex-1;
+}
+
+.prefix-field {
+  // Dimensiones
+  @apply w-32;
+  
+  // Comportamiento flex
+  @apply flex-shrink-0;
+}
+
+.mobile-field {
+  // Comportamiento flex
+  @apply flex-1;
+}

@@ -1,0 +1,126 @@
+// ==========================================
+// FORMULARIOS - ESTRUCTURA Y SECCIONES
+// ==========================================
+
+// Formulario base
+form {
+  @apply w-full;
+}
+
+// Sección de autorización - compacta y elegante
+.authorization-section {
+  // Espaciado
+  @apply p-3;
+
+  // Colores de fondo
+  @apply bg-gray-50;
+
+  // Bordes y forma
+  @apply rounded-md border border-gray-200;
+
+  p {
+    // Tipografía
+    @apply text-sm text-gray-700 leading-relaxed;
+
+    // Espaciado
+    @apply mb-3;
+
+    a {
+      // Decoración de enlaces
+      @apply underline;
+
+      // Colores de enlaces
+      @apply text-primary-600;
+
+      &:hover {
+        // Colores hover
+        @apply text-primary-700;
+      }
+    }
+  }
+
+  .radio-group {
+    // Layout flex
+    @apply flex gap-6 items-center;
+
+    .radio-option {
+      // Layout de opción
+      @apply flex items-center gap-2;
+
+      input[type="radio"] {
+        // Dimensiones de radio
+        @apply w-4 h-4 flex-shrink-0;
+
+        // Espaciado de radio
+        @apply m-0;
+      }
+
+      label {
+        // Tipografía de label
+        @apply text-sm text-gray-700 font-medium leading-none;
+
+        // Interacción de label
+        @apply cursor-pointer;
+
+        // Espaciado de label
+        @apply mb-0;
+
+        &:hover {
+          // Colores hover de label
+          @apply text-primary-600;
+        }
+      }
+    }
+  }
+}
+
+// Contenedor de campos
+.field {
+  // Espaciado y dimensiones
+  @apply mb-4 w-full;
+
+  // Labels
+  label {
+    // Layout de label
+    @apply block;
+
+    // Tipografía de label
+    @apply text-sm font-medium text-gray-700;
+
+    // Espaciado de label
+    @apply mb-1;
+  }
+
+  // Nota: Todos los estilos de input, textarea, select están en _fields.scss
+  // Este archivo solo maneja la estructura del formulario
+
+  // Checkbox y radio - estilos definidos en _fields.scss
+}
+
+// Estilos para campos con prefijos/sufijos - utilizado por JS
+.field-with-prefix {
+  // Layout flex
+  @apply flex items-center;
+
+  .field-prefix {
+    // Colores de fondo
+    @apply bg-gray-50;
+
+    // Bordes
+    @apply border border-r-0 border-gray-300;
+
+    // Espaciado
+    @apply px-3 py-2;
+
+    // Tipografía
+    @apply text-gray-500 text-sm;
+
+    // Forma
+    @apply rounded-l-md;
+  }
+
+  input {
+    // Forma y bordes
+    @apply rounded-l-none border-l-0 focus:border-l-0;
+  }
+}

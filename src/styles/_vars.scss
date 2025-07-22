@@ -1,0 +1,78 @@
+$selector-prefix: "form-modules";
+
+// ==========================================
+// VARIABLES CSS ESENCIALES DEL SISTEMA
+// ==========================================
+:root {
+  // ==========================================
+  // COLORES PRIMARIOS (personalizable por tema)
+  // ==========================================
+  --form-modules-primary-50: #f3f6fc;
+  --form-modules-primary-100: #e7edf7;
+  --form-modules-primary-200: #c9d7ee;
+  --form-modules-primary-300: #99b6e0;
+  --form-modules-primary-400: #6290ce;
+  --form-modules-primary-500: #3e72b9;
+  --form-modules-primary-600: #2c5697;
+  --form-modules-primary-700: #26477e;
+  --form-modules-primary-800: #233e69;
+  --form-modules-primary-900: #223658;
+  --form-modules-primary-950: #16223b;
+  --form-modules-primary: var(--form-modules-primary-500);
+
+  // Transparencias para shadows y overlays
+  --form-modules-primary-500-30: rgba(62, 114, 185, 0.3);
+  --form-modules-primary-500-40: rgba(62, 114, 185, 0.4);
+
+  // ==========================================
+  // COLORES SEMÁNTICOS (personalizable por tema)
+  // ==========================================
+  --form-modules-success: #16a34a;
+  --form-modules-success-light: #dcfce7;
+  --form-modules-error: #ef4444;
+  --form-modules-error-light: #fef2f2;
+  --form-modules-warning: #f59e0b;
+  --form-modules-warning-light: #fffbeb;
+  --form-modules-info: #3b82f6;
+  --form-modules-info-light: #eff6ff;
+
+  // ==========================================
+  // GRISES (personalizable por tema)
+  // ==========================================
+  --form-modules-gray-50: #f9fafb;
+  --form-modules-gray-100: #f3f4f6;
+  --form-modules-gray-200: #e5e7eb;
+  --form-modules-gray-300: #d1d5db;
+  --form-modules-gray-400: #9ca3af;
+  --form-modules-gray-500: #6b7280;
+  --form-modules-gray-600: #4b5563;
+  --form-modules-gray-700: #374151;
+  --form-modules-gray-800: #1f2937;
+  --form-modules-gray-900: #111827;
+
+  // ==========================================
+  // TIPOGRAFÍA (solo pesos no disponibles en Tailwind)
+  // ==========================================
+  --form-modules-font-weight-normal: 400;
+  --form-modules-font-weight-medium: 500;
+  --form-modules-font-weight-semibold: 600;
+  --form-modules-font-weight-bold: 700;
+
+  // ==========================================
+  // PROPIEDADES ESPECÍFICAS DEL SISTEMA
+  // ==========================================
+  
+  // Contenedor principal (configuración específica del módulo)
+  --form-modules-container-max-width: 32rem;
+  --form-modules-container-background: #ffffff;
+  --form-modules-container-border-radius: 1rem;
+  --form-modules-container-padding: 1.5rem;
+  --form-modules-container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+  // Input focus color (referencia al primary)
+  --form-modules-input-border-color-focus: var(--form-modules-primary-500);
+  --form-modules-input-border-color-error: var(--form-modules-error);
+  --form-modules-input-border-color-success: var(--form-modules-success);
+  --form-modules-input-background: #ffffff;
+  --form-modules-input-background-disabled: var(--form-modules-gray-100);
+}

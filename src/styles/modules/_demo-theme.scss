@@ -1,0 +1,23 @@
+// ==========================================
+// DEMO THEME - ESTILOS ESPECÍFICOS PARA EJEMPLOS
+// ==========================================
+
+// Información de prueba - clase utilizada en HTML
+.test-info {
+  // Espaciado
+  @apply p-4;
+  
+  // Bordes
+  @apply border-t border-gray-200;
+  
+  // Colores de fondo
+  @apply bg-gray-50;
+
+  &.test-additional {
+    // Bordes adicionales
+    @apply border-l-4;
+    
+    // Colores de borde
+    @apply border-purple-500;
+  }
+}

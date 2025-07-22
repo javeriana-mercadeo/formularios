@@ -1,0 +1,104 @@
+// ==========================================
+// LAYOUT - CONTENEDORES UTILIZADOS EN HTML
+// ==========================================
+
+// Header del formulario - FIJO - utilizado en HTML
+.form-header {
+  // Layout
+  @apply flex-none;
+  
+  // Alineación
+  @apply text-center;
+  
+  // Espaciado
+  @apply p-2;
+
+  h1,
+  h2,
+  h3 {
+    // Tipografía
+    @apply text-2xl font-medium leading-tight;
+    
+    // Colores
+    @apply text-primary;
+    
+    // Espaciado
+    @apply mb-2;
+  }
+
+  p {
+    // Tipografía
+    @apply text-sm leading-relaxed;
+    
+    // Colores
+    @apply text-gray-600;
+    
+    // Espaciado
+    @apply mb-0;
+  }
+}
+
+// Contenido del formulario - CON SCROLL - utilizado en HTML
+.form-content {
+  // Layout flex
+  @apply flex-1;
+  
+  // Scroll
+  @apply overflow-y-auto;
+  
+  // Espaciado
+  @apply px-5 py-4;
+  
+  // Altura máxima dinámica
+  max-height: calc(100vh - 200px);
+}
+
+// Campo alternativo - utilizado en HTML
+.form-fields {
+  // Layout flex
+  @apply flex-1;
+  
+  // Scroll
+  @apply overflow-y-auto;
+  
+  // Espaciado
+  @apply px-6 py-4;
+  
+  // Altura máxima dinámica
+  max-height: calc(100vh - 200px);
+}
+
+// Footer del formulario - FIJO - utilizado en HTML
+.form-footer {
+  // Layout flex
+  @apply flex items-center;
+  
+  // Espaciado
+  @apply p-2;
+}
+
+// Filas para campos lado a lado - utilizado en HTML
+.field-group {
+  // Layout base
+  @apply flex flex-col w-full;
+  
+  // Gap base
+  @apply gap-0;
+  
+  // Responsive - pantallas medianas y grandes
+  @apply sm:flex-row sm:gap-4;
+}
+
+// Clases específicas para campos con prefijo - utilizadas por JS
+.field-prefix {
+  // Dimensiones
+  @apply w-32;
+  
+  // Comportamiento flex
+  @apply flex-shrink-0;
+}
+
+.field-main {
+  // Comportamiento flex
+  @apply flex-1;
+}

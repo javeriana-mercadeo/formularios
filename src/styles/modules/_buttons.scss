@@ -1,0 +1,93 @@
+// ==========================================
+// BOTONES - ESTILO MODERNO CON TAILWIND
+// ==========================================
+
+// Botón principal - estilo moderno usando Tailwind
+.submit-button {
+  // Reset y apariencia base
+  @apply appearance-none outline-none border-0 bg-transparent p-0 m-0;
+  
+  // Layout y posicionamiento
+  @apply cursor-pointer relative inline-flex items-center justify-center gap-2;
+  
+  // Dimensiones y espaciado
+  @apply min-w-16 min-h-10 px-4 py-2 w-full max-w-[424px] mx-auto;
+  
+  // Tipografía
+  @apply font-medium leading-6 text-sm text-white;
+  
+  // Forma y bordes
+  @apply rounded-xl;
+  
+  // Animaciones y transiciones
+  @apply transition-all duration-300 ease-in-out select-none whitespace-nowrap overflow-hidden;
+  
+  // Colores base
+  @apply bg-primary;
+  
+  // Otras propiedades
+  @apply no-underline align-top;
+  font: inherit;
+
+  &:hover {
+    // Colores hover
+    @apply bg-primary-600;
+    
+    // Transformaciones hover
+    @apply -translate-y-0.5;
+    
+    // Sombras hover
+    box-shadow: 0 4px 12px rgba(77, 127, 203, 0.3);
+  }
+
+  &:active {
+    // Colores active
+    @apply bg-primary-700;
+    
+    // Transformaciones active
+    @apply translate-y-0;
+    
+    // Sombras active
+    box-shadow: 0 2px 8px rgba(77, 127, 203, 0.4);
+  }
+
+  &:focus {
+    // Focus outline
+    @apply outline-none;
+    
+    // Sombras focus
+    box-shadow: 0 0 0 3px rgba(77, 127, 203, 0.3);
+  }
+
+  &:disabled {
+    // Colores disabled
+    @apply bg-gray-400 text-gray-100;
+    
+    // Cursor disabled
+    @apply cursor-not-allowed;
+    
+    // Reset transformaciones
+    @apply transform-none;
+    
+    // Reset sombras
+    box-shadow: none;
+
+    &:hover {
+      // Mantener colores disabled en hover
+      @apply bg-gray-400;
+      
+      // Reset transformaciones en hover
+      @apply transform-none;
+      
+      // Reset sombras en hover
+      box-shadow: none;
+    }
+  }
+}
+
+// Responsive - ajustes para móviles usando Tailwind
+@media (max-width: 639px) {
+  .submit-button {
+    @apply px-6 py-4 text-base min-h-12;
+  }
+}

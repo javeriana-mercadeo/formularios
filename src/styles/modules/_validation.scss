@@ -1,0 +1,90 @@
+// ==========================================
+// VALIDACIÓN - ESTILOS BÁSICOS Y CLASES JS
+// ==========================================
+
+// CLASES CRÍTICAS UTILIZADAS POR JAVASCRIPT - NO ELIMINAR
+
+// Mensajes de error - utilizados por Validation.js
+.error_text {
+  // Layout flex
+  @apply flex items-center;
+  
+  // Espaciado
+  @apply gap-2 p-2 mt-1;
+  
+  // Tipografía
+  @apply text-sm;
+  
+  // Colores
+  @apply text-red-500 bg-red-50;
+  
+  // Forma
+  @apply rounded-md;
+  
+  // Tamaño específico
+  font-size: 12px;
+  
+  // Animación
+  animation: errorSlideIn 0.3s ease-out;
+
+  &::before {
+    content: "⚠ ";
+    
+    // Tipografía del icono
+    @apply text-xs;
+    
+    // Comportamiento flex
+    @apply flex-shrink-0;
+    
+    // Colores del icono
+    @apply text-red-500;
+  }
+}
+
+// Animación para mensajes de error
+@keyframes errorSlideIn {
+  from {
+    // Opacidad inicial
+    @apply opacity-0;
+    
+    // Posición inicial
+    transform: translateY(-10px);
+  }
+  to {
+    // Opacidad final
+    @apply opacity-100;
+    
+    // Posición final
+    transform: translateY(0);
+  }
+}
+
+// Estados de error en inputs - utilizados por Validation.js
+input.error,
+select.error {
+  // Bordes error
+  @apply border-red-500;
+  
+  // Fondo error
+  @apply bg-red-50;
+
+  &:focus {
+    // Color de borde focus error (forzado)
+    border-bottom-color: theme('colors.red.500') !important;
+  }
+}
+
+// Estados validados en inputs - utilizados por Validation.js
+input.validated,
+select.validated {
+  // Bordes validado
+  @apply border-green-600;
+  
+  // Fondo validado
+  @apply bg-green-50;
+
+  &:focus {
+    // Color de borde focus validado (forzado)
+    border-bottom-color: theme('colors.green.600') !important;
+  }
+}
