@@ -1,0 +1,468 @@
+{
+  "fieldSets": [
+    {
+      "fields": [
+        {
+          "name": "eventName",
+          "label": "Nombre del Evento",
+          "description": "Nombre del evento que se mostrará en el formulario",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "Open Day 2024"
+          }
+        },
+        {
+          "name": "eventDate",
+          "label": "Fecha del Evento",
+          "description": "Fecha del evento en formato DD/MM/YYYY HH:mm AM/PM",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "23/01/2025 12:00 PM"
+          }
+        }
+      ],
+      "label": "Configuración Básica"
+    },
+    {
+      "fields": [
+        {
+          "name": "source",
+          "label": "Fuente UTM",
+          "description": "Fuente de tráfico (utm_source)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "website"
+          }
+        },
+        {
+          "name": "subSource",
+          "label": "Sub-fuente UTM",
+          "description": "Sub-fuente de tráfico (utm_subsource)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "organico"
+          }
+        },
+        {
+          "name": "medium",
+          "label": "Medio UTM",
+          "description": "Medio de tráfico (utm_medium)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "web"
+          }
+        },
+        {
+          "name": "campaign",
+          "label": "Campaña UTM",
+          "description": "Nombre de la campaña (utm_campaign)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "eventos_2024"
+          }
+        },
+        {
+          "name": "article",
+          "label": "Artículo UTM",
+          "description": "Artículo específico (utm_article)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "landing_principal"
+          }
+        }
+      ],
+      "label": "Parámetros UTM"
+    },
+    {
+      "fields": [
+        {
+          "name": "typeAttendee",
+          "label": "Tipos de Asistente",
+          "description": "Selecciona los tipos de asistente permitidos",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Aspirante", "label": "Solo Aspirante"},
+              {"value": "Aspirante,Padre de familia y/o acudiente", "label": "Aspirante y Padres"},
+              {"value": "Aspirante,Graduado", "label": "Aspirante y Graduados"},
+              {"value": "Aspirante,Padre de familia y/o acudiente,Graduado", "label": "Aspirante, Padres y Graduados"},
+              {"value": "Aspirante,Padre de familia y/o acudiente,Docente y/o psicoorientador,Visitante PUJ,Administrativo PUJ", "label": "Todos los tipos"}
+            ]
+          },
+          "defaultValue": "Aspirante,Padre de familia y/o acudiente,Docente y/o psicoorientador,Visitante PUJ,Administrativo PUJ"
+        },
+        {
+          "name": "attendanceDays",
+          "label": "Días de Asistencia",
+          "description": "Días disponibles para asistir (separados por comas)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "Lunes 10 de febrero,Martes 11 de febrero,Miércoles 12 de febrero"
+          }
+        }
+      ],
+      "label": "Configuración del Evento"
+    },
+    {
+      "fields": [
+        {
+          "name": "academicLevels",
+          "label": "Niveles Académicos",
+          "description": "Niveles académicos permitidos",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "PREG", "label": "Solo Pregrado"},
+              {"value": "GRAD", "label": "Solo Posgrado"},
+              {"value": "CONT", "label": "Solo Educación Continua"},
+              {"value": "PREG,GRAD", "label": "Pregrado y Posgrado"},
+              {"value": "PREG,GRAD,CONT", "label": "Todos los niveles"}
+            ]
+          },
+          "defaultValue": "PREG,GRAD,CONT"
+        },
+        {
+          "name": "faculties",
+          "label": "Facultades",
+          "description": "Facultades permitidas",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Ingeniería"},
+              {"value": "Medicina"},
+              {"value": "Derecho"},
+              {"value": "Ciencias Sociales"},
+              {"value": "Comunicación y Lenguaje"},
+              {"value": "Ciencias Económicas y Administrativas"},
+              {"value": "Psicología"},
+              {"value": "Arquitectura y Diseño"},
+              {"value": "Odontología"},
+              {"value": "Enfermería"},
+              {"value": "Filosofía"},
+              {"value": "Teología"},
+              {"value": "Artes"}
+            ]
+          }
+        },
+        {
+          "name": "programs",
+          "label": "Programas",
+          "description": "Códigos de programas permitidos (ingrese códigos manualmente separados por comas)",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "IINDS,MEDIC,DRCHO,PSICO,COMSC"
+          }
+        }
+      ],
+      "label": "Filtros Académicos"
+    },
+    {
+      "fields": [
+        {
+          "name": "countries",
+          "label": "Países",
+          "description": "Países permitidos",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Colombia", "label": "Solo Colombia"},
+              {"value": "Colombia,México,Ecuador,Perú", "label": "Países Latinoamericanos"},
+              {"value": "Colombia,Estados Unidos,España", "label": "Colombia + Principales"},
+              {"value": "Colombia,México,Ecuador,Perú,Estados Unidos,España,Argentina,Chile,Brasil,Venezuela,Panamá,Costa Rica", "label": "Todos los países"}
+            ]
+          },
+          "defaultValue": "Colombia,México,Ecuador,Perú,Estados Unidos,España,Argentina,Chile,Brasil,Venezuela,Panamá,Costa Rica"
+        },
+        {
+          "name": "departments",
+          "label": "Departamentos (Colombia)",
+          "description": "Departamentos permitidos de Colombia",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Cundinamarca"},
+              {"value": "Antioquia"},
+              {"value": "Valle del Cauca"},
+              {"value": "Atlántico"},
+              {"value": "Santander"},
+              {"value": "Bolívar"},
+              {"value": "Norte de Santander"},
+              {"value": "Boyacá"},
+              {"value": "Tolima"},
+              {"value": "Meta"},
+              {"value": "Caldas"},
+              {"value": "Risaralda"},
+              {"value": "Quindío"}
+            ]
+          }
+        },
+        {
+          "name": "cities",
+          "label": "Ciudades",
+          "description": "Ciudades específicas permitidas",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Bogotá"},
+              {"value": "Medellín"},
+              {"value": "Cali"},
+              {"value": "Barranquilla"},
+              {"value": "Cartagena"},
+              {"value": "Bucaramanga"},
+              {"value": "Pereira"},
+              {"value": "Manizales"},
+              {"value": "Armenia"},
+              {"value": "Ibagué"},
+              {"value": "Villavicencio"},
+              {"value": "Tunja"}
+            ]
+          }
+        }
+      ],
+      "label": "Filtros Geográficos"
+    },
+    {
+      "fields": [
+        {
+          "name": "universities",
+          "label": "Universidades",
+          "description": "Universidades permitidas",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Universidad Nacional de Colombia"},
+              {"value": "Universidad de los Andes"},
+              {"value": "Universidad del Rosario"},
+              {"value": "Universidad Externado"},
+              {"value": "Universidad La Salle"},
+              {"value": "EAFIT"},
+              {"value": "Universidad del Norte"},
+              {"value": "Universidad de Antioquia"},
+              {"value": "Universidad del Valle"},
+              {"value": "Universidad Industrial de Santander"}
+            ]
+          }
+        },
+        {
+          "name": "colleges",
+          "label": "Colegios",
+          "description": "Colegios permitidos",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Colegio San Patricio"},
+              {"value": "Gimnasio Moderno"},
+              {"value": "Colegio Anglo Colombiano"},
+              {"value": "Liceo Francés Louis Pasteur"},
+              {"value": "Colegio Rochester"},
+              {"value": "Colegio San Carlos"},
+              {"value": "Gimnasio Los Caobos"},
+              {"value": "Colegio Nueva Granada"}
+            ]
+          }
+        },
+        {
+          "name": "companies",
+          "label": "Empresas",
+          "description": "Empresas permitidas",
+          "type": "select",
+          "dataType": "string",
+          "typeOptions": {
+            "validValues": [
+              {"value": "Grupo Bancolombia"},
+              {"value": "ECOPETROL"},
+              {"value": "Grupo Nutresa"},
+              {"value": "Bavaria - AB InBev"},
+              {"value": "Grupo Argos"},
+              {"value": "ETB"},
+              {"value": "Microsoft Colombia"},
+              {"value": "Google Colombia"}
+            ]
+          }
+        }
+      ],
+      "label": "Entidades Externas"
+    },
+    {
+      "fields": [
+        {
+          "name": "authorizationSource",
+          "label": "Fuente de Autorización",
+          "description": "Fuente de autorización de datos personales",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "Landing Eventos"
+          },
+          "defaultValue": "Landing Eventos"
+        },
+        {
+          "name": "requestOrigin", 
+          "label": "Origen de la Solicitud",
+          "description": "Origen de la solicitud del lead",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "Web to Lead"
+          },
+          "defaultValue": "Web to Lead"
+        },
+        {
+          "name": "leadSource",
+          "label": "Fuente del Lead",
+          "description": "Fuente del lead en Salesforce",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "Landing Pages"
+          },
+          "defaultValue": "Landing Pages"
+        }
+      ],
+      "label": "Campos Ocultos"
+    },
+    {
+      "fields": [
+        {
+          "name": "retUrl",
+          "label": "URL de Redirección",
+          "description": "URL a la que se redirige después del envío exitoso",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY"
+          },
+          "defaultValue": "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY"
+        },
+        {
+          "name": "privacyPolicyUrl",
+          "label": "URL Política de Privacidad",
+          "description": "URL de la política de tratamiento de datos",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+          },
+          "defaultValue": "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+        }
+      ],
+      "label": "URLs"
+    },
+    {
+      "fields": [
+        {
+          "name": "test",
+          "label": "Modo Test",
+          "description": "Activar modo de pruebas (sandbox de Salesforce)",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": false
+        },
+        {
+          "name": "debug",
+          "label": "Modo Debug",
+          "description": "Activar modo de depuración (logs detallados)",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": false
+        },
+        {
+          "name": "development",
+          "label": "Modo Desarrollo",
+          "description": "Activar modo de desarrollo (no envía datos reales)",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": false
+        },
+        {
+          "name": "debugEmail",
+          "label": "Email de Debug",
+          "description": "Email para recibir copias en modo debug",
+          "type": "text",
+          "dataType": "string",
+          "typeOptions": {
+            "placeholder": "debug@javeriana.edu.co"
+          }
+        }
+      ],
+      "label": "Configuración Técnica"
+    },
+    {
+      "fields": [
+        {
+          "name": "cacheEnabled",
+          "label": "Habilitar Cache",
+          "description": "Activar cache para datos del formulario",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": false
+        },
+        {
+          "name": "cacheExpirationHours",
+          "label": "Horas de Expiración del Cache",
+          "description": "Número de horas antes de que expire el cache",
+          "type": "text",
+          "dataType": "int",
+          "typeOptions": {
+            "placeholder": "12"
+          },
+          "defaultValue": "12"
+        }
+      ],
+      "label": "Configuración de Cache"
+    },
+    {
+      "fields": [
+        {
+          "name": "loggingEnabled",
+          "label": "Habilitar Logging",
+          "description": "Activar sistema de logs del formulario",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": false
+        },
+        {
+          "name": "loggingLevel",
+          "label": "Nivel de Logging",
+          "description": "Nivel de detalle de los logs",
+          "type": "select",
+          "typeOptions": {
+            "validValues": [
+              {"value": "error"},
+              {"value": "warn"},
+              {"value": "info"},
+              {"value": "debug"}
+            ]
+          },
+          "defaultValue": "info"
+        },
+        {
+          "name": "loggingShowTimestamp",
+          "label": "Mostrar Timestamp en Logs",
+          "description": "Incluir timestamp en cada mensaje de log",
+          "type": "checkbox",
+          "dataType": "bool",
+          "defaultValue": true
+        }
+      ],
+      "label": "Configuración de Logging"
+    }
+  ]
+}

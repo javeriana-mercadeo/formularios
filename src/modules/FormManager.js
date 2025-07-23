@@ -163,6 +163,12 @@ export class FormManager {
       Constants.SELECTORS.SUBMIT_BUTTON
     );
     if (exists && submitBtn) {
+      // No permitir habilitar el botón si está en proceso de envío
+      if (enabled && this.isSubmitting) {
+        this.logger.warn("⚠️ No se puede habilitar el botón de submit - envío en progreso");
+        return;
+      }
+      
       submitBtn.disabled = !enabled;
       this.state.setFieldDisabled("submit", !enabled);
     }
@@ -173,10 +179,11 @@ export class FormManager {
    */
   async handleSubmit(e) {
     e.preventDefault();
+    e.stopImmediatePropagation();
 
     if (this.isSubmitting) {
       this.logger.warn("⚠️ Envío ya en progreso, ignorando intento adicional");
-      return;
+      return false;
     }
 
     this.logger.info("🚀 Iniciando proceso de envío del formulario");
@@ -782,6 +789,30 @@ export class FormManager {
     handlers.forEach(([type, handler]) => {
       this.event.registerHandler(type, handler);
     });
+    
+    // Agregar protección adicional específica para el botón de submit
+    this._addSubmitButtonProtection();
+  }
+  
+  /**
+   * Agregar protección adicional contra múltiples clicks en el botón de submit
+   * @private
+   */
+  _addSubmitButtonProtection() {
+    const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON);
+    if (submitBtn) {
+      // Agregar listener para capturar clicks directos en el botón
+      submitBtn.addEventListener('click', (e) => {
+        if (this.isSubmitting) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          this.logger.warn("🚫 Click en botón de submit bloqueado - envío en progreso");
+          return false;
+        }
+      }, { capture: true }); // Usar capture para interceptar antes que otros listeners
+      
+      this.logger.info("🛡️ Protección adicional contra múltiples clicks agregada al botón de submit");
+    }
   }
 
   // ===============================
@@ -1168,7 +1199,12 @@ export class FormManager {
 
     const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON);
     if (submitBtn) {
+      // Guardar el texto original antes de cambiarlo
+      if (!submitBtn.dataset.originalText) {
+        submitBtn.dataset.originalText = submitBtn.textContent || submitBtn.value || "Enviar";
+      }
       this.ui.disableElement(submitBtn);
+      submitBtn.classList.add('is-submitting');
       this.ui.setFieldText(submitBtn, submitBtn.dataset.loadingText || "Enviando...");
     }
 
@@ -1221,18 +1257,43 @@ export class FormManager {
         document.body.removeChild(tempForm);
 
         this.logger.info(`✅ Formulario enviado exitosamente a ${targetEnv}: ${salesforceUrl}`);
+        
+        // En producción, mantener el botón deshabilitado más tiempo para evitar reenvíos
+        if (submitBtn) {
+          this.ui.setFieldText(submitBtn, "Enviado ✓");
+          setTimeout(() => {
+            this.ui.setFieldText(submitBtn, "Redirigiendo...");
+          }, 2000);
+        }
         return;
       }
     } catch (error) {
       this.logger.error("❌ Error durante el envío:", error);
       this.ui.showGeneralError("Error al enviar el formulario. Por favor, intente nuevamente.");
-    } finally {
-      this.isSubmitting = false;
-      this.state.setSystemState("isSubmitting", false);
-
+      
+      // Solo en caso de error, restaurar el botón para permitir reintento
       if (submitBtn) {
         this.ui.enableElement(submitBtn);
+        submitBtn.classList.remove('is-submitting');
         this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || "Enviar");
+      }
+    } finally {
+      // Solo restaurar el estado interno en modo desarrollo
+      const isDevelopmentMode = this.state.isDevMode();
+      
+      if (isDevelopmentMode) {
+        this.isSubmitting = false;
+        this.state.setSystemState("isSubmitting", false);
+        
+        if (submitBtn) {
+          this.ui.enableElement(submitBtn);
+          submitBtn.classList.remove('is-submitting');
+          this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || "Enviar");
+        }
+      } else {
+        // En producción, mantener el estado de "enviando" para evitar reenvíos accidentales
+        // El usuario será redirigido por Salesforce, por lo que no necesita interactuar más con el formulario
+        this.logger.info("🔒 Formulario enviado en producción - manteniendo botón deshabilitado para evitar reenvíos");
       }
     }
   }

@@ -71,6 +71,9 @@
     
     // Reset sombras
     box-shadow: none;
+    
+    // Prevenir eventos de puntero completamente
+    pointer-events: none;
 
     &:hover {
       // Mantener colores disabled en hover
@@ -80,6 +83,17 @@
       @apply transform-none;
       
       // Reset sombras en hover
+      box-shadow: none;
+    }
+  }
+  
+  // Estado específico para cuando está enviando
+  &.is-submitting {
+    @apply bg-yellow-500 text-white cursor-not-allowed;
+    pointer-events: none;
+    
+    &:hover {
+      @apply bg-yellow-500 transform-none;
       box-shadow: none;
     }
   }

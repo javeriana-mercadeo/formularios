@@ -22,8 +22,11 @@
 // ✅ Usado en: formMini (test.html)
 
 export const configMini = {
-  campaign: "MERCA_ENFER_ENFER",
   // DATOS DEL EVENTO
+  campaign: "Mercadeo",
+  eventName: "Open Day Enfermería 2024",
+  eventDate: "23/01/2025 12:00 PM", // Formato: DD/MM/YYYY HH:mm AM/PM
+
   // CONFIGURACIÓN BÁSICA DE EVENTO
   typeAttendee: ["Aspirante"], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
 

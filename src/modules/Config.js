@@ -47,7 +47,7 @@ export class Config {
       campaign: "",
       article: "",
       eventName: "",
-      eventDate: "",
+      eventDate: "", // Formato: DD/MM/YYYY HH:mm AM/PM
 
       // CONFIGURACIONES
       test: false,

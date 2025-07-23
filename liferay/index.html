@@ -1,0 +1,149 @@
+<link
+  rel="stylesheet"
+  href="https://www.javeriana.edu.co/recursosdb/d/info-prg/form-modules-style"
+/>
+
+<form id="genericForm" class="form-modules" aria-label="Prueba 1: Configuración Base" novalidate>
+  <!-- HEADER: Solo título fijo -->
+  <div class="form-header">
+    <h2>Formulario de inscripción</h2>
+    <p>Completa el formulario para reservar tu lugar en nuestro evento</p>
+  </div>
+
+  <!-- CONTENT: Descripción + campos + autorización con scroll -->
+  <div class="form-content">
+    <!-- Nombres y apellidos -->
+    <div class="field-group">
+      <div class="field">
+        <input type="text" placeholder="*Nombre(s)" name="first_name" />
+      </div>
+      <div class="field">
+        <input type="text" placeholder="*Apellidos" name="last_name" />
+      </div>
+    </div>
+
+    <!-- Tipo de documento y número -->
+    <div class="field-group">
+      <div class="field">
+        <select name="type_doc">
+          <option value="">*Tipo de documento</option>
+          <option value="CC">Cédula Ciudadanía</option>
+          <option value="CE">Cédula Extranjería</option>
+          <option value="PA">Pasaporte</option>
+          <option value="TI">Tarjeta Identidad</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <input type="text" name="document" placeholder="*Número de documento" />
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="field">
+      <input type="email" placeholder="*Email" name="email" />
+    </div>
+
+    <!-- Teléfono -->
+    <div class="field-group">
+      <div class="field">
+        <select name="phone_code">
+          <option value="">(+) Indicativo</option>
+        </select>
+      </div>
+      <div class="field">
+        <input type="text" placeholder="*Teléfono celular" name="mobile" />
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div class="field">
+      <select name="country">
+        <option value="">*País de residencia</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <select name="department" style="display: none">
+        <option value="">*Selecciona el departamento</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <select name="city" style="display: none">
+        <option value="">*Selecciona la Ciudad</option>
+      </select>
+    </div>
+
+    <!-- Día de asistencia -->
+    <div class="field">
+      <select name="attendance_day">
+        <option value="">*Día de asistencia</option>
+      </select>
+    </div>
+
+    <!-- Tipo de asistente -->
+    <div class="field">
+      <select name="type_attendee">
+        <option value="">*Tipo de asistente</option>
+      </select>
+    </div>
+
+    <!-- Nivel académico -->
+    <div class="field">
+      <select name="academic_level" style="display: none">
+        <option value="">*Nivel académico</option>
+      </select>
+    </div>
+
+    <!-- Facultad -->
+    <div class="field">
+      <select name="faculty" style="display: none">
+        <option value="">*Facultad de interés</option>
+      </select>
+    </div>
+
+    <!-- Programa -->
+    <div class="field">
+      <select name="program" style="display: none">
+        <option value="">*Programa de interés</option>
+      </select>
+    </div>
+
+    <!-- Período de ingreso -->
+    <div class="field">
+      <select name="admission_period" style="display: none">
+        <option value="">*Periodo esperado de Ingreso de interés</option>
+      </select>
+    </div>
+
+    <!-- Autorización de datos dentro del scroll -->
+    <div class="authorization-section">
+      <p>
+        ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
+        <a
+          href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+          target="_blank"
+          >autorización de privacidad</a
+        >?
+      </p>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+          <label for="auth_si_1">Sí</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+          <label for="auth_no_1">No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER: Solo botón fijo -->
+  <div class="form-footer">
+    <button type="submit" class="submit-button">Inscríbete</button>
+  </div>
+</form>
+
+<script src="https://www.javeriana.edu.co/recursosdb/d/info-prg/form-modules-script"></script>
