@@ -83,21 +83,46 @@
     {
       "fields": [
         {
-          "name": "typeAttendee",
-          "label": "Tipos de Asistente",
-          "description": "Selecciona los tipos de asistente permitidos",
-          "type": "select",
-          "dataType": "string",
-          "typeOptions": {
-            "validValues": [
-              {"value": "Aspirante", "label": "Solo Aspirante"},
-              {"value": "Aspirante,Padre de familia y/o acudiente", "label": "Aspirante y Padres"},
-              {"value": "Aspirante,Graduado", "label": "Aspirante y Graduados"},
-              {"value": "Aspirante,Padre de familia y/o acudiente,Graduado", "label": "Aspirante, Padres y Graduados"},
-              {"value": "Aspirante,Padre de familia y/o acudiente,Docente y/o psicoorientador,Visitante PUJ,Administrativo PUJ", "label": "Todos los tipos"}
-            ]
-          },
-          "defaultValue": "Aspirante,Padre de familia y/o acudiente,Docente y/o psicoorientador,Visitante PUJ,Administrativo PUJ"
+          "name": "typeAttendeeAspirante",
+          "label": "Aspirante",
+          "description": "Permitir aspirantes",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "typeAttendeePadres",
+          "label": "Padre de familia y/o acudiente",
+          "description": "Permitir padres de familia",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "typeAttendeeDocente",
+          "label": "Docente y/o psicoorientador",
+          "description": "Permitir docentes y psicoorientadores",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "typeAttendeeVisitante",
+          "label": "Visitante PUJ",
+          "description": "Permitir visitantes PUJ",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "typeAttendeeAdministrativo",
+          "label": "Administrativo PUJ",
+          "description": "Permitir administrativos PUJ",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "typeAttendeeGraduado",
+          "label": "Graduado",
+          "description": "Permitir graduados",
+          "type": "checkbox",
+          "defaultValue": false
         },
         {
           "name": "attendanceDays",
@@ -115,50 +140,40 @@
     {
       "fields": [
         {
-          "name": "academicLevels",
-          "label": "Niveles Académicos",
-          "description": "Niveles académicos permitidos",
-          "type": "select",
-          "dataType": "string",
-          "typeOptions": {
-            "validValues": [
-              {"value": "PREG", "label": "Solo Pregrado"},
-              {"value": "GRAD", "label": "Solo Posgrado"},
-              {"value": "CONT", "label": "Solo Educación Continua"},
-              {"value": "PREG,GRAD", "label": "Pregrado y Posgrado"},
-              {"value": "PREG,GRAD,CONT", "label": "Todos los niveles"}
-            ]
-          },
-          "defaultValue": "PREG,GRAD,CONT"
+          "name": "academicLevelPREG",
+          "label": "Pregrado",
+          "description": "Permitir nivel pregrado",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "academicLevelGRAD",
+          "label": "Posgrado",
+          "description": "Permitir nivel posgrado",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "name": "academicLevelCONT",
+          "label": "Educación Continua",
+          "description": "Permitir educación continua",
+          "type": "checkbox",
+          "defaultValue": true
         },
         {
           "name": "faculties",
           "label": "Facultades",
-          "description": "Facultades permitidas",
-          "type": "select",
+          "description": "Facultades permitidas (separadas por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Ingeniería"},
-              {"value": "Medicina"},
-              {"value": "Derecho"},
-              {"value": "Ciencias Sociales"},
-              {"value": "Comunicación y Lenguaje"},
-              {"value": "Ciencias Económicas y Administrativas"},
-              {"value": "Psicología"},
-              {"value": "Arquitectura y Diseño"},
-              {"value": "Odontología"},
-              {"value": "Enfermería"},
-              {"value": "Filosofía"},
-              {"value": "Teología"},
-              {"value": "Artes"}
-            ]
+            "placeholder": "Ingeniería,Medicina,Derecho,Ciencias Sociales"
           }
         },
         {
           "name": "programs",
           "label": "Programas",
-          "description": "Códigos de programas permitidos (ingrese códigos manualmente separados por comas)",
+          "description": "Códigos de programas permitidos (separados por comas)",
           "type": "text",
           "dataType": "string",
           "typeOptions": {
@@ -173,64 +188,31 @@
         {
           "name": "countries",
           "label": "Países",
-          "description": "Países permitidos",
-          "type": "select",
+          "description": "Países permitidos (separados por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Colombia", "label": "Solo Colombia"},
-              {"value": "Colombia,México,Ecuador,Perú", "label": "Países Latinoamericanos"},
-              {"value": "Colombia,Estados Unidos,España", "label": "Colombia + Principales"},
-              {"value": "Colombia,México,Ecuador,Perú,Estados Unidos,España,Argentina,Chile,Brasil,Venezuela,Panamá,Costa Rica", "label": "Todos los países"}
-            ]
-          },
-          "defaultValue": "Colombia,México,Ecuador,Perú,Estados Unidos,España,Argentina,Chile,Brasil,Venezuela,Panamá,Costa Rica"
+            "placeholder": "Colombia,México,Ecuador,Perú,Estados Unidos,España"
+          }
         },
         {
           "name": "departments",
           "label": "Departamentos (Colombia)",
-          "description": "Departamentos permitidos de Colombia",
-          "type": "select",
+          "description": "Departamentos permitidos (separados por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Cundinamarca"},
-              {"value": "Antioquia"},
-              {"value": "Valle del Cauca"},
-              {"value": "Atlántico"},
-              {"value": "Santander"},
-              {"value": "Bolívar"},
-              {"value": "Norte de Santander"},
-              {"value": "Boyacá"},
-              {"value": "Tolima"},
-              {"value": "Meta"},
-              {"value": "Caldas"},
-              {"value": "Risaralda"},
-              {"value": "Quindío"}
-            ]
+            "placeholder": "Cundinamarca,Antioquia,Valle del Cauca,Atlántico"
           }
         },
         {
           "name": "cities",
           "label": "Ciudades",
-          "description": "Ciudades específicas permitidas",
-          "type": "select",
+          "description": "Ciudades permitidas (separadas por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Bogotá"},
-              {"value": "Medellín"},
-              {"value": "Cali"},
-              {"value": "Barranquilla"},
-              {"value": "Cartagena"},
-              {"value": "Bucaramanga"},
-              {"value": "Pereira"},
-              {"value": "Manizales"},
-              {"value": "Armenia"},
-              {"value": "Ibagué"},
-              {"value": "Villavicencio"},
-              {"value": "Tunja"}
-            ]
+            "placeholder": "Bogotá,Medellín,Cali,Barranquilla"
           }
         }
       ],
@@ -241,60 +223,31 @@
         {
           "name": "universities",
           "label": "Universidades",
-          "description": "Universidades permitidas",
-          "type": "select",
+          "description": "Universidades permitidas (separadas por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Universidad Nacional de Colombia"},
-              {"value": "Universidad de los Andes"},
-              {"value": "Universidad del Rosario"},
-              {"value": "Universidad Externado"},
-              {"value": "Universidad La Salle"},
-              {"value": "EAFIT"},
-              {"value": "Universidad del Norte"},
-              {"value": "Universidad de Antioquia"},
-              {"value": "Universidad del Valle"},
-              {"value": "Universidad Industrial de Santander"}
-            ]
+            "placeholder": "Universidad Nacional de Colombia,Universidad de los Andes,Universidad del Rosario"
           }
         },
         {
           "name": "colleges",
           "label": "Colegios",
-          "description": "Colegios permitidos",
-          "type": "select",
+          "description": "Colegios permitidos (separados por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Colegio San Patricio"},
-              {"value": "Gimnasio Moderno"},
-              {"value": "Colegio Anglo Colombiano"},
-              {"value": "Liceo Francés Louis Pasteur"},
-              {"value": "Colegio Rochester"},
-              {"value": "Colegio San Carlos"},
-              {"value": "Gimnasio Los Caobos"},
-              {"value": "Colegio Nueva Granada"}
-            ]
+            "placeholder": "Colegio San Patricio,Gimnasio Moderno,Colegio Anglo Colombiano"
           }
         },
         {
           "name": "companies",
           "label": "Empresas",
-          "description": "Empresas permitidas",
-          "type": "select",
+          "description": "Empresas permitidas (separadas por comas)",
+          "type": "text",
           "dataType": "string",
           "typeOptions": {
-            "validValues": [
-              {"value": "Grupo Bancolombia"},
-              {"value": "ECOPETROL"},
-              {"value": "Grupo Nutresa"},
-              {"value": "Bavaria - AB InBev"},
-              {"value": "Grupo Argos"},
-              {"value": "ETB"},
-              {"value": "Microsoft Colombia"},
-              {"value": "Google Colombia"}
-            ]
+            "placeholder": "Grupo Bancolombia,ECOPETROL,Grupo Nutresa"
           }
         }
       ],
@@ -314,7 +267,7 @@
           "defaultValue": "Landing Eventos"
         },
         {
-          "name": "requestOrigin", 
+          "name": "requestOrigin",
           "label": "Origen de la Solicitud",
           "description": "Origen de la solicitud del lead",
           "type": "text",
@@ -355,7 +308,7 @@
           "name": "privacyPolicyUrl",
           "label": "URL Política de Privacidad",
           "description": "URL de la política de tratamiento de datos",
-          "type": "text",
+          "type": "url",
           "dataType": "string",
           "typeOptions": {
             "placeholder": "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
@@ -372,7 +325,6 @@
           "label": "Modo Test",
           "description": "Activar modo de pruebas (sandbox de Salesforce)",
           "type": "checkbox",
-          "dataType": "bool",
           "defaultValue": false
         },
         {
@@ -380,7 +332,6 @@
           "label": "Modo Debug",
           "description": "Activar modo de depuración (logs detallados)",
           "type": "checkbox",
-          "dataType": "bool",
           "defaultValue": false
         },
         {
@@ -388,7 +339,6 @@
           "label": "Modo Desarrollo",
           "description": "Activar modo de desarrollo (no envía datos reales)",
           "type": "checkbox",
-          "dataType": "bool",
           "defaultValue": false
         },
         {
@@ -411,7 +361,6 @@
           "label": "Habilitar Cache",
           "description": "Activar cache para datos del formulario",
           "type": "checkbox",
-          "dataType": "bool",
           "defaultValue": false
         },
         {
@@ -419,7 +368,7 @@
           "label": "Horas de Expiración del Cache",
           "description": "Número de horas antes de que expire el cache",
           "type": "text",
-          "dataType": "int",
+          "dataType": "string",
           "typeOptions": {
             "placeholder": "12"
           },
@@ -435,7 +384,6 @@
           "label": "Habilitar Logging",
           "description": "Activar sistema de logs del formulario",
           "type": "checkbox",
-          "dataType": "bool",
           "defaultValue": false
         },
         {
@@ -443,23 +391,16 @@
           "label": "Nivel de Logging",
           "description": "Nivel de detalle de los logs",
           "type": "select",
+          "dataType": "string",
           "typeOptions": {
             "validValues": [
-              {"value": "error"},
-              {"value": "warn"},
-              {"value": "info"},
-              {"value": "debug"}
+              { "value": "error", "label": "Error" },
+              { "value": "warn", "label": "Warning" },
+              { "value": "info", "label": "Info" },
+              { "value": "debug", "label": "Debug" }
             ]
           },
           "defaultValue": "info"
-        },
-        {
-          "name": "loggingShowTimestamp",
-          "label": "Mostrar Timestamp en Logs",
-          "description": "Incluir timestamp en cada mensaje de log",
-          "type": "checkbox",
-          "dataType": "bool",
-          "defaultValue": true
         }
       ],
       "label": "Configuración de Logging"

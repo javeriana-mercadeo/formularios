@@ -87,6 +87,57 @@ function getLiferayConfiguration() {
 }
 
 /**
+ * Construir array de tipos de asistente basado en checkboxes individuales
+ * @param {Object} liferayConfig - Configuración desde Liferay
+ * @returns {Array} - Array de tipos de asistente habilitados
+ */
+function buildTypeAttendeeFromCheckboxes(liferayConfig) {
+  const typeAttendeeOptions = [];
+  
+  if (liferayConfig.typeAttendeeAspirante) {
+    typeAttendeeOptions.push("Aspirante");
+  }
+  if (liferayConfig.typeAttendeePadres) {
+    typeAttendeeOptions.push("Padre de familia y/o acudiente");
+  }
+  if (liferayConfig.typeAttendeeDocente) {
+    typeAttendeeOptions.push("Docente y/o psicoorientador");
+  }
+  if (liferayConfig.typeAttendeeVisitante) {
+    typeAttendeeOptions.push("Visitante PUJ");
+  }
+  if (liferayConfig.typeAttendeeAdministrativo) {
+    typeAttendeeOptions.push("Administrativo PUJ");
+  }
+  if (liferayConfig.typeAttendeeGraduado) {
+    typeAttendeeOptions.push("Graduado");
+  }
+  
+  return typeAttendeeOptions;
+}
+
+/**
+ * Construir array de niveles académicos basado en checkboxes individuales
+ * @param {Object} liferayConfig - Configuración desde Liferay
+ * @returns {Array} - Array de objetos con code y name para niveles académicos
+ */
+function buildAcademicLevelsFromCheckboxes(liferayConfig) {
+  const academicLevels = [];
+  
+  if (liferayConfig.academicLevelPREG) {
+    academicLevels.push({ code: 'PREG', name: 'Pregrado' });
+  }
+  if (liferayConfig.academicLevelGRAD) {
+    academicLevels.push({ code: 'GRAD', name: 'Posgrado' });
+  }
+  if (liferayConfig.academicLevelCONT) {
+    academicLevels.push({ code: 'CONT', name: 'Educación Continua' });
+  }
+  
+  return academicLevels;
+}
+
+/**
  * Transformar configuración de Liferay a formato FormManager
  * @param {Object} liferayConfig - Configuración desde Liferay
  * @returns {Object} - Configuración para FormManager
@@ -96,10 +147,10 @@ function transformLiferayConfig(liferayConfig) {
   
   // Log de tipos de datos recibidos para debugging
   console.log('📊 Tipos de datos recibidos:', {
-    typeAttendee: typeof liferayConfig.typeAttendee,
+    typeAttendeeAspirante: typeof liferayConfig.typeAttendeeAspirante,
+    academicLevelPREG: typeof liferayConfig.academicLevelPREG,
     countries: typeof liferayConfig.countries,
     faculties: typeof liferayConfig.faculties,
-    academicLevels: typeof liferayConfig.academicLevels,
     test: typeof liferayConfig.test,
     debug: typeof liferayConfig.debug,
     cacheEnabled: typeof liferayConfig.cacheEnabled
@@ -117,21 +168,21 @@ function transformLiferayConfig(liferayConfig) {
     campaign: liferayConfig.campaign || "",
     article: liferayConfig.article || "",
     
-    // CONFIGURACIÓN DEL EVENTO
-    typeAttendee: parseCommaSeparatedString(liferayConfig.typeAttendee),
+    // CONFIGURACIÓN DEL EVENTO - Construir desde checkboxes individuales
+    typeAttendee: buildTypeAttendeeFromCheckboxes(liferayConfig),
     attendanceDays: parseCommaSeparatedString(liferayConfig.attendanceDays),
     
-    // FILTROS ACADÉMICOS
-    academicLevels: parseAcademicLevels(liferayConfig.academicLevels),
+    // FILTROS ACADÉMICOS - Construir desde checkboxes + texto separado por comas
+    academicLevels: buildAcademicLevelsFromCheckboxes(liferayConfig),
     faculties: parseCommaSeparatedString(liferayConfig.faculties),
     programs: parseCommaSeparatedString(liferayConfig.programs),
     
-    // FILTROS GEOGRÁFICOS
+    // FILTROS GEOGRÁFICOS - Texto separado por comas
     countries: parseCommaSeparatedString(liferayConfig.countries),
     departments: parseCommaSeparatedString(liferayConfig.departments),
     cities: parseCommaSeparatedString(liferayConfig.cities),
     
-    // ENTIDADES EXTERNAS
+    // ENTIDADES EXTERNAS - Texto separado por comas
     universities: parseCommaSeparatedString(liferayConfig.universities),
     colleges: parseCommaSeparatedString(liferayConfig.colleges),
     companies: parseCommaSeparatedString(liferayConfig.companies),
@@ -161,7 +212,7 @@ function transformLiferayConfig(liferayConfig) {
     logging: {
       enabled: Boolean(liferayConfig.loggingEnabled),
       level: liferayConfig.loggingLevel || "info",
-      showTimestamp: liferayConfig.loggingShowTimestamp !== false, // Default true
+      showTimestamp: true, // Siempre true ya que quitamos el campo
       showLevel: true,
       prefix: `Liferay Form | ${liferayConfig.eventName || 'Evento'}`
     },
@@ -209,6 +260,19 @@ function getDefaultConfiguration() {
       "Administrativo PUJ"
     ],
     attendanceDays: [],
+    academicLevels: [
+      { code: 'PREG', name: 'Pregrado' },
+      { code: 'GRAD', name: 'Posgrado' },
+      { code: 'CONT', name: 'Educación Continua' }
+    ],
+    faculties: [],
+    programs: [],
+    countries: [],
+    departments: [],
+    cities: [],
+    universities: [],
+    colleges: [],
+    companies: [],
     test: false,
     debug: false,
     development: false,

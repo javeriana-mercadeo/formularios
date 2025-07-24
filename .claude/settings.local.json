@@ -5,7 +5,9 @@
       "Bash(npm run build:*)",
       "Bash(rm:*)",
       "WebFetch(domain:learn.liferay.com)",
-      "WebFetch(domain:help.liferay.com)"
+      "WebFetch(domain:help.liferay.com)",
+      "Bash(python:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }
