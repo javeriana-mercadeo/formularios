@@ -43,7 +43,7 @@ export class Constants {
     // Campos de evento
     TYPE_ATTENDEE: "type_attendee",
     ATTENDANCE_DAY: "attendance_day",
-    COLLEGE: "college",
+    COLLEGE: "school",
     UNIVERSITY: "university",
     DATA_AUTHORIZATION: "authorization_data",
 

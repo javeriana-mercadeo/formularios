@@ -346,18 +346,6 @@ export const configUniversities = {
   source: "alianzas_academicas",
   medium: "referido",
 
-  // CONFIGURACIÓN DE UNIVERSIDADES
-  university: [
-    "Pontificia Universidad Javeriana",
-    "Universidad Nacional de Colombia",
-    "Universidad de los Andes",
-    "Universidad del Rosario",
-    "Universidad Externado",
-    "Universidad La Salle",
-    "EAFIT",
-    "Universidad del Norte",
-  ],
-
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
     "Graduado",
@@ -367,6 +355,17 @@ export const configUniversities = {
   ],
   attendanceDays: ["Martes 15 de octubre de 2024"],
 
+  universities: [
+    "Universidad Prueba",
+    "Univ. Nacional de Colombia",
+    "Universidad de los Andes",
+    "Universidad del Rosario",
+    "Universidad Externado de Colombia",
+    "Universidad de la Sabana",
+    "Universidad Santo Tomas",
+    "Univ. Católica de Colombia",
+  ],
+
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
@@ -374,7 +373,7 @@ export const configUniversities = {
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO:
-  // ✅ Campo Universidad: Visible con lista específica de 8 universidades
+  // ✅ Campo Universidad: Visible con lista completa de universidades del JSON
   // ✅ Enfoque en red de universidades aliadas
   // ✅ Tipos de asistente: Orientado a comunidad académica
   // ✅ Para eventos de intercambio académico y colaboración
@@ -407,17 +406,33 @@ export const configCompaniesSchools = {
     "Google Colombia",
   ],
 
-  // CONFIGURACIÓN DE COLEGIOS ALIADOS
-  school: [
-    "Colegio San Patricio",
-    "Gimnasio Moderno",
-    "Colegio Anglo Colombiano",
-    "Liceo Francés Louis Pasteur",
-    "Colegio Rochester",
-    "Colegio San Carlos",
-    "Gimnasio Los Caobos",
-    "Colegio Nueva Granada",
-  ],
+  // ✅ CASO 1: CONFIGURACIÓN CON COLEGIOS ESPECÍFICOS (COMENTADO)
+  /* school: [
+     "Colegio San Patricio",
+     "Gimnasio Moderno",
+     "Colegio Anglo Colombiano", 
+     "Liceo Francés Louis Pasteur",
+     "Colegio Rochester",
+     "Colegio San Carlos",
+     "Gimnasio Los Caobos",
+     "Colegio Nueva Granada",
+   ], */
+
+  // ✅ CASO 2: SIN CONFIGURACIÓN - TODOS LOS COLEGIOS DEL JSON (ACTIVO)
+  // school: [], // Array vacío o comentado = muestra todos los colegios
+
+  // ✅ CASO 3: FILTRO POR CIUDAD - SOLO COLEGIOS DE BOGOTÁ
+  // citySchool: "Bogotá D.C.",
+  // citySchool: ["Bogotá D.C.", "Medellín"], // Múltiples ciudades
+
+  // ✅ CASO 4: FILTRO POR CALENDARIO - SOLO CALENDARIO A
+  // calendarSchool: "Calendario A",
+  // calendarSchool: ["Calendario A", "Calendario B"], // Múltiples calendarios
+
+  // ✅ CASO 5: COMBINACIÓN DE FILTROS
+  // school: ["Gimnasio Moderno"], // Filtro por nombre
+  // citySchool: "Bogotá D.C.",    // Y filtro por ciudad de colegios
+  // calendarSchool: "Calendario A", // Y filtro por calendario de colegios
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
@@ -431,17 +446,27 @@ export const configCompaniesSchools = {
   attendanceDays: ["Miércoles 20 de noviembre de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
-  test: true,
-  debug: true,
-  development: false,
+  test: true, //Sandbox
+  debug: true, // Envio de emails de prueba
+  development: false, // No se envia a ningún endpoint
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
-  // 💡 COMPORTAMIENTO ESPERADO:
-  // ✅ Campo Empresa: Visible con 8 empresas de convenio
-  // ✅ Campo Colegio: Visible con 8 colegios aliados
+  // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):
+  // ✅ Campo Empresa: Visible con 8 empresas de convenio específicas
+  // ✅ Campo Colegio: Solo visible para "Aspirante" y "Docente y/o psicoorientador"
+  //     → OPTIMIZADO: Usa búsqueda en tiempo real para ~1000+ colegios
+  //     → Carga inicial: solo 20 colegios mostrados
+  //     → Búsqueda: hasta 50 resultados filtrados dinámicamente
+  //     → Debounce: 300ms para evitar búsquedas excesivas
   // ✅ Tipos de asistente: Incluye empresarios y comunidad educativa
   // ✅ Para eventos de networking empresarial y alianzas educativas
-  // ✅ Configuración completa para relaciones institucionales
+  //
+  // 🔧 CASOS DE USO DISPONIBLES PARA COLEGIOS:
+  // - CASO 1: Filtro por nombres específicos (comentado arriba)
+  // - CASO 2: Sin filtros - todos los colegios (ACTUAL)
+  // - CASO 3: Filtro por ciudad - ej: citySchool: "Bogotá D.C."
+  // - CASO 4: Filtro por calendario - ej: calendarSchool: "Calendario A"
+  // - CASO 5: Combinación múltiple de filtros
 };
 
 // ============================================================================

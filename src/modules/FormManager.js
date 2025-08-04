@@ -14,6 +14,8 @@ import { State } from "./State.js";
 import { Event } from "./Event.js";
 import { Academic } from "./Academic.js";
 import { Locations } from "./Locations.js";
+import { University } from "./University.js";
+import { College } from "./College.js";
 import { UtmParameters } from "./UtmParameters.js";
 import { Constants } from "./Constants.js";
 
@@ -405,6 +407,12 @@ export class FormManager {
     // Módulo de ubicaciones - IMPORTANTE: pasar configuración para filtros
     this.locations = new Locations(this.data, this.ui, this.state, this.logger, this.config);
 
+    // Módulo de universidades - IMPORTANTE: pasar configuración para filtros
+    this.university = new University(this.data, this.ui, this.state, this.logger, this.config);
+
+    // Módulo de colegios - IMPORTANTE: pasar configuración para filtros
+    this.college = new College(this.data, this.ui, this.state, this.logger, this.config);
+
     // Módulo de parámetros UTM
     this.utmParameters = new UtmParameters(this.formElement, this.state, this.ui, this.logger);
 
@@ -422,6 +430,8 @@ export class FormManager {
     this._initializeFormHiddenFields();
     this.academic.initializeAcademicFields();
     this.locations.initializeLocationFields();
+    this.university.initializeUniversityField();
+    this.college.initializeCollegeField();
     // Establecer valores iniciales DESPUÉS de que se hayan poblado los selects
     this._setInitialFormValues();
     this.event.setupAllEvents();
@@ -649,8 +659,46 @@ export class FormManager {
       });
     });
 
+    // Poblar campos adicionales (empresas)  
+    this._initializeAdditionalFields();
+
     // Manejar auto-selección de tipo de asistente "Aspirante"
     this._handleTypeAttendeeAutoSelection();
+  }
+
+  /**
+   * Inicializar campos adicionales (empresas)
+   * @private
+   */
+  _initializeAdditionalFields() {
+    const { config } = this.config;
+
+    // Poblar empresas
+    this._populateCompanies(config.company);
+  }
+
+
+  /**
+   * Poblar select de empresas
+   * @private
+   */
+  _populateCompanies(configCompanies) {
+    const companyElement = this.ui.scopedQuery(Constants.SELECTORS.COMPANY);
+    if (!companyElement) return;
+
+    if (configCompanies && Array.isArray(configCompanies) && configCompanies.length > 0) {
+      const options = configCompanies.map(company => ({
+        value: company,
+        text: company
+      }));
+
+      this.ui.populateSelect({
+        selector: Constants.SELECTORS.COMPANY,
+        options: options,
+      });
+
+      this.logger.info(`🏢 Poblando empresas con lista específica (${configCompanies.length} empresas)`);
+    }
   }
 
   /**
