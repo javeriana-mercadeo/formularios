@@ -5,6 +5,7 @@
  */
 
 import { Constants } from "./Constants.js";
+import { TomSelect } from "./TomSelect.js";
 
 export class University {
   constructor(Data, Ui, state, logger = null, config = null) {
@@ -13,6 +14,9 @@ export class University {
     this.state = state;
     this.logger = logger;
     this.config = config;
+    
+    // Inicializar módulo TomSelect
+    this.tomSelect = new TomSelect(logger);
   }
 
   // ===============================
@@ -22,14 +26,14 @@ export class University {
   /**
    * Inicializar campo de universidad
    */
-  initializeUniversityField() {
+  async initializeUniversityField() {
     const universityElement = this.Ui.scopedQuery(Constants.SELECTORS.UNIVERSITY);
     if (!universityElement) {
       this.logger.debug("Campo universidad no encontrado en el formulario");
       return;
     }
 
-    this._populateUniversities();
+    await this._populateUniversities();
   }
 
   /**
@@ -43,7 +47,7 @@ export class University {
       return [];
     }
 
-    const { config } = this.config;
+    const config = this.config?.config || this.config || {};
     const configUniversities = config.universities;
 
     if (configUniversities && Array.isArray(configUniversities) && configUniversities.length > 0) {
@@ -67,6 +71,10 @@ export class University {
     } else {
       // Retornar todas las universidades del JSON
       this.logger.info(`🎓 Usando todas las universidades: ${universityData.cuentasInstitucionales.length} universidades`);
+      this.logger.debug('📊 Datos de universidades:', {
+        total: universityData.cuentasInstitucionales.length,
+        primeras5: universityData.cuentasInstitucionales.slice(0, 5).map(u => ({ name: u.NAME, id: u.PUJ_EXTERNALORGID__C }))
+      });
       return universityData.cuentasInstitucionales;
     }
   }
@@ -76,10 +84,10 @@ export class University {
   // ===============================
 
   /**
-   * Poblar select de universidades
+   * Poblar select de universidades con TomSelect
    * @private
    */
-  _populateUniversities() {
+  async _populateUniversities() {
     const filteredUniversities = this.getFilteredUniversities();
     
     if (filteredUniversities.length === 0) {
@@ -89,17 +97,21 @@ export class University {
     }
 
     const options = filteredUniversities.map(university => ({
-      value: university.PUJ_EXTERNALORGID__C,
+      value: university.PUJ_EXTERNALORGID__C || university.ID || university.NAME,
       text: university.NAME
     }));
-
-    this.Ui.populateSelect({
-      selector: Constants.SELECTORS.UNIVERSITY,
-      options: options,
+    
+    this.logger.debug('🎯 Opciones generadas para TomSelect:', {
+      total: options.length,
+      primeras5: options.slice(0, 5),
+      ultimas5: options.slice(-5)
     });
 
+    // Inicializar TomSelect
+    await this._setupTomSelectModular(options);
+
     this.state.setFieldVisibility(Constants.FIELDS.UNIVERSITY, true);
-    this.logger.info(`🎓 Select de universidades poblado con ${options.length} opciones`);
+    this.logger.info(`🎓 Select de universidades poblado con ${options.length} opciones usando TomSelect`);
   }
 
   /**
@@ -165,6 +177,82 @@ export class University {
     return abbreviatedJson === normalizedConfig || 
            normalizedJson === abbreviatedConfig ||
            abbreviatedJson === abbreviatedConfig;
+  }
+
+  /**
+   * Configurar TomSelect para universidades
+   * @private
+   */
+  async _setupTomSelectModular(options) {
+    try {
+      const universitySelectElement = this.Ui.scopedQuery(Constants.SELECTORS.UNIVERSITY);
+      
+      if (!universitySelectElement) {
+        throw new Error('Elemento select de universidad no encontrado');
+      }
+
+      this.logger?.info(`🎯 Configurando TomSelect para universidad con ${options.length} opciones`);
+
+      // Configuración para universidad
+      const config = {
+        placeholder: 'Buscar universidad...',
+        searchEnabled: true,
+        clearable: true,
+        closeAfterSelect: true,
+        maxItems: 1,
+        required: universitySelectElement.hasAttribute('required') || universitySelectElement.hasAttribute('data-validation')
+      };
+
+      // Inicializar TomSelect usando el módulo reutilizable
+      const instance = await this.tomSelect.initialize(universitySelectElement, options, config);
+
+      this.logger?.info(`✅ TomSelect configurado para universidad: ${options.length} opciones`);
+      
+      return instance;
+
+    } catch (error) {
+      this.logger?.error('❌ Error configurando TomSelect para universidad:', error);
+      
+      // Fallback a población normal si TomSelect falla
+      this.logger?.warn('⚠️ Usando población normal como fallback');
+      this.Ui.populateSelect({
+        selector: Constants.SELECTORS.UNIVERSITY,
+        options: options,
+      });
+      
+      throw error;
+    }
+  }
+
+  /**
+   * Validar campo de universidad usando TomSelect
+   * @returns {boolean} - True si es válido
+   */
+  validateField() {
+    try {
+      const universityElement = this.Ui.scopedQuery(Constants.SELECTORS.UNIVERSITY);
+      if (!universityElement) return true;
+
+      const instanceKey = universityElement.name || universityElement.id || 'university';
+      return this.tomSelect.validateField(instanceKey);
+    } catch (error) {
+      this.logger?.warn('⚠️ Error validando campo universidad:', error);
+      return true;
+    }
+  }
+
+  /**
+   * Limpiar instancias de TomSelect
+   */
+  destroy() {
+    try {
+      if (this.tomSelect) {
+        this.tomSelect.destroyAll();
+        this.logger?.info('🗑️ Instancias de TomSelect destruidas para Universidad');
+      }
+    } catch (error) {
+      this.logger?.warn('⚠️ Error destruyendo TomSelect para Universidad:', error);
+    }
   }
 
   /**

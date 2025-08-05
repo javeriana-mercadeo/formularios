@@ -7,7 +7,11 @@
       "WebFetch(domain:learn.liferay.com)",
       "WebFetch(domain:help.liferay.com)",
       "Bash(python:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:tom-select.js.org)",
+      "Bash(find:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

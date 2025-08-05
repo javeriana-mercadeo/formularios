@@ -45,9 +45,10 @@ export class Data {
         "../data/universidades.json",
       ],
       college: [
+        "./data/Colegios PRD.json", // Archivo local primero para desarrollo
+        "../data/Colegios PRD.json",
         "https://www.javeriana.edu.co/recursosdb/1372208/10609114/Colegios+PRD.json",
         "https://cloud.cx.javeriana.edu.co/Colegios+PRD.json",
-        "../data/Colegios PRD.json",
       ],
     };
 

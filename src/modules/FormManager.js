@@ -16,6 +16,7 @@ import { Academic } from "./Academic.js";
 import { Locations } from "./Locations.js";
 import { University } from "./University.js";
 import { College } from "./College.js";
+import { TomSelect } from "./TomSelect.js";
 import { UtmParameters } from "./UtmParameters.js";
 import { Constants } from "./Constants.js";
 
@@ -54,6 +55,9 @@ export class FormManager {
       urls: this.config.getConfig().urls,
       logger: this.logger,
     });
+
+    // Inicializar TomSelect para campos adicionales
+    this.tomSelect = new TomSelect(this.logger);
 
     this.service = new Service({
       config: this.config,
@@ -320,6 +324,12 @@ export class FormManager {
     const reqUiredData = this._detectReqUiredDataSources();
     this.logger.info(`🎯 Cargando solo los datos necesarios: ${reqUiredData.join(", ")}`);
 
+    // DEBUG: Forzar carga de colegios para debug
+    if (!reqUiredData.includes(DATA_FILES.COLLEGES)) {
+      this.logger.warn("⚠️ Colegios no detectados automáticamente - forzando carga para debug");
+      reqUiredData.push(DATA_FILES.COLLEGES);
+    }
+
     const loadPromises = [];
 
     // Cargar datos basándose en campos detectados
@@ -427,7 +437,7 @@ export class FormManager {
   async _configureForm() {
     this._initializeModes();
     this._addHiddenFields();
-    this._initializeFormHiddenFields();
+    await this._initializeFormHiddenFields();
     this.academic.initializeAcademicFields();
     this.locations.initializeLocationFields();
     this.university.initializeUniversityField();
@@ -490,6 +500,12 @@ export class FormManager {
   _addHiddenFields() {
     const { FIELDS, FIELD_MAPPING } = Constants;
     const config = this.config.getConfig();
+
+    // Skip adding hidden fields if disabled in config (useful for debugging)
+    if (config.disableHiddenFields) {
+      this.logger.info("🚫 Campos ocultos desactivados por configuración de debug");
+      return;
+    }
 
     const fields = [
       {
@@ -623,7 +639,7 @@ export class FormManager {
    * Inicializar campos del formulario con datos
    * @private
    */
-  _initializeFormHiddenFields() {
+  async _initializeFormHiddenFields() {
     const { config } = this.config;
     const fieldConfigs = [
       {
@@ -660,7 +676,7 @@ export class FormManager {
     });
 
     // Poblar campos adicionales (empresas)  
-    this._initializeAdditionalFields();
+    await this._initializeAdditionalFields();
 
     // Manejar auto-selección de tipo de asistente "Aspirante"
     this._handleTypeAttendeeAutoSelection();
@@ -670,19 +686,19 @@ export class FormManager {
    * Inicializar campos adicionales (empresas)
    * @private
    */
-  _initializeAdditionalFields() {
+  async _initializeAdditionalFields() {
     const { config } = this.config;
 
-    // Poblar empresas
-    this._populateCompanies(config.company);
+    // Poblar empresas con TomSelect
+    await this._populateCompanies(config.company);
   }
 
 
   /**
-   * Poblar select de empresas
+   * Poblar select de empresas usando TomSelect
    * @private
    */
-  _populateCompanies(configCompanies) {
+  async _populateCompanies(configCompanies) {
     const companyElement = this.ui.scopedQuery(Constants.SELECTORS.COMPANY);
     if (!companyElement) return;
 
@@ -692,12 +708,53 @@ export class FormManager {
         text: company
       }));
 
-      this.ui.populateSelect({
-        selector: Constants.SELECTORS.COMPANY,
-        options: options,
-      });
+      try {
+        // Usar TomSelect para empresas
+        await this._setupTomSelectForCompany(companyElement, options);
+        this.logger.info(`🏢 Campo empresa configurado con TomSelect (${options.length} opciones)`);
+      } catch (error) {
+        this.logger.error(`❌ Error configurando TomSelect para empresa: ${error.message}`);
+        // Fallback a método nativo
+        this.ui.populateSelect({
+          selector: Constants.SELECTORS.COMPANY,
+          options: options,
+        });
+      }
 
       this.logger.info(`🏢 Poblando empresas con lista específica (${configCompanies.length} empresas)`);
+    } else {
+      this.logger.info("🏢 No hay configuración de empresas - campo se mantiene vacío");
+    }
+  }
+
+  /**
+   * Configurar TomSelect para el campo empresa
+   * @private
+   */
+  async _setupTomSelectForCompany(companyElement, options) {
+    try {
+      this.logger?.info(`🎯 Configurando TomSelect para empresa con ${options.length} opciones`);
+
+      // Configuración para empresa
+      const config = {
+        placeholder: companyElement.getAttribute("data-placeholder-text") || 'Buscar empresa...',
+        searchEnabled: true,
+        clearable: true,
+        closeAfterSelect: true,
+        maxItems: 1,
+        required: companyElement.hasAttribute('required') || companyElement.hasAttribute('data-validation')
+      };
+
+      // Inicializar TomSelect usando el módulo reutilizable
+      const instance = await this.tomSelect.initialize(companyElement, options, config);
+
+      this.logger?.info(`✅ TomSelect configurado para empresa: ${options.length} opciones`);
+      
+      return instance;
+
+    } catch (error) {
+      this.logger?.error('❌ Error configurando TomSelect para empresa:', error);
+      throw error;
     }
   }
 

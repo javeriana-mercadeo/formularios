@@ -454,10 +454,12 @@ export const configCompaniesSchools = {
   // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):
   // ✅ Campo Empresa: Visible con 8 empresas de convenio específicas
   // ✅ Campo Colegio: Solo visible para "Aspirante" y "Docente y/o psicoorientador"
-  //     → OPTIMIZADO: Usa búsqueda en tiempo real para ~1000+ colegios
-  //     → Carga inicial: solo 20 colegios mostrados
-  //     → Búsqueda: hasta 50 resultados filtrados dinámicamente
-  //     → Debounce: 300ms para evitar búsquedas excesivas
+  //     → POWERED BY SELECT2: Búsqueda profesional y optimizada
+  //     → 🔍 Búsqueda en tiempo real con highlighting
+  //     → ⚡ Virtualización automática para +1000 colegios
+  //     → 🎨 UI/UX profesional con estilos personalizados
+  //     → 📱 Responsive y accesible
+  //     → 🧹 Auto-limpieza al cambiar tipo de asistente
   // ✅ Tipos de asistente: Incluye empresarios y comunidad educativa
   // ✅ Para eventos de networking empresarial y alianzas educativas
   //
