@@ -21,14 +21,17 @@
 // Configuración mínima para demostrar comportamiento estándar sin filtros
 // ✅ Usado en: formMini (test.html)
 
-export const configMini = {
+export const configMiniOld = {
   // DATOS DEL EVENTO
   campaign: "Mercadeo",
-  eventName: "Open Day Enfermería 2024",
+  eventName: "Open Day Técnico 2024",
   eventDate: "23/01/2025 12:00 PM", // Formato: DD/MM/YYYY HH:mm AM/PM
 
   // CONFIGURACIÓN BÁSICA DE EVENTO
   typeAttendee: ["Aspirante"], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
+
+  // 🎯 FILTRO PARA PROBAR CASO 1-1-1: Solo nivel ETDH (Técnico)
+  /* academicLevels: [{ code: "ETDH", name: "Técnico" }], */
 
   attendanceDays: ["Jueves 15 de febrero de 2024"],
 
@@ -50,6 +53,37 @@ export const configMini = {
   // ✅ Comportamiento optimizado para formularios dirigidos específicamente a aspirantes
   // ✅ Sin restricciones geográficas (países/departamentos/ciudades)
   // ✅ Formulario completo con todas las opciones académicas disponibles
+};
+
+const configMini = {
+  campaign: "MERCA_JaverianaAlCaribe",
+  eventName: "Javeriana al Caribe",
+  eventDate: "02/09/2025 12:00 PM",
+  retUrl: "https://www.javeriana.edu.co/info-prg/typ-javeriana-caribe",
+
+  // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
+  countries: ["Colombia"],
+  departments: ["Atlántico", "Bolívar", "Magdalena"],
+  cities: ["Barranquilla", "Cartagena", "Santa Marta"],
+
+  // CONFIGURACIÓN DEL EVENTO
+  attendanceDays: [
+    "Martes 2 de septiembre - Cartagena",
+    "Miércoles 3 de septiembre - Barranquilla",
+  ],
+
+  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Docente y/o psicoorientador"],
+
+  // CONFIGURACIONES TÉCNICAS
+  test: false,
+  debug: false,
+  development: false,
+  debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // Logging detallado
+  logging: {
+    enabled: true,
+  },
 };
 
 // ============================================================================
@@ -254,15 +288,17 @@ export const configDepartments = {
 
 export const configCities = {
   // DATOS DEL EVENTO
-  eventName: "Open Day Ciudades Principales 2024",
+  eventName: "Open Day Filtrado Jerárquico 2024",
   eventDate: "2024-08-30",
-  campaign: "CIUDADES_PRINCIPALES_2024",
-  article: "evento_ciudades",
-  source: "enfoque_urbano",
+  campaign: "JERARQUICO_TEST_2024",
+  article: "evento_jerarquico",
+  source: "enfoque_jerarquico",
   medium: "digital",
 
-  // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
-  cities: ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"],
+  // 🎯 FILTRO JERÁRQUICO DE PRUEBA - Caso del usuario
+  countries: ["Colombia"],
+  departments: ["Atlántico", "Bolívar", "Magdalena"],
+  cities: ["Barranquilla", "Cartagena", "Santa Marta"],
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
@@ -274,14 +310,20 @@ export const configCities = {
   development: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
-  // 💡 COMPORTAMIENTO ESPERADO:
-  // ✅ Países: Todos disponibles (sin filtro)
-  // ✅ Al seleccionar "Colombia" → Solo 5 departamentos específicos:
-  //     • Cundinamarca (Bogotá) • Antioquia (Medellín) • Valle del Cauca (Cali)
-  //     • Atlántico (Barranquilla) • Bolívar (Cartagena)
-  // ✅ Al seleccionar departamento → Solo 1 ciudad configurada por departamento
-  // ✅ Lógica inteligente: Ciudades filtran automáticamente departamentos
-  // ✅ Otros países funcionan normalmente (sin filtros)
+  // 💡 COMPORTAMIENTO ESPERADO JERÁRQUICO:
+  // 🔥 FILTRADO EN CASCADA: País -> Departamento -> Ciudad
+  //
+  // ✅ Países: Solo "Colombia" (preseleccionado por configuración)
+  // ✅ Departamentos: Solo "Atlántico", "Bolívar", "Magdalena" (configurados)
+  // ✅ Ciudades: Solo las que pertenecen a los departamentos configurados:
+  //     • Atlántico → Barranquilla ✅
+  //     • Bolívar → Cartagena ✅
+  //     • Magdalena → Santa Marta ✅
+  //
+  // 🚀 LÓGICA JERÁRQUICA:
+  // - Si ciudad no pertenece al departamento configurado → NO se muestra
+  // - Solo se muestran ciudades que están en departamentos válidos
+  // - Prioridad: departamentos configurados filtran las ciudades configuradas
 };
 
 // ============================================================================

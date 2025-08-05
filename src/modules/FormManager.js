@@ -678,6 +678,9 @@ export class FormManager {
     // Poblar campos adicionales (empresas)  
     await this._initializeAdditionalFields();
 
+    // Inicializar campos de evento con valores de configuración
+    this._initializeEventFields();
+
     // Manejar auto-selección de tipo de asistente "Aspirante"
     this._handleTypeAttendeeAutoSelection();
   }
@@ -755,6 +758,59 @@ export class FormManager {
     } catch (error) {
       this.logger?.error('❌ Error configurando TomSelect para empresa:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Inicializar campos de evento con valores de configuración
+   * Crea los campos EVENT_NAME y EVENT_DATE en el DOM con valores por defecto
+   * @private
+   */
+  _initializeEventFields() {
+    const eventNameValue = this.state.getField(Constants.FIELDS.EVENT_NAME);
+    const eventDateValue = this.state.getField(Constants.FIELDS.EVENT_DATE);
+
+    // Crear campo EVENT_NAME si tiene valor de configuración
+    if (eventNameValue) {
+      this.ui.addHiddenField(
+        this.formElement,
+        Constants.FIELDS.EVENT_NAME,
+        eventNameValue,
+        "Nombre del evento desde configuración"
+      );
+      this.logger?.info(`✅ Campo EVENT_NAME inicializado: "${eventNameValue}"`);
+    }
+
+    // Crear campo EVENT_DATE si tiene valor de configuración
+    if (eventDateValue) {
+      this.ui.addHiddenField(
+        this.formElement,
+        Constants.FIELDS.EVENT_DATE,
+        eventDateValue,
+        "Fecha del evento desde configuración"
+      );
+      this.logger?.info(`✅ Campo EVENT_DATE inicializado: "${eventDateValue}"`);
+    }
+
+    // Si no hay valores de configuración, crear campos vacíos para que UTM los pueda llenar
+    if (!eventNameValue) {
+      this.ui.addHiddenField(
+        this.formElement,
+        Constants.FIELDS.EVENT_NAME,
+        "",
+        "Nombre del evento (vacío, listo para UTM)"
+      );
+      this.logger?.info(`✅ Campo EVENT_NAME creado vacío para UTM`);
+    }
+
+    if (!eventDateValue) {
+      this.ui.addHiddenField(
+        this.formElement,
+        Constants.FIELDS.EVENT_DATE,
+        "",
+        "Fecha del evento (vacío, listo para UTM)"
+      );
+      this.logger?.info(`✅ Campo EVENT_DATE creado vacío para UTM`);
     }
   }
 
@@ -993,8 +1049,35 @@ export class FormManager {
     let filteredCount = 0;
     const originalCount = Object.keys(formData).length;
 
+    // Verificar si el tipo de asistente no es "Aspirante"
+    const typeAttendee = formData[Constants.FIELDS.TYPE_ATTENDEE];
+    const isNotAspirant = typeAttendee && typeAttendee !== Constants.ATTENDEE_TYPES.APPLICANT;
+
     Object.entries(formData).forEach(([fieldName, fieldValue]) => {
-      // Incluir el campo si tiene un valor válido
+      // Lógica especial para asistentes que NO son aspirantes
+      if (isNotAspirant) {
+        // Para asistentes que NO son aspirantes, EXCLUIR nivel académico y facultad
+        if (fieldName === Constants.FIELDS.ACADEMIC_LEVEL || fieldName === Constants.FIELDS.FACULTY) {
+          filteredCount++;
+          this.logger.debug(`Campo académico excluido para no-aspirante: ${fieldName} = "${fieldValue}"`);
+          return; // No incluir este campo
+        }
+        
+        // Para el programa, solo incluir si tiene valor "NOAP"
+        if (fieldName === Constants.FIELDS.PROGRAM) {
+          if (fieldValue === "NOAP") {
+            filteredData[fieldName] = fieldValue;
+            this.logger.debug(`Campo programa incluido con NOAP para no-aspirante: ${fieldName} = "${fieldValue}"`);
+          } else {
+            // Si no es NOAP, establecer NOAP
+            filteredData[fieldName] = "NOAP";
+            this.logger.debug(`Campo programa corregido a NOAP para no-aspirante: ${fieldName} = "NOAP"`);
+          }
+          return;
+        }
+      }
+
+      // Lógica normal para otros campos o aspirantes
       const isValidValue =
         fieldValue !== null &&
         fieldValue !== undefined &&

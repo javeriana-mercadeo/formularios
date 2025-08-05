@@ -595,6 +595,16 @@ export class Constants {
       type: "select",
     },
     {
+      selector: Constants.SELECTORS.EVENT_NAME,
+      stateKey: Constants.FIELDS.EVENT_NAME,
+      type: "hidden", // Campo oculto que se llena con UTM
+    },
+    {
+      selector: Constants.SELECTORS.EVENT_DATE,
+      stateKey: Constants.FIELDS.EVENT_DATE,
+      type: "hidden", // Campo oculto que se llena con UTM
+    },
+    {
       selector: Constants.SELECTORS.DATA_AUTHORIZATION,
       stateKey: Constants.FIELDS.DATA_AUTHORIZATION,
       type: "radio", // Es radio button, no checkbox

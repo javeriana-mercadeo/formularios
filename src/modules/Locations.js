@@ -171,30 +171,34 @@ export class Locations {
     if (filteredCities.length === 1) {
       // Solo una ciudad: preseleccionar automáticamente
       this.state.updateField(Constants.FIELDS.CITY, filteredCities[0].value);
-      
+
       // Verificar si viene de un departamento con singleCity (información ya está en la UI)
       const filteredDepartments = this.getFilteredDepartments();
-      const currentDepartment = filteredDepartments.find(dept => dept.value === departmentCode);
-      
+      const currentDepartment = filteredDepartments.find((dept) => dept.value === departmentCode);
+
       if (currentDepartment && currentDepartment.singleCity) {
         // Viene de departamento con una sola ciudad: ocultar campo ciudad
         this.Ui.populateSelect({
           selector: Constants.SELECTORS.CITY,
           options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
         });
-        
+
         this.state.setFieldVisibility(Constants.FIELDS.CITY, false);
-        this.logger.info(`🔧 Ciudad preseleccionada automáticamente y ocultada (desde departamento con ciudad única): ${filteredCities[0].text}`);
+        this.logger.info(
+          `🔧 Ciudad preseleccionada automáticamente y ocultada (desde departamento con ciudad única): ${filteredCities[0].text}`
+        );
       } else {
         // Departamento regular con una sola ciudad: mantener visible pero preseleccionado
         this.Ui.populateSelect({
           selector: Constants.SELECTORS.CITY,
           options: [{ value: filteredCities[0].value, text: filteredCities[0].text }],
         });
-        
+
         this.Ui.showElement(this.Ui.scopedQuery(Constants.SELECTORS.CITY));
         this.state.setFieldVisibility(Constants.FIELDS.CITY, true);
-        this.logger.info(`🔧 Ciudad preseleccionada automáticamente (departamento regular): ${filteredCities[0].text}`);
+        this.logger.info(
+          `🔧 Ciudad preseleccionada automáticamente (departamento regular): ${filteredCities[0].text}`
+        );
       }
     } else if (filteredCities.length === 0) {
       // Sin ciudades disponibles
@@ -389,6 +393,130 @@ export class Locations {
   // ===============================
 
   /**
+   * Obtener filtros de ubicación aplicados jerárquicamente
+   * Prioridad: País -> Departamento -> Ciudad
+   * @private
+   */
+  _getHierarchicalLocationFilter() {
+    const configCountries = this.config.get("countries") || [];
+    const configDepartments = this.config.get("departments") || [];
+    const configCities = this.config.get("cities") || [];
+
+    this.logger.info(`🔍 Aplicando filtrado jerárquico de ubicación:`, {
+      countries: configCountries,
+      departments: configDepartments,
+      cities: configCities,
+    });
+
+    // PASO 1: Determinar países válidos
+    let validCountries = configCountries.length > 0 ? configCountries : [];
+
+    // PASO 2: Determinar departamentos válidos basados en países
+    let validDepartments = [];
+
+    if (configDepartments.length > 0) {
+      if (validCountries.length > 0) {
+        // Si hay países configurados, solo usar departamentos que pertenezcan a esos países
+        // Para Colombia (que es nuestro caso principal), todos los departamentos son válidos
+        if (validCountries.includes("Colombia") || validCountries.includes("COL")) {
+          validDepartments = configDepartments;
+        }
+      } else {
+        // Si no hay países configurados, usar todos los departamentos configurados
+        validDepartments = configDepartments;
+      }
+    }
+
+    // PASO 3: Determinar ciudades válidas basadas en departamentos
+    let validCities = [];
+
+    if (configCities.length > 0) {
+      if (validDepartments.length > 0) {
+        // Si hay departamentos configurados, solo usar ciudades que pertenezcan a esos departamentos
+        validCities = this._filterCitiesByDepartments(configCities, validDepartments);
+      } else {
+        // Si no hay departamentos configurados, usar todas las ciudades configuradas
+        validCities = configCities;
+
+        // Pero necesitamos determinar qué departamentos contienen estas ciudades
+        validDepartments = this._getDepartmentsFromCityNames(configCities);
+      }
+    }
+
+    const result = {
+      countries: validCountries,
+      departments: validDepartments,
+      cities: validCities,
+    };
+
+    this.logger.info(`✅ Filtro jerárquico calculado:`, result);
+    return result;
+  }
+
+  /**
+   * Filtrar ciudades que pertenecen a departamentos específicos
+   * @private
+   */
+  _filterCitiesByDepartments(configCities, validDepartments) {
+    const allDepartments = this.Data.getDepartments();
+    const validCities = [];
+
+    // Para cada departamento válido, buscar sus ciudades configuradas
+    validDepartments.forEach((deptName) => {
+      const department = allDepartments.find((d) => d.nombre === deptName || d.codigo === deptName);
+      if (department) {
+        const departmentCities = this.Data.getCities(department.codigo);
+
+        // Encontrar ciudades configuradas que pertenecen a este departamento
+        const matchingCities = departmentCities.filter(
+          (city) => configCities.includes(city.nombre) || configCities.includes(city.codigo)
+        );
+
+        matchingCities.forEach((city) => {
+          if (!validCities.includes(city.nombre)) {
+            validCities.push(city.nombre);
+          }
+        });
+      }
+    });
+
+    this.logger.info(
+      `🏙️ Ciudades filtradas por departamentos [${validDepartments.join(", ")}]: ${validCities.join(
+        ", "
+      )}`
+    );
+    return validCities;
+  }
+
+  /**
+   * Obtener departamentos que contienen ciudades específicas
+   * @private
+   */
+  _getDepartmentsFromCityNames(configCities) {
+    const allDepartments = this.Data.getDepartments();
+    const departmentsSet = new Set();
+
+    allDepartments.forEach((department) => {
+      const cities = this.Data.getCities(department.codigo);
+      const hasConfiguredCity = cities.some(
+        (city) => configCities.includes(city.nombre) || configCities.includes(city.codigo)
+      );
+
+      if (hasConfiguredCity) {
+        departmentsSet.add(department.nombre);
+      }
+    });
+
+    const result = Array.from(departmentsSet);
+    this.logger.info(
+      `🏛️ Departamentos encontrados desde ciudades [${configCities.join(", ")}]: ${result.join(
+        ", "
+      )}`
+    );
+    return result;
+  }
+
+  /**
    * Obtener países filtrados por configuración
    */
   getFilteredCountries() {
@@ -420,7 +548,7 @@ export class Locations {
   }
 
   /**
-   * Obtener departamentos filtrados por configuración
+   * Obtener departamentos filtrados por configuración con jerarquía
    */
   getFilteredDepartments() {
     const allDepartments = this.Data.getDepartments();
@@ -429,53 +557,39 @@ export class Locations {
       return allDepartments.map((dept) => ({ value: dept.codigo, text: dept.nombre }));
     }
 
-    const configDepartments = this.config.get("departments");
-    const configCities = this.config.get("cities");
+    // APLICAR FILTRADO JERÁRQUICO: País -> Departamento -> Ciudad
+    const hierarchicalFilter = this._getHierarchicalLocationFilter();
 
-    // Si hay ciudades específicas, obtener departamentos de esas ciudades
-    if (configCities && configCities.length > 0) {
-      const departmentsFromCities = this.getDepartmentsFromCities(configCities);
-      
-      // Enriquecer el texto de los departamentos que tienen una sola ciudad
-      const enrichedDepartments = departmentsFromCities.map((department) => {
+    // Si hay filtro jerárquico, usar esos departamentos
+    if (hierarchicalFilter.departments.length > 0) {
+      const filteredDepartments = allDepartments
+        .filter(
+          (dept) =>
+            hierarchicalFilter.departments.includes(dept.nombre) ||
+            hierarchicalFilter.departments.includes(dept.codigo)
+        )
+        .map((dept) => ({ value: dept.codigo, text: dept.nombre }));
+
+      // Enriquecer departamentos que tienen una sola ciudad configurada
+      const enrichedDepartments = filteredDepartments.map((department) => {
         const departmentCities = this.getFilteredCities(department.value);
-        
+
         if (departmentCities.length === 1) {
-          // Una sola ciudad: mostrar "Departamento - Ciudad" en el texto
           return {
-            value: department.value, // IMPORTANTE: mantener solo el valor del departamento
-            text: `${department.text} - ${departmentCities[0].text}`, // UI enriquecida
-            singleCity: departmentCities[0] // Metadata para auto-selección
+            value: department.value,
+            text: `${department.text} - ${departmentCities[0].text}`,
+            singleCity: departmentCities[0],
           };
-        } else {
-          // Múltiples ciudades: mantener texto original
-          return department;
         }
+        return department;
       });
-      
+
       this.logger.info(
-        `🏛️ Departamentos desde ciudades configuradas (enriquecidos): ${enrichedDepartments
+        `🏛️ Departamentos filtrados jerárquicamente: ${enrichedDepartments
           .map((d) => d.text)
           .join(", ")}`
       );
       return enrichedDepartments;
-    }
-
-    // Si hay departamentos específicos en configuración, filtrar por esos
-    if (configDepartments && configDepartments.length > 0) {
-      const filteredDepartments = allDepartments
-        .filter(
-          (dept) =>
-            configDepartments.includes(dept.nombre) || configDepartments.includes(dept.codigo)
-        )
-        .map((dept) => ({ value: dept.codigo, text: dept.nombre }));
-
-      this.logger.info(
-        `🏛️ Departamentos filtrados por configuración: ${filteredDepartments
-          .map((d) => d.text)
-          .join(", ")}`
-      );
-      return filteredDepartments;
     }
 
     this.logger.info(`🏛️ Mostrando todos los departamentos disponibles`);
@@ -483,7 +597,7 @@ export class Locations {
   }
 
   /**
-   * Obtener ciudades filtradas por configuración
+   * Obtener ciudades filtradas por configuración con jerarquía
    */
   getFilteredCities(departmentCode) {
     const allCities = this.Data.getCities(departmentCode);
@@ -492,16 +606,23 @@ export class Locations {
       return allCities.map((city) => ({ value: city.codigo, text: city.nombre }));
     }
 
-    const configCities = this.config.get("cities");
+    // APLICAR FILTRADO JERÁRQUICO: País -> Departamento -> Ciudad
+    const hierarchicalFilter = this._getHierarchicalLocationFilter();
 
-    // Si hay ciudades específicas en configuración, filtrar por esas
-    if (configCities && configCities.length > 0) {
+    // Si hay filtro jerárquico de ciudades, usar solo esas ciudades para este departamento
+    if (hierarchicalFilter.cities.length > 0) {
       const filteredCities = allCities
-        .filter((city) => configCities.includes(city.nombre) || configCities.includes(city.codigo))
+        .filter(
+          (city) =>
+            hierarchicalFilter.cities.includes(city.nombre) ||
+            hierarchicalFilter.cities.includes(city.codigo)
+        )
         .map((city) => ({ value: city.codigo, text: city.nombre }));
 
       this.logger.info(
-        `🏙️ Ciudades filtradas por configuración: ${filteredCities.map((c) => c.text).join(", ")}`
+        `🏙️ Ciudades filtradas jerárquicamente para ${departmentCode}: ${filteredCities
+          .map((c) => c.text)
+          .join(", ")}`
       );
       return filteredCities;
     }
