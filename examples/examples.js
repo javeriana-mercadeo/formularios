@@ -521,61 +521,61 @@ export const configCompaniesSchools = {
 document.addEventListener("DOMContentLoaded", function () {
   // 📝 Prueba 1: Configuración Base
   if (document.getElementById("formMini")) {
-    const formMini = new FormModules("formMini", configMini);
+    const formMini = new FormModules("#formMini", configMini);
     formMini.initialize();
   }
 
   // 🎓 Prueba 2: Filtro por Nivel Académico
   if (document.getElementById("formAcademicLevel")) {
-    const formAcademicLevel = new FormModules("formAcademicLevel", configAcademicLevel);
+    const formAcademicLevel = new FormModules("#formAcademicLevel", configAcademicLevel);
     formAcademicLevel.initialize();
   }
 
   // 🏛️ Prueba 3: Filtro por Facultad
   if (document.getElementById("formFaculty")) {
-    const formFaculty = new FormModules("formFaculty", configFaculty);
+    const formFaculty = new FormModules("#formFaculty", configFaculty);
     formFaculty.initialize();
   }
 
   // 📚 Prueba 4: Filtro por Programas
   if (document.getElementById("formPrograms")) {
-    const formPrograms = new FormModules("formPrograms", configPrograms);
+    const formPrograms = new FormModules("#formPrograms", configPrograms);
     formPrograms.initialize();
   }
 
   // 🌍 Prueba 5: Filtro por Países
   if (document.getElementById("formCountries")) {
-    const formCountries = new FormModules("formCountries", configCountries);
+    const formCountries = new FormModules("#formCountries", configCountries);
     formCountries.initialize();
   }
 
   // 🏛️ Prueba 6: Filtro por Departamentos
   if (document.getElementById("formDepartments")) {
-    const formDepartments = new FormModules("formDepartments", configDepartments);
+    const formDepartments = new FormModules("#formDepartments", configDepartments);
     formDepartments.initialize();
   }
 
   // 🏙️ Prueba 7: Filtro por Ciudades
   if (document.getElementById("formCities")) {
-    const formCities = new FormModules("formCities", configCities);
+    const formCities = new FormModules("#formCities", configCities);
     formCities.initialize();
   }
 
   // 🎯 Prueba 8: Días Múltiples
   if (document.getElementById("formMultipleDays")) {
-    const formMultipleDays = new FormModules("formMultipleDays", configMultipleDays);
+    const formMultipleDays = new FormModules("#formMultipleDays", configMultipleDays);
     formMultipleDays.initialize();
   }
 
   // 🎓 Prueba 9: Universidades
   if (document.getElementById("formUniversities")) {
-    const formUniversities = new FormModules("formUniversities", configUniversities);
+    const formUniversities = new FormModules("#formUniversities", configUniversities);
     formUniversities.initialize();
   }
 
   // 🏢 Prueba 10: Empresas y Colegios
   if (document.getElementById("formCompaniesSchools")) {
-    const formCompaniesSchools = new FormModules("formCompaniesSchools", configCompaniesSchools);
+    const formCompaniesSchools = new FormModules("#formCompaniesSchools", configCompaniesSchools);
     formCompaniesSchools.initialize();
   }
 });

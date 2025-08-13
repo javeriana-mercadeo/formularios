@@ -38,7 +38,11 @@
   "author": "PUJ",
   "license": "MIT",
   "dependencies": {
+    "cleave.js": "^1.6.0",
     "jquery": "^3.7.1",
-    "select2": "^4.1.0-rc.0"
+    "select2": "^4.1.0-rc.0",
+    "tom-select": "^2.4.3",
+    "yup": "^1.7.0",
+    "zustand": "^5.0.7"
   }
 }

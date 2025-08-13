@@ -30,7 +30,6 @@ module.exports = {
     ],
   },
   plugins: [
-    require('@tailwindcss/forms'),
     new MiniCssExtractPlugin({
       filename: "[name]-style.css",
     }),
@@ -38,5 +37,24 @@ module.exports = {
   resolve: {
     extensions: [".js", ".css", ".scss", ".sass"],
   },
-  externals: {},
+  externals: {
+    // Si prefieres cargar desde CDN (opcional)
+    // 'zustand': 'zustand',
+    // 'yup': 'yup',
+    // 'tom-select': 'TomSelect',
+    // 'cleave.js': 'Cleave'
+  },
+  optimization: {
+    // Optimizaciones para el build modernizado
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
 };
