@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Nuevo Sistema de Formularios</title>
+    <link rel="stylesheet" href="../build/form-modules-style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .field-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .field-group.full-width {
+            display: block;
+        }
+        
+        .form-field {
+            flex: 1;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-field input:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .checkbox-field input[type="checkbox"] {
+            width: auto;
+            margin-top: 3px;
+        }
+        
+        .checkbox-field label {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .submit-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-submit:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .debug-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Test - Nuevo Sistema de Formularios</h1>
+        <p>Prueba de las nuevas funcionalidades con validación automática y adaptadores modernos</p>
+    </div>
+
+    <div class="form-container">
+        <form id="test-form">
+            <!-- Información Personal -->
+            <div class="form-section">
+                <h3 class="section-title">📝 Información Personal</h3>
+                
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="first_name">Nombre *</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                        <div class="error-message" id="error-first_name"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="last_name">Apellidos *</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                        <div class="error-message" id="error-last_name"></div>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="type_doc">Tipo de Documento *</label>
+                        <select id="type_doc" name="type_doc" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="PASSPORT">Pasaporte</option>
+                        </select>
+                        <div class="error-message" id="error-type_doc"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="document">Número de Documento *</label>
+                        <input type="text" id="document" name="document" required>
+                        <div class="error-message" id="error-document"></div>
+                    </div>
+                </div>
+
+                <div class="field-group full-width">
+                    <div class="form-field">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="error-email"></div>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="phone_code">Código País</label>
+                        <select id="phone_code" name="phone_code">
+                            <option value="">Seleccionar...</option>
+                            <option value="+57" selected>+57 (Colombia)</option>
+                            <option value="+1">+1 (Estados Unidos)</option>
+                            <option value="+34">+34 (España)</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="mobile">Teléfono Móvil *</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+                        <div class="error-message" id="error-mobile"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="form-section">
+                <h3 class="section-title">🌍 Ubicación</h3>
+                
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="country">País *</label>
+                        <select id="country" name="country" required>
+                            <option value="">Seleccionar país...</option>
+                            <option value="Colombia" selected>Colombia</option>
+                            <option value="Estados Unidos">Estados Unidos</option>
+                            <option value="España">España</option>
+                            <option value="México">México</option>
+                        </select>
+                        <div class="error-message" id="error-country"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="department">Departamento *</label>
+                        <select id="department" name="department">
+                            <option value="">Seleccionar departamento...</option>
+                        </select>
+                        <div class="error-message" id="error-department"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="city">Ciudad *</label>
+                        <select id="city" name="city">
+                            <option value="">Seleccionar ciudad...</option>
+                        </select>
+                        <div class="error-message" id="error-city"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del Evento -->
+            <div class="form-section">
+                <h3 class="section-title">🎓 Información del Evento</h3>
+                
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="type_attendee">Tipo de Asistente *</label>
+                        <select id="type_attendee" name="type_attendee" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="aspirante">Aspirante</option>
+                            <option value="estudiante">Estudiante actual</option>
+                            <option value="egresado">Egresado</option>
+                            <option value="padre_familia">Padre de familia</option>
+                            <option value="orientador">Orientador académico</option>
+                        </select>
+                        <div class="error-message" id="error-type_attendee"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="attendance_day">Día de Asistencia *</label>
+                        <select id="attendance_day" name="attendance_day" required>
+                            <option value="">Seleccionar día...</option>
+                            <option value="2024-03-15">15 de Marzo, 2024</option>
+                            <option value="2024-03-16">16 de Marzo, 2024</option>
+                            <option value="2024-03-17">17 de Marzo, 2024</option>
+                        </select>
+                        <div class="error-message" id="error-attendance_day"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información Académica (Solo para aspirantes) -->
+            <div class="form-section" id="academic-section" style="display: none;">
+                <h3 class="section-title">📚 Información Académica</h3>
+                
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="academic_level">Nivel Académico *</label>
+                        <select id="academic_level" name="academic_level">
+                            <option value="">Seleccionar nivel...</option>
+                            <option value="pregrado">Pregrado</option>
+                            <option value="posgrado">Posgrado</option>
+                            <option value="educacion_continua">Educación Continua</option>
+                        </select>
+                        <div class="error-message" id="error-academic_level"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="faculty">Facultad *</label>
+                        <select id="faculty" name="faculty">
+                            <option value="">Seleccionar facultad...</option>
+                        </select>
+                        <div class="error-message" id="error-faculty"></div>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="form-field">
+                        <label for="program">Programa *</label>
+                        <select id="program" name="program">
+                            <option value="">Seleccionar programa...</option>
+                        </select>
+                        <div class="error-message" id="error-program"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="admission_period">Periodo de Ingreso *</label>
+                        <select id="admission_period" name="admission_period">
+                            <option value="">Seleccionar periodo...</option>
+                            <option value="2024-1">2024-1</option>
+                            <option value="2024-2">2024-2</option>
+                            <option value="2025-1">2025-1</option>
+                        </select>
+                        <div class="error-message" id="error-admission_period"></div>
+                    </div>
+                </div>
+
+                <div class="field-group full-width">
+                    <div class="form-field">
+                        <label for="school">Colegio</label>
+                        <select id="school" name="school">
+                            <option value="">Buscar colegio...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Autorización -->
+            <div class="form-section">
+                <div class="checkbox-field">
+                    <input type="checkbox" id="authorization_data" name="authorization_data" value="1" required>
+                    <label for="authorization_data">
+                        Autorizo el tratamiento de mis datos personales de acuerdo con la 
+                        <a href="#" target="_blank">Política de Privacidad</a> de la Universidad Javeriana *
+                    </label>
+                </div>
+                <div class="error-message" id="error-authorization_data"></div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="submit-section">
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    Registrar en Evento
+                </button>
+            </div>
+        </form>
+
+        <!-- Debug Info -->
+        <div class="debug-info" id="debug-info">
+            <strong>📊 Debug Info:</strong><br>
+            <div id="debug-content">Sistema inicializando...</div>
+        </div>
+    </div>
+
+    <script src="../build/form-modules-script.js"></script>
+    <script>
+        // Configuración del formulario usando la estructura correcta
+        const formConfig = {
+            // DATOS DE EVENTO
+            eventName: "Test Evento - Nuevo Sistema 2025",
+            eventDate: "15/03/2025 10:00 AM",
+            retUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
+            
+            // CONFIGURACIONES DE MODO
+            test: false,
+            debug: true,
+            development: true,
+            
+            // CAMPOS OCULTOS
+            leadSource: "Landing Pages",
+            authorizationSource: "Formulario Test",
+            requestOrigin: "Test Nuevo Sistema",
+            
+            // FILTROS - Ubicaciones
+            countries: ["Colombia", "Estados Unidos", "España", "México"],
+            departments: [], // Se cargarán dinámicamente
+            cities: [], // Se cargarán dinámicamente
+            
+            // DATOS ACADÉMICOS
+            academicLevels: ["pregrado", "posgrado", "educacion_continua"],
+            faculties: [
+                "Ingeniería", 
+                "Ciencias", 
+                "Ciencias Económicas y Administrativas",
+                "Comunicación y Lenguaje"
+            ],
+            programs: [], // Se cargarán dinámicamente según facultad
+            
+            // DATOS DEL EVENTO
+            typeAttendee: [
+                "Aspirante",
+                "Estudiante actual",
+                "Egresado", 
+                "Padre de familia",
+                "Orientador académico"
+            ],
+            attendanceDays: [
+                "15 de Marzo, 2024",
+                "16 de Marzo, 2024", 
+                "17 de Marzo, 2024"
+            ],
+            
+            // UTMs
+            source: "test-page",
+            medium: "web",
+            campaign: "nuevo-sistema-test",
+            
+            // CONFIGURACIÓN DE CACHÉ
+            cache: {
+                enabled: true,
+                expirationHours: 12
+            },
+            
+            // URLs de datos
+            urls: {
+                locations: "/data/ubicaciones.json",
+                programs: "/data/programas.json",
+                periods: "/data/periodos.json"
+            },
+            
+            // CONFIGURACIÓN DE LOGGING
+            logging: {
+                enabled: true,
+                level: "debug",
+                showTimestamp: true,
+                showLevel: true
+            },
+            
+            // CONFIGURACIÓN DE UI
+            ui: {
+                errorClass: "error",
+                validClass: "validated",
+                errorTextClass: "error_text",
+                hiddenClass: "fm-hidden",
+                animationDuration: 300,
+                enableAnimations: true,
+                loadingText: "Cargando datos...",
+                successText: "¡Registro exitoso!",
+                errorText: "Error al procesar formulario"
+            },
+            
+            // CALLBACKS
+            callbacks: {
+                onFormLoad: (formManager) => {
+                    console.log('📋 Formulario cargado correctamente');
+                    updateDebugInfo('Formulario cargado con todas las funcionalidades ✅');
+                },
+                onFormSubmit: async (formData) => {
+                    console.log('📤 Enviando datos:', formData);
+                    updateDebugInfo('Procesando envío de formulario... 📤');
+                    
+                    // Simular envío
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    updateDebugInfo('¡Formulario enviado exitosamente! ✅');
+                    return true;
+                },
+                onFieldChange: (field, value) => {
+                    console.log(`🔄 Campo ${field.name} cambió a: ${value}`);
+                    updateDebugInfo(`Campo actualizado: ${field.name} = "${value}" 🔄`);
+                },
+                onValidationError: (field, error) => {
+                    console.warn(`❌ Error validación ${field}: ${error}`);
+                    updateDebugInfo(`Error validación: ${field} - ${error} ❌`);
+                }
+            }
+        };
+
+        // Inicializar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando nuevo sistema de formularios...');
+            
+            // Crear instancia del FormManager usando la exportación UMD
+            const { FormManager } = FormModules;
+            const form = new FormManager('#test-form', formConfig);
+            
+            // Inicializar el sistema
+            form.initialize().then(() => {
+                console.log('✅ Sistema de formularios inicializado correctamente');
+                updateDebugInfo('Sistema inicializado correctamente ✅');
+                
+                // Configurar eventos específicos del formulario de test
+                setupFormEvents(form);
+                
+            }).catch(error => {
+                console.error('❌ Error inicializando formulario:', error);
+                updateDebugInfo(`Error de inicialización: ${error.message} ❌`);
+            });
+        });
+
+        // Configurar eventos específicos del formulario
+        function setupFormEvents(formManager) {
+            // Mostrar/ocultar sección académica según el tipo de asistente
+            const typeAttendeeSelect = document.getElementById('type_attendee');
+            const academicSection = document.getElementById('academic-section');
+            
+            typeAttendeeSelect.addEventListener('change', function() {
+                if (this.value === 'aspirante') {
+                    academicSection.style.display = 'block';
+                    updateDebugInfo('Sección académica activada para aspirante 📚');
+                } else {
+                    academicSection.style.display = 'none';
+                    updateDebugInfo('Sección académica ocultada 📚');
+                }
+            });
+            
+            // Event listeners para debug info
+            const form = document.getElementById('test-form');
+            
+            form.addEventListener('change', function(e) {
+                if (e.target.matches('input, select')) {
+                    updateDebugInfo(`Campo actualizado: ${e.target.name} = "${e.target.value}" 🔄`);
+                }
+            });
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateDebugInfo('Formulario enviado - Procesando... 📤');
+                
+                setTimeout(() => {
+                    updateDebugInfo('Formulario procesado exitosamente ✅');
+                }, 2000);
+            });
+        }
+
+        // Actualizar información de debug
+        function updateDebugInfo(message) {
+            const debugContent = document.getElementById('debug-content');
+            const timestamp = new Date().toLocaleTimeString();
+            debugContent.innerHTML = `[${timestamp}] ${message}`;
+        }
+    </script>
+</body>
+</html>

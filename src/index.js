@@ -54,11 +54,71 @@ import { Cache } from "./utils/cache-manager.js";
 import { UtmParameters } from "./utils/utm-processor.js";
 
 // =========================================
-// MAIN EXPORTS
+// MAIN EXPORTS - OBJETO COMPLETO PARA UMD
 // =========================================
 
-// Export main FormManager as default (backward compatible)
-export default FormManager;
+// Crear objeto completo con todas las exportaciones
+const FormModulesAPI = {
+  // Main FormManager (backward compatible)
+  FormManager,
+  
+  // Zustand Stores
+  useSystemStore,
+  useValidationStore,
+  useFieldStore,
+  useSubmissionStore,
+  
+  // Modern Engines & Controllers
+  ValidationEngine,
+  FieldController,
+  
+  // Modern Adapters
+  TomSelectAdapter,
+  YupAdapter,
+  CleaveAdapter,
+  SalesforceClient,
+  FieldMapper,
+  
+  // Modernized Modules
+  Academic,
+  Locations,
+  University,
+  College,
+  
+  // Legacy names for backward compatibility
+  Ui: DomManager,
+  Logger,
+  Config: ConfigLoader,
+  Data: DataPreloader,
+  Event: EventBus,
+  Service: SalesforceMapper,
+  Validation: ValidationLegacy,
+  State: StateLegacy,
+  
+  // Constants and base modules
+  Constants,
+  TomSelect: TomSelectBase,
+  
+  // Utils
+  Cache,
+  UtmParameters,
+  
+  // Modern aliases
+  DomManager,
+  ConfigLoader,
+  DataPreloader,
+  EventBus,
+  SalesforceMapper,
+  ValidationLegacy,
+  StateLegacy,
+  TomSelectBase,
+};
+
+// Para mantener compatibilidad hacia atrás, también exportar FormManager como constructor directo
+FormModulesAPI.default = FormManager;
+
+// Export principal como default
+export default FormModulesAPI;
 
 // =========================================
 // MODERN API EXPORTS

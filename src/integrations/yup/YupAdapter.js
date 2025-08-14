@@ -273,6 +273,82 @@ export class YupAdapter {
   }
   
   /**
+   * Validar con esquema personalizado (API simple para demos)
+   * @param {Object} data - Datos a validar
+   * @param {Object} schemaDefinition - Definición simple del esquema
+   * @returns {Object} - Resultado de validación
+   */
+  validateSchema(data, schemaDefinition) {
+    try {
+      const errors = [];
+      
+      // Validar cada campo según la definición
+      Object.entries(schemaDefinition).forEach(([fieldName, rules]) => {
+        const value = data[fieldName];
+        
+        // Required
+        if (rules.required && (!value || value.trim() === '')) {
+          errors.push(`${fieldName} es obligatorio`);
+          return;
+        }
+        
+        if (value && value.trim() !== '') {
+          // Min length
+          if (rules.min && value.length < rules.min) {
+            errors.push(`${fieldName} debe tener al menos ${rules.min} caracteres`);
+          }
+          
+          // Max length
+          if (rules.max && value.length > rules.max) {
+            errors.push(`${fieldName} no puede exceder ${rules.max} caracteres`);
+          }
+          
+          // Type validations
+          if (rules.type === 'email') {
+            const emailRegex = /\S+@\S+\.\S+/;
+            if (!emailRegex.test(value)) {
+              errors.push(`${fieldName} debe ser un email válido`);
+            }
+          }
+          
+          if (rules.type === 'number') {
+            const numValue = Number(value);
+            if (isNaN(numValue)) {
+              errors.push(`${fieldName} debe ser un número`);
+            } else {
+              if (rules.min && numValue < rules.min) {
+                errors.push(`${fieldName} debe ser mayor o igual a ${rules.min}`);
+              }
+              if (rules.max && numValue > rules.max) {
+                errors.push(`${fieldName} debe ser menor o igual a ${rules.max}`);
+              }
+            }
+          }
+          
+          // Pattern validation
+          if (rules.pattern) {
+            const regex = new RegExp(rules.pattern);
+            if (!regex.test(value)) {
+              errors.push(`${fieldName} no tiene el formato correcto`);
+            }
+          }
+        }
+      });
+      
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    } catch (error) {
+      this.logger?.error('❌ Error en validateSchema:', error);
+      return {
+        isValid: false,
+        errors: [`Error de validación: ${error.message}`]
+      };
+    }
+  }
+
+  /**
    * Reset del adaptador
    */
   reset() {

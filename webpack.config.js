@@ -12,7 +12,6 @@ module.exports = {
     library: {
       name: "FormModules",
       type: "umd",
-      export: "default",
       umdNamedDefine: true,
     },
     globalObject: "typeof self !== 'undefined' ? self : this",
@@ -45,16 +44,7 @@ module.exports = {
     // 'cleave.js': 'Cleave'
   },
   optimization: {
-    // Optimizaciones para el build modernizado
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
+    // Todo en un solo archivo
+    splitChunks: false,
   },
 };
