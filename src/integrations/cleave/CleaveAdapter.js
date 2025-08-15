@@ -19,10 +19,43 @@ export class CleaveAdapter {
    */
   getMaskConfig(type) {
     const configs = {
-      // Documento de identidad colombiano
+      // Documento de identidad genérico (por defecto)
       document: {
         numericOnly: true,
         blocks: [10],
+        stripLeadingZeroes: false,
+        delimiter: ''
+      },
+      
+      // Cédula de Ciudadanía - CC
+      document_CC: {
+        numericOnly: true,
+        blocks: [3, 3, 3, 1],
+        delimiters: ['.', '.', '.'],
+        stripLeadingZeroes: false
+      },
+      
+      // Cédula de Extranjería - CE
+      document_CE: {
+        numericOnly: true,
+        blocks: [10],
+        stripLeadingZeroes: false,
+        delimiter: ''
+      },
+      
+      // Tarjeta de Identidad - TI
+      document_TI: {
+        numericOnly: true,
+        blocks: [11],
+        stripLeadingZeroes: false,
+        delimiter: ''
+      },
+      
+      // Pasaporte - PA
+      document_PA: {
+        numericOnly: false,
+        blocks: [9],
+        uppercase: true,
         stripLeadingZeroes: false,
         delimiter: ''
       },
@@ -133,6 +166,41 @@ export class CleaveAdapter {
       this.logger?.error(`❌ Error aplicando máscara ${type}:`, error);
       return null;
     }
+  }
+  
+  /**
+   * Actualizar máscara de documento según el tipo seleccionado
+   * @param {HTMLElement} documentField - Campo de número de documento
+   * @param {string} documentType - Tipo de documento (CC, CE, TI, PA)
+   */
+  updateDocumentMask(documentField, documentType) {
+    if (!documentField || !documentType) return;
+    
+    const fieldKey = documentField.name || documentField.id;
+    const existingInstance = this.instances.get(fieldKey);
+    
+    if (existingInstance) {
+      // Destruir instancia anterior
+      existingInstance.instance.destroy();
+      this.instances.delete(fieldKey);
+    }
+    
+    // Aplicar nueva máscara según el tipo
+    const maskType = `document_${documentType}`;
+    const currentValue = documentField.value;
+    
+    this.logger?.info(`🔄 Cambiando máscara de documento a: ${maskType}`);
+    
+    // Aplicar nueva máscara
+    const newInstance = this.applyMask(documentField, maskType);
+    
+    // Preservar valor si existe
+    if (currentValue && newInstance) {
+      documentField.value = currentValue;
+      newInstance.setRawValue(currentValue);
+    }
+    
+    return newInstance;
   }
   
   /**

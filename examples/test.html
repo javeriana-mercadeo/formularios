@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test - Nuevo Sistema de Formularios</title>
+    <link rel="stylesheet" href="../build/form-modules-style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .test-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .debug-info {
+        margin-top: 30px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        color: #495057;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-header">
+      <h1>Test - Nuevo Sistema de Formularios</h1>
+      <p>Prueba de las nuevas funcionalidades con validación automática y adaptadores modernos</p>
+    </div>
+
+    <div class="form-container">
+      <div class="form-card">
+        <form
+          class="form-modules"
+          id="test-form"
+          aria-label="Prueba 1: Configuración Base"
+          novalidate
+        >
+          <!-- HEADER: Solo título fijo -->
+          <div class="form-header">
+            <h2>Formulario de inscripción</h2>
+            <p>Completa el formulario para reservar tu lugar en nuestro evento</p>
+          </div>
+
+          <!-- CONTENT: Descripción + campos + autorización con scroll -->
+          <div class="form-content">
+            <!-- Nombres y apellidos -->
+            <div class="field-group">
+              <div class="field">
+                <input type="text" placeholder="*Nombre(s)" name="first_name" />
+              </div>
+              <div class="field">
+                <input type="text" placeholder="*Apellidos" name="last_name" />
+              </div>
+            </div>
+
+            <!-- Tipo de documento y número -->
+            <div class="field-group">
+              <div class="field">
+                <select name="type_doc">
+                  <option value="">*Tipo de documento</option>
+                  <option value="CC">Cédula Ciudadanía</option>
+                  <option value="CE">Cédula Extranjería</option>
+                  <option value="PA">Pasaporte</option>
+                  <option value="TI">Tarjeta Identidad</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <input type="text" name="document" placeholder="*Número de documento" />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+              <input type="email" placeholder="*Email" name="email" />
+            </div>
+
+            <!-- Teléfono -->
+            <div class="field-group">
+              <div class="field">
+                <select name="phone_code">
+                  <option value="">(+) Indicativo</option>
+                </select>
+              </div>
+              <div class="field">
+                <input type="text" placeholder="*Teléfono celular" name="mobile" />
+              </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="field">
+              <select name="country">
+                <option value="">*País de residencia</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <select name="department" style="display: none">
+                <option value="">*Selecciona el departamento</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <select name="city" style="display: none">
+                <option value="">*Selecciona la Ciudad</option>
+              </select>
+            </div>
+
+            <!-- Día de asistencia -->
+            <div class="field">
+              <select name="attendance_day">
+                <option value="">*Día de asistencia</option>
+              </select>
+            </div>
+
+            <!-- Tipo de asistente -->
+            <div class="field">
+              <select name="type_attendee">
+                <option value="">*Tipo de asistente</option>
+              </select>
+            </div>
+
+            <!-- Nivel académico -->
+            <div class="field">
+              <select name="academic_level" style="display: none">
+                <option value="">*Nivel académico</option>
+              </select>
+            </div>
+
+            <!-- Facultad -->
+            <div class="field">
+              <select name="faculty" style="display: none">
+                <option value="">*Facultad de interés</option>
+              </select>
+            </div>
+
+            <!-- Programa -->
+            <div class="field">
+              <select name="program" style="display: none">
+                <option value="">*Programa de interés</option>
+              </select>
+            </div>
+
+            <!-- Período de ingreso -->
+            <div class="field">
+              <select name="admission_period" style="display: none">
+                <option value="">*Periodo esperado de Ingreso de interés</option>
+              </select>
+            </div>
+
+            <!-- Autorización de datos dentro del scroll -->
+            <div class="authorization-section">
+              <p>
+                ¿Autorizas el tratamiento de tus datos personales de acuerdo con la
+                <a
+                  href="https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html"
+                  target="_blank"
+                  >autorización de privacidad</a
+                >?
+              </p>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" id="auth_si_1" name="authorization_data" value="1" />
+                  <label for="auth_si_1">Sí</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="auth_no_1" name="authorization_data" value="0" />
+                  <label for="auth_no_1">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FOOTER: Solo botón fijo -->
+          <div class="form-footer">
+            <button type="submit" class="submit-button">Inscríbete</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Debug Info -->
+      <div class="debug-info" id="debug-info">
+        <strong>📊 Debug Info:</strong><br />
+        <div id="debug-content">Sistema inicializando...</div>
+      </div>
+    </div>
+
+    <script src="../build/form-modules-script.js"></script>
+    <script>
+      // Configuración del formulario siguiendo las mejores prácticas de examples.js y ConfigLoader.js
+      const formConfig = {
+        // DATOS DE EVENTO
+        eventName: "Test Evento - Nuevo Sistema 2025",
+        eventDate: "15/03/2025 10:00 AM",
+        campaign: "TEST_NUEVO_SISTEMA_2025",
+        article: "evento_test_sistema",
+        source: "test-page",
+        medium: "web",
+        retUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
+
+        // CONFIGURACIONES DE MODO
+        test: true,
+        debug: true,
+        development: false,
+        debugEmail: "gavilanm-j@javeriana.edu.co",
+
+        // CAMPOS OCULTOS
+        leadSource: "Landing Pages",
+        authorizationSource: "Formulario Test",
+        requestOrigin: "Test Nuevo Sistema",
+
+        // FILTROS - Ubicaciones (siguiendo patrón de examples.js)
+        countries: ["Colombia", "Estados Unidos", "España", "México"],
+        departments: [],
+        cities: [],
+
+        // DATOS ACADÉMICOS (siguiendo estructura de ConfigLoader)
+        academicLevels: [],
+        faculties: [],
+        programs: [],
+
+        // DATOS DEL EVENTO
+        typeAttendee: [
+          "Aspirante",
+          "Padre de familia y/o acudiente",
+          "Estudiante actual",
+          "Egresado",
+          "Docente y/o psicoorientador",
+        ],
+        attendanceDays: [
+          "Viernes 15 de marzo de 2025",
+          "Sábado 16 de marzo de 2025",
+          "Domingo 17 de marzo de 2025",
+        ],
+
+        // CONFIGURACIÓN DE CACHÉ
+        cache: {
+          enabled: true,
+          expirationHours: 12,
+        },
+
+        // URLs de datos (siguiendo ConfigLoader)
+        urls: {
+          locations: "../data/ubicaciones.json",
+          prefixes: "../data/prefijos.json",
+          programs: "../data/programas.json",
+          periods: "../data/periodos.json",
+        },
+
+        // URL de política de privacidad
+        privacyPolicyUrl:
+          "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
+
+        // CONFIGURACIÓN DE LOGGING
+        logging: {
+          enabled: true,
+          level: "debug",
+          showTimestamp: true,
+          showLevel: true,
+          prefix: "#test-form | Test Evento - Nuevo Sistema 2025",
+        },
+
+        // CONFIGURACIÓN DE UI
+        ui: {
+          errorClass: "error",
+          validClass: "validated",
+          errorTextClass: "error_text",
+          hiddenClass: "fm-hidden",
+          animationDuration: 300,
+          enableAnimations: true,
+          loadingText: "Cargando datos...",
+          successText: "¡Registro exitoso!",
+          errorText: "Error al procesar formulario",
+        },
+
+        // CALLBACKS
+        callbacks: {
+          onFormLoad: (formManager) => {
+            console.log("📋 Formulario cargado correctamente");
+            updateDebugInfo("Formulario cargado con todas las funcionalidades ✅");
+          },
+          onFormSubmit: async (formData) => {
+            console.log("📤 Enviando datos:", formData);
+            updateDebugInfo("Procesando envío de formulario... 📤");
+
+            // Simular envío
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            updateDebugInfo("¡Formulario enviado exitosamente! ✅");
+            return true;
+          },
+          onFieldChange: (field, value) => {
+            console.log(`🔄 Campo ${field.name} cambió a: ${value}`);
+            updateDebugInfo(`Campo actualizado: ${field.name} = "${value}" 🔄`);
+          },
+          onValidationError: (field, error) => {
+            console.warn(`❌ Error validación ${field}: ${error}`);
+            updateDebugInfo(`Error validación: ${field} - ${error} ❌`);
+          },
+        },
+      };
+
+      // Inicializar el formulario
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🚀 Inicializando nuevo sistema de formularios...");
+
+        // Crear instancia del FormManager usando la exportación UMD
+        const { FormManager } = FormModules;
+        const form = new FormManager("#test-form", formConfig);
+
+        // Inicializar el sistema
+        form
+          .initialize()
+          .then(() => {
+            console.log("✅ Sistema de formularios inicializado correctamente");
+            updateDebugInfo("Sistema inicializado correctamente ✅");
+
+            // Configurar eventos específicos del formulario de test
+            setupFormEvents(form);
+          })
+          .catch((error) => {
+            console.error("❌ Error inicializando formulario:", error);
+            updateDebugInfo(`Error de inicialización: ${error.message} ❌`);
+          });
+      });
+
+      // Configurar eventos específicos del formulario
+      function setupFormEvents(formManager) {
+        // Mostrar/ocultar sección académica según el tipo de asistente
+        const typeAttendeeSelect = document.querySelector("select[name='type_attendee']");
+        const academicFields = document.querySelectorAll(".academic-fields");
+
+        typeAttendeeSelect.addEventListener("change", function () {
+          if (this.value === "Aspirante") {
+            academicFields.forEach((field) => (field.style.display = "flex"));
+            updateDebugInfo("Campos académicos activados para aspirante 📚");
+          } else {
+            academicFields.forEach((field) => (field.style.display = "none"));
+            updateDebugInfo("Campos académicos ocultados 📚");
+          }
+        });
+
+        // Event listeners para debug info
+        const form = document.querySelector("#test-form");
+
+        form.addEventListener("change", function (e) {
+          if (e.target.matches("input, select")) {
+            updateDebugInfo(`Campo actualizado: ${e.target.name} = "${e.target.value}" 🔄`);
+          }
+        });
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          updateDebugInfo("Formulario enviado - Procesando... 📤");
+
+          setTimeout(() => {
+            updateDebugInfo("Formulario procesado exitosamente ✅");
+          }, 2000);
+        });
+      }
+
+      // Actualizar información de debug
+      function updateDebugInfo(message) {
+        const debugContent = document.getElementById("debug-content");
+        const timestamp = new Date().toLocaleTimeString();
+        debugContent.innerHTML = `[${timestamp}] ${message}`;
+      }
+    </script>
+  </body>
+</html>

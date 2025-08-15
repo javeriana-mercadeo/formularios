@@ -16,10 +16,10 @@ export class Ui {
     this.config = config;
     this.logger = logger;
 
-    // Buscar el elemento del formulario
-    const formElement = document.getElementById(this.config.selector);
+    // Buscar el elemento del formulario usando selector CSS
+    const formElement = document.querySelector(this.config.selector);
     if (!formElement && this.logger) {
-      this.logger.warn(`⚠️ No se encontró el elemento con ID: ${this.config.selector}`);
+      this.logger.warn(`⚠️ No se encontró el elemento con selector: ${this.config.selector}`);
     }
 
     this.formContext = formElement || document;

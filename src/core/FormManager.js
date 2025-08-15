@@ -199,7 +199,7 @@ export class FormManager {
    */
   _setupValidations() {
     // Validación en tiempo real para campos específicos
-    const criticalFields = ['first_name', 'last_name', 'email', 'type_attendee'];
+    const criticalFields = ['first_name', 'last_name', 'email', 'type_doc', 'document', 'type_attendee'];
     
     criticalFields.forEach(fieldName => {
       const field = this.formElement.querySelector(`[name="${fieldName}"]`);
@@ -207,7 +207,15 @@ export class FormManager {
         field.addEventListener('blur', async (e) => {
           const value = e.target.value;
           const formData = this._getFormData();
-          await this.validationEngine.validateField(fieldName, value, formData);
+          const validationResult = await this.validationEngine.validateField(fieldName, value, formData);
+          
+          // Mostrar error si la validación falló
+          if (!validationResult.isValid && validationResult.error) {
+            this.domManager.showFieldError(field, validationResult.error);
+          } else {
+            // Limpiar error si la validación pasó
+            this.domManager.hideFieldError(field);
+          }
         });
       }
     });
@@ -224,6 +232,16 @@ export class FormManager {
     if (typeAttendeeField) {
       typeAttendeeField.addEventListener('change', (e) => {
         this._handleTypeAttendeeChange(e.target.value);
+      });
+    }
+    
+    // Lógica condicional para tipo de documento → máscara de documento
+    const typeDocField = this.formElement.querySelector('[name="type_doc"]');
+    const documentField = this.formElement.querySelector('[name="document"]');
+    
+    if (typeDocField && documentField) {
+      typeDocField.addEventListener('change', (e) => {
+        this._handleDocumentTypeChange(e.target.value, documentField);
       });
     }
     
@@ -254,6 +272,23 @@ export class FormManager {
     }
     
     this.logger.debug(`🔄 Lógica condicional aplicada para: ${typeValue}`);
+  }
+  
+  /**
+   * Manejar cambio de tipo de documento
+   */
+  _handleDocumentTypeChange(documentType, documentField) {
+    if (!documentType || !documentField) return;
+    
+    // Acceder al CleaveAdapter a través del fieldController
+    const cleaveAdapter = this.fieldController?.adapters?.cleave;
+    
+    if (cleaveAdapter && cleaveAdapter.updateDocumentMask) {
+      cleaveAdapter.updateDocumentMask(documentField, documentType);
+      this.logger.debug(`🆔 Máscara de documento actualizada a: ${documentType}`);
+    } else {
+      this.logger.warn('⚠️ CleaveAdapter no encontrado para actualizar máscara');
+    }
   }
   
   /**
@@ -349,8 +384,13 @@ export class FormManager {
    * Mostrar errores de validación
    */
   _showValidationErrors(errors) {
-    Object.entries(errors).forEach(([field, message]) => {
-      this.domManager.showFieldError(field, message);
+    Object.entries(errors).forEach(([fieldName, message]) => {
+      const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`);
+      if (fieldElement) {
+        this.domManager.showFieldError(fieldElement, message);
+      } else {
+        this.logger.warn(`Campo con error no encontrado en DOM: ${fieldName}`);
+      }
     });
   }
   

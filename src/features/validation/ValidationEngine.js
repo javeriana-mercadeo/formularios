@@ -27,13 +27,10 @@ export class ValidationEngine {
     // 3. Validar con Yup (moderno)
     const yupResult = await this.yupAdapter.validateField(fieldName, value, formData);
     
-    // 4. Si Yup pasa, validar reglas legacy específicas
+    // 4. Para validación individual, Yup es suficiente
+    // Las validaciones legacy están optimizadas para formularios completos
     if (yupResult.isValid) {
-      const legacyResult = this.legacyValidator.validateSpecificField(fieldName, value, formData);
-      if (!legacyResult.isValid) {
-        this.store.getState().setValidationError(fieldName, legacyResult.error);
-        return legacyResult;
-      }
+      this.store.getState().clearValidationError(fieldName);
     }
     
     return yupResult;
