@@ -60,13 +60,12 @@ export class CleaveAdapter {
         delimiter: ''
       },
       
-      // Teléfono móvil colombiano
+      // Teléfono móvil (sin prefijo, se maneja por separado)
       mobile: {
-        phone: true,
-        phoneRegionCode: 'CO',
-        delimiter: ' ',
+        numericOnly: true,
         blocks: [3, 3, 4],
-        prefix: ''
+        delimiters: [' ', ' '],
+        stripLeadingZeroes: false
       },
       
       // Teléfono fijo genérico

@@ -41,7 +41,7 @@ export class TomSelect {
         searchEnabled: true,
         clearable: true,
         closeAfterSelect: true,
-        maxItems: 10790,
+        maxItems: 1, // Valor por defecto estándar
         required: false,
         ...config,
       };
@@ -65,6 +65,12 @@ export class TomSelect {
         if (controlInput && placeholderText) {
           controlInput.setAttribute('placeholder', placeholderText);
           this.logger?.info(`🎯 Placeholder forzado desde HTML: "${placeholderText}"`);
+        }
+        
+        // Establecer valor por defecto si está configurado
+        if (defaultConfig.defaultValue && !instance.getValue()) {
+          instance.setValue(defaultConfig.defaultValue);
+          this.logger?.info(`🎯 Valor por defecto establecido: "${defaultConfig.defaultValue}"`);
         }
       }, 50);
 
@@ -287,6 +293,7 @@ export class TomSelect {
 
       // Configuración de UI - PLACEHOLDER desde HTML original
       placeholder: placeholderText,
+      searchPlaceholder: config.searchPlaceholder || 'Buscar...',
       maxItems: config.maxItems,
       closeAfterSelect: config.closeAfterSelect,
       allowEmptyOption: true,
@@ -296,6 +303,9 @@ export class TomSelect {
       hideSelected: false,
       selectOnTab: true,
       preload: false, // No precargar para mantener placeholder visible
+      
+      // Configuración para mostrar todas las opciones
+      maxOptions: null, // Sin límite en las opciones mostradas
 
       // Configuración de búsqueda
       score: function (search) {
@@ -309,8 +319,8 @@ export class TomSelect {
         };
       },
 
-      // Configuración de render - PRESERVAR PLACEHOLDER
-      render: {
+      // Configuración de render - Usar configuración personalizada si existe, sino usar default
+      render: config.render || {
         option: function (data, escape) {
           return `<div class="tom-select-option">
                     <span class="option-text">${escape(data.text)}</span>

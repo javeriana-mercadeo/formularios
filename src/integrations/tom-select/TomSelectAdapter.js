@@ -50,6 +50,74 @@ export class TomSelectAdapter {
         searchEnabled: true,
         clearable: true
       },
+      phone_prefix: {
+        placeholder: 'Indicativo',
+        required: true,
+        maxItems: 1,
+        searchEnabled: true,
+        clearable: false,
+        defaultValue: 'CO', // Colombia por defecto
+        searchPlaceholder: 'Buscar país...',
+        maxOptions: null, // Sin límite en las opciones mostradas
+        load: null, // Desactivar carga lazy
+        render: {
+          option: function(data, escape) {
+            // Extraer código del texto que ya está formateado
+            const textMatch = data.text?.match(/\(\+(\d+(?:\s\d+)*)\)/);
+            const phoneCodeFromText = textMatch ? textMatch[1] : null;
+            
+            const flagUrl = `https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/${data.value}.svg`;
+            const phoneCode = data.phoneCode || phoneCodeFromText || '??';
+            const countryName = data.text?.replace(/\s*\(\+[^)]+\)/, '') || data.text;
+            
+            return `<div class="phone-prefix-option">
+              <img src="${flagUrl}" alt="${countryName}" class="country-flag" loading="lazy" onerror="this.style.display='none'">
+              <span class="country-code">+${phoneCode}</span>
+              <span class="country-name">${escape(countryName)}</span>
+            </div>`;
+          },
+          item: function(data, escape) {
+            // Extraer código del texto que ya está formateado
+            const textMatch = data.text?.match(/\(\+(\d+(?:\s\d+)*)\)/);
+            const phoneCodeFromText = textMatch ? textMatch[1] : null;
+            
+            const flagUrl = `https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/${data.value}.svg`;
+            const phoneCode = data.phoneCode || phoneCodeFromText || '??';
+            
+            return `<div class="phone-prefix-item">
+              <img src="${flagUrl}" alt="${data.text}" class="country-flag" loading="lazy" onerror="this.style.display='none'">
+              <span class="country-code">+${phoneCode}</span>
+            </div>`;
+          }
+        }
+      },
+      country: {
+        placeholder: 'Selecciona tu país...',
+        required: true,
+        maxItems: 1,
+        searchEnabled: true,
+        clearable: false,
+        maxOptions: null, // Sin límite en las opciones mostradas
+        load: null, // Desactivar carga lazy
+        render: {
+          option: function(data, escape) {
+            const flagUrl = `https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/${data.iso2 || data.value}.svg`;
+            const countryName = data.nameES || data.name || data.text;
+            return `<div class="country-option">
+              <img src="${flagUrl}" alt="${countryName}" class="country-flag" loading="lazy" onerror="this.style.display='none'">
+              <span class="country-name">${escape(countryName)}</span>
+            </div>`;
+          },
+          item: function(data, escape) {
+            const flagUrl = `https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/${data.iso2 || data.value}.svg`;
+            const countryName = data.nameES || data.name || data.text;
+            return `<div class="country-item">
+              <img src="${flagUrl}" alt="${countryName}" class="country-flag" loading="lazy" onerror="this.style.display='none'">
+              <span class="country-name">${escape(countryName)}</span>
+            </div>`;
+          }
+        }
+      },
       default: {
         placeholder: 'Seleccionar opción...',
         required: false,

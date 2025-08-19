@@ -1,0 +1,567 @@
+/**
+ * Phone Selector Styles - Estilos para selector de teléfono con banderas
+ */
+
+// Estilos para el selector de prefijos telefónicos
+.phone-prefix-option,
+.phone-prefix-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px; // Más compacto
+  transition: background-color 0.15s ease;
+
+  .country-flag {
+    width: 18px; // Más pequeña
+    height: 13px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .country-code {
+    font-weight: 700;
+    color: #374151;
+    min-width: 45px; // Asegurar espacio para códigos largos
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  .country-name {
+    font-size: 13px;
+    color: #6b7280;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.phone-prefix-item {
+  padding: 4px 8px; // Más compacto para el item seleccionado
+  border-radius: 4px;
+  background: transparent; // Fondo transparente para mejor integración
+
+  .country-code {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+  }
+  
+  .country-name {
+    display: none; // Ocultar nombre en el item seleccionado para mantenerlo compacto
+  }
+}
+
+// Estilos para el selector de países
+.country-option,
+.country-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+
+  .country-flag {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .country-name {
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+  }
+}
+
+.country-item {
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #f9fafb;
+  
+  .country-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+// Estilos específicos para Tom Select con banderas
+.ts-wrapper {
+  &.phone-prefix-select,
+  &.country-select {
+    position: relative;
+    
+    .ts-control {
+      min-height: 42px;
+      position: relative;
+      
+      .ts-placeholder {
+        color: #9ca3af;
+        font-size: 13px;
+      }
+      
+      // Asegurar que el item seleccionado se vea bien
+      .item {
+        padding: 2px 4px;
+        margin: 2px 0;
+        background: transparent;
+        border: none;
+        font-size: 13px;
+      }
+    }
+    
+    // Flecha personalizada para TomSelect
+    &::after {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #6b7280;
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    // Cuando el dropdown está abierto, rotar la flecha
+    &.dropdown-active::after {
+      border-top: none;
+      border-bottom: 5px solid #6b7280;
+    }
+    
+    // Ocultar flecha nativa de TomSelect
+    .ts-control::after {
+      display: none !important;
+    }
+    
+    // Asegurar que los códigos de teléfono sean visibles
+    .phone-prefix-option,
+    .phone-prefix-item {
+      .country-code {
+        color: #374151 !important;
+        font-weight: 700 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+    }
+
+    .ts-dropdown {
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      background: white;
+      position: absolute;
+
+      // Input de búsqueda dentro del dropdown
+      .ts-control {
+        border: none !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        border-radius: 6px 6px 0 0 !important;
+        background: #f8f9fa !important;
+        margin: 0 !important;
+        padding: 10px 12px !important;
+        min-height: 38px !important;
+        
+        .ts-input {
+          display: block !important;
+          border: none !important;
+          background: transparent !important;
+          font-size: 14px !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          width: 100% !important;
+          color: #374151 !important;
+          
+          &::placeholder {
+            color: #9ca3af !important;
+            font-size: 14px !important;
+          }
+          
+          &:focus {
+            outline: none !important;
+            box-shadow: none !important;
+          }
+        }
+      }
+
+      .ts-dropdown-content {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 4px 0; // Padding interno
+      }
+    }
+
+    .option {
+      padding: 6px 10px; // Más compacto
+      border-bottom: none; // Sin bordes entre opciones
+      cursor: pointer;
+      margin: 1px 4px; // Pequeño margen
+      border-radius: 3px; // Esquinas redondeadas
+      transition: background-color 0.15s ease;
+      
+      &:hover,
+      &.active {
+        background-color: #f1f5f9 !important;
+        color: #374151 !important;
+      }
+
+      &.selected {
+        background-color: #3b82f6 !important;
+        color: white !important;
+        
+        .country-code,
+        .country-name {
+          color: white !important;
+        }
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+// Layout para campos de teléfono
+.phone-field-group {
+  display: flex;
+  gap: 0; // Sin gap entre elementos para una apariencia más unificada
+  align-items: stretch;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  overflow: visible;
+  transition: border-color 0.15s ease-in-out;
+  position: relative;
+  height: 42px; // Altura más estándar
+  background: white;
+
+  &:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .phone-prefix-field {
+    flex: 0 0 110px; // Más compacto
+    min-width: 110px;
+    border-right: 1px solid #e5e7eb;
+    height: 100%;
+    position: relative;
+    
+    .ts-wrapper {
+      border: none !important;
+      border-radius: 6px 0 0 6px !important; // Solo esquinas izquierdas redondeadas
+      box-shadow: none !important;
+      height: 100%;
+      
+      .ts-control {
+        border: none !important;
+        border-radius: 6px 0 0 6px !important;
+        height: 100% !important;
+        min-height: 42px;
+        background: #f8f9fa; // Color más sutil
+        padding: 0 8px; // Padding más compacto
+        display: flex !important;
+        align-items: center !important; // Centrar contenido verticalmente
+        
+        &:focus {
+          border: none !important;
+          box-shadow: none !important;
+        }
+        
+        .ts-input {
+          display: none !important; // Ocultar input de búsqueda en el control cuando no está abierto
+        }
+        
+        // Ocultar la flecha nativa de TomSelect para usar la personalizada
+        .ts-dropdown-toggle {
+          display: none !important;
+        }
+      }
+      
+      .ts-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        background: white;
+        left: 0 !important;
+        top: calc(100% + 2px) !important; // Pequeño margen del campo
+        min-width: 280px !important;
+        width: 280px !important;
+        max-width: 320px !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        
+        // Estilos para el input de búsqueda en el dropdown
+        .ts-control {
+          border: none !important;
+          border-bottom: 1px solid #e5e7eb !important;
+          border-radius: 6px 6px 0 0 !important;
+          background: #f8f9fa !important;
+          margin: 0 !important;
+          padding: 8px 12px !important;
+          min-height: 36px !important;
+          
+          .ts-input {
+            display: block !important; // Mostrar input de búsqueda en el dropdown
+            border: none !important;
+            background: transparent !important;
+            font-size: 14px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            
+            &::placeholder {
+              color: #9ca3af !important;
+              font-size: 14px !important;
+            }
+            
+            &:focus {
+              outline: none !important;
+              box-shadow: none !important;
+            }
+          }
+        }
+        
+        .ts-dropdown-content {
+          max-height: 180px; // Altura más manejable
+          overflow-y: auto;
+          padding: 4px 0; // Padding interno
+        }
+      }
+    }
+  }
+
+  .phone-number-field {
+    flex: 1;
+    height: 100%;
+    
+    input {
+      height: 100%;
+      padding: 0 12px;
+      border: none;
+      border-radius: 0 6px 6px 0; // Solo esquinas derechas redondeadas
+      font-size: 14px;
+      background: white;
+      width: 100%;
+
+      &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+
+      &::placeholder {
+        color: #9ca3af;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Asegurar que el dropdown no se corte en contenedores padre
+.field {
+  &:has(.phone-field-group) {
+    overflow: visible !important;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.form-content,
+.form-modules,
+.form-container {
+  overflow: visible !important;
+}
+
+// Ajustes específicos para evitar corte del dropdown
+body {
+  &.ts-open {
+    overflow-x: hidden; // Solo prevenir scroll horizontal cuando dropdown está abierto
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .phone-field-group {
+    height: 44px; // Mantener altura estándar en móvil
+    
+    .phone-prefix-field {
+      flex: 0 0 95px; // Ligeramente más espacio en móvil para mostrar códigos largos
+      min-width: 95px;
+      
+      .ts-wrapper {
+        .ts-control {
+          padding: 0 6px !important; // Menos padding en móvil
+          font-size: 13px;
+        }
+        
+        // Ajustar flecha personalizada para móvil
+        &::after {
+          right: 6px !important;
+          border-width: 4px 3px 0 3px !important;
+        }
+        
+        .ts-dropdown {
+          min-width: 280px !important; // Mantener ancho suficiente para ver contenido
+          width: 280px !important;
+          left: 0 !important; // Alineado con el campo prefijo
+          
+          .ts-control {
+            padding: 8px 10px !important; // Input de búsqueda más compacto
+            
+            .ts-input {
+              font-size: 13px !important;
+            }
+          }
+        }
+      }
+    }
+    
+    .phone-number-field input {
+      font-size: 14px; // Mantener tamaño legible
+      padding: 0 10px; // Menos padding horizontal
+    }
+  }
+
+  .phone-prefix-option,
+  .country-option {
+    padding: 5px 8px; // Más compacto en móvil
+    
+    .country-flag {
+      width: 16px;
+      height: 12px;
+    }
+    
+    .country-name {
+      font-size: 12px;
+      max-width: 140px; // Más espacio para el nombre
+    }
+    
+    .country-code {
+      font-size: 12px;
+      min-width: 45px; // Espacio para códigos largos como +1 246
+    }
+  }
+
+  .phone-prefix-item {
+    .country-flag {
+      width: 16px;
+      height: 12px;
+    }
+    
+    .country-code {
+      font-size: 12px;
+      min-width: auto;
+    }
+  }
+}
+
+// Tablets y pantallas medianas
+@media (max-width: 1024px) and (min-width: 769px) {
+  .phone-field-group {
+    .phone-prefix-field {
+      flex: 0 0 105px;
+      min-width: 105px;
+      
+      .ts-wrapper .ts-dropdown {
+        min-width: 290px !important;
+        width: 290px !important;
+      }
+    }
+  }
+}
+
+// Pantallas muy pequeñas (menos de 480px)
+@media (max-width: 480px) {
+  .phone-field-group {
+    .phone-prefix-field {
+      flex: 0 0 85px; // Más compacto en pantallas muy pequeñas
+      min-width: 85px;
+      
+      .ts-wrapper .ts-dropdown {
+        min-width: 260px !important;
+        width: 260px !important;
+        left: 0 !important; // Alineado con el campo prefijo
+      }
+    }
+  }
+
+  .phone-prefix-option .country-name {
+    display: none; // Ocultar nombre en pantallas muy pequeñas para ahorrar espacio
+  }
+}
+
+// Estados de validación
+.field.error {
+  .phone-field-group {
+    border-color: #ef4444 !important;
+    
+    .ts-wrapper .ts-control,
+    input {
+      border-color: transparent; // El borde está en el contenedor padre
+    }
+  }
+  
+  // Mensaje de error específico para campos de teléfono
+  .error_text {
+    position: relative;
+    z-index: 1;
+    margin-top: 6px;
+    margin-bottom: 12px; // Más espacio para evitar sobreposición
+    padding: 6px 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+    color: #dc2626;
+    font-size: 12px;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.field.validated {
+  .phone-field-group {
+    border-color: #10b981 !important;
+    
+    .ts-wrapper .ts-control,
+    input {
+      border-color: transparent; // El borde está en el contenedor padre
+    }
+  }
+}
+
+// Asegurar que los errores del campo de teléfono no se superpongan
+.field:has(.phone-field-group) {
+  margin-bottom: 24px; // Espacio extra para errores
+  
+  &.error {
+    margin-bottom: 32px; // Más espacio cuando hay error
+  }
+}
+
+// Espaciado específico para formularios con campos de teléfono
+.form-field-group .field:has(.phone-field-group) {
+  margin-bottom: 20px;
+  
+  &.error {
+    margin-bottom: 28px;
+    
+    .error_text {
+      margin-bottom: 16px; // Espacio extra antes del siguiente campo
+    }
+  }
+}
+
+// Animaciones
+.country-flag,
+.phone-prefix-option,
+.phone-prefix-item,
+.country-option,
+.country-item {
+  transition: all 0.15s ease-in-out;
+}

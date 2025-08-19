@@ -17,9 +17,14 @@
       "Bash(mkdir:*)",
       "Bash(cp:*)",
       "Bash(mv:*)",
-      "Bash(/dev/null)"
+      "Bash(/dev/null)",
+      "Bash(curl:*)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "C:\\c\\Users\\gavilanm-j\\Desktop"
+    ]
   }
 }

@@ -229,12 +229,8 @@ export class Data {
     try {
       const rawData = await this.loadingPromises.prefixes;
 
-      // Transformar datos para uso más fácil
-      this.data.prefixes = rawData.map((pais) => ({
-        iso2: pais.iso2,
-        phoneCode: pais.phoneCode,
-        phoneName: pais.nameES,
-      }));
+      // Mantener los datos originales sin transformar
+      this.data.prefixes = rawData;
 
       return this.data.prefixes;
     } finally {

@@ -76,14 +76,14 @@ export class FormManager {
       // 2. Obtener elemento del formulario
       this._initializeFormElement();
       
-      // 3. Inicializar field controller
-      this.fieldController = new FieldController(this.logger, this.formElement);
-      
-      // 4. Configurar event bus
-      this._initializeEventBus();
-      
-      // 5. Cargar datos preconfigurados
+      // 3. Cargar datos preconfigurados primero
       await this._loadData();
+      
+      // 4. Inicializar field controller con DataPreloader
+      this.fieldController = new FieldController(this.logger, this.formElement, this.dataPreloader);
+      
+      // 5. Configurar event bus
+      this._initializeEventBus();
       
       // 6. Configurar formulario
       await this._configureForm();
@@ -168,7 +168,7 @@ export class FormManager {
   async _loadData() {
     try {
       this.logger.info('📊 Cargando datos preconfigurados...');
-      await this.dataPreloader.loadAllData();
+      await this.dataPreloader.loadAll();
       this.logger.info('✅ Datos cargados correctamente');
     } catch (error) {
       this.logger.warn('⚠️ Error cargando datos preconfigurados:', error.message);
@@ -377,7 +377,38 @@ export class FormManager {
       data[key] = value;
     }
     
+    // Procesar campos especiales de teléfono
+    this._processPhoneFields(data);
+    
     return data;
+  }
+  
+  /**
+   * Procesar campos de teléfono para mantener indicativo y número por separado
+   */
+  _processPhoneFields(data) {
+    // Si tenemos tanto phone_code como mobile, crear campos separados
+    if (data.phone_code && data.mobile) {
+      // Obtener información del país seleccionado
+      const phoneCodeElement = this.formElement.querySelector('[name="phone_code"]');
+      let selectedCountry = null;
+      
+      if (phoneCodeElement && phoneCodeElement.tomSelect) {
+        const selectedValue = phoneCodeElement.tomSelect.getValue();
+        selectedCountry = phoneCodeElement.tomSelect.options[selectedValue];
+      }
+      
+      // Mantener campos separados
+      data.phone_country_code = data.phone_code; // ISO2 del país 
+      data.phone_prefix = selectedCountry ? selectedCountry.phoneCode : data.phone_code;
+      data.phone_number = data.mobile;
+      
+      // Crear campo combinado para compatibilidad
+      const prefix = selectedCountry ? `+${selectedCountry.phoneCode}` : '';
+      data.phone_full = prefix ? `${prefix} ${data.mobile}` : data.mobile;
+      
+      this.logger?.debug(`📱 Teléfono procesado - País: ${data.phone_country_code}, Prefijo: +${data.phone_prefix}, Número: ${data.phone_number}`);
+    }
   }
   
   /**

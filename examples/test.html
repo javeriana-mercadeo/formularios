@@ -89,20 +89,20 @@
             </div>
 
             <!-- Teléfono -->
-            <div class="field-group">
-              <div class="field">
-                <select name="phone_code">
-                  <option value="">(+) Indicativo</option>
+            <div class="field phone-field-group">
+              <div class="field phone-prefix-field">
+                <select name="phone_code" class="phone-prefix-select">
+                  <option value="">Indicativo</option>
                 </select>
               </div>
-              <div class="field">
-                <input type="text" placeholder="*Teléfono celular" name="mobile" />
+              <div class="field phone-number-field">
+                <input type="text" placeholder="*Número de teléfono" name="mobile" />
               </div>
             </div>
 
             <!-- Ubicación -->
             <div class="field">
-              <select name="country">
+              <select name="country" class="country-select">
                 <option value="">*País de residencia</option>
               </select>
             </div>

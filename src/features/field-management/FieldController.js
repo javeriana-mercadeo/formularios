@@ -8,9 +8,10 @@ import { TomSelectAdapter } from '../../integrations/tom-select/TomSelectAdapter
 import { CleaveAdapter } from '../../integrations/cleave/CleaveAdapter.js';
 
 export class FieldController {
-  constructor(logger, formElement) {
+  constructor(logger, formElement, dataPreloader = null) {
     this.logger = logger;
     this.formElement = formElement;
+    this.dataPreloader = dataPreloader;
     this.store = useFieldStore;
     
     // Adaptadores
@@ -28,7 +29,9 @@ export class FieldController {
       company: { type: 'select', enhancer: 'tom-select', category: 'company' },
       document: { type: 'input', enhancer: 'cleave', category: 'document' },
       mobile: { type: 'input', enhancer: 'cleave', category: 'mobile' },
-      phone: { type: 'input', enhancer: 'cleave', category: 'phone' }
+      phone: { type: 'input', enhancer: 'cleave', category: 'phone' },
+      phone_code: { type: 'select', enhancer: 'tom-select', category: 'phone_prefix' },
+      country: { type: 'select', enhancer: 'tom-select', category: 'country' }
     };
   }
   
@@ -54,8 +57,10 @@ export class FieldController {
   async initializeField(fieldName, element, config) {
     try {
       if (config.enhancer === 'tom-select' && config.type === 'select') {
-        await this.tomSelectAdapter.initializeByType(element, [], config.category);
-        this.logger?.debug(`🎯 TomSelect inicializado para: ${fieldName}`);
+        // Cargar datos apropiados según el tipo de campo
+        const options = await this._getFieldOptions(fieldName, config.category);
+        await this.tomSelectAdapter.initializeByType(element, options, config.category);
+        this.logger?.debug(`🎯 TomSelect inicializado para: ${fieldName} con ${options.length} opciones`);
       }
       
       if (config.enhancer === 'cleave' && config.type === 'input') {
@@ -205,6 +210,70 @@ export class FieldController {
    */
   _getFieldElement(fieldName) {
     return this.formElement.querySelector(`[name="${fieldName}"]`);
+  }
+  
+  /**
+   * Obtener opciones para un campo específico desde DataPreloader
+   */
+  async _getFieldOptions(fieldName, category) {
+    if (!this.dataPreloader) {
+      this.logger?.warn(`DataPreloader no disponible para cargar opciones de ${fieldName}`);
+      return [];
+    }
+    
+    try {
+      switch (category) {
+        case 'phone_prefix':
+          const prefixes = await this.dataPreloader.loadPrefixes();
+          // Filtrar solo países válidos con datos completos
+          return prefixes
+            .filter(country => country.nameES && country.phoneCode && country.iso2)
+            .map(country => ({
+              value: country.iso2,
+              text: `${country.nameES} (+${country.phoneCode})`,
+              iso2: country.iso2,
+              nameES: country.nameES,
+              phoneCode: country.phoneCode
+            }));
+          
+        case 'country':
+          const countries = await this.dataPreloader.loadPrefixes(); // Usar prefixes que contiene países
+          return countries
+            .filter(country => country.nameES && country.iso2)
+            .map(country => ({
+              value: country.iso2,
+              text: country.nameES,
+              iso2: country.iso2,
+              nameES: country.nameES,
+              phoneCode: country.phoneCode
+            }));
+          
+        case 'location':
+          if (fieldName === 'country') {
+            const locations = await this.dataPreloader.loadLocations();
+            return Object.keys(locations).map(key => ({
+              value: key,
+              text: locations[key].nombre,
+              data: locations[key]
+            }));
+          }
+          return [];
+          
+        case 'academic':
+        case 'university':
+        case 'college':
+        case 'company':
+          // Para ahora retornar array vacío, se puede implementar después
+          return [];
+          
+        default:
+          this.logger?.warn(`Categoría desconocida: ${category} para campo ${fieldName}`);
+          return [];
+      }
+    } catch (error) {
+      this.logger?.error(`Error cargando opciones para ${fieldName}:`, error);
+      return [];
+    }
   }
   
   /**
