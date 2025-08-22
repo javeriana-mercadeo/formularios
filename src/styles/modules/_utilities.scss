@@ -1,137 +1,94 @@
-// ==========================================
-// UTILIDADES - CLASES UTILIZADAS EN HTML Y JS
-// ==========================================
-
-// Clases para grupos de radio - utilizadas en authorization-section (compacta)
+// Utilidades - clases utilizadas en HTML y JS
 .radio-group {
-  // Layout flex
-  @apply flex items-center;
-  
-  // Espaciado
-  @apply gap-6;
+  display: flex;
+  align-items: center;
+  gap: var(--fm-form-radio-gap);
 }
 
 .radio-option {
-  // Layout flex
-  @apply flex items-center;
-  
-  // Espaciado
-  @apply gap-2;
+  display: flex;
+  align-items: center;
+  gap: var(--fm-form-radio-option-gap);
 }
 
-// CLASES CRÍTICAS PARA JAVASCRIPT - NO ELIMINAR
-// Clases para mostrar/ocultar elementos (UI.js)
 .fm-hidden {
-  // Visibilidad
-  @apply hidden;
+  display: none;
 }
 
-// Clases para errores generales (UI.js)
 .form-general-error {
-  // Colores de fondo y texto
-  @apply bg-red-50 text-red-800;
-  
-  // Espaciado
-  @apply p-3 mb-4;
-  
-  // Bordes y forma
-  @apply border border-red-200 rounded-md;
-  
-  // Animaciones
-  @apply transition-opacity duration-300;
+  background-color: var(--fm-color-error-50);
+  color: var(--fm-text-error);
+  padding: var(--fm-space-3);
+  margin-bottom: var(--fm-space-4);
+  border: var(--fm-input-border-width) solid var(--fm-border-error);
+  border-radius: var(--fm-radius-md);
+  transition: opacity var(--fm-duration-slow);
 }
 
-// Clases para campos de formulario con contexto (FormManager.js)
 .field-container {
-  // Espaciado
-  @apply mb-4;
+  margin-bottom: var(--fm-space-4);
 }
 
 .form-group {
-  // Espaciado
-  @apply mb-4;
+  margin-bottom: var(--fm-space-4);
 }
 
 .input-group {
-  // Layout flex
-  @apply flex;
-  
-  // Espaciado
-  @apply gap-2;
+  display: flex;
+  gap: var(--fm-space-2);
 }
 
-// Clases para grupos de radio inline (UI.js)
 .radio-inline-group {
-  // Layout flex
-  @apply flex items-center;
-  
-  // Espaciado
-  @apply gap-6 mt-3;
+  display: flex;
+  align-items: center;
+  gap: var(--fm-form-radio-gap);
+  margin-top: var(--fm-space-3);
 
   .radio-option {
-    // Layout flex
-    @apply flex items-center;
-    
-    // Espaciado
-    @apply gap-2;
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
 
     input[type="radio"] {
-      // Espaciado
-      @apply mr-1;
-      
-      // Dimensiones
-      @apply w-4 h-4;
+      margin-right: var(--fm-space-1);
+      width: var(--fm-space-4);
+      height: var(--fm-space-4);
     }
 
     label {
-      // Interacción
-      @apply cursor-pointer;
-      
-      // Tipografía
-      @apply text-sm text-gray-700;
-      
-      // Animaciones
-      @apply transition-colors duration-200;
+      cursor: pointer;
+      font-size: var(--fm-font-size-sm);
+      color: var(--fm-text-primary);
+      transition: color var(--fm-transition-fast);
 
       &:hover {
-        // Colores hover
-        @apply text-primary-600;
+        color: var(--fm-interactive-primary-hover);
       }
     }
   }
 }
 
-// Contenedores específicos para campos de teléfono (UI.js)
 .phone-row {
-  // Layout flex
-  @apply flex w-full;
-  
-  // Espaciado
-  @apply gap-4;
+  display: flex;
+  width: 100%;
+  gap: var(--fm-space-4);
 }
 
 .name-row {
-  // Layout flex
-  @apply flex w-full;
-  
-  // Espaciado
-  @apply gap-4;
+  display: flex;
+  width: 100%;
+  gap: var(--fm-space-4);
 }
 
 .name-field {
-  // Comportamiento flex
-  @apply flex-1;
+  flex: 1;
 }
 
 .prefix-field {
-  // Dimensiones
-  @apply w-32;
-  
-  // Comportamiento flex
-  @apply flex-shrink-0;
+  width: var(--fm-space-32);
+  flex-shrink: 0;
 }
 
 .mobile-field {
-  // Comportamiento flex
-  @apply flex-1;
+  flex: 1;
 }

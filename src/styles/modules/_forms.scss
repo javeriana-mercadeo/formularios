@@ -1,126 +1,99 @@
-// ==========================================
-// FORMULARIOS - ESTRUCTURA Y SECCIONES
-// ==========================================
-
-// Formulario base
-form {
-  @apply w-full;
-}
-
-// Sección de autorización - compacta y elegante
 .authorization-section {
-  // Espaciado
-  @apply p-3;
-
-  // Colores de fondo
-  @apply bg-gray-50;
-
-  // Bordes y forma
-  @apply rounded-md border border-gray-200;
+  padding: var(--fm-form-authorization-padding);
+  background-color: var(--fm-form-authorization-background);
+  border-radius: var(--fm-form-authorization-border-radius);
+  border: var(--fm-input-border-width) solid var(--fm-form-authorization-border-color);
 
   p {
-    // Tipografía
-    @apply text-sm text-gray-700 leading-relaxed;
-
-    // Espaciado
-    @apply mb-3;
+    font-size: var(--fm-font-size-sm);
+    color: var(--fm-text-primary);
+    line-height: var(--fm-line-height-relaxed);
+    margin-bottom: var(--fm-space-3);
 
     a {
-      // Decoración de enlaces
-      @apply underline;
-
-      // Colores de enlaces
-      @apply text-primary-600;
+      text-decoration: underline;
+      color: var(--fm-interactive-primary);
+      transition: color var(--fm-transition-fast);
 
       &:hover {
-        // Colores hover
-        @apply text-primary-700;
+        color: var(--fm-interactive-primary-hover);
+      }
+
+      &:active {
+        color: var(--fm-interactive-primary-active);
       }
     }
   }
 
   .radio-group {
-    // Layout flex
-    @apply flex gap-6 items-center;
+    display: flex;
+    gap: var(--fm-form-radio-gap);
+    align-items: center;
 
     .radio-option {
-      // Layout de opción
-      @apply flex items-center gap-2;
+      display: flex;
+      align-items: center;
+      gap: var(--fm-form-radio-option-gap);
 
       input[type="radio"] {
-        // Dimensiones de radio
-        @apply w-4 h-4 flex-shrink-0;
-
-        // Espaciado de radio
-        @apply m-0;
+        width: var(--fm-form-radio-size);
+        height: var(--fm-form-radio-size);
+        flex-shrink: 0;
+        margin: 0;
+        accent-color: var(--fm-interactive-primary);
       }
 
       label {
-        // Tipografía de label
-        @apply text-sm text-gray-700 font-medium leading-none;
-
-        // Interacción de label
-        @apply cursor-pointer;
-
-        // Espaciado de label
-        @apply mb-0;
+        font-size: var(--fm-font-size-sm);
+        color: var(--fm-text-primary);
+        font-weight: var(--fm-font-weight-medium);
+        line-height: 1;
+        cursor: pointer;
+        transition: color var(--fm-transition-fast);
+        margin-bottom: 0;
 
         &:hover {
-          // Colores hover de label
-          @apply text-primary-600;
+          color: var(--fm-interactive-primary);
         }
       }
     }
   }
 }
 
-// Contenedor de campos
 .field {
-  // Espaciado y dimensiones
-  @apply mb-4 w-full;
+  margin-bottom: var(--fm-form-field-margin-bottom);
+  width: 100%;
 
-  // Labels
   label {
-    // Layout de label
-    @apply block;
-
-    // Tipografía de label
-    @apply text-sm font-medium text-gray-700;
-
-    // Espaciado de label
-    @apply mb-1;
+    display: block;
+    font-size: var(--fm-font-size-sm);
+    font-weight: var(--fm-font-weight-medium);
+    color: var(--fm-text-primary);
+    margin-bottom: var(--fm-form-label-margin-bottom);
+    cursor: pointer;
   }
-
-  // Nota: Todos los estilos de input, textarea, select están en _fields.scss
-  // Este archivo solo maneja la estructura del formulario
-
-  // Checkbox y radio - estilos definidos en _fields.scss
 }
 
-// Estilos para campos con prefijos/sufijos - utilizado por JS
 .field-with-prefix {
-  // Layout flex
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 
   .field-prefix {
-    // Colores de fondo
-    @apply bg-gray-50;
-
-    // Bordes
-    @apply border border-r-0 border-gray-300;
-
-    // Espaciado
-    @apply px-3 py-2;
-
-    // Tipografía
-    @apply text-gray-500 text-sm;
-
-    // Forma
-    @apply rounded-l-md;
+    background-color: var(--fm-form-prefix-background);
+    border: var(--fm-input-border-width) solid var(--fm-form-prefix-border-color);
+    border-right: none;
+    padding: var(--fm-form-prefix-padding-y) var(--fm-form-prefix-padding-x);
+    color: var(--fm-text-muted);
+    font-size: var(--fm-font-size-sm);
+    border-radius: var(--fm-form-prefix-border-radius-left) 0 0 var(--fm-form-prefix-border-radius-left);
   }
 
   input {
-    // Forma y bordes
-    @apply rounded-l-none border-l-0 focus:border-l-0;
+    border-radius: 0 var(--fm-input-border-radius) var(--fm-input-border-radius) 0;
+    border-left: none;
+
+    &:focus {
+      border-left: none;
+    }
   }
 }

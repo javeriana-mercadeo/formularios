@@ -9,12 +9,24 @@
   // ESTILOS GENERALES DEL MÓDULO
   // ==========================================
   
-  @apply font-segoe bg-[var(--form-modules-container-background)];
-  @apply rounded-[var(--form-modules-container-border-radius)];
-  @apply p-[var(--form-modules-container-padding)] my-0 mx-auto w-full;
-  @apply max-w-[var(--form-modules-container-max-width)] flex flex-col max-h-[90vh];
-  @apply overflow-y-auto box-border;
-  box-shadow: var(--form-modules-container-shadow);
+  // Tipografía base
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  // Layout principal
+  background-color: var(--fm-container-background);
+  border-radius: var(--fm-container-border-radius);
+  padding: var(--fm-container-padding);
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--fm-container-max-width);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  
+  // Sombra usando tokens del sistema
+  box-shadow: var(--fm-container-shadow);
 
   // ==========================================
   // BASE - RESET Y TIPOGRAFÍA
@@ -33,16 +45,18 @@
   @include meta.load-css("modules/fields");
   @include meta.load-css("modules/buttons");
   @include meta.load-css("modules/validation");
-  @include meta.load-css("modules/tom-select-college");
+  @include meta.load-css("modules/tom-select");
   @include meta.load-css("modules/phone-selector");
+  @include meta.load-css("modules/college-selector");
 
   // ==========================================
   // UTILIDADES - ESPACIADO Y DISPLAY
   // ==========================================
   @include meta.load-css("modules/utilities");
 
-  // ==========================================
-  // TEMAS - ESTILOS ESPECÍFICOS
-  // ==========================================
-  @include meta.load-css("modules/demo-theme");
 }
+
+// ==========================================
+// TEMAS - VARIACIONES INDEPENDIENTES
+// ==========================================
+@include meta.load-css("modules/themes");

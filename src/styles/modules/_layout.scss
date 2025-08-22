@@ -1,104 +1,66 @@
-// ==========================================
-// LAYOUT - CONTENEDORES UTILIZADOS EN HTML
-// ==========================================
-
-// Header del formulario - FIJO - utilizado en HTML
+// Layout de formulario
 .form-header {
-  // Layout
-  @apply flex-none;
-  
-  // Alineación
-  @apply text-center;
-  
-  // Espaciado
-  @apply p-2;
+  flex: none;
+  text-align: center;
+  padding: var(--fm-layout-header-padding);
 
   h1,
   h2,
   h3 {
-    // Tipografía
-    @apply text-2xl font-medium leading-tight;
-    
-    // Colores
-    @apply text-primary;
-    
-    // Espaciado
-    @apply mb-2;
+    font-size: var(--fm-font-size-2xl);
+    font-weight: var(--fm-font-weight-medium);
+    line-height: var(--fm-line-height-tight);
+    color: var(--fm-interactive-primary);
+    margin-bottom: var(--fm-space-2);
   }
 
   p {
-    // Tipografía
-    @apply text-sm leading-relaxed;
-    
-    // Colores
-    @apply text-gray-600;
-    
-    // Espaciado
-    @apply mb-0;
+    font-size: var(--fm-font-size-sm);
+    line-height: var(--fm-line-height-relaxed);
+    color: var(--fm-text-secondary);
+    margin-bottom: 0;
   }
 }
 
-// Contenido del formulario - CON SCROLL - utilizado en HTML
 .form-content {
-  // Layout flex
-  @apply flex-1;
-  
-  // Scroll
-  @apply overflow-y-auto;
-  
-  // Espaciado
-  @apply px-5 py-4;
-  
-  // Altura máxima dinámica
-  max-height: calc(100vh - 200px);
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--fm-layout-content-padding-y) var(--fm-layout-content-padding-x);
+  max-height: calc(100vh - var(--fm-layout-max-height-offset));
 }
 
-// Campo alternativo - utilizado en HTML
 .form-fields {
-  // Layout flex
-  @apply flex-1;
-  
-  // Scroll
-  @apply overflow-y-auto;
-  
-  // Espaciado
-  @apply px-6 py-4;
-  
-  // Altura máxima dinámica
-  max-height: calc(100vh - 200px);
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--fm-layout-fields-padding-y) var(--fm-layout-fields-padding-x);
+  max-height: calc(100vh - var(--fm-layout-max-height-offset));
 }
 
-// Footer del formulario - FIJO - utilizado en HTML
 .form-footer {
-  // Layout flex
-  @apply flex items-center;
-  
-  // Espaciado
-  @apply p-2;
+  display: flex;
+  align-items: center;
+  padding: var(--fm-layout-footer-padding);
 }
 
-// Filas para campos lado a lado - utilizado en HTML
+// Campo groups responsive
 .field-group {
-  // Layout base
-  @apply flex flex-col w-full;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0;
   
-  // Gap base
-  @apply gap-0;
-  
-  // Responsive - pantallas medianas y grandes
-  @apply sm:flex-row sm:gap-4;
+  @media (min-width: 640px) {
+    flex-direction: row;
+    gap: var(--fm-layout-field-group-gap);
+  }
 }
 
-// Clases específicas para campos con prefijo - utilizadas por JS
+// Sistema de prefijos para campos
 .field-prefix {
-  // Dimensiones
-  @apply w-32;
-  
-  // Comportamiento flex
-  @apply flex-shrink-0;
+  width: var(--fm-layout-field-prefix-width);
+  flex-shrink: 0;
 }
 
 .field-main {
-  // Comportamiento flex
-  @apply flex-1;
+  flex: 1;
 }

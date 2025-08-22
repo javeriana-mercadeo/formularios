@@ -1,70 +1,194 @@
 // ==========================================
 // BASE - RESET Y TIPOGRAFÍA
+// Estilos base para la librería usando el sistema de design tokens
 // ==========================================
 
-// Reset básico
+// Reset básico siguiendo buenas prácticas de librerías CSS
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-// Títulos y textos - más
+// ==========================================
+// TYPOGRAPHY FOUNDATION
+// ==========================================
+
+// Headings - usando tokens semánticos para consistencia
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  @apply font-medium text-gray-900 leading-tight;
+  font-weight: var(--fm-font-weight-medium);
+  color: var(--fm-text-primary);
+  line-height: var(--fm-line-height-tight);
+  margin-bottom: var(--fm-space-2);
 }
 
+// Tamaños específicos de headings
+h1 {
+  font-size: var(--fm-font-size-2xl);
+}
+h2 {
+  font-size: var(--fm-font-size-xl);
+}
+h3 {
+  font-size: var(--fm-font-size-lg);
+}
+h4,
+h5,
+h6 {
+  font-size: var(--fm-font-size-base);
+}
+
+// Párrafos
 p {
-  @apply text-gray-600 leading-relaxed;
+  color: var(--fm-text-secondary);
+  line-height: var(--fm-line-height-relaxed);
+  margin-bottom: var(--fm-space-3);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
-// Enlaces - más sutiles
+// ==========================================
+// INTERACTIVE ELEMENTS
+// ==========================================
+
+// Enlaces - usando tokens de interacción
 a {
-  @apply text-primary-600 hover:text-primary-700 transition-colors duration-200 underline;
+  color: var(--fm-interactive-primary);
+  text-decoration: underline;
+  transition: color var(--fm-transition-fast);
+
+  &:hover {
+    color: var(--fm-interactive-primary-hover);
+  }
+
+  &:active {
+    color: var(--fm-interactive-primary-active);
+  }
+
+  // Estado deshabilitado
+  &:disabled,
+  &[aria-disabled="true"] {
+    color: var(--fm-text-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
-// Listas
+// ==========================================
+// LIST ELEMENTS
+// ==========================================
+
 ul,
 ol {
-  @apply list-none p-0 m-0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-// Eliminar estilos por defecto de algunos elementos
+// ==========================================
+// FORM ELEMENT RESETS
+// Preparación para componentes de formulario
+// ==========================================
+
 button {
-  @apply border-none bg-transparent p-0 cursor-pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+
+  // Estado deshabilitado
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
 input,
 textarea,
 select {
-  @apply outline-none;
+  outline: none;
+  font-family: inherit;
+  font-size: var(--fm-font-size-base);
+  line-height: var(--fm-line-height-normal);
 }
 
-// Accesibilidad mejorada
+// ==========================================
+// ACCESSIBILITY & FOCUS MANAGEMENT
+// ==========================================
+
+// Focus visible mejorado para accesibilidad
 :focus-visible {
-  @apply outline-none ring-2 ring-primary ring-offset-2;
+  outline: none;
+  box-shadow: 0 0 0 var(--fm-focus-ring-offset) var(--fm-surface-primary),
+    0 0 0 calc(var(--fm-focus-ring-width) + var(--fm-focus-ring-offset)) var(--fm-focus-ring-color);
+  border-radius: var(--fm-radius-sm);
 }
 
-// Scrollbar personalizada
+// Reducir movimiento para usuarios con preferencias de accesibilidad
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ==========================================
+// SCROLLBAR CUSTOMIZATION
+// Scrollbar consistente con el design system
+// ==========================================
+
 ::-webkit-scrollbar {
-  @apply w-2;
+  width: var(--fm-scrollbar-width);
+  height: var(--fm-scrollbar-width);
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-50 rounded-full;
+  background: var(--fm-scrollbar-track-color);
+  border-radius: var(--fm-radius-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary-600 rounded-full hover:bg-primary-700;
+  background: var(--fm-scrollbar-thumb-color);
+  border-radius: var(--fm-radius-base);
+
+  &:hover {
+    background: var(--fm-scrollbar-thumb-color-hover);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--fm-scrollbar-track-color);
 }
 
 // Firefox scrollbar
 * {
   scrollbar-width: thin;
-  scrollbar-color: theme('colors.primary.DEFAULT') theme('colors.gray.50');
+  scrollbar-color: var(--fm-scrollbar-thumb-color) var(--fm-scrollbar-track-color);
+}
+
+// ==========================================
+// TEXT SELECTION
+// ==========================================
+
+::selection {
+  background-color: var(--fm-color-primary-100);
+  color: var(--fm-text-primary);
+}
+
+::-moz-selection {
+  background-color: var(--fm-color-primary-100);
+  color: var(--fm-text-primary);
 }

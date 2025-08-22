@@ -1,90 +1,51 @@
-// ==========================================
-// VALIDACIÓN - ESTILOS BÁSICOS Y CLASES JS
-// ==========================================
-
-// CLASES CRÍTICAS UTILIZADAS POR JAVASCRIPT - NO ELIMINAR
-
-// Mensajes de error - utilizados por Validation.js
+// Validación - estilos utilizados por JavaScript
 .error_text {
-  // Layout flex
-  @apply flex items-center;
-  
-  // Espaciado
-  @apply gap-2 p-2 mt-1;
-  
-  // Tipografía
-  @apply text-sm;
-  
-  // Colores
-  @apply text-red-500 bg-red-50;
-  
-  // Forma
-  @apply rounded-md;
-  
-  // Tamaño específico
-  font-size: 12px;
-  
-  // Animación
-  animation: errorSlideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: var(--fm-space-2);
+  padding: var(--fm-space-2);
+  margin-top: var(--fm-space-1);
+  font-size: var(--fm-font-size-xs);
+  color: var(--fm-text-error);
+  background-color: var(--fm-color-error-50);
+  border-radius: var(--fm-radius-md);
+  animation: errorSlideIn var(--fm-duration-slow) var(--fm-easing-ease-out);
 
   &::before {
     content: "⚠ ";
-    
-    // Tipografía del icono
-    @apply text-xs;
-    
-    // Comportamiento flex
-    @apply flex-shrink-0;
-    
-    // Colores del icono
-    @apply text-red-500;
+    font-size: var(--fm-font-size-xs);
+    flex-shrink: 0;
+    color: var(--fm-text-error);
   }
 }
 
-// Animación para mensajes de error
 @keyframes errorSlideIn {
   from {
-    // Opacidad inicial
-    @apply opacity-0;
-    
-    // Posición inicial
+    opacity: 0;
     transform: translateY(-10px);
   }
   to {
-    // Opacidad final
-    @apply opacity-100;
-    
-    // Posición final
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-// Estados de error en inputs - utilizados por Validation.js
 input.error,
 select.error {
-  // Bordes error
-  @apply border-red-500;
-  
-  // Fondo error
-  @apply bg-red-50;
+  border-color: var(--fm-input-border-color-error);
+  background-color: var(--fm-color-error-50);
 
   &:focus {
-    // Color de borde focus error (forzado)
-    border-bottom-color: theme('colors.red.500') !important;
+    border-bottom-color: var(--fm-input-border-color-error) !important;
   }
 }
 
-// Estados validados en inputs - utilizados por Validation.js
 input.validated,
 select.validated {
-  // Bordes validado
-  @apply border-green-600;
-  
-  // Fondo validado
-  @apply bg-green-50;
+  border-color: var(--fm-input-border-color-success);
+  background-color: var(--fm-color-success-50);
 
   &:focus {
-    // Color de borde focus validado (forzado)
-    border-bottom-color: theme('colors.green.600') !important;
+    border-bottom-color: var(--fm-input-border-color-success) !important;
   }
 }

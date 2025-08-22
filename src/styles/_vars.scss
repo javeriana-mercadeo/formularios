@@ -1,78 +1,292 @@
-$selector-prefix: "form-modules";
+// ==========================================
+// CONFIGURACIÓN DE LA LIBRERÍA
+// ==========================================
+$selector-prefix: "form-modules" !default;
 
 // ==========================================
-// VARIABLES CSS ESENCIALES DEL SISTEMA
+// TOKENS DE DISEÑO - CAPA PRIMITIVA
+// Tokens de diseño primitivos que definen los valores base del sistema
 // ==========================================
 :root {
   // ==========================================
-  // COLORES PRIMARIOS (personalizable por tema)
-  // ==========================================
-  --form-modules-primary-50: #f3f6fc;
-  --form-modules-primary-100: #e7edf7;
-  --form-modules-primary-200: #c9d7ee;
-  --form-modules-primary-300: #99b6e0;
-  --form-modules-primary-400: #6290ce;
-  --form-modules-primary-500: #3e72b9;
-  --form-modules-primary-600: #2c5697;
-  --form-modules-primary-700: #26477e;
-  --form-modules-primary-800: #233e69;
-  --form-modules-primary-900: #223658;
-  --form-modules-primary-950: #16223b;
-  --form-modules-primary: var(--form-modules-primary-500);
-
-  // Transparencias para shadows y overlays
-  --form-modules-primary-500-30: rgba(62, 114, 185, 0.3);
-  --form-modules-primary-500-40: rgba(62, 114, 185, 0.4);
-
-  // ==========================================
-  // COLORES SEMÁNTICOS (personalizable por tema)
-  // ==========================================
-  --form-modules-success: #16a34a;
-  --form-modules-success-light: #dcfce7;
-  --form-modules-error: #ef4444;
-  --form-modules-error-light: #fef2f2;
-  --form-modules-warning: #f59e0b;
-  --form-modules-warning-light: #fffbeb;
-  --form-modules-info: #3b82f6;
-  --form-modules-info-light: #eff6ff;
-
-  // ==========================================
-  // GRISES (personalizable por tema)
-  // ==========================================
-  --form-modules-gray-50: #f9fafb;
-  --form-modules-gray-100: #f3f4f6;
-  --form-modules-gray-200: #e5e7eb;
-  --form-modules-gray-300: #d1d5db;
-  --form-modules-gray-400: #9ca3af;
-  --form-modules-gray-500: #6b7280;
-  --form-modules-gray-600: #4b5563;
-  --form-modules-gray-700: #374151;
-  --form-modules-gray-800: #1f2937;
-  --form-modules-gray-900: #111827;
-
-  // ==========================================
-  // TIPOGRAFÍA (solo pesos no disponibles en Tailwind)
-  // ==========================================
-  --form-modules-font-weight-normal: 400;
-  --form-modules-font-weight-medium: 500;
-  --form-modules-font-weight-semibold: 600;
-  --form-modules-font-weight-bold: 700;
-
-  // ==========================================
-  // PROPIEDADES ESPECÍFICAS DEL SISTEMA
+  // TOKENS PRIMITIVOS - PALETA DE COLORES
   // ==========================================
   
-  // Contenedor principal (configuración específica del módulo)
-  --form-modules-container-max-width: 32rem;
-  --form-modules-container-background: #ffffff;
-  --form-modules-container-border-radius: 1rem;
-  --form-modules-container-padding: 1.5rem;
-  --form-modules-container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  // Colores primarios de marca - Configurables por usuarios de la librería
+  --fm-color-primary-50: #f3f6fc;
+  --fm-color-primary-100: #e7edf7;
+  --fm-color-primary-200: #c9d7ee;
+  --fm-color-primary-300: #99b6e0;
+  --fm-color-primary-400: #6290ce;
+  --fm-color-primary-500: #3e72b9;
+  --fm-color-primary-600: #2c5697;
+  --fm-color-primary-700: #26477e;
+  --fm-color-primary-800: #233e69;
+  --fm-color-primary-900: #223658;
+  --fm-color-primary-950: #16223b;
 
-  // Input focus color (referencia al primary)
-  --form-modules-input-border-color-focus: var(--form-modules-primary-500);
-  --form-modules-input-border-color-error: var(--form-modules-error);
-  --form-modules-input-border-color-success: var(--form-modules-success);
-  --form-modules-input-background: #ffffff;
-  --form-modules-input-background-disabled: var(--form-modules-gray-100);
+  // Colores neutros - Base para superficies y texto
+  --fm-color-neutral-0: #ffffff;
+  --fm-color-neutral-50: #f9fafb;
+  --fm-color-neutral-100: #f3f4f6;
+  --fm-color-neutral-200: #e5e7eb;
+  --fm-color-neutral-300: #d1d5db;
+  --fm-color-neutral-400: #9ca3af;
+  --fm-color-neutral-500: #6b7280;
+  --fm-color-neutral-600: #4b5563;
+  --fm-color-neutral-700: #374151;
+  --fm-color-neutral-800: #1f2937;
+  --fm-color-neutral-900: #111827;
+
+  // Colores semánticos - Estados y retroalimentación
+  --fm-color-success-50: #f0fdf4;
+  --fm-color-success-500: #16a34a;
+  --fm-color-success-600: #059669;
+  
+  --fm-color-error-50: #fef2f2;
+  --fm-color-error-500: #ef4444;
+  --fm-color-error-600: #dc2626;
+  
+  --fm-color-warning-50: #fffbeb;
+  --fm-color-warning-500: #f59e0b;
+  --fm-color-warning-600: #d97706;
+  
+  --fm-color-info-50: #eff6ff;
+  --fm-color-info-500: #3b82f6;
+  --fm-color-info-600: #2563eb;
+
+  // ==========================================
+  // TOKENS PRIMITIVOS - ESCALA DE ESPACIADO
+  // ==========================================
+  --fm-space-0: 0;
+  --fm-space-1: 0.25rem;   // 4px
+  --fm-space-2: 0.5rem;    // 8px
+  --fm-space-3: 0.75rem;   // 12px
+  --fm-space-4: 1rem;      // 16px
+  --fm-space-5: 1.25rem;   // 20px
+  --fm-space-6: 1.5rem;    // 24px
+  --fm-space-8: 2rem;      // 32px
+  --fm-space-10: 2.5rem;   // 40px
+  --fm-space-12: 3rem;     // 48px
+  --fm-space-16: 4rem;     // 64px
+  --fm-space-32: 8rem;     // 128px
+
+  // ==========================================
+  // TOKENS PRIMITIVOS - ESCALA TIPOGRÁFICA
+  // ==========================================
+  --fm-font-size-xs: 0.75rem;    // 12px
+  --fm-font-size-sm: 0.875rem;   // 14px
+  --fm-font-size-base: 1rem;     // 16px
+  --fm-font-size-lg: 1.125rem;   // 18px
+  --fm-font-size-xl: 1.25rem;    // 20px
+  --fm-font-size-2xl: 1.5rem;    // 24px
+
+  --fm-font-weight-normal: 400;
+  --fm-font-weight-medium: 500;
+  --fm-font-weight-semibold: 600;
+  --fm-font-weight-bold: 700;
+
+  --fm-line-height-tight: 1.25;
+  --fm-line-height-normal: 1.5;
+  --fm-line-height-relaxed: 1.625;
+
+  // ==========================================
+  // TOKENS PRIMITIVOS - RADIO DE BORDES
+  // ==========================================
+  --fm-radius-none: 0;
+  --fm-radius-sm: 0.125rem;   // 2px
+  --fm-radius-base: 0.25rem;  // 4px
+  --fm-radius-md: 0.375rem;   // 6px
+  --fm-radius-lg: 0.5rem;     // 8px
+  --fm-radius-xl: 0.75rem;    // 12px
+  --fm-radius-2xl: 1rem;      // 16px
+  --fm-radius-full: 9999px;
+
+  // ==========================================
+  // TOKENS PRIMITIVOS - SOMBRAS
+  // ==========================================
+  --fm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --fm-shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --fm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --fm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --fm-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  // ==========================================
+  // TOKENS PRIMITIVOS - TIEMPOS Y SUAVIZADO
+  // ==========================================
+  --fm-duration-fast: 150ms;
+  --fm-duration-normal: 200ms;
+  --fm-duration-slow: 300ms;
+  --fm-easing-linear: linear;
+  --fm-easing-ease: ease;
+  --fm-easing-ease-in: ease-in;
+  --fm-easing-ease-out: ease-out;
+  --fm-easing-ease-in-out: ease-in-out;
+}
+
+// ==========================================
+// TOKENS SEMÁNTICOS - CAPA DE COMPONENTES
+// Tokens semánticos que definen el propósito y uso de los tokens primitivos
+// ==========================================
+:root {
+  // ==========================================
+  // TOKENS SEMÁNTICOS DE TEXTO
+  // ==========================================
+  --fm-text-primary: var(--fm-color-neutral-900);
+  --fm-text-secondary: var(--fm-color-neutral-600);
+  --fm-text-muted: var(--fm-color-neutral-500);
+  --fm-text-disabled: var(--fm-color-neutral-400);
+  --fm-text-on-primary: var(--fm-color-neutral-0);
+  --fm-text-success: var(--fm-color-success-600);
+  --fm-text-error: var(--fm-color-error-600);
+  --fm-text-warning: var(--fm-color-warning-600);
+  --fm-text-info: var(--fm-color-info-600);
+
+  // ==========================================
+  // TOKENS SEMÁNTICOS DE SUPERFICIE
+  // ==========================================
+  --fm-surface-primary: var(--fm-color-neutral-0);
+  --fm-surface-secondary: var(--fm-color-neutral-50);
+  --fm-surface-tertiary: var(--fm-color-neutral-100);
+  --fm-surface-overlay: var(--fm-color-neutral-0);
+  --fm-surface-disabled: var(--fm-color-neutral-100);
+
+  // ==========================================
+  // TOKENS SEMÁNTICOS DE BORDES
+  // ==========================================
+  --fm-border-default: var(--fm-color-neutral-300);
+  --fm-border-subtle: var(--fm-color-neutral-200);
+  --fm-border-strong: var(--fm-color-neutral-400);
+  --fm-border-focus: var(--fm-color-primary-500);
+  --fm-border-success: var(--fm-color-success-500);
+  --fm-border-error: var(--fm-color-error-500);
+  --fm-border-warning: var(--fm-color-warning-500);
+  --fm-border-info: var(--fm-color-info-500);
+
+  // ==========================================
+  // TOKENS SEMÁNTICOS DE INTERACCIÓN
+  // ==========================================
+  --fm-interactive-primary: var(--fm-color-primary-600);
+  --fm-interactive-primary-hover: var(--fm-color-primary-700);
+  --fm-interactive-primary-active: var(--fm-color-primary-800);
+  --fm-interactive-primary-disabled: var(--fm-color-neutral-300);
+
+  // ==========================================
+  // TOKENS SEMÁNTICOS DE FOCO
+  // ==========================================
+  --fm-focus-ring-color: var(--fm-color-primary-500);
+  --fm-focus-ring-width: 2px;
+  --fm-focus-ring-offset: 2px;
+  --fm-focus-ring-opacity: 0.5;
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - CONTENEDOR DE FORMULARIO
+  // Tokens específicos para el contenedor principal del formulario
+  // ==========================================
+  --fm-container-max-width: 32rem;
+  --fm-container-background: var(--fm-surface-primary);
+  --fm-container-border-radius: var(--fm-radius-2xl);
+  --fm-container-padding: var(--fm-space-6);
+  --fm-container-shadow: var(--fm-shadow-lg);
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - CAMPOS DE ENTRADA
+  // ==========================================
+  --fm-input-height: 2.75rem; // 44px - objetivo táctil accesible
+  --fm-input-padding-x: var(--fm-space-1);
+  --fm-input-padding-y: var(--fm-space-2);
+  --fm-input-background: transparent;
+  --fm-input-background-disabled: var(--fm-surface-disabled);
+  --fm-input-border-color: var(--fm-border-default);
+  --fm-input-border-color-hover: var(--fm-border-strong);
+  --fm-input-border-color-focus: var(--fm-border-focus);
+  --fm-input-border-color-error: var(--fm-border-error);
+  --fm-input-border-color-success: var(--fm-border-success);
+  --fm-input-border-radius: var(--fm-radius-none);
+  --fm-input-border-width: 1px;
+  --fm-input-border-width-focus: 2px;
+  --fm-input-placeholder-color: var(--fm-color-neutral-400);
+  --fm-input-text-color: var(--fm-text-primary);
+  
+  // Select específicos
+  --fm-select-arrow-color: #666666;
+  --fm-select-arrow-color-hover: var(--fm-text-primary);
+  --fm-select-arrow-color-focus: var(--fm-interactive-primary);
+  --fm-select-padding-right: var(--fm-space-10);
+  
+  // Radio y checkbox
+  --fm-radio-size: 1rem;
+  --fm-radio-border-width: 2px;
+  --fm-radio-border-color: var(--fm-color-neutral-400);
+  --fm-radio-border-color-hover: var(--fm-color-neutral-600);
+  --fm-radio-border-color-checked: var(--fm-interactive-primary);
+  --fm-radio-dot-color: var(--fm-interactive-primary);
+  
+  --fm-checkbox-size: 1rem;
+  --fm-checkbox-border-width: 2px;
+  --fm-checkbox-border-color: var(--fm-border-default);
+  --fm-checkbox-border-radius: var(--fm-radius-base);
+  
+  // File input
+  --fm-file-border-style: dashed;
+  --fm-file-border-width: 2px;
+  --fm-file-padding: var(--fm-space-3);
+  --fm-file-button-background: var(--fm-color-primary-50);
+  --fm-file-button-color: var(--fm-color-primary-700);
+  --fm-file-button-background-hover: var(--fm-color-primary-100);
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - BOTONES
+  // ==========================================
+  --fm-button-height: var(--fm-input-height);
+  --fm-button-padding-x: var(--fm-space-6);
+  --fm-button-padding-y: var(--fm-space-2);
+  --fm-button-border-radius: var(--fm-radius-md);
+  --fm-button-font-weight: var(--fm-font-weight-medium);
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - LAYOUT
+  // ==========================================
+  --fm-layout-header-padding: var(--fm-space-2);
+  --fm-layout-content-padding-x: var(--fm-space-5);
+  --fm-layout-content-padding-y: var(--fm-space-4);
+  --fm-layout-fields-padding-x: var(--fm-space-6);
+  --fm-layout-fields-padding-y: var(--fm-space-4);
+  --fm-layout-footer-padding: var(--fm-space-2);
+  --fm-layout-max-height-offset: 200px;
+  --fm-layout-field-group-gap: var(--fm-space-4);
+  --fm-layout-field-prefix-width: 8rem; // 128px
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - FORMULARIOS
+  // ==========================================
+  --fm-form-field-margin-bottom: var(--fm-space-4);
+  --fm-form-label-margin-bottom: var(--fm-space-1);
+  --fm-form-authorization-padding: var(--fm-space-3);
+  --fm-form-authorization-background: var(--fm-surface-secondary);
+  --fm-form-authorization-border-color: var(--fm-border-subtle);
+  --fm-form-authorization-border-radius: var(--fm-radius-md);
+  --fm-form-radio-gap: var(--fm-space-6);
+  --fm-form-radio-option-gap: var(--fm-space-2);
+  --fm-form-radio-size: 1rem; // 16px
+  --fm-form-prefix-padding-x: var(--fm-space-3);
+  --fm-form-prefix-padding-y: var(--fm-space-2);
+  --fm-form-prefix-background: var(--fm-surface-secondary);
+  --fm-form-prefix-border-color: var(--fm-border-default);
+  --fm-form-prefix-border-radius-left: var(--fm-radius-md);
+
+  // ==========================================
+  // TOKENS DE COMPONENTE - BARRA DE DESPLAZAMIENTO
+  // ==========================================
+  --fm-scrollbar-width: 8px;
+  --fm-scrollbar-track-color: var(--fm-surface-secondary);
+  --fm-scrollbar-thumb-color: var(--fm-interactive-primary);
+  --fm-scrollbar-thumb-color-hover: var(--fm-interactive-primary-hover);
+
+  // ==========================================
+  // TOKENS DE ANIMACIÓN
+  // ==========================================
+  --fm-transition-fast: var(--fm-duration-fast) var(--fm-easing-ease-out);
+  --fm-transition-normal: var(--fm-duration-normal) var(--fm-easing-ease-in-out);
+  --fm-transition-slow: var(--fm-duration-slow) var(--fm-easing-ease-in-out);
 }

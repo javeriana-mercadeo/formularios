@@ -1,0 +1,164 @@
+// Temas predefinidos para la librería
+// Los usuarios pueden aplicar estos temas añadiendo la clase correspondiente al contenedor principal
+// Uso: <div class="form-modules theme-dark">
+
+// ==========================================
+// TEMA CLARO (por defecto)
+// ==========================================
+.form-modules.theme-light {
+  // Colores primarios
+  --fm-color-primary-50: #f3f6fc;
+  --fm-color-primary-100: #e7edf7;
+  --fm-color-primary-200: #c9d7ee;
+  --fm-color-primary-300: #99b6e0;
+  --fm-color-primary-400: #6290ce;
+  --fm-color-primary-500: #3e72b9;
+  --fm-color-primary-600: #2c5697;
+  --fm-color-primary-700: #26477e;
+  --fm-color-primary-800: #233e69;
+  --fm-color-primary-900: #223658;
+  --fm-color-primary-950: #16223b;
+
+  // Superficies
+  --fm-surface-primary: #ffffff;
+  --fm-surface-secondary: #f9fafb;
+  --fm-surface-tertiary: #f3f4f6;
+  --fm-surface-overlay: #ffffff;
+  --fm-surface-disabled: #f3f4f6;
+
+  // Texto
+  --fm-text-primary: #111827;
+  --fm-text-secondary: #4b5563;
+  --fm-text-muted: #6b7280;
+  --fm-text-disabled: #9ca3af;
+  --fm-text-on-primary: #ffffff;
+
+  // Bordes
+  --fm-border-default: #d1d5db;
+  --fm-border-subtle: #e5e7eb;
+  --fm-border-strong: #9ca3af;
+
+  // Contenedor
+  --fm-container-background: #ffffff;
+  --fm-container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+// ==========================================
+// TEMA OSCURO
+// ==========================================
+.form-modules.theme-dark {
+  // Colores primarios - versión más brillante para contraste
+  --fm-color-primary-50: #1e3a8a;
+  --fm-color-primary-100: #1d4ed8;
+  --fm-color-primary-200: #2563eb;
+  --fm-color-primary-300: #3b82f6;
+  --fm-color-primary-400: #60a5fa;
+  --fm-color-primary-500: #93c5fd;
+  --fm-color-primary-600: #bfdbfe;
+  --fm-color-primary-700: #dbeafe;
+  --fm-color-primary-800: #eff6ff;
+  --fm-color-primary-900: #f8fafc;
+  --fm-color-primary-950: #ffffff;
+
+  // Superficies oscuras
+  --fm-surface-primary: #1f2937;
+  --fm-surface-secondary: #374151;
+  --fm-surface-tertiary: #4b5563;
+  --fm-surface-overlay: #1f2937;
+  --fm-surface-disabled: #374151;
+
+  // Texto para tema oscuro
+  --fm-text-primary: #f9fafb;
+  --fm-text-secondary: #d1d5db;
+  --fm-text-muted: #9ca3af;
+  --fm-text-disabled: #6b7280;
+  --fm-text-on-primary: #111827;
+
+  // Bordes para tema oscuro
+  --fm-border-default: #4b5563;
+  --fm-border-subtle: #374151;
+  --fm-border-strong: #6b7280;
+
+  // Contenedor oscuro
+  --fm-container-background: #1f2937;
+  --fm-container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+
+  // Inputs en tema oscuro
+  --fm-input-background: #374151;
+  --fm-input-text-color: #f9fafb;
+  --fm-input-placeholder-color: #9ca3af;
+  --fm-input-border-color: #4b5563;
+  --fm-input-border-color-hover: #6b7280;
+  --fm-input-border-color-focus: #93c5fd;
+
+  // Estados semánticos ajustados para tema oscuro
+  --fm-color-success-50: #064e3b;
+  --fm-color-success-500: #10b981;
+  --fm-color-success-600: #059669;
+
+  --fm-color-error-50: #7f1d1d;
+  --fm-color-error-500: #ef4444;
+  --fm-color-error-600: #dc2626;
+
+  --fm-color-warning-50: #78350f;
+  --fm-color-warning-500: #f59e0b;
+  --fm-color-warning-600: #d97706;
+
+  --fm-color-info-50: #1e3a8a;
+  --fm-color-info-500: #3b82f6;
+  --fm-color-info-600: #2563eb;
+}
+
+// ==========================================
+// TEMA MINIMALISTA
+// ==========================================
+.form-modules.theme-minimal {
+  // Paleta monocromática
+  --fm-color-primary-50: #f8fafc;
+  --fm-color-primary-100: #f1f5f9;
+  --fm-color-primary-200: #e2e8f0;
+  --fm-color-primary-300: #cbd5e1;
+  --fm-color-primary-400: #94a3b8;
+  --fm-color-primary-500: #64748b;
+  --fm-color-primary-600: #475569;
+  --fm-color-primary-700: #334155;
+  --fm-color-primary-800: #1e293b;
+  --fm-color-primary-900: #0f172a;
+  --fm-color-primary-950: #020617;
+
+  // Superficies ultra limpias
+  --fm-surface-primary: #ffffff;
+  --fm-surface-secondary: #fafafa;
+  --fm-surface-tertiary: #f5f5f5;
+  --fm-surface-overlay: #ffffff;
+  --fm-surface-disabled: #f5f5f5;
+
+  // Texto minimalista
+  --fm-text-primary: #0f172a;
+  --fm-text-secondary: #475569;
+  --fm-text-muted: #64748b;
+  --fm-text-disabled: #94a3b8;
+  --fm-text-on-primary: #ffffff;
+
+  // Bordes sutiles
+  --fm-border-default: #e2e8f0;
+  --fm-border-subtle: #f1f5f9;
+  --fm-border-strong: #cbd5e1;
+
+  // Contenedor minimalista
+  --fm-container-background: #ffffff;
+  --fm-container-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+
+  // Interacciones sutiles
+  --fm-interactive-primary: #475569;
+  --fm-interactive-primary-hover: #334155;
+  --fm-interactive-primary-active: #1e293b;
+  --fm-interactive-primary-disabled: #cbd5e1;
+
+  // Inputs minimalistas
+  --fm-input-border-color-focus: #475569;
+  --fm-input-border-color-hover: #64748b;
+
+  // Focus ring sutil
+  --fm-focus-ring-color: rgba(71, 85, 105, 0.3);
+}

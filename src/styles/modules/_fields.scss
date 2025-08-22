@@ -1,8 +1,4 @@
-// ==========================================
-// CAMPOS - ESTILOS UNDERLINED MINIMALISTAS
-// ==========================================
-
-// Estilo base para todos los inputs - underlined simple que funciona
+// Campos de formulario
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -10,519 +6,349 @@ input[type="password"],
 input[type="url"],
 input[type="search"],
 input[type="number"] {
-  // Plugin base
-  @apply form-input;
-
-  // Layout y dimensiones
-  @apply w-full;
-
-  // Espaciado
-  @apply px-1 py-2;
-
-  // Bordes
-  @apply border-0 border-b border-gray-300 rounded-none;
-
-  // Colores y fondo
-  @apply bg-transparent text-gray-900 placeholder-gray-400;
-
-  // Interacción
-  @apply outline-none appearance-none;
-
-  // Animaciones
-  @apply transition-all duration-300 ease-in-out;
-
-  // Override de estilos conflictivos
-  @apply rounded-none shadow-none;
-  @apply border-0 border-b border-solid;
+  width: 100%;
+  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
+  border: 0;
+  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
+  border-radius: var(--fm-input-border-radius);
+  background-color: var(--fm-input-background);
+  color: var(--fm-input-text-color);
+  outline: none;
+  appearance: none;
+  transition: var(--fm-transition-normal);
 
   &:focus {
-    // Interacción focus
-    @apply outline-none;
-
-    // Reset estilos focus
-    @apply bg-transparent rounded-none shadow-none;
-
-    // Borde focus
-    @apply border-b-2 border-primary;
+    outline: none;
+    background-color: var(--fm-input-background);
+    border-bottom-width: var(--fm-input-border-width-focus);
+    border-bottom-color: var(--fm-input-border-color-focus);
   }
 
   &:hover:not(:focus) {
-    // Colores hover
-    @apply border-gray-400;
+    border-bottom-color: var(--fm-input-border-color-hover);
   }
 
   &::placeholder {
-    // Colores placeholder
-    @apply text-gray-400;
+    color: var(--fm-input-placeholder-color);
   }
 }
 
-select,
-.field select {
-  // Layout y dimensiones
-  @apply w-full;
+select {
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  border: 0;
+  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
+  border-radius: var(--fm-input-border-radius);
+  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
+  padding-right: var(--fm-select-padding-right);
+  background-color: var(--fm-input-background);
+  color: var(--fm-input-text-color);
+  font-size: var(--fm-font-size-sm);
+  line-height: var(--fm-line-height-normal);
+  transition: var(--fm-transition-normal);
 
-  // Interacción
-  @apply cursor-pointer outline-none appearance-none;
-
-  // Bordes
-  @apply border-0 border-b border-gray-300 rounded-none;
-
-  // Espaciado
-  @apply px-1 py-2;
-
-  // Colores y fondo
-  @apply bg-transparent text-gray-900;
-
-  // Espaciado mejorado
-  @apply pr-10;
-  @apply py-2 px-1;
-
-  // Tipografía
-  @apply text-sm leading-normal;
-
-  // Override de estilos conflictivos
-  @apply shadow-none rounded-none border-0 border-b;
-
-  // Flecha personalizada más elegante - chevron más pequeño y refinado
+  // Flecha personalizada
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23666666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.7rem center;
   background-repeat: no-repeat;
   background-size: 1.2em 1.2em;
-  transition: all 0.25s ease-in-out;
 
-  // Estado hover - flecha más oscura y borde más visible
   &:hover:not(:focus) {
-    @apply border-gray-600;
+    border-bottom-color: var(--fm-input-border-color-hover);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23374151' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 
-  // Estado focus - borde azul y flecha azul
   &:focus {
-    // Interacción focus
-    @apply outline-none;
-
-    // Reset estilos focus
-    @apply bg-transparent rounded-none shadow-none;
-
-    // Borde focus
-    @apply border-b-2 border-primary;
-
-    // Flecha azul en focus
+    outline: none;
+    background-color: var(--fm-input-background);
+    border-bottom-width: var(--fm-input-border-width-focus);
+    border-bottom-color: var(--fm-input-border-color-focus);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 
-  // Cuando el select está abierto (clase agregada por JS) - flecha hacia arriba
   &.select-open {
-    // Icono de flecha hacia arriba
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14 12l-4-4-4 4'/%3e%3c/svg%3e");
-
-    // Borde activo
-    @apply border-b-2 border-primary;
+    border-bottom-width: var(--fm-input-border-width-focus);
+    border-bottom-color: var(--fm-input-border-color-focus);
   }
 
-  // Estado disabled
   &:disabled {
-    // Colores disabled
-    @apply text-gray-400 border-gray-200;
-
-    // Cursor disabled
-    @apply cursor-not-allowed;
-
-    // Icono disabled
+    color: var(--fm-text-disabled);
+    border-bottom-color: var(--fm-border-subtle);
+    cursor: not-allowed;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 
-  // Mejores estilos para las opciones (limitado pero algo se puede hacer)
   option {
-    // Colores base de opciones
-    @apply text-gray-800 bg-white;
-
-    // Espaciado de opciones
-    @apply py-2 px-3 text-sm;
+    color: var(--fm-text-primary);
+    background-color: var(--fm-surface-primary);
+    padding: var(--fm-space-2) var(--fm-space-3);
+    font-size: var(--fm-font-size-sm);
 
     &:checked {
-      // Colores opción seleccionada
-      @apply bg-primary-50 text-primary-700;
+      background-color: var(--fm-color-primary-50);
+      color: var(--fm-color-primary-700);
     }
 
     &:disabled {
-      // Colores opción disabled
-      @apply text-gray-400 bg-gray-50;
+      color: var(--fm-text-disabled);
+      background-color: var(--fm-surface-disabled);
     }
   }
 }
 
 // Select múltiple
 select[multiple] {
-  // Plugin base
-  @apply form-multiselect;
-
-  // Layout y posición
-  @apply relative;
-
-  // Bordes
-  @apply border-0 border-b border-gray-300 rounded-none;
-
-  // Espaciado
-  @apply px-1 py-2;
-
-  // Colores y fondo
-  @apply bg-transparent text-gray-900;
-
-  // Sin icono de flecha
+  position: relative;
+  border: 0;
+  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
+  border-radius: var(--fm-input-border-radius);
+  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
+  background-color: var(--fm-input-background);
+  color: var(--fm-input-text-color);
   background-image: none;
 
   &::before {
-    // Posicionamiento de línea de focus
-    @apply absolute bottom-0 left-1/2;
-
-    // Dimensiones de línea
-    @apply h-0.5 w-0;
-
-    // Colores de línea
-    @apply bg-primary;
-
-    // Animación de línea
-    @apply transition-all duration-300 ease-out;
-
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    width: 0;
+    background-color: var(--fm-interactive-primary);
+    transition: var(--fm-transition-normal);
     content: "";
     transform: translateX(-50%);
-    @apply z-10;
+    z-index: 10;
   }
 
   &:focus {
-    // Interacción focus
-    @apply outline-none rounded-none bg-transparent;
-
-    // Reset borde focus
+    outline: none;
+    border-radius: var(--fm-input-border-radius);
+    background-color: var(--fm-input-background);
     border-bottom-color: transparent;
 
     &::before {
-      // Expandir línea en focus
-      @apply w-full;
+      width: 100%;
     }
   }
 }
 
 // Textarea
 textarea {
-  // Plugin base
-  @apply form-textarea;
-
-  // Layout y posición
-  @apply relative;
-
-  // Bordes
-  @apply border border-gray-300 rounded-md;
-
-  // Espaciado
-  @apply px-3 py-2;
-
-  // Colores y fondo
-  @apply bg-white text-gray-900 placeholder-gray-400;
-
-  // Interacción
-  @apply resize-y outline-none;
-
-  // Animaciones
-  @apply transition-all duration-300 ease-in-out;
+  position: relative;
+  border: var(--fm-input-border-width) solid var(--fm-input-border-color);
+  border-radius: var(--fm-radius-md);
+  padding: var(--fm-space-3);
+  background-color: var(--fm-surface-primary);
+  color: var(--fm-input-text-color);
+  resize: vertical;
+  outline: none;
+  transition: var(--fm-transition-normal);
 
   &::before {
-    // Posicionamiento de línea
-    @apply absolute bottom-0 left-1/2;
-
-    // Dimensiones de línea
-    @apply h-0.5 w-0;
-
-    // Colores de línea
-    @apply bg-primary;
-
-    // Animación de línea
-    @apply transition-all duration-300 ease-out;
-
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    width: 0;
+    background-color: var(--fm-interactive-primary);
+    transition: var(--fm-transition-normal);
     content: "";
     transform: translateX(-50%);
-    @apply z-10;
+    z-index: 10;
   }
 
   &:focus {
-    // Interacción focus
-    @apply outline-none bg-transparent;
-
-    // Reset borde focus
+    outline: none;
+    background-color: var(--fm-input-background);
     border-bottom-color: transparent;
 
     &::before {
-      // Expandir línea en focus
-      @apply w-full;
+      width: 100%;
     }
   }
 
   &:hover:not(:focus) {
-    // Colores hover
-    @apply border-gray-400;
+    border-color: var(--fm-input-border-color-hover);
+  }
+
+  &::placeholder {
+    color: var(--fm-input-placeholder-color);
   }
 }
 
-// Radio buttons - FORZAR CIRCULAR EN TODOS LOS ESTADOS
+// Radio buttons circulares
 input[type="radio"] {
-  // Reset de apariencia (forzado para navegadores)
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-
-  // Dimensiones fijas (forzadas)
-  width: 16px !important;
-  height: 16px !important;
-
-  // Espaciado (forzado)
-  margin: 0 !important;
-
-  // Bordes y forma (forzados)
-  border: 2px solid #9ca3af !important;
-  border-radius: 50% !important;
-
-  // Colores de fondo (forzado)
-  background-color: white !important;
-
-  // Interacción
+  appearance: none;
+  width: var(--fm-radio-size);
+  height: var(--fm-radio-size);
+  margin: 0;
+  border: var(--fm-radio-border-width) solid var(--fm-radio-border-color);
+  border-radius: 50%;
+  background-color: var(--fm-surface-primary);
   cursor: pointer;
-
-  // Layout
   position: relative;
   display: inline-block;
   vertical-align: middle;
-
-  // Caja (forzada)
-  box-sizing: border-box !important;
-
-  // Animaciones
-  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  transition: var(--fm-transition-normal);
 
   &:hover {
-    // Colores hover (forzado)
-    border-color: #4b5563 !important;
-
-    // Mantener forma circular (forzado)
-    border-radius: 50% !important;
+    border-color: var(--fm-radio-border-color-hover);
   }
 
   &:checked {
-    // Colores checked (forzados)
-    border-color: #4d7fcb !important;
-    background-color: white !important;
-    border-radius: 50% !important;
+    border-color: var(--fm-radio-border-color-checked);
+    background-color: var(--fm-surface-primary);
 
-    // Punto central
     &::after {
       content: "";
-
-      // Posicionamiento del punto
-      @apply absolute top-1/2 left-1/2;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-
-      // Dimensiones del punto
-      @apply w-1.5 h-1.5;
-
-      // Color del punto (forzado)
-      background-color: #4d7fcb;
-
-      // Forma del punto (forzada)
+      width: 6px;
+      height: 6px;
+      background-color: var(--fm-radio-dot-color);
       border-radius: 50%;
     }
   }
 
   &:focus {
-    // Focus styles (forzados)
-    outline: none !important;
-    border-radius: 50% !important;
-
-    // Sombra de focus
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+    outline: none;
+    box-shadow: 0 0 0 var(--fm-focus-ring-width) var(--fm-focus-ring-color);
   }
 
   &:disabled {
-    // Colores disabled (forzados)
-    border-color: #d1d5db !important;
-    background-color: #f3f4f6 !important;
-
-    // Cursor disabled
+    border-color: var(--fm-border-subtle);
+    background-color: var(--fm-surface-disabled);
     cursor: not-allowed;
-
-    // Mantener forma circular (forzado)
-    border-radius: 50% !important;
-  }
-
-  // Sobrescribir cualquier estilo de Tailwind o navegador
-  &:active,
-  &:visited,
-  &:link {
-    @apply rounded-full;
   }
 }
 
-// Checkbox - estilo minimalista
+// Checkbox
 input[type="checkbox"] {
-  // Plugin base
-  @apply form-checkbox;
-
-  // Dimensiones
-  @apply w-4 h-4;
-
-  // Bordes y forma
-  @apply border-2 border-gray-300 rounded;
-
-  // Color de acento
-  @apply accent-primary;
+  width: var(--fm-checkbox-size);
+  height: var(--fm-checkbox-size);
+  border: var(--fm-checkbox-border-width) solid var(--fm-checkbox-border-color);
+  border-radius: var(--fm-checkbox-border-radius);
+  accent-color: var(--fm-interactive-primary);
 
   &:checked {
-    // Color de borde checked
-    @apply border-primary-600;
+    border-color: var(--fm-interactive-primary);
   }
 
   &:focus {
-    // Reset focus
-    @apply outline-none ring-0;
+    outline: none;
+    box-shadow: none;
   }
 }
 
 // File input
 input[type="file"] {
-  // Bordes y forma
-  @apply border-dashed border-2 border-gray-300 rounded-lg;
-
-  // Espaciado
-  @apply p-3;
-
-  // Tipografía
-  @apply text-sm;
+  border: var(--fm-file-border-width) var(--fm-file-border-style) var(--fm-input-border-color);
+  border-radius: var(--fm-radius-lg);
+  padding: var(--fm-file-padding);
+  font-size: var(--fm-font-size-sm);
 
   &::file-selector-button {
-    // Espaciado del botón
-    @apply mr-4 py-2 px-4;
-
-    // Forma del botón
-    @apply rounded-full border-0;
-
-    // Tipografía del botón
-    @apply text-sm font-medium;
-
-    // Interacción del botón
-    @apply cursor-pointer;
-
-    // Colores del botón
-    @apply bg-primary-50 text-primary-700;
+    margin-right: var(--fm-space-4);
+    padding: var(--fm-space-2) var(--fm-space-4);
+    border-radius: var(--fm-radius-full);
+    border: 0;
+    font-size: var(--fm-font-size-sm);
+    font-weight: var(--fm-font-weight-medium);
+    cursor: pointer;
+    background-color: var(--fm-file-button-background);
+    color: var(--fm-file-button-color);
 
     &:hover {
-      // Colores hover del botón
-      @apply bg-primary-100;
+      background-color: var(--fm-file-button-background-hover);
     }
   }
 
   &:hover {
-    // Colores hover del input
-    @apply border-gray-400;
+    border-color: var(--fm-input-border-color-hover);
   }
 
   &:focus {
-    // Colores focus del input
-    @apply border-primary outline-none ring-0;
+    border-color: var(--fm-interactive-primary);
+    outline: none;
   }
 }
 
-// Labels - estilo minimalista
+// Labels
 label {
-  // Tipografía
-  @apply text-sm text-gray-700;
-
-  // Espaciado
-  @apply mb-2;
-
-  // Interacción
-  @apply cursor-pointer;
-
-  // Animaciones
-  @apply transition-colors duration-200;
+  font-size: var(--fm-font-size-sm);
+  color: var(--fm-text-primary);
+  margin-bottom: var(--fm-space-2);
+  cursor: pointer;
+  transition: var(--fm-transition-fast);
 
   &:hover {
-    // Colores hover
-    @apply text-primary-600;
+    color: var(--fm-interactive-primary);
   }
 
   &.required::after {
-    // Indicador requerido
-    @apply text-red-500 font-semibold;
+    color: var(--fm-text-error);
+    font-weight: var(--fm-font-weight-semibold);
     content: " *";
   }
 }
 
-// Inputs con error - underlined rojo sin border-radius
+// Estados de error
 input.error,
 select.error {
-  // Forma y apariencia error
-  @apply rounded-none appearance-none;
-
-  // Colores error
-  @apply border-red-500 bg-red-50;
+  border-radius: var(--fm-input-border-radius);
+  appearance: none;
+  border-color: var(--fm-input-border-color-error);
+  background-color: var(--fm-color-error-50);
 
   &:focus {
-    // Mantener forma en focus error
-    @apply rounded-none;
-
-    // Mantener colores en focus error
-    @apply border-red-500 bg-red-50;
+    border-radius: var(--fm-input-border-radius);
+    border-color: var(--fm-input-border-color-error);
+    background-color: var(--fm-color-error-50);
   }
 }
 
-// Inputs validados - underlined verde sin border-radius
+// Estados validados
 input.validated,
 select.validated {
-  // Forma y apariencia validado
-  @apply rounded-none appearance-none;
-
-  // Colores validado
-  @apply border-green-600 bg-green-50;
+  border-radius: var(--fm-input-border-radius);
+  appearance: none;
+  border-color: var(--fm-input-border-color-success);
+  background-color: var(--fm-color-success-50);
 
   &:focus {
-    // Mantener forma en focus validado
-    @apply rounded-none;
-
-    // Mantener colores en focus validado
-    @apply border-green-600 bg-green-50;
+    border-radius: var(--fm-input-border-radius);
+    border-color: var(--fm-input-border-color-success);
+    background-color: var(--fm-color-success-50);
   }
 }
 
-// Labels con error
+// Label con error
 label.error {
-  // Color de label con error
-  @apply text-red-500;
+  color: var(--fm-text-error);
 }
 
-// Remover spinners de number inputs
+// Ocultar spinners en number inputs
 input[type="number"] {
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
-    // Ocultar spinners webkit
-    @apply appearance-none m-0;
+    appearance: none;
+    margin: 0;
   }
 
   &[type="number"] {
-    // Ocultar spinners firefox
     -moz-appearance: textfield;
   }
 }
 
-// ==========================================
-// ESTILOS GLOBALES DE FOCUS - LIMPIOS
-// ==========================================
-
-// Focus global para consistencia (sin conflictos)
+// Focus global
 input:focus,
 textarea:focus,
 select:focus {
-  // Reset outline global
-  @apply outline-none;
+  outline: none;
 }
-
-// Los radio buttons ya tienen su forma circular garantizada arriba con !important

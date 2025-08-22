@@ -1,0 +1,299 @@
+// Tom Select - estilos base para cualquier implementación
+.ts-wrapper {
+  width: 100% !important;
+  font-family: inherit;
+  
+  .ts-control {
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    border: 0;
+    border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
+    border-radius: var(--fm-input-border-radius);
+    padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
+    background-color: var(--fm-input-background);
+    color: var(--fm-input-text-color);
+    transition: var(--fm-transition-normal);
+    min-height: var(--fm-input-height);
+    height: auto;
+    
+    .ts-control-input {
+      font-family: inherit;
+      font-size: var(--fm-font-size-base);
+      font-weight: var(--fm-font-weight-normal);
+      background: transparent;
+      color: var(--fm-input-text-color);
+      outline: none;
+      border: 0;
+      line-height: var(--fm-line-height-normal);
+      
+      &::placeholder {
+        color: var(--fm-input-placeholder-color);
+      }
+    }
+    
+    .ts-input {
+      font-family: inherit;
+      font-size: var(--fm-font-size-base);
+      font-weight: var(--fm-font-weight-normal);
+      background: transparent;
+      color: var(--fm-input-text-color);
+      outline: none;
+      border: 0;
+      line-height: var(--fm-line-height-normal);
+    }
+    
+    .ts-item {
+      font-family: inherit;
+      font-size: var(--fm-font-size-base);
+      font-weight: var(--fm-font-weight-normal);
+      background-color: var(--fm-color-primary-50);
+      color: var(--fm-color-primary-700);
+      padding: var(--fm-space-1) var(--fm-space-2);
+      border-radius: var(--fm-radius-base);
+    }
+    
+    .ts-control-clear {
+      position: absolute;
+      right: var(--fm-space-8);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--fm-text-muted);
+      cursor: pointer;
+      border-radius: var(--fm-radius-full);
+      width: var(--fm-space-5);
+      height: var(--fm-space-5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--fm-transition-fast);
+      font-size: var(--fm-font-size-sm);
+      font-weight: var(--fm-font-weight-medium);
+      line-height: 1;
+      
+      &:hover {
+        color: var(--fm-text-secondary);
+        background-color: var(--fm-color-neutral-100);
+      }
+      
+      &::before {
+        content: "×";
+        font-size: var(--fm-font-size-base);
+        line-height: 1;
+      }
+      
+      &:active {
+        background-color: var(--fm-color-neutral-200);
+        transform: translateY(-50%) scale(0.95);
+      }
+    }
+  }
+  
+  &.focus .ts-control,
+  &.dropdown-active .ts-control {
+    outline: none;
+    background-color: var(--fm-input-background);
+    border-bottom-width: var(--fm-input-border-width-focus);
+    border-bottom-color: var(--fm-input-border-color-focus);
+  }
+  
+  &:hover:not(.focus):not(.dropdown-active) .ts-control {
+    border-bottom-color: var(--fm-input-border-color-hover);
+  }
+  
+  &.disabled .ts-control {
+    color: var(--fm-text-disabled);
+    border-bottom-color: var(--fm-border-subtle);
+    cursor: not-allowed;
+    background-color: var(--fm-surface-disabled);
+  }
+}
+
+.ts-dropdown {
+  border: var(--fm-input-border-width) solid var(--fm-border-default);
+  border-radius: var(--fm-input-border-radius);
+  box-shadow: var(--fm-shadow-lg);
+  background-color: var(--fm-surface-primary);
+  border-top: none;
+  font-family: inherit;
+  
+  .ts-dropdown-content {
+    max-height: 24rem;
+    overflow-y: auto;
+    
+    .ts-option {
+      padding: var(--fm-space-3) var(--fm-space-3);
+      cursor: pointer;
+      color: var(--fm-text-primary);
+      border-bottom: var(--fm-input-border-width) solid var(--fm-border-subtle);
+      font-family: inherit;
+      font-size: var(--fm-font-size-base);
+      font-weight: var(--fm-font-weight-normal);
+      line-height: var(--fm-line-height-normal);
+      
+      &:last-child {
+        border-bottom: 0;
+      }
+      
+      &:hover {
+        background-color: var(--fm-surface-secondary);
+      }
+      
+      &.active {
+        background-color: var(--fm-interactive-primary);
+        color: var(--fm-text-on-primary);
+      }
+      
+      &.selected {
+        background-color: var(--fm-color-primary-50);
+        color: var(--fm-color-primary-700);
+      }
+    }
+  }
+  
+  .ts-no-results {
+    padding: var(--fm-space-3) var(--fm-space-4);
+    text-align: center;
+    color: var(--fm-text-muted);
+    font-style: italic;
+    font-size: var(--fm-font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .ts-wrapper {
+    .ts-control {
+      min-height: 2.75rem;
+      
+      .ts-control-input,
+      .ts-input {
+        font-size: var(--fm-font-size-base);
+      }
+    }
+  }
+  
+  .ts-dropdown {
+    .ts-dropdown-content .ts-option {
+      padding: var(--fm-space-4) var(--fm-space-4);
+      font-size: var(--fm-font-size-base);
+    }
+  }
+}
+
+// Estados de error y validación
+.form-modules {
+  .field {
+    .ts-wrapper {
+      width: 100% !important;
+    }
+  }
+  
+  .ts-wrapper.error .ts-control,
+  .field.error .ts-wrapper .ts-control {
+    border-radius: var(--fm-input-border-radius);
+    appearance: none;
+    border-color: var(--fm-input-border-color-error);
+    background-color: var(--fm-color-error-50);
+    
+    &.focus {
+      border-radius: var(--fm-input-border-radius);
+      border-color: var(--fm-input-border-color-error);
+      background-color: var(--fm-color-error-50);
+    }
+  }
+  
+  .ts-wrapper.validated .ts-control,
+  .field.validated .ts-wrapper .ts-control {
+    border-radius: var(--fm-input-border-radius);
+    appearance: none;
+    border-color: var(--fm-input-border-color-success);
+    background-color: var(--fm-color-success-50);
+    
+    &.focus {
+      border-radius: var(--fm-input-border-radius);
+      border-color: var(--fm-input-border-color-success);
+      background-color: var(--fm-color-success-50);
+    }
+  }
+
+  .error-message {
+    color: var(--fm-text-error);
+    font-size: var(--fm-font-size-sm);
+    margin-top: var(--fm-space-1);
+    font-family: inherit;
+  }
+
+  .loading {
+    color: var(--fm-text-muted);
+    font-size: var(--fm-font-size-sm);
+    padding: var(--fm-space-3);
+    text-align: center;
+    font-family: inherit;
+    font-style: italic;
+    border-top: var(--fm-input-border-width) solid var(--fm-border-subtle);
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+    animation: loading-shimmer 1.5s infinite;
+  }
+
+  @keyframes loading-shimmer {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+
+  .ts-dropdown-content {
+    max-height: 24rem;
+    overflow-y: auto;
+    scrollbar-width: var(--fm-scrollbar-width);
+    scrollbar-color: var(--fm-scrollbar-thumb-color) var(--fm-scrollbar-track-color);
+    
+    &::-webkit-scrollbar {
+      width: var(--fm-scrollbar-width);
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--fm-scrollbar-track-color);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--fm-scrollbar-thumb-color);
+      border-radius: var(--fm-radius-sm);
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--fm-scrollbar-thumb-color-hover);
+    }
+  }
+}
+
+// Flecha personalizada
+.ts-wrapper {
+  &.single .ts-control {
+    padding-right: 2.5rem;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      right: var(--fm-space-2);
+      top: 50%;
+      transform: translateY(-50%);
+      display: block;
+      width: var(--fm-space-5);
+      height: var(--fm-space-5);
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 1rem 1rem;
+    }
+  }
+  
+  &.dropdown-active.single .ts-control::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14 12l-4-4-4 4'/%3e%3c/svg%3e");
+  }
+  
+  &.focus.single .ts-control::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  }
+}

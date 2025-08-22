@@ -1,0 +1,10 @@
+// College selector - customizaciones específicas para selección de colegios
+.college-dropdown {
+  .college-option {
+    .college-name {
+      font-weight: var(--fm-font-weight-normal);
+      color: var(--fm-text-primary);
+      line-height: var(--fm-line-height-tight);
+    }
+  }
+}
