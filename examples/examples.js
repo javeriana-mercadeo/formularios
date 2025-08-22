@@ -82,7 +82,7 @@ const configMini = {
 
   // Logging detallado
   logging: {
-    enabled: true,
+    enabled: false,
   },
 };
 
@@ -478,6 +478,10 @@ export const configCompaniesSchools = {
   debug: true, // Envio de emails de prueba
   development: true, // No se envia a ningún endpoint
   debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  logging: {
+    enabled: true,
+  },
 
   // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):
   // ✅ Campo Empresa: Visible con 8 empresas de convenio específicas

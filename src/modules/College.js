@@ -16,7 +16,7 @@ export class College {
     this.logger = logger;
     this.config = config;
     this.tomSelectInstance = null;
-    
+
     // Inicializar módulo TomSelect
     this.tomSelect = new TomSelect(logger);
   }
@@ -30,10 +30,12 @@ export class College {
    */
   initializeCollegeField() {
     this.logger.info("🏫 🚀 Iniciando inicialización del campo colegio...");
-    
+
     const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
     if (!collegeElement) {
-      this.logger.warn(`❌ Campo colegio no encontrado. Selector usado: ${Constants.SELECTORS.COLLEGE}`);
+      this.logger.warn(
+        `❌ Campo colegio no encontrado. Selector usado: ${Constants.SELECTORS.COLLEGE}`
+      );
       return;
     }
 
@@ -41,7 +43,7 @@ export class College {
 
     // Configurar listener para cambios en tipo de asistente
     this._setupTypeAttendeeListener();
-    
+
     // Verificar inicialmente si debe mostrar el campo (incluye casos de preselección)
     this._initializeCollegeVisibility();
   }
@@ -52,24 +54,28 @@ export class College {
    */
   _initializeCollegeVisibility() {
     this.logger.info("🏫 🔍 Verificando estado inicial del tipo de asistente...");
-    
+
     // Verificar si hay un tipo de asistente ya seleccionado en el state
     const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
     this.logger.info(`🏫 📋 Tipo de asistente en state: "${currentTypeAttendee}"`);
-    
+
     // También verificar el valor del DOM por si acaso
     const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
     const domValue = typeAttendeeElement?.value || "";
     this.logger.info(`🏫 📋 Tipo de asistente en DOM: "${domValue}"`);
-    
+
     // Usar el valor que esté disponible
     const selectedValue = currentTypeAttendee || domValue;
-    
+
     if (selectedValue) {
-      this.logger.info(`🏫 ⚡ Tipo de asistente ya seleccionado: "${selectedValue}" - verificando visibilidad`);
+      this.logger.info(
+        `🏫 ⚡ Tipo de asistente ya seleccionado: "${selectedValue}" - verificando visibilidad`
+      );
       this._checkAndToggleCollegeVisibility();
     } else {
-      this.logger.info("🏫 ➡️ No hay tipo de asistente seleccionado inicialmente - campo colegio oculto");
+      this.logger.info(
+        "🏫 ➡️ No hay tipo de asistente seleccionado inicialmente - campo colegio oculto"
+      );
       this._hideCollegeField();
     }
   }
@@ -80,21 +86,21 @@ export class College {
    */
   getFilteredColleges() {
     this.logger.info("🏫 🔍 Iniciando getFilteredColleges()");
-    
+
     const collegeRawData = this.Data.data.college;
     this.logger.info("🏫 📊 Datos raw de colegios:", collegeRawData);
-    
+
     // Los datos de colegios vienen en formato {cuentasInstitucionales: [...]}
     const collegeData = collegeRawData?.cuentasInstitucionales;
-    
+
     this.logger.info("🏫 📊 Estado de datos de colegios:", {
       rawExists: !!collegeRawData,
       dataExists: !!collegeData,
       isArray: Array.isArray(collegeData),
       length: collegeData ? collegeData.length : 0,
-      firstItem: collegeData && collegeData[0] ? collegeData[0] : null
+      firstItem: collegeData && collegeData[0] ? collegeData[0] : null,
     });
-    
+
     if (!collegeData || !Array.isArray(collegeData)) {
       this.logger.warn("⚠️ Datos de colegios no disponibles o inválidos en cuentasInstitucionales");
       return [];
@@ -121,7 +127,9 @@ export class College {
       filteredColleges = this._applyCalendarFilters(filteredColleges, config.calendarSchool);
     }
 
-    this.logger.info(`🏫 Resultado final: ${filteredColleges.length} colegios después de aplicar filtros`);
+    this.logger.info(
+      `🏫 Resultado final: ${filteredColleges.length} colegios después de aplicar filtros`
+    );
     return filteredColleges;
   }
 
@@ -138,7 +146,7 @@ export class College {
     try {
       const filteredColleges = this.getFilteredColleges();
       this.logger.info(`🏫 📊 Colegios filtrados obtenidos: ${filteredColleges.length}`);
-      
+
       if (filteredColleges.length === 0) {
         this.logger.warn("⚠️ No se encontraron colegios que coincidan con los filtros");
         this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, false);
@@ -146,38 +154,43 @@ export class College {
       }
 
       // Transformar colegios a formato de opciones y eliminar duplicados
-      const collegeOptions = filteredColleges.map(college => ({
-        value: college.NAME,
+      const collegeOptions = filteredColleges.map((college) => ({
+        value: college.PUJ_EXTERNALORGID__C || college.NAME, // Usar ID externo como valor
         text: college.NAME,
-        data: college
+        data: college,
       }));
 
       // Eliminar duplicados por nombre
-      const uniqueOptions = collegeOptions.filter((option, index, self) =>
-        index === self.findIndex(o => o.value === option.value)
+      const uniqueOptions = collegeOptions.filter(
+        (option, index, self) => index === self.findIndex((o) => o.value === option.value)
       );
 
       // Ordenar alfabéticamente
       uniqueOptions.sort((a, b) => a.text.localeCompare(b.text));
 
-      // Guardar todas las opciones para scroll infinito
+      // Guardar todas las opciones para los filtros avanzados
       this.allCollegeOptions = uniqueOptions;
+      this.allCollegesData = filteredColleges; // Guardar datos completos para filtros
       this.logger.info(`🏫 💾 Guardadas ${uniqueOptions.length} opciones en allCollegeOptions`);
-      this.logger.info(`🏫 📋 Muestra de colegios:`, uniqueOptions.slice(0, 5).map(o => o.text));
-      
+      this.logger.info(
+        `🏫 📋 Muestra de colegios:`,
+        uniqueOptions.slice(0, 5).map((o) => o.text)
+      );
+
       const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
       if (!collegeElement) {
         this.logger.error("❌ Elemento de colegio no encontrado");
         return;
       }
 
-      // Usar selector normal (sin TomSelect)
-      this.logger.info(`🏫 Configurando selector normal para ${uniqueOptions.length} colegios`);
-      this._setupNormalSelect(collegeElement, uniqueOptions);
+      // Configurar filtros avanzados estilo formulario viejo
+      this._setupAdvancedCollegeFilters();
 
       this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, true);
       this._showCollegeFieldInDOM();
-      this.logger.info(`🏫 Campo colegios configurado como selector normal (${uniqueOptions.length} opciones)`);
+      this.logger.info(
+        `🏫 Campo colegios configurado con filtros avanzados (${uniqueOptions.length} opciones)`
+      );
     } catch (error) {
       this.logger.error(`❌ Error configurando campo colegios: ${error.message}`);
       this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, false);
@@ -194,12 +207,12 @@ export class College {
     }
 
     const filteredColleges = [];
-    
-    configSchools.forEach(configName => {
-      const matchedColleges = colleges.filter(college => 
+
+    configSchools.forEach((configName) => {
+      const matchedColleges = colleges.filter((college) =>
         this._matchCollegeName(college.NAME, configName)
       );
-      
+
       if (matchedColleges.length > 0) {
         filteredColleges.push(...matchedColleges);
       } else {
@@ -207,8 +220,8 @@ export class College {
       }
     });
 
-    const uniqueColleges = filteredColleges.filter((college, index, self) =>
-      index === self.findIndex(c => c.ID === college.ID)
+    const uniqueColleges = filteredColleges.filter(
+      (college, index, self) => index === self.findIndex((c) => c.ID === college.ID)
     );
 
     this.logger.info(`🏫 Filtro por nombres: ${uniqueColleges.length} colegios encontrados`);
@@ -225,17 +238,19 @@ export class College {
     }
 
     const cities = Array.isArray(configCities) ? configCities : [configCities];
-    
+
     if (cities.length === 0) {
       return colleges;
     }
 
-    const filteredColleges = colleges.filter(college => {
+    const filteredColleges = colleges.filter((college) => {
       const collegeCity = college.SHIPPINGCITY || "";
-      return cities.some(city => this._matchCityName(collegeCity, city));
+      return cities.some((city) => this._matchCityName(collegeCity, city));
     });
 
-    this.logger.info(`🏫 Filtro por ciudades [${cities.join(', ')}]: ${filteredColleges.length} colegios encontrados`);
+    this.logger.info(
+      `🏫 Filtro por ciudades [${cities.join(", ")}]: ${filteredColleges.length} colegios encontrados`
+    );
     return filteredColleges;
   }
 
@@ -249,267 +264,20 @@ export class College {
     }
 
     const calendars = Array.isArray(configCalendars) ? configCalendars : [configCalendars];
-    
+
     if (calendars.length === 0) {
       return colleges;
     }
 
-    const filteredColleges = colleges.filter(college => {
+    const filteredColleges = colleges.filter((college) => {
       const collegeCalendar = college.PUJ_CALENDAR__C || "";
-      return calendars.some(calendar => this._matchCalendarType(collegeCalendar, calendar));
+      return calendars.some((calendar) => this._matchCalendarType(collegeCalendar, calendar));
     });
 
-    this.logger.info(`🏫 Filtro por calendarios [${calendars.join(', ')}]: ${filteredColleges.length} colegios encontrados`);
+    this.logger.info(
+      `🏫 Filtro por calendarios [${calendars.join(", ")}]: ${filteredColleges.length} colegios encontrados`
+    );
     return filteredColleges;
-  }
-
-  /**
-   * Configurar Tom Select con scroll infinito
-   * @private
-   */
-  _setupTomSelectWithInfiniteScroll(selectElement) {
-    if (!selectElement) {
-      this.logger.error("❌ Tom Select requiere un elemento <select>");
-      return;
-    }
-
-    // Limpiar el select (sin poblar opciones - se cargarán dinámicamente)
-    selectElement.innerHTML = '';
-    const emptyOption = document.createElement('option');
-    emptyOption.value = '';
-    emptyOption.textContent = 'Busca tu colegio...';
-    selectElement.appendChild(emptyOption);
-
-    // Cargar Tom Select dinámicamente
-    this._loadTomSelect().then(() => {
-      this._initializeTomSelectWithInfiniteScroll(selectElement);
-    }).catch(error => {
-      this.logger.error("❌ Error cargando Tom Select:", error);
-    });
-  }
-
-  /**
-   * Configurar Tom Select para campo de colegio (método legacy)
-   * @private
-   */
-  _setupTomSelectCollegeField(selectElement, options) {
-    if (!selectElement) {
-      this.logger.error("❌ Tom Select requiere un elemento <select>");
-      return;
-    }
-
-    // Limpiar el select y poblar con opciones
-    this._populateSelectForTomSelect(selectElement, options);
-
-    // Cargar Tom Select dinámicamente
-    this._loadTomSelect().then(() => {
-      this._initializeTomSelect(selectElement, options);
-    }).catch(error => {
-      this.logger.error("❌ Error cargando Tom Select:", error);
-    });
-  }
-
-  /**
-   * Cargar Tom Select dinámicamente
-   * @private
-   */
-  async _loadTomSelect() {
-    this.logger.info("🔄 Iniciando carga de Tom Select...");
-    
-    // Verificar si Tom Select ya está cargado
-    if (window.TomSelect) {
-      this.logger.info("✅ Tom Select ya está disponible");
-      return Promise.resolve();
-    }
-
-    // Cargar CSS
-    this.logger.info("📄 Cargando CSS de Tom Select...");
-    const cssLink = document.createElement('link');
-    cssLink.rel = 'stylesheet';
-    cssLink.href = 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css';
-    document.head.appendChild(cssLink);
-
-    // Cargar JS
-    this.logger.info("📜 Cargando JavaScript de Tom Select...");
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js';
-      script.onload = () => {
-        this.logger.info("✅ Tom Select cargado exitosamente");
-        resolve();
-      };
-      script.onerror = (error) => {
-        this.logger.error("❌ Error cargando Tom Select:", error);
-        reject(error);
-      };
-      document.head.appendChild(script);
-    });
-  }
-
-  /**
-   * Poblar select con opciones para Tom Select
-   * @private
-   */
-  _populateSelectForTomSelect(selectElement, options) {
-    // Limpiar opciones existentes
-    selectElement.innerHTML = '';
-
-    // Agregar opción vacía
-    const emptyOption = document.createElement('option');
-    emptyOption.value = '';
-    emptyOption.textContent = 'Selecciona tu colegio...';
-    selectElement.appendChild(emptyOption);
-
-    // Agregar todas las opciones
-    options.forEach(option => {
-      const optElement = document.createElement('option');
-      optElement.value = option.value;
-      optElement.textContent = option.text;
-      selectElement.appendChild(optElement);
-    });
-
-    this.logger.info(`🏫 Select poblado con ${options.length} opciones de colegios`);
-  }
-
-  /**
-   * Inicializar Tom Select
-   * @private
-   */
-  _initializeTomSelect(selectElement, options) {
-    try {
-      // Destruir instancia existente si la hay
-      if (this.tomSelectInstance) {
-        this.tomSelectInstance.destroy();
-        this.tomSelectInstance = null;
-      }
-
-      // Marcar el campo como requerido para validación
-      selectElement.setAttribute('required', 'required');
-      selectElement.setAttribute('data-validation', 'required');
-
-      // Configuración de Tom Select
-      const config = {
-        // Permitir búsqueda
-        searchField: ['text'],
-        
-        // Configuración de búsqueda
-        score: function(search) {
-          const score = this.getScoreFunction(search);
-          return function(item) {
-            return score(item) * (1 + Math.min(item.text.toLowerCase().indexOf(search.toLowerCase()), 1));
-          };
-        },
-
-        // Placeholder
-        placeholder: 'Busca tu colegio...',
-        
-        // Permitir selección vacía
-        allowEmptyOption: true,
-        
-        // Sin creación de nuevas opciones
-        create: false,
-        
-        // Cargar todas las opciones
-        load: null,
-        
-        // Configuración de render
-        render: {
-          option: function(data, escape) {
-            return '<div class="college-option">' + 
-                   '<span class="college-name">' + escape(data.text) + '</span>' + 
-                   '</div>';
-          },
-          item: function(data, escape) {
-            return '<div class="college-selected">' + escape(data.text) + '</div>';
-          },
-          no_results: function(data, escape) {
-            return '<div class="no-results">No se encontraron colegios</div>';
-          }
-        }
-      };
-
-      // Inicializar Tom Select
-      this.tomSelectInstance = new TomSelect(selectElement, config);
-
-      // Configurar eventos
-      this._setupTomSelectEvents();
-
-      // Asegurar que el select original mantenga el valor para validación
-      this._syncSelectValue();
-
-      this.logger.info(`🏫 Tom Select inicializado con ${options.length} opciones de colegios (campo obligatorio)`);
-    } catch (error) {
-      this.logger.error("❌ Error inicializando Tom Select:", error);
-    }
-  }
-
-  /**
-   * Configurar eventos de Tom Select
-   * @private
-   */
-  _setupTomSelectEvents() {
-    if (!this.tomSelectInstance) return;
-
-    // Evento cuando se selecciona un colegio
-    this.tomSelectInstance.on('change', (value) => {
-      this.logger.info(`🏫 Colegio seleccionado: ${value}`);
-      
-      // Sincronizar valor con el select original para validación
-      this._syncSelectValue();
-      
-      // Limpiar errores de validación si existe una selección
-      if (value) {
-        this._clearValidationErrors();
-      }
-    });
-
-    // Evento cuando se limpia la selección
-    this.tomSelectInstance.on('clear', () => {
-      this.logger.info('🏫 Selección de colegio limpiada');
-      this._syncSelectValue();
-    });
-  }
-
-  /**
-   * Sincronizar valor entre Tom Select y el select original
-   * @private
-   */
-  _syncSelectValue() {
-    if (!this.tomSelectInstance) return;
-
-    const selectElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
-    if (selectElement) {
-      const tomSelectValue = this.tomSelectInstance.getValue();
-      selectElement.value = tomSelectValue;
-      
-      // Disparar evento change para que otros sistemas detecten el cambio
-      selectElement.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-
-  /**
-   * Limpiar errores de validación del campo
-   * @private
-   */
-  _clearValidationErrors() {
-    const selectElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
-    if (selectElement) {
-      // Remover clases de error
-      selectElement.classList.remove('error');
-      selectElement.parentElement?.classList.remove('error');
-      
-      // Remover mensajes de error
-      const errorMessage = selectElement.parentElement?.querySelector('.error-message');
-      if (errorMessage) {
-        errorMessage.remove();
-      }
-
-      // Limpiar error de Tom Select wrapper
-      const tsWrapper = selectElement.parentElement?.querySelector('.ts-wrapper');
-      if (tsWrapper) {
-        tsWrapper.classList.remove('error');
-      }
-    }
   }
 
   // ===============================
@@ -548,11 +316,9 @@ export class College {
     // Matching por palabras clave
     const jsonWords = jsonNormalized.split(/\s+/);
     const configWords = configNormalized.split(/\s+/);
-    
-    const commonWords = jsonWords.filter(word => 
-      configWords.some(configWord => 
-        word.includes(configWord) || configWord.includes(word)
-      )
+
+    const commonWords = jsonWords.filter((word) =>
+      configWords.some((configWord) => word.includes(configWord) || configWord.includes(word))
     );
 
     return commonWords.length >= Math.min(2, Math.min(jsonWords.length, configWords.length));
@@ -577,9 +343,11 @@ export class College {
     const jsonNormalized = normalizeCity(jsonCity);
     const configNormalized = normalizeCity(configCity);
 
-    return jsonNormalized === configNormalized || 
-           jsonNormalized.includes(configNormalized) || 
-           configNormalized.includes(jsonNormalized);
+    return (
+      jsonNormalized === configNormalized ||
+      jsonNormalized.includes(configNormalized) ||
+      configNormalized.includes(jsonNormalized)
+    );
   }
 
   /**
@@ -600,9 +368,11 @@ export class College {
     const jsonNormalized = normalizeCalendar(jsonCalendar);
     const configNormalized = normalizeCalendar(configCalendar);
 
-    return jsonNormalized === configNormalized ||
-           jsonNormalized.includes(configNormalized) ||
-           configNormalized.includes(jsonNormalized);
+    return (
+      jsonNormalized === configNormalized ||
+      jsonNormalized.includes(configNormalized) ||
+      configNormalized.includes(jsonNormalized)
+    );
   }
 
   // ===============================
@@ -615,18 +385,20 @@ export class College {
    */
   _setupTypeAttendeeListener() {
     this.logger.info("🏫 🎧 Configurando listener para tipo de asistente...");
-    
+
     const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
     if (!typeAttendeeElement) {
-      this.logger.warn(`❌ Campo tipo de asistente no encontrado. Selector: ${Constants.SELECTORS.TYPE_ATTENDEE}`);
+      this.logger.warn(
+        `❌ Campo tipo de asistente no encontrado. Selector: ${Constants.SELECTORS.TYPE_ATTENDEE}`
+      );
       return;
     }
 
     this.logger.info("✅ Campo tipo de asistente encontrado, agregando listener");
-    
-    typeAttendeeElement.addEventListener('change', (event) => {
+
+    typeAttendeeElement.addEventListener("change", (event) => {
       this.logger.info(`🏫 🔄 Cambio detectado en tipo de asistente: "${event.target.value}"`);
-      this._checkAndToggleCollegeVisibility();
+      this._checkAndToggleCollegeVisibility(event.target.value);
     });
   }
 
@@ -634,48 +406,32 @@ export class College {
    * Verificar y alternar visibilidad del campo colegio
    * @private
    */
-  _checkAndToggleCollegeVisibility() {
+  _checkAndToggleCollegeVisibility(selectedValue) {
     this.logger.info("🏫 Verificando visibilidad del campo colegio...");
-    
-    // Obtener valor del tipo de asistente desde múltiples fuentes
-    let selectedValue = "";
-    
-    // 1. Intentar obtener desde el state primero
-    const stateValue = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
-    if (stateValue) {
-      selectedValue = stateValue;
-      this.logger.info(`🏫 📊 Valor obtenido desde state: "${selectedValue}"`);
-    } else {
-      // 2. Si no está en state, obtener desde DOM
-      const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
-      if (typeAttendeeElement) {
-        selectedValue = typeAttendeeElement.value || "";
-        this.logger.info(`🏫 🌐 Valor obtenido desde DOM: "${selectedValue}"`);
-      } else {
-        this.logger.warn("⚠️ Elemento tipo de asistente no encontrado - ocultando campo colegio por defecto");
-        this._hideCollegeField();
-        return;
-      }
-    }
 
     // Lógica simple: solo los casos donde SÍ debe aparecer
-    const shouldShow = (selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador");
+    const shouldShow =
+      selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador";
 
-    this.logger.info(`🏫 Tipo de asistente detectado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`);
+    this.logger.info(
+      `🏫 Tipo de asistente detectado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`
+    );
 
     this.logger.info(`🏫 🔧 DECISIÓN: shouldShow=${shouldShow} para "${selectedValue}"`);
-    
+
     if (shouldShow) {
       this.logger.info("🏫 ✅ MOSTRANDO campo colegio (Aspirante o Docente)");
-      this._hideCollegeField(); // TEMPORALMENTE INTERCAMBIADO
+      this._populateCollegeField().catch((error) => {
+        this.logger.error("❌ Error poblando colegios:", error);
+      });
     } else {
       this.logger.info("🏫 ❌ OCULTANDO campo colegio (Padre, Visitante u otro)");
-      this._populateCollegeField().catch(error => {
-        this.logger.error("❌ Error poblando colegios:", error);
-      }); // TEMPORALMENTE INTERCAMBIADO
+      this._hideCollegeField();
     }
 
-    this.logger.info(`🏫 Campo colegio ${shouldShow ? 'mostrado' : 'oculto'} para tipo: "${selectedValue}"`);
+    this.logger.info(
+      `🏫 Campo colegio ${shouldShow ? "mostrado" : "oculto"} para tipo: "${selectedValue}"`
+    );
   }
 
   /**
@@ -685,17 +441,17 @@ export class College {
   _hideCollegeField() {
     this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, false);
     this._hideCollegeFieldInDOM();
-    
+
     // Limpiar el selector normal
     const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
     if (collegeElement) {
-      collegeElement.innerHTML = '';
-      collegeElement.value = '';
+      collegeElement.innerHTML = "";
+      collegeElement.value = "";
     }
-    
+
     // Limpiar también del state para que no se envíe al backend
-    this.state.updateField(Constants.FIELDS.COLLEGE, '');
-    
+    this.state.updateField(Constants.FIELDS.COLLEGE, "");
+
     this.logger.info("🏫 Selector de colegio limpiado y ocultado");
   }
 
@@ -711,7 +467,7 @@ export class College {
       // Como no es requerido, siempre es válido
       return true;
     } catch (error) {
-      this.logger?.warn('⚠️ Error validando campo colegio:', error);
+      this.logger?.warn("⚠️ Error validando campo colegio:", error);
       return true;
     }
   }
@@ -724,17 +480,20 @@ export class College {
     const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
     if (!collegeElement) return;
 
-    // Mostrar el campo y su contenedor
-    const fieldContainer = collegeElement.closest('.field') || collegeElement.parentElement;
-    if (fieldContainer) {
-      fieldContainer.style.display = '';
-      fieldContainer.classList.remove('hidden');
+    // Mostrar el contenedor de filtros y ocultar el select original
+    const filtersContainer = document.querySelector('.college-filters-container');
+    if (filtersContainer) {
+      filtersContainer.style.display = "block";
     }
-    
-    collegeElement.style.display = '';
-    collegeElement.removeAttribute('disabled');
-    collegeElement.setAttribute('required', 'required');
-    
+
+    // Mantener el select original oculto pero funcional para validación
+    collegeElement.style.display = "none";
+    collegeElement.removeAttribute("disabled");
+    collegeElement.setAttribute("required", "required");
+
+    // Limpiar errores previos
+    this._clearValidationErrors();
+
     this.logger.info("🏫 Campo colegio mostrado en DOM");
   }
 
@@ -746,19 +505,80 @@ export class College {
     const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
     if (!collegeElement) return;
 
-    // Ocultar el campo y su contenedor
-    const fieldContainer = collegeElement.closest('.field') || collegeElement.parentElement;
-    if (fieldContainer) {
-      fieldContainer.style.display = 'none';
-      fieldContainer.classList.add('hidden');
+    // Ocultar el contenedor de filtros
+    const filtersContainer = document.querySelector('.college-filters-container');
+    if (filtersContainer) {
+      filtersContainer.style.display = "none";
     }
-    
-    collegeElement.style.display = 'none';
-    collegeElement.setAttribute('disabled', 'disabled');
-    collegeElement.removeAttribute('required');
-    collegeElement.value = '';
-    
+
+    // Ocultar y limpiar el select original
+    collegeElement.style.display = "none";
+    collegeElement.setAttribute("disabled", "disabled");
+    collegeElement.removeAttribute("required");
+    collegeElement.value = "";
+
+    // Limpiar errores de validación
+    this._clearValidationErrors();
+
     this.logger.info("🏫 Campo colegio ocultado en DOM");
+  }
+
+  /**
+   * Limpiar errores de validación del campo colegio
+   * @private
+   */
+  _clearValidationErrors() {
+    const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+    if (!collegeElement) return;
+
+    // Quitar clase de error del select original
+    collegeElement.classList.remove('error');
+
+    // Ocultar mensaje de error del select original
+    const errorElement = document.querySelector('#error_school, [data-error-for="school"]');
+    if (errorElement) {
+      errorElement.style.display = 'none';
+      errorElement.style.opacity = '0';
+    }
+
+    // Limpiar errores del input de búsqueda
+    this._forceCleanSearchInput();
+  }
+
+  /**
+   * Forzar limpieza del input de búsqueda
+   * @private
+   */
+  _forceCleanSearchInput() {
+    const searchInput = document.getElementById('college-search-input');
+    if (!searchInput) return;
+
+    // Quitar todas las clases de error posibles
+    searchInput.classList.remove('error', 'invalid', 'required');
+    
+    // Buscar y ocultar todos los posibles mensajes de error
+    const possibleSelectors = [
+      '[data-error-for="college-search-input"]',
+      '#error_college-search-input',
+      '.error_text'
+    ];
+    
+    possibleSelectors.forEach(selector => {
+      const errorElements = document.querySelectorAll(selector);
+      errorElements.forEach(element => {
+        // Solo ocultar si está cerca del input de búsqueda
+        const searchContainer = searchInput.closest('.college-filters-container');
+        if (searchContainer && searchContainer.contains(element)) {
+          element.style.display = 'none';
+          element.style.opacity = '0';
+        }
+      });
+    });
+    
+    // Forzar que no sea validado
+    searchInput.removeAttribute('required');
+    searchInput.removeAttribute('data-validate');
+    searchInput.setAttribute('data-no-validate', 'true');
   }
 
   // ===============================
@@ -774,461 +594,403 @@ export class College {
       this.logger.info(`🏫 📋 Configurando selector normal con ${options.length} opciones`);
 
       // Limpiar opciones existentes
-      selectElement.innerHTML = '';
+      selectElement.innerHTML = "";
 
       // Agregar opción vacía
-      const emptyOption = document.createElement('option');
-      emptyOption.value = '';
-      emptyOption.textContent = 'Colegio de origen';
+      const emptyOption = document.createElement("option");
+      emptyOption.value = "";
+      emptyOption.textContent = "Colegio de origen";
       selectElement.appendChild(emptyOption);
 
       // Agregar todas las opciones
-      options.forEach(option => {
-        const optElement = document.createElement('option');
+      options.forEach((option) => {
+        const optElement = document.createElement("option");
         optElement.value = option.value;
         optElement.textContent = option.text;
         selectElement.appendChild(optElement);
       });
 
       // No marcar como requerido por ahora
-      selectElement.removeAttribute('required');
+      selectElement.removeAttribute("required");
 
       this.logger.info(`🏫 ✅ Selector normal configurado con ${options.length} colegios`);
-      
     } catch (error) {
-      this.logger.error('❌ Error configurando selector normal:', error);
+      this.logger.error("❌ Error configurando selector normal:", error);
       throw error;
     }
   }
 
   // ===============================
-  // MÉTODOS PRIVADOS - TOMSELECT MODULAR (DESACTIVADOS)
+  // MÉTODOS PRIVADOS - FILTROS AVANZADOS
   // ===============================
 
   /**
-   * Configurar TomSelect usando el módulo reutilizable
+   * Configurar filtros avanzados usando HTML existente
    * @private
    */
-  async _setupTomSelectModular(selectElement, options) {
-    try {
-      this.logger.info(`🎯 Configurando TomSelect modular con ${options.length} opciones`);
+  _setupAdvancedCollegeFilters() {
+    this.logger.info("🏫 🎛️ Configurando filtros avanzados de colegios...");
+    
+    // El HTML ya está en test.html, solo necesitamos inicializar la lógica
+    const filtersContainer = document.querySelector('.college-filters-container');
+    if (!filtersContainer) {
+      this.logger.warn("❌ Contenedor de filtros no encontrado en el HTML");
+      return;
+    }
 
-      // Configuración específica para colegios
-      const config = {
-        placeholder: 'Busca tu colegio...',
-        required: true,
-        searchEnabled: true,
-        clearable: true,
-        closeAfterSelect: true,
-        maxItems: 1
-      };
+    // Inicializar filtros
+    this._initializeFilters();
+    this._bindFilterEvents();
+    
+    // Forzar limpieza del input de búsqueda desde el inicio
+    this._forceCleanSearchInput();
+    
+    this.logger.info("🏫 ✅ Filtros avanzados configurados correctamente");
+  }
 
-      // Inicializar TomSelect
-      const instance = await this.tomSelect.initialize(selectElement, options, config);
-      
-      // Guardar referencia
-      this.tomSelectInstance = instance;
-      
-      // Configurar eventos adicionales específicos para colegios
-      instance.on('change', (value) => {
-        this.logger.info(`🏫 Colegio seleccionado: ${value}`);
-        this._syncSelectValue();
-        if (value) {
-          this._clearValidationErrors();
-        }
+  /**
+   * Inicializar opciones de filtros
+   * @private
+   */
+  _initializeFilters() {
+    this.logger.info("🏫 🔧 Inicializando opciones de filtros...");
+
+    // Obtener departamentos únicos de los colegios con nombres legibles
+    const departmentData = this._getDepartmentData();
+
+    // Poblar filtro de departamentos
+    const departmentFilter = document.getElementById('college-department-filter');
+    if (departmentFilter) {
+      departmentData.forEach(dept => {
+        const option = document.createElement('option');
+        option.value = dept.code;
+        option.textContent = dept.name;
+        departmentFilter.appendChild(option);
       });
-
-      instance.on('clear', () => {
-        this.logger.info('🏫 Selección de colegio limpiada');
-        this._syncSelectValue();
-      });
-
-      this.logger.info('✅ TomSelect modular configurado correctamente');
-      
-    } catch (error) {
-      this.logger.error('❌ Error configurando TomSelect modular:', error);
-      throw error;
     }
-  }
 
-  // ===============================
-  // MÉTODOS PRIVADOS - SCROLL INFINITO (LEGACY)
-  // ===============================
+    // Inicializar variables de filtro
+    this.selectedDepartment = '';
+    this.selectedCity = '';
+    this.searchTerm = '';
+    this.filteredColleges = [...this.allCollegesData];
+    this.selectedCollege = null;
 
-  /**
-   * Inicializar Tom Select con scroll infinito - VERSIÓN SIMPLE
-   * @private
-   */
-  _initializeTomSelectWithInfiniteScroll(selectElement) {
-    try {
-      // Destruir instancia existente si la hay
-      if (this.tomSelectInstance) {
-        this.tomSelectInstance.destroy();
-        this.tomSelectInstance = null;
-      }
-
-      this.logger.info(`🏫 🚀 Inicializando Tom Select SIMPLE con ${this.allCollegeOptions.length} colegios`);
-
-      // Variables de paginación
-      this.currentPage = 0;
-      this.itemsPerPage = 50;
-      this.isLoading = false;
-
-      // Marcar el campo como requerido
-      selectElement.setAttribute('required', 'required');
-      selectElement.setAttribute('data-validation', 'required');
-
-      // Configuración SIMPLE de Tom Select
-      const config = {
-        valueField: 'value',
-        labelField: 'text',
-        searchField: 'text',
-        placeholder: 'Busca tu colegio...',
-        
-        // Función de carga - SIMPLE
-        load: (query, callback) => {
-          this.logger.info(`🏫 📞 load() llamado con query: "${query}"`);
-          this._simpleLoad(query, callback);
-        },
-
-        render: {
-          option: function(data, escape) {
-            return '<div>' + escape(data.text) + '</div>';
-          },
-          item: function(data, escape) {
-            return '<div>' + escape(data.text) + '</div>';
-          },
-          loading: function() {
-            return '<div class="loading">Cargando...</div>';
-          }
-        },
-
-        // Configuración básica
-        create: false,
-        maxOptions: 50 // Límite inicial
-      };
-
-      // Inicializar Tom Select
-      this.tomSelectInstance = new TomSelect(selectElement, config);
-
-      // Configurar eventos básicos
-      this.tomSelectInstance.on('change', (value) => {
-        this.logger.info(`🏫 ✅ Seleccionado: ${value}`);
-        this._syncSelectValue();
-        if (value) this._clearValidationErrors();
-      });
-
-      // FORZAR carga inicial
-      setTimeout(() => {
-        this.logger.info('🏫 🔄 FORZANDO carga inicial...');
-        this.tomSelectInstance.load('');
-      }, 100);
-
-      this.logger.info('🏫 ✅ Tom Select inicializado');
-    } catch (error) {
-      this.logger.error("❌ Error inicializando Tom Select:", error);
-    }
+    this.logger.info(`🏫 📊 Filtros inicializados: ${departmentData.length} departamentos disponibles`);
   }
 
   /**
-   * Método de carga SIMPLE para Tom Select
+   * Obtener datos de departamentos con códigos y nombres legibles
    * @private
    */
-  _simpleLoad(query, callback) {
-    try {
-      this.logger.info(`🏫 📥 _simpleLoad ejecutándose - query: "${query}", página: ${this.currentPage}`);
-      
-      if (this.isLoading) {
-        this.logger.info('🏫 ⏳ Ya cargando, saltando...');
-        return;
-      }
-
-      this.isLoading = true;
-
-      // Simular un pequeño delay
-      setTimeout(() => {
-        let allOptions = this.allCollegeOptions || [];
-        this.logger.info(`🏫 📊 Total colegios disponibles: ${allOptions.length}`);
-
-        let filteredOptions = allOptions;
-
-        // Filtrar por búsqueda si hay query
-        if (query && query.trim().length > 0) {
-          const queryLower = query.trim().toLowerCase();
-          filteredOptions = allOptions.filter(option => 
-            option.text.toLowerCase().includes(queryLower)
-          );
-          this.logger.info(`🏫 🔍 Filtrado por "${query}": ${filteredOptions.length} resultados`);
-          
-          // Reset página para nueva búsqueda
-          this.currentPage = 0;
-        }
-
-        // Paginación simple
-        const start = this.currentPage * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        const pageResults = filteredOptions.slice(start, end);
-
-        this.logger.info(`🏫 📄 Página ${this.currentPage}: ${start}-${end}, devolviendo ${pageResults.length} elementos`);
-        this.logger.info(`🏫 📋 Primeros elementos:`, pageResults.slice(0, 3).map(o => o.text));
-
-        this.isLoading = false;
-        
-        // Devolver resultados
-        callback(pageResults);
-
-      }, 50);
-
-    } catch (error) {
-      this.logger.error('❌ Error en _simpleLoad:', error);
-      this.isLoading = false;
-      callback([]);
-    }
-  }
-
-  /**
-   * Cargar opciones de colegios con el patrón correcto de Tom Select
-   * @private
-   */
-  _loadCollegeOptionsCorrect(query, callback) {
-    try {
-      this.logger.info(`🏫 📄 Cargando opciones para query: "${query}"`);
-      
-      // Si estamos cargando, no hacer nada
-      if (this.isLoading) {
-        this.logger.info('🏫 ⏳ Ya está cargando, saltando...');
-        return;
-      }
-
-      this.isLoading = true;
-      
-      // Simular delay para mostrar loading (opcional)
-      setTimeout(() => {
-        let filteredOptions = this.allCollegeOptions;
-        
-        // Aplicar filtro de búsqueda si hay query
-        if (query && query.length > 0) {
-          const queryLower = query.toLowerCase();
-          filteredOptions = this.allCollegeOptions.filter(option => 
-            option.text.toLowerCase().includes(queryLower)
-          );
-          this.logger.info(`🏫 🔍 Filtrados por búsqueda: ${filteredOptions.length} colegios`);
-          
-          // Resetear paginación para nueva búsqueda
-          this.currentPage = 0;
-        }
-
-        // Calcular paginación
-        const startIndex = this.currentPage * this.itemsPerPage;
-        const endIndex = startIndex + this.itemsPerPage;
-        const pageOptions = filteredOptions.slice(startIndex, endIndex);
-
-        this.logger.info(`🏫 📄 Cargando página ${this.currentPage}: ${startIndex}-${endIndex} (${pageOptions.length} elementos)`);
-
-        // Actualizar estado
-        this.hasMore = endIndex < filteredOptions.length;
-        this.isLoading = false;
-
-        // Retornar opciones vía callback
-        callback(pageOptions);
-        
-      }, 100); // Pequeño delay para UX
-      
-    } catch (error) {
-      this.logger.error("❌ Error cargando opciones de colegios:", error);
-      this.isLoading = false;
-      callback([]);
-    }
-  }
-
-  /**
-   * Cargar opciones de colegios de manera diferida (método legacy)
-   * @private
-   */
-  _loadCollegeOptions(query, callback) {
-    try {
-      this.logger.info(`🏫 📄 Cargando opciones para query: "${query}" (página ${this.currentPage})`);
-      
-      let filteredOptions = this.allCollegeOptions;
-      
-      // Aplicar filtro de búsqueda si hay query
-      if (query && query.length > 0) {
-        const queryLower = query.toLowerCase();
-        filteredOptions = this.allCollegeOptions.filter(option => 
-          option.text.toLowerCase().includes(queryLower)
-        );
-        this.logger.info(`🏫 🔍 Filtrados por búsqueda: ${filteredOptions.length} colegios`);
-      }
-
-      // Calcular paginación
-      const startIndex = this.currentPage * this.itemsPerPage;
-      const endIndex = startIndex + this.itemsPerPage;
-      const pageOptions = filteredOptions.slice(startIndex, endIndex);
-
-      this.logger.info(`🏫 📄 Cargando página ${this.currentPage}: ${startIndex}-${endIndex} (${pageOptions.length} elementos)`);
-
-      // Incrementar página para la próxima carga
-      this.currentPage++;
-
-      // Retornar opciones vía callback
-      callback(pageOptions);
-      
-    } catch (error) {
-      this.logger.error("❌ Error cargando opciones de colegios:", error);
-      callback([]);
-    }
-  }
-
-  /**
-   * Configurar eventos de scroll infinito para Tom Select
-   * @private
-   */
-  _setupTomSelectInfiniteScrollEvents() {
-    if (!this.tomSelectInstance) return;
-
-    // Evento cuando se selecciona un colegio
-    this.tomSelectInstance.on('change', (value) => {
-      this.logger.info(`🏫 Colegio seleccionado: ${value}`);
-      this._syncSelectValue();
-      if (value) {
-        this._clearValidationErrors();
-      }
-    });
-
-    // Evento cuando se limpia la selección
-    this.tomSelectInstance.on('clear', () => {
-      this.logger.info('🏫 Selección de colegio limpiada');
-      this._syncSelectValue();
-    });
-
-    // Evento cuando se abre el dropdown
-    this.tomSelectInstance.on('dropdown_open', () => {
-      this.logger.info('🏫 Dropdown abierto');
-      this._setupScrollListener();
-    });
-
-    // Evento cuando se cierra el dropdown
-    this.tomSelectInstance.on('dropdown_close', () => {
-      this.logger.info('🏫 Dropdown cerrado');
-      this._removeScrollListener();
-    });
-
-    // Evento cuando cambia la búsqueda
-    this.tomSelectInstance.on('type', (query) => {
-      // Resetear paginación cuando cambia la búsqueda
-      this.currentPage = 0;
-      this.logger.info(`🏫 🔤 Búsqueda cambiada: "${query}" - reseteando paginación`);
-    });
-  }
-
-  /**
-   * Configurar scroll infinito manualmente
-   * @private
-   */
-  _setupInfiniteScrollManual() {
-    // Esperar a que Tom Select esté completamente inicializado
-    setTimeout(() => {
-      const dropdown = this.tomSelectInstance?.dropdown_content;
-      if (!dropdown) {
-        this.logger.warn('⚠️ Dropdown content no encontrado para scroll infinito');
-        return;
-      }
-
-      this.logger.info('🏫 🎯 Configurando scroll infinito manual');
-
-      const scrollHandler = () => {
-        // Verificar si estamos cerca del final del scroll
-        const { scrollTop, scrollHeight, clientHeight } = dropdown;
-        const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-        
-        if (scrollPercentage > 0.8 && this.hasMore && !this.isLoading) {
-          this.logger.info('🏫 📜 Scroll al 80% - cargando más opciones');
-          
-          // Incrementar página
-          this.currentPage++;
-          
-          // Obtener query actual
-          const currentQuery = this.tomSelectInstance.input.value || '';
-          
-          // Cargar más opciones
-          this._loadCollegeOptionsCorrect(currentQuery, (newOptions) => {
-            if (newOptions && newOptions.length > 0) {
-              // Agregar nuevas opciones a Tom Select
-              newOptions.forEach(option => {
-                this.tomSelectInstance.addOption(option);
-              });
-              this.logger.info(`🏫 ➕ Agregadas ${newOptions.length} opciones más`);
-            } else {
-              this.hasMore = false;
-              this.logger.info('🏫 🔚 No hay más opciones para cargar');
-            }
-          });
-        }
-      };
-
-      // Agregar listener de scroll
-      dropdown.addEventListener('scroll', scrollHandler);
-      
-      // Guardar referencia para limpieza
-      this.scrollHandler = scrollHandler;
-      this.dropdownElement = dropdown;
-      
-    }, 500); // Dar tiempo para que Tom Select se inicialice completamente
-  }
-
-  /**
-   * Configurar listener de scroll para carga infinita (método legacy)
-   * @private
-   */
-  _setupScrollListener() {
-    const dropdown = this.tomSelectInstance.dropdown;
-    if (!dropdown) return;
-
-    this.scrollListener = () => {
-      const scrollTop = dropdown.scrollTop;
-      const scrollHeight = dropdown.scrollHeight;
-      const clientHeight = dropdown.clientHeight;
-      
-      // Si está cerca del final (90% del scroll), cargar más opciones
-      if (scrollTop + clientHeight >= scrollHeight * 0.9) {
-        const currentQuery = this.tomSelectInstance.inputValue || '';
-        this.logger.info('🏫 📜 Scroll cerca del final - cargando más opciones');
-        this._loadCollegeOptions(currentQuery, (newOptions) => {
-          newOptions.forEach(option => {
-            if (!this.loadedItems.has(option.value)) {
-              this.tomSelectInstance.addOption(option);
-              this.loadedItems.add(option.value);
-            }
-          });
-        });
-      }
+  _getDepartmentData() {
+    // Mapa de códigos de departamento a nombres
+    const departmentMap = {
+      'AMA': 'Amazonas',
+      'ANT': 'Antioquia', 
+      'ARA': 'Arauca',
+      'ATL': 'Atlántico',
+      'BOG': 'Bogotá D.C.',
+      'BOL': 'Bolívar',
+      'BOY': 'Boyacá',
+      'CAL': 'Caldas',
+      'CAQ': 'Caquetá',
+      'CAS': 'Casanare',
+      'CAU': 'Cauca',
+      'CES': 'Cesar',
+      'CHO': 'Chocó',
+      'COR': 'Córdoba',
+      'CUN': 'Cundinamarca',
+      'GAI': 'Guainía',
+      'GAV': 'Guaviare',
+      'HUI': 'Huila',
+      'LAG': 'La Guajira',
+      'MAG': 'Magdalena',
+      'MET': 'Meta',
+      'NAR': 'Nariño',
+      'NSA': 'Norte de Santander',
+      'PUT': 'Putumayo',
+      'QUI': 'Quindío',
+      'RIS': 'Risaralda',
+      'SAN': 'Santander',
+      'SUC': 'Sucre',
+      'TOL': 'Tolima',
+      'VAC': 'Valle del Cauca',
+      'VAU': 'Vaupés',
+      'VIC': 'Vichada'
     };
 
-    dropdown.addEventListener('scroll', this.scrollListener);
+    // Obtener códigos únicos de departamentos de los colegios
+    const uniqueCodes = [...new Set(
+      this.allCollegesData
+        .map(college => college.SHIPPINGSTATE)
+        .filter(state => state && state.trim() !== '')
+    )];
+
+    // Mapear códigos a nombres y ordenar
+    return uniqueCodes
+      .map(code => ({
+        code: code,
+        name: departmentMap[code] || code // Si no está en el mapa, usar el código
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
   /**
-   * Limpiar scroll infinito manual
+   * Configurar eventos de filtros
    * @private
    */
-  _cleanupInfiniteScroll() {
-    if (this.dropdownElement && this.scrollHandler) {
-      this.dropdownElement.removeEventListener('scroll', this.scrollHandler);
-      this.scrollHandler = null;
-      this.dropdownElement = null;
-      this.logger.info('🏫 🧹 Scroll infinito limpiado');
+  _bindFilterEvents() {
+    this.logger.info("🏫 🎧 Configurando eventos de filtros...");
+
+    // Filtro por departamento
+    const departmentFilter = document.getElementById('college-department-filter');
+    departmentFilter?.addEventListener('change', (e) => {
+      this.selectedDepartment = e.target.value;
+      this._updateCityFilter();
+      this._applyFilters();
+    });
+
+    // Filtro por ciudad
+    const cityFilter = document.getElementById('college-city-filter');
+    cityFilter?.addEventListener('change', (e) => {
+      this.selectedCity = e.target.value;
+      this._applyFilters();
+    });
+
+    // Búsqueda por texto
+    const searchInput = document.getElementById('college-search-input');
+    searchInput?.addEventListener('input', (e) => {
+      this.searchTerm = e.target.value;
+      this._applyFilters();
+      
+      // Forzar limpieza de errores del input de búsqueda
+      this._forceCleanSearchInput();
+    });
+
+    // Botón para limpiar selección
+    const clearButton = document.getElementById('college-clear-selection');
+    clearButton?.addEventListener('click', () => {
+      this._clearSelection();
+    });
+
+    this.logger.info("🏫 ✅ Eventos de filtros configurados");
+  }
+
+  /**
+   * Actualizar filtro de ciudades según departamento seleccionado
+   * @private
+   */
+  _updateCityFilter() {
+    const cityFilter = document.getElementById('college-city-filter');
+    if (!cityFilter) return;
+
+    // Limpiar opciones de ciudad
+    cityFilter.innerHTML = '<option value="">Filtrar por Ciudad</option>';
+
+    if (!this.selectedDepartment) {
+      this.selectedCity = '';
+      return;
+    }
+
+    // Obtener ciudades del departamento seleccionado
+    const cities = [...new Set(
+      this.allCollegesData
+        .filter(college => college.SHIPPINGSTATE === this.selectedDepartment)
+        .map(college => college.SHIPPINGCITY)
+        .filter(city => city && city.trim() !== '')
+    )].sort();
+
+    // Poblar filtro de ciudades
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      cityFilter.appendChild(option);
+    });
+
+    // Auto-seleccionar primera ciudad si solo hay una
+    if (cities.length === 1) {
+      this.selectedCity = cities[0];
+      cityFilter.value = cities[0];
+    } else {
+      this.selectedCity = '';
+    }
+
+    this.logger.info(`🏫 🏙️ ${cities.length} ciudades actualizadas para ${this.selectedDepartment}`);
+  }
+
+  /**
+   * Aplicar filtros y mostrar resultados
+   * @private
+   */
+  _applyFilters() {
+    this.logger.info("🏫 🔍 Aplicando filtros...");
+
+    // Filtrar colegios
+    this.filteredColleges = this.allCollegesData.filter(college => {
+      // Filtro por departamento
+      if (this.selectedDepartment && college.SHIPPINGSTATE !== this.selectedDepartment) {
+        return false;
+      }
+
+      // Filtro por ciudad
+      if (this.selectedCity && college.SHIPPINGCITY !== this.selectedCity) {
+        return false;
+      }
+
+      // Filtro por texto
+      if (this.searchTerm) {
+        const searchLower = this.searchTerm.toLowerCase();
+        const collegeName = college.NAME.toLowerCase();
+        if (!collegeName.includes(searchLower)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    this._updateResultsList();
+    this.logger.info(`🏫 📊 ${this.filteredColleges.length} colegios filtrados`);
+  }
+
+  /**
+   * Actualizar lista de resultados
+   * @private
+   */
+  _updateResultsList() {
+    const resultsList = document.getElementById('college-results-list');
+    if (!resultsList) return;
+
+    // Limpiar lista
+    resultsList.innerHTML = '';
+
+    // Mostrar/ocultar lista según filtros aplicados
+    const showList = (this.selectedDepartment || this.selectedCity || this.searchTerm) && 
+                     this.filteredColleges.length > 0 && 
+                     !this.selectedCollege;
+
+    // Agregar/quitar clase show en lugar de estilo inline
+    if (showList) {
+      resultsList.classList.add('show');
+    } else {
+      resultsList.classList.remove('show');
+      return;
+    }
+
+    // Limitar resultados para performance (máximo 100)
+    const limitedResults = this.filteredColleges.slice(0, 100);
+
+    limitedResults.forEach(college => {
+      const li = document.createElement('li');
+      li.className = 'college-result-item';
+      
+      // Contenido simple - solo el nombre del colegio
+      li.textContent = college.NAME;
+
+      // Evento click
+      li.addEventListener('click', () => {
+        this._selectCollege(college);
+      });
+
+      resultsList.appendChild(li);
+    });
+
+    if (this.filteredColleges.length > 100) {
+      const moreItem = document.createElement('li');
+      moreItem.className = 'college-more-results';
+      moreItem.innerHTML = `
+        <span class="results-icon">📊</span> 
+        Mostrando 100 de ${this.filteredColleges.length} colegios. Refina tu búsqueda para ver menos resultados.
+      `;
+      resultsList.appendChild(moreItem);
     }
   }
 
   /**
-   * Remover listener de scroll (método legacy)
+   * Obtener nombre legible del departamento por código
    * @private
    */
-  _removeScrollListener() {
-    const dropdown = this.tomSelectInstance.dropdown;
-    if (dropdown && this.scrollListener) {
-      dropdown.removeEventListener('scroll', this.scrollListener);
-      this.scrollListener = null;
+  _getDepartmentName(code) {
+    const departmentData = this._getDepartmentData();
+    const dept = departmentData.find(d => d.code === code);
+    return dept ? dept.name : code;
+  }
+
+  /**
+   * Seleccionar un colegio
+   * @private
+   */
+  _selectCollege(college) {
+    this.selectedCollege = college;
+    
+    // Actualizar campo hidden
+    const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+    if (collegeElement) {
+      const collegeValue = college.PUJ_EXTERNALORGID__C || college.NAME;
+      
+      collegeElement.value = collegeValue;
+      this.state.updateField(Constants.FIELDS.COLLEGE, collegeValue);
+      this.logger.info(`🏫 ✅ Campo colegio actualizado con valor: ${collegeValue}`);
+      
+      // Limpiar errores de validación al seleccionar
+      this._clearValidationErrors();
     }
+
+    // Mostrar selección usando clases CSS
+    const selectedDisplay = document.getElementById('college-selected-display');
+    const selectedName = document.getElementById('college-selected-name');
+    if (selectedDisplay && selectedName) {
+      selectedName.textContent = college.NAME;
+      selectedDisplay.classList.add('show');
+    }
+
+    // Ocultar lista de resultados usando clases CSS
+    const resultsList = document.getElementById('college-results-list');
+    if (resultsList) {
+      resultsList.classList.remove('show');
+    }
+
+    this.logger.info(`🏫 ✅ Colegio seleccionado: ${college.NAME}`);
+  }
+
+  /**
+   * Limpiar selección actual
+   * @private
+   */
+  _clearSelection() {
+    this.selectedCollege = null;
+
+    // Limpiar campo
+    const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+    if (collegeElement) {
+      collegeElement.value = '';
+      this.state.updateField(Constants.FIELDS.COLLEGE, '');
+    }
+
+    // Ocultar display de selección usando clases CSS
+    const selectedDisplay = document.getElementById('college-selected-display');
+    if (selectedDisplay) {
+      selectedDisplay.classList.remove('show');
+    }
+
+    // Limpiar filtros
+    this.selectedDepartment = '';
+    this.selectedCity = '';
+    this.searchTerm = '';
+
+    const departmentFilter = document.getElementById('college-department-filter');
+    const cityFilter = document.getElementById('college-city-filter');
+    const searchInput = document.getElementById('college-search-input');
+
+    if (departmentFilter) departmentFilter.value = '';
+    if (cityFilter) cityFilter.value = '';
+    if (searchInput) searchInput.value = '';
+
+    this._updateCityFilter();
+    this._applyFilters();
+
+    this.logger.info("🏫 🧹 Selección y filtros limpiados");
   }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -1425,11 +1425,46 @@
             </select>
           </div>
 
-          <!-- Colegio -->
-          <div class="field">
-            <select name="school">
-              <option value="">Selecciona el colegio</option>
-            </select>
+          <!-- Colegio con filtros -->
+          <div class="college-filters-container" style="display: none">
+            <p>Selecciona tu colegio</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="college-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="college-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="college-search-input"
+                placeholder="Buscar colegio por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="college-results-list" class="college-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="college-selected-display" class="college-selected-display">
+              <span><strong>✓</strong> <span id="college-selected-name"></span></span>
+              <button type="button" id="college-clear-selection" class="college-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="college" value="" />
           </div>
 
           <!-- Nivel académico -->

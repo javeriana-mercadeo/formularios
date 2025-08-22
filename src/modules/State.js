@@ -524,7 +524,7 @@ export class State {
       [FIELDS.ADMISSION_PERIOD]: "",
 
       // Campos del evento
-      [FIELDS.TYPE_ATTENDEE]: "Aspirante",
+      [FIELDS.TYPE_ATTENDEE]: "",
       [FIELDS.ATTENDANCE_DAY]: "",
       [FIELDS.COLLEGE]: "",
       [FIELDS.UNIVERSITY]: "",

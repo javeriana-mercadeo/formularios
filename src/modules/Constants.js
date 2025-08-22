@@ -43,7 +43,7 @@ export class Constants {
     // Campos de evento
     TYPE_ATTENDEE: "type_attendee",
     ATTENDANCE_DAY: "attendance_day",
-    COLLEGE: "school",
+    COLLEGE: "college",
     UNIVERSITY: "university",
     DATA_AUTHORIZATION: "authorization_data",
 
@@ -640,6 +640,11 @@ export class Constants {
     SUBMIT: "submit",
     RESET: "reset",
   };
+
+  // IDs de campos que deben excluirse de la validación automática
+  static EXCLUDED_FIELD_IDS = [
+    "college-search-input", // Campo de búsqueda de colegios (solo filtro)
+  ];
 
   static THANK_YOU_PAGE = "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY";
 

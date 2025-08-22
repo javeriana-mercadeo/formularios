@@ -59,6 +59,13 @@ export class Validation {
         return false;
       }
 
+      // Excluir campos por ID definidos en constantes
+      if (Constants.EXCLUDED_FIELD_IDS.includes(field.id)) {
+        this.logger.debug(`⚪ Campo excluido por ID: ${field.id}`);
+
+        return false;
+      }
+
       // Excluir campos que no tienen name ni id
       if (!field.name && !field.id) {
         this.logger.debug(`⚪ Campo excluido sin name/id: ${field.tagName}`);
