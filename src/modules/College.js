@@ -658,18 +658,21 @@ export class College {
       }
     }
 
-    const shouldShow = selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador";
+    // Lógica simple: solo los casos donde SÍ debe aparecer
+    const shouldShow = (selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador");
 
     this.logger.info(`🏫 Tipo de asistente detectado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`);
 
+    this.logger.info(`🏫 🔧 DECISIÓN: shouldShow=${shouldShow} para "${selectedValue}"`);
+    
     if (shouldShow) {
-      this.logger.info("🏫 Iniciando población del campo colegio...");
+      this.logger.info("🏫 ✅ MOSTRANDO campo colegio (Aspirante o Docente)");
+      this._hideCollegeField(); // TEMPORALMENTE INTERCAMBIADO
+    } else {
+      this.logger.info("🏫 ❌ OCULTANDO campo colegio (Padre, Visitante u otro)");
       this._populateCollegeField().catch(error => {
         this.logger.error("❌ Error poblando colegios:", error);
-      });
-    } else {
-      this.logger.info("🏫 Ocultando campo colegio...");
-      this._hideCollegeField();
+      }); // TEMPORALMENTE INTERCAMBIADO
     }
 
     this.logger.info(`🏫 Campo colegio ${shouldShow ? 'mostrado' : 'oculto'} para tipo: "${selectedValue}"`);
@@ -689,6 +692,9 @@ export class College {
       collegeElement.innerHTML = '';
       collegeElement.value = '';
     }
+    
+    // Limpiar también del state para que no se envíe al backend
+    this.state.updateField(Constants.FIELDS.COLLEGE, '');
     
     this.logger.info("🏫 Selector de colegio limpiado y ocultado");
   }
