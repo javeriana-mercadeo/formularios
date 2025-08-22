@@ -1,6 +1,7 @@
 # 📋 Sistema Modular de Formularios PUJ
 
-Un sistema completo y modular para crear formularios de eventos con JavaScript y CSS modulares, optimizado para los formularios de eventos de la Pontificia Universidad Javeriana.
+Un sistema completo y modular para crear formularios de eventos con JavaScript y CSS modulares, optimizado para los formularios de eventos
+de la Pontificia Universidad Javeriana.
 
 ## 🏗️ Estructura del Proyecto
 
@@ -102,12 +103,12 @@ npm run build
     <script src="build/form-modules-script.js"></script>
     <script>
       // FormManager está disponible como variable global
-      const formManager = new FormModules("#form_inscription", {
-        eventName: "Mi Evento 2025",
-        eventDate: "15/03/2025",
-      });
+      const formManager = new FormModules('#form_inscription', {
+        eventName: 'Mi Evento 2025',
+        eventDate: '15/03/2025'
+      })
 
-      formManager.initialize();
+      formManager.initialize()
     </script>
   </body>
 </html>
@@ -116,31 +117,31 @@ npm run build
 ### 3. Uso Avanzado - Módulos ES6
 
 ```javascript
-import { FormManager } from "./src/modules/FormManager.js";
+import { FormManager } from './src/modules/FormManager.js'
 
-const formManager = new FormManager("#form_inscription", {
-  eventName: "Open Day 2025",
-  eventDate: "15/03/2025",
+const formManager = new FormManager('#form_inscription', {
+  eventName: 'Open Day 2025',
+  eventDate: '15/03/2025',
 
   // Tipos de asistente personalizados
-  typeAttendee: ["Aspirante", "Padre de familia", "Estudiante actual"],
+  typeAttendee: ['Aspirante', 'Padre de familia', 'Estudiante actual'],
 
   // Configuración de datos
   dataConfig: {
-    universitiesUrl: "./data/universidades.json",
-    programsUrl: "./data/programas.json",
-    locationsUrl: "./data/ubicaciones.json",
+    universitiesUrl: './data/universidades.json',
+    programsUrl: './data/programas.json',
+    locationsUrl: './data/ubicaciones.json'
   },
 
   // Configuración de logging
   logging: {
     enabled: true,
-    level: "info",
-  },
-});
+    level: 'info'
+  }
+})
 
 // Inicializar el formulario
-await formManager.initialize();
+await formManager.initialize()
 ```
 
 ## 🎨 Personalización de Estilos
@@ -193,7 +194,7 @@ Para evitar conflictos, usar clases con prefijo `fm-`:
 
 ```scss
 // Crear tema personalizado en un archivo .scss
-@import "src/styles/vars";
+@import 'src/styles/vars';
 
 :root {
   --form-modules-primary-color: #e91e63; // Rosa
@@ -212,74 +213,74 @@ Para evitar conflictos, usar clases con prefijo `fm-`:
 ```javascript
 const config = {
   // Información básica del evento
-  eventName: "Mi Evento",
-  eventDate: "15/03/2025",
-  university: "Pontificia Universidad Javeriana",
+  eventName: 'Mi Evento',
+  eventDate: '15/03/2025',
+  university: 'Pontificia Universidad Javeriana',
 
   // Tipos de asistente disponibles
-  typeAttendee: ["Aspirante", "Padre de familia", "Estudiante actual", "Egresado"],
+  typeAttendee: ['Aspirante', 'Padre de familia', 'Estudiante actual', 'Egresado'],
 
   // Configuración de datos JSON
   dataConfig: {
-    universitiesUrl: "./data/universidades.json",
-    programsUrl: "./data/programas.json",
-    locationsUrl: "./data/ubicaciones.json",
-    periodsUrl: "./data/periodos.json",
-    phoneCodesUrl: "./data/codigos_pais.json",
+    universitiesUrl: './data/universidades.json',
+    programsUrl: './data/programas.json',
+    locationsUrl: './data/ubicaciones.json',
+    periodsUrl: './data/periodos.json',
+    phoneCodesUrl: './data/codigos_pais.json'
   },
 
   // Configuración de logging y debugging
   logging: {
     enabled: true,
-    level: "info", // error, warn, info, debug
-    prefix: "FormManager",
+    level: 'info', // error, warn, info, debug
+    prefix: 'FormManager',
     showTimestamp: true,
-    showLevel: true,
+    showLevel: true
   },
 
   // Configuración de validación
   validation: {
     enabled: true,
     realTimeValidation: true,
-    showErrorMessages: true,
+    showErrorMessages: true
   },
 
   // Configuración de envío
   submission: {
-    endpoint: "https://api.salesforce.com/submit",
-    method: "POST",
+    endpoint: 'https://api.salesforce.com/submit',
+    method: 'POST',
     timeout: 10000,
-    retryAttempts: 3,
-  },
-};
+    retryAttempts: 3
+  }
+}
 
-const formManager = new FormManager("#form_inscription", config);
-await formManager.initialize();
+const formManager = new FormManager('#form_inscription', config)
+await formManager.initialize()
 ```
 
 ### Métodos Principales del FormManager
 
 ```javascript
 // Inicialización
-await formManager.initialize();
+await formManager.initialize()
 
 // Obtener datos del formulario
-const formData = formManager.getFormData();
+const formData = formManager.getFormData()
 
 // Validar formulario
-const isValid = formManager.validateForm();
+const isValid = formManager.validateForm()
 
 // Enviar formulario manualmente
-await formManager.submitForm();
+await formManager.submitForm()
 
 // Configurar callbacks
-formManager.onSubmitSuccess = (data) => {
-  console.log("Formulario enviado exitosamente:", data);
-};
+formManager.onSubmitSuccess = data => {
+  console.log('Formulario enviado exitosamente:', data)
+}
 
-formManager.onSubmitError = (error) => {
-  console.error("Error al enviar formulario:", error);
-};
+formManager.onSubmitError = error => {
+  console.error('Error al enviar formulario:', error)
+}
 ```
 
 ## 🎯 Funcionalidades Principales
@@ -388,17 +389,17 @@ npm run dev
 
 ```javascript
 // Obtener información del estado actual
-console.log("Estado del formulario:", formManager.getState());
-console.log("Configuración actual:", formManager.getConfig());
-console.log("Datos cargados:", formManager.getLoadedData());
-console.log("Errores de validación:", formManager.getValidationErrors());
+console.log('Estado del formulario:', formManager.getState())
+console.log('Configuración actual:', formManager.getConfig())
+console.log('Datos cargados:', formManager.getLoadedData())
+console.log('Errores de validación:', formManager.getValidationErrors())
 
 // Habilitar logging detallado
-formManager.setLogLevel("debug");
-formManager.enableLogging();
+formManager.setLogLevel('debug')
+formManager.enableLogging()
 
 // Verificar carga de módulos
-console.log("Módulos inicializados:", formManager.getInitializedModules());
+console.log('Módulos inicializados:', formManager.getInitializedModules())
 ```
 
 ### Problemas Comunes
@@ -407,15 +408,15 @@ console.log("Módulos inicializados:", formManager.getInitializedModules());
 
 ```javascript
 // Verificar que el selector existe
-const formElement = document.querySelector("#form_inscription");
+const formElement = document.querySelector('#form_inscription')
 if (!formElement) {
-  console.error("Elemento de formulario no encontrado");
+  console.error('Elemento de formulario no encontrado')
 }
 
 // Verificar que los archivos JSON se cargan correctamente
-formManager.onDataLoadError = (error) => {
-  console.error("Error cargando datos:", error);
-};
+formManager.onDataLoadError = error => {
+  console.error('Error cargando datos:', error)
+}
 ```
 
 #### 2. Estilos no se aplican
@@ -448,23 +449,23 @@ jsonlint data/universidades.json
 
 ```javascript
 // Configurar logging detallado
-const formManager = new FormManager("#form_inscription", {
+const formManager = new FormManager('#form_inscription', {
   logging: {
     enabled: true,
-    level: "debug",
+    level: 'debug',
     showTimestamp: true,
     showLevel: true,
-    prefix: "MyForm",
-  },
-});
+    prefix: 'MyForm'
+  }
+})
 
 // Escuchar eventos de logging
-formManager.onLogEntry = (entry) => {
-  if (entry.level === "error") {
+formManager.onLogEntry = entry => {
+  if (entry.level === 'error') {
     // Enviar error a servicio de monitoreo
-    console.error("Error crítico:", entry);
+    console.error('Error crítico:', entry)
   }
-};
+}
 ```
 
 ## 🎮 Ejemplos y Demos
@@ -518,16 +519,16 @@ Los formularios antiguos están disponibles en `/before-forms/` para referencia.
 
 ```javascript
 // Antes (formulario legacy)
-document.getElementById("submit-btn").addEventListener("click", function () {
+document.getElementById('submit-btn').addEventListener('click', function () {
   // código personalizado de validación y envío
-});
+})
 
 // Después (sistema modular)
-const formManager = new FormManager("#form_inscription", {
-  eventName: "Mi Evento",
+const formManager = new FormManager('#form_inscription', {
+  eventName: 'Mi Evento'
   // configuración automática de validación y envío
-});
-await formManager.initialize();
+})
+await formManager.initialize()
 ```
 
 ## 📋 Datos JSON

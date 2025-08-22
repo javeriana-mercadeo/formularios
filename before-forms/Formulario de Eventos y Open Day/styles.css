@@ -5,7 +5,8 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-body, html {
+body,
+html {
   height: 100%;
   width: 100%;
 }
@@ -25,7 +26,7 @@ body, html {
   padding: 30px;
   width: 100%;
   max-width: 427px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -127,7 +128,7 @@ body, html {
 .form-card input.error,
 .form-card select.error {
   border-bottom-color: var(--danger-500) !important;
-  background: rgba(var(--danger-rgb), .09) !important;
+  background: rgba(var(--danger-rgb), 0.09) !important;
 }
 
 /* Input Validated States */
@@ -172,7 +173,7 @@ body, html {
   padding: 0;
   margin: 10px 0;
   font-size: var(--font-size-paragraph, 0.875rem);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-card ul li {
@@ -221,7 +222,7 @@ body, html {
 }
 
 /* Radio buttons styling */
-.form-card input[type="radio"] {
+.form-card input[type='radio'] {
   margin-right: 8px;
   border: none;
   accent-color: #4d7fcb;
@@ -265,7 +266,7 @@ body, html {
     padding: 20px;
     min-height: 100vh;
   }
-  
+
   .form-card {
     width: 100%;
     max-width: 100%;
@@ -278,18 +279,18 @@ body, html {
   .container {
     padding: 15px;
   }
-  
+
   .form-card {
     padding: 15px;
     border-radius: 12px;
   }
-  
+
   .form-card input,
   .form-card select {
     font-size: 16px; /* Prevents zoom on iOS */
     padding: 12px 5px;
   }
-  
+
   .form-card button {
     padding: 15px;
     font-size: 16px;
@@ -319,7 +320,7 @@ body, html {
 }
 
 /* College search input */
-#colegio_section input[type="text"],
+#colegio_section input[type='text'],
 #searchTerm {
   width: 100% !important;
   box-sizing: border-box;
@@ -506,7 +507,7 @@ body, html {
 }
 
 /* Radio button styling */
-.radio-option input[type="radio"] {
+.radio-option input[type='radio'] {
   margin: 0;
   width: 16px;
   height: 16px;

@@ -74,7 +74,7 @@ a {
 
   // Estado deshabilitado
   &:disabled,
-  &[aria-disabled="true"] {
+  &[aria-disabled='true'] {
     color: var(--fm-text-disabled);
     cursor: not-allowed;
     pointer-events: none;
@@ -125,14 +125,6 @@ select {
 // ==========================================
 // ACCESSIBILITY & FOCUS MANAGEMENT
 // ==========================================
-
-// Focus visible mejorado para accesibilidad
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--fm-focus-ring-offset) var(--fm-surface-primary),
-    0 0 0 calc(var(--fm-focus-ring-width) + var(--fm-focus-ring-offset)) var(--fm-focus-ring-color);
-  border-radius: var(--fm-radius-sm);
-}
 
 // Reducir movimiento para usuarios con preferencias de accesibilidad
 @media (prefers-reduced-motion: reduce) {

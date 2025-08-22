@@ -3,75 +3,75 @@
  * Combina validación moderna con esquemas y compatibilidad legacy
  * @version 1.0
  */
-import { YupAdapter } from '../../integrations/yup/YupAdapter.js';
-import { Validation } from './ValidationLegacy.js';
-import { useValidationStore } from './stores/validation-store.js';
+import { YupAdapter } from '../../integrations/yup/YupAdapter.js'
+import { Validation } from './ValidationLegacy.js'
+import { useValidationStore } from './stores/validation-store.js'
 
 export class ValidationEngine {
   constructor(logger) {
-    this.logger = logger;
-    this.store = useValidationStore;
-    
+    this.logger = logger
+    this.store = useValidationStore
+
     // Adaptadores
-    this.yupAdapter = new YupAdapter(logger);
-    this.legacyValidator = new Validation({ logger }); // Backward compatibility
+    this.yupAdapter = new YupAdapter(logger)
+    this.legacyValidator = new Validation({ logger }) // Backward compatibility
   }
-  
+
   async validateField(fieldName, value, formData) {
     // 1. Marcar campo como touched
-    this.store.getState().markFieldTouched(fieldName);
-    
+    this.store.getState().markFieldTouched(fieldName)
+
     // 2. Actualizar valor en store
-    this.store.getState().updateField(fieldName, value);
-    
+    this.store.getState().updateField(fieldName, value)
+
     // 3. Validar con Yup (moderno)
-    const yupResult = await this.yupAdapter.validateField(fieldName, value, formData);
-    
+    const yupResult = await this.yupAdapter.validateField(fieldName, value, formData)
+
     // 4. Para validación individual, Yup es suficiente
     // Las validaciones legacy están optimizadas para formularios completos
     if (yupResult.isValid) {
-      this.store.getState().clearValidationError(fieldName);
+      this.store.getState().clearValidationError(fieldName)
     }
-    
-    return yupResult;
+
+    return yupResult
   }
-  
+
   async validateForm(formData) {
     // Validación completa con ambos sistemas
-    const yupResult = await this.yupAdapter.validateForm(formData);
-    
+    const yupResult = await this.yupAdapter.validateForm(formData)
+
     if (yupResult.isValid) {
       // Validaciones legacy adicionales
-      const legacyResult = this.legacyValidator.validateFormComplete(null, formData);
+      const legacyResult = this.legacyValidator.validateFormComplete(null, formData)
       if (!legacyResult.isValid) {
-        return legacyResult;
+        return legacyResult
       }
     }
-    
-    return yupResult;
+
+    return yupResult
   }
-  
+
   // Mantener compatibilidad con API existente
   validateFormComplete(formElement, formData) {
-    return this.legacyValidator.validateFormComplete(formElement, formData);
+    return this.legacyValidator.validateFormComplete(formElement, formData)
   }
-  
+
   // Getters para compatibilidad
   get isFormValid() {
-    return this.store.getState().isValid();
+    return this.store.getState().isValid()
   }
-  
+
   get formErrors() {
-    return this.store.getState().validationErrors;
+    return this.store.getState().validationErrors
   }
-  
+
   clearFieldError(fieldName) {
-    this.store.getState().clearValidationError(fieldName);
-    this.logger?.debug(`🧹 Error limpiado para campo: ${fieldName}`);
+    this.store.getState().clearValidationError(fieldName)
+    this.logger?.debug(`🧹 Error limpiado para campo: ${fieldName}`)
   }
-  
+
   clearAllErrors() {
-    this.store.getState().reset();
-    this.logger?.debug(`🧹 Todos los errores de validación limpiados`);
+    this.store.getState().reset()
+    this.logger?.debug(`🧹 Todos los errores de validación limpiados`)
   }
 }

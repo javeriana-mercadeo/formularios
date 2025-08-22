@@ -23,96 +23,94 @@
 
 // Estado de las pestañas activas
 window.activeTabs = {
-  advanced: "js",
-  programs: "js",
-  custom: "js",
-};
+  advanced: 'js',
+  programs: 'js',
+  custom: 'js'
+}
 
 // Función global para cambiar tabs de código
 window.showCodeTab = function (example, type) {
-  console.log(`Switching to ${type} tab for ${example}`);
+  console.log(`Switching to ${type} tab for ${example}`)
 
   // Actualizar tabs visuales - buscar por onclick exacto para ser más específico
-  const jsTab = document.querySelector(`button[onclick="showCodeTab('${example}', 'js')"]`);
-  const htmlTab = document.querySelector(`button[onclick="showCodeTab('${example}', 'html')"]`);
+  const jsTab = document.querySelector(`button[onclick="showCodeTab('${example}', 'js')"]`)
+  const htmlTab = document.querySelector(`button[onclick="showCodeTab('${example}', 'html')"]`)
 
   if (jsTab && htmlTab) {
     // Remover clase activa de ambas pestañas
-    jsTab.classList.remove("gh-code-tab-active");
-    htmlTab.classList.remove("gh-code-tab-active");
+    jsTab.classList.remove('gh-code-tab-active')
+    htmlTab.classList.remove('gh-code-tab-active')
 
     // Activar la pestaña seleccionada
-    if (type === "js") {
-      jsTab.classList.add("gh-code-tab-active");
-      console.log("Activated JS tab");
-    } else if (type === "html") {
-      htmlTab.classList.add("gh-code-tab-active");
-      console.log("Activated HTML tab");
+    if (type === 'js') {
+      jsTab.classList.add('gh-code-tab-active')
+      console.log('Activated JS tab')
+    } else if (type === 'html') {
+      htmlTab.classList.add('gh-code-tab-active')
+      console.log('Activated HTML tab')
     }
   } else {
-    console.log("Tabs not found for example:", example);
+    console.log('Tabs not found for example:', example)
   }
 
   // Ocultar todos los contenidos de código para este ejemplo
-  const jsContent = document.getElementById(`${example}-js-code`);
-  const htmlContent = document.getElementById(`${example}-html-code`);
+  const jsContent = document.getElementById(`${example}-js-code`)
+  const htmlContent = document.getElementById(`${example}-html-code`)
 
-  if (jsContent) jsContent.classList.add("gh-code-hidden");
-  if (htmlContent) htmlContent.classList.add("gh-code-hidden");
+  if (jsContent) jsContent.classList.add('gh-code-hidden')
+  if (htmlContent) htmlContent.classList.add('gh-code-hidden')
 
   // Mostrar el contenido seleccionado
-  const selectedContent = document.getElementById(`${example}-${type}-code`);
+  const selectedContent = document.getElementById(`${example}-${type}-code`)
   if (selectedContent) {
-    selectedContent.classList.remove("gh-code-hidden");
-    console.log(`Showing content for ${type}`);
+    selectedContent.classList.remove('gh-code-hidden')
+    console.log(`Showing content for ${type}`)
   }
 
   // Actualizar tab activo
-  if (!window.activeTabs) window.activeTabs = {};
-  window.activeTabs[example] = type;
-};
+  if (!window.activeTabs) window.activeTabs = {}
+  window.activeTabs[example] = type
+}
 
 /**
  * Copiar código del visor integrado
  */
 window.copyCode = function (example, buttonElement) {
   // Determinar qué pestaña está activa
-  const activeTab = document.querySelector(
-    `[onclick*="showCodeTab('${example}',"][class*="active"]`
-  );
-  let type = "js"; // default
+  const activeTab = document.querySelector(`[onclick*="showCodeTab('${example}',"][class*="active"]`)
+  let type = 'js' // default
 
   if (activeTab) {
-    const onclickAttr = activeTab.getAttribute("onclick");
-    if (onclickAttr.includes("'html'")) type = "html";
+    const onclickAttr = activeTab.getAttribute('onclick')
+    if (onclickAttr.includes("'html'")) type = 'html'
   }
 
   // Obtener el contenido del código
-  const codeElement = document.getElementById(`${example}-${type}-content`);
+  const codeElement = document.getElementById(`${example}-${type}-content`)
 
   if (codeElement) {
-    const text = codeElement.textContent;
+    const text = codeElement.textContent
     navigator.clipboard
       .writeText(text)
       .then(() => {
         // Mostrar feedback visual
-        const originalText = buttonElement.textContent;
-        buttonElement.textContent = "¡Copiado!";
-        buttonElement.style.backgroundColor = "#22c55e";
-        buttonElement.style.color = "white";
+        const originalText = buttonElement.textContent
+        buttonElement.textContent = '¡Copiado!'
+        buttonElement.style.backgroundColor = '#22c55e'
+        buttonElement.style.color = 'white'
 
         setTimeout(() => {
-          buttonElement.textContent = originalText;
-          buttonElement.style.backgroundColor = "";
-          buttonElement.style.color = "";
-        }, 2000);
+          buttonElement.textContent = originalText
+          buttonElement.style.backgroundColor = ''
+          buttonElement.style.color = ''
+        }, 2000)
       })
-      .catch((err) => {
-        console.error("Error al copiar:", err);
-        alert("Error al copiar el código");
-      });
+      .catch(err => {
+        console.error('Error al copiar:', err)
+        alert('Error al copiar el código')
+      })
   }
-};
+}
 
 // ============================================================================
 // 🎛️ CONTROLES DE FORMULARIO
@@ -123,95 +121,90 @@ window.copyCode = function (example, buttonElement) {
  */
 window.resetForm = function () {
   if (window.FORM_INSTANCE) {
-    window.FORM_INSTANCE.reset();
-    console.log("Formulario reseteado");
-    showToast("Formulario limpiado correctamente", "success");
+    window.FORM_INSTANCE.reset()
+    console.log('Formulario reseteado')
+    showToast('Formulario limpiado correctamente', 'success')
   }
-};
+}
 
 /**
  * Alternar modo debug
  */
 window.toggleDebugMode = function () {
   if (window.FORM_INSTANCE) {
-    const currentState = window.FORM_INSTANCE.getConfig().debugMode;
-    window.FORM_INSTANCE.setDebugMode(!currentState);
-    console.log(`Debug mode: ${!currentState ? "ON" : "OFF"}`);
-    showToast(`Modo debug ${!currentState ? "activado" : "desactivado"}`, "info");
+    const currentState = window.FORM_INSTANCE.getConfig().debugMode
+    window.FORM_INSTANCE.setDebugMode(!currentState)
+    console.log(`Debug mode: ${!currentState ? 'ON' : 'OFF'}`)
+    showToast(`Modo debug ${!currentState ? 'activado' : 'desactivado'}`, 'info')
   }
-};
+}
 
 /**
  * Alternar modo desarrollo
  */
 window.toggleDevMode = function () {
   if (window.FORM_INSTANCE) {
-    const currentState = window.FORM_INSTANCE.getConfig().devMode;
-    window.FORM_INSTANCE.setDevMode(!currentState);
-    console.log(`Dev mode: ${!currentState ? "ON" : "OFF"}`);
-    showToast(`Modo desarrollo ${!currentState ? "activado" : "desactivado"}`, "info");
+    const currentState = window.FORM_INSTANCE.getConfig().devMode
+    window.FORM_INSTANCE.setDevMode(!currentState)
+    console.log(`Dev mode: ${!currentState ? 'ON' : 'OFF'}`)
+    showToast(`Modo desarrollo ${!currentState ? 'activado' : 'desactivado'}`, 'info')
   }
-};
+}
 
 /**
  * Mostrar datos del formulario
  */
 window.showFormData = function () {
   if (window.FORM_INSTANCE) {
-    const data = window.FORM_INSTANCE.getFormData();
-    console.log("📊 Datos del formulario:", data);
+    const data = window.FORM_INSTANCE.getFormData()
+    console.log('📊 Datos del formulario:', data)
 
     // Mostrar en modal
-    const formattedData = JSON.stringify(data, null, 2);
+    const formattedData = JSON.stringify(data, null, 2)
     showModal(
-      "Datos del Formulario",
+      'Datos del Formulario',
       `<pre style="background: #f5f5f5; padding: 15px; border-radius: 8px; max-height: 400px; overflow-y: auto;"><code>${formattedData}</code></pre>`
-    );
+    )
   }
-};
+}
 
 /**
  * Mostrar logs del sistema
  */
 window.showLogs = function () {
   if (window.FORM_INSTANCE) {
-    const logs = window.FORM_INSTANCE.getLogs();
-    console.log("📋 Logs del sistema:", logs);
+    const logs = window.FORM_INSTANCE.getLogs()
+    console.log('📋 Logs del sistema:', logs)
 
     // Formatear logs para mostrar
     let logContent = logs
       .map(
-        (log) =>
-          `<div style="margin-bottom: 10px; padding: 8px; background: ${getLogLevelColor(
-            log.level
-          )}; border-radius: 4px;">
+        log =>
+          `<div style="margin-bottom: 10px; padding: 8px; background: ${getLogLevelColor(log.level)}; border-radius: 4px;">
         <strong>[${log.level.toUpperCase()}]</strong> ${log.timestamp} - ${log.message}
       </div>`
       )
-      .join("");
+      .join('')
 
-    if (logContent === "") {
-      logContent = "<p>No hay logs disponibles</p>";
+    if (logContent === '') {
+      logContent = '<p>No hay logs disponibles</p>'
     }
 
-    showModal(
-      "Logs del Sistema",
-      `<div style="max-height: 400px; overflow-y: auto;">${logContent}</div>`
-    );
+    showModal('Logs del Sistema', `<div style="max-height: 400px; overflow-y: auto;">${logContent}</div>`)
   }
-};
+}
 
 /**
  * Obtener color para nivel de log
  */
 function getLogLevelColor(level) {
   const colors = {
-    debug: "#e3f2fd",
-    info: "#e8f5e8",
-    warn: "#fff3cd",
-    error: "#f8d7da",
-  };
-  return colors[level] || "#f8f9fa";
+    debug: '#e3f2fd',
+    info: '#e8f5e8',
+    warn: '#fff3cd',
+    error: '#f8d7da'
+  }
+  return colors[level] || '#f8f9fa'
 }
 
 // ============================================================================
@@ -223,11 +216,11 @@ function getLogLevelColor(level) {
  */
 function showModal(title, content) {
   // Crear modal si no existe
-  let modal = document.getElementById("generic-modal");
+  let modal = document.getElementById('generic-modal')
   if (!modal) {
-    modal = document.createElement("div");
-    modal.id = "generic-modal";
-    modal.className = "gh-modal";
+    modal = document.createElement('div')
+    modal.id = 'generic-modal'
+    modal.className = 'gh-modal'
     modal.innerHTML = `
       <div class="gh-modal-content">
         <div class="gh-modal-header">
@@ -236,46 +229,46 @@ function showModal(title, content) {
         </div>
         <div class="gh-modal-body"></div>
       </div>
-    `;
-    document.body.appendChild(modal);
+    `
+    document.body.appendChild(modal)
   }
 
   // Actualizar contenido
-  modal.querySelector(".gh-modal-title").textContent = title;
-  modal.querySelector(".gh-modal-body").innerHTML = content;
+  modal.querySelector('.gh-modal-title').textContent = title
+  modal.querySelector('.gh-modal-body').innerHTML = content
 
   // Mostrar modal
-  modal.style.display = "flex";
+  modal.style.display = 'flex'
 
   // Cerrar con Escape
-  const closeHandler = (e) => {
-    if (e.key === "Escape") {
-      closeModal("generic-modal");
-      document.removeEventListener("keydown", closeHandler);
+  const closeHandler = e => {
+    if (e.key === 'Escape') {
+      closeModal('generic-modal')
+      document.removeEventListener('keydown', closeHandler)
     }
-  };
-  document.addEventListener("keydown", closeHandler);
+  }
+  document.addEventListener('keydown', closeHandler)
 }
 
 /**
  * Cerrar modal
  */
 window.closeModal = function (modalId) {
-  const modal = document.getElementById(modalId);
+  const modal = document.getElementById(modalId)
   if (modal) {
-    modal.style.display = "none";
+    modal.style.display = 'none'
   }
-};
+}
 
 /**
  * Mostrar toast notification
  */
-function showToast(message, type = "info") {
+function showToast(message, type = 'info') {
   // Crear container de toasts si no existe
-  let container = document.getElementById("toast-container");
+  let container = document.getElementById('toast-container')
   if (!container) {
-    container = document.createElement("div");
-    container.id = "toast-container";
+    container = document.createElement('div')
+    container.id = 'toast-container'
     container.style.cssText = `
       position: fixed;
       top: 20px;
@@ -284,13 +277,13 @@ function showToast(message, type = "info") {
       display: flex;
       flex-direction: column;
       gap: 10px;
-    `;
-    document.body.appendChild(container);
+    `
+    document.body.appendChild(container)
   }
 
   // Crear toast
-  const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
+  const toast = document.createElement('div')
+  toast.className = `toast toast-${type}`
   toast.style.cssText = `
     padding: 12px 20px;
     border-radius: 8px;
@@ -301,27 +294,27 @@ function showToast(message, type = "info") {
     transform: translateX(100%);
     transition: all 0.3s ease;
     ${getToastStyle(type)}
-  `;
-  toast.textContent = message;
+  `
+  toast.textContent = message
 
-  container.appendChild(toast);
+  container.appendChild(toast)
 
   // Animar entrada
   requestAnimationFrame(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "translateX(0)";
-  });
+    toast.style.opacity = '1'
+    toast.style.transform = 'translateX(0)'
+  })
 
   // Auto-remove después de 3 segundos
   setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = '0'
+    toast.style.transform = 'translateX(100%)'
     setTimeout(() => {
       if (toast.parentNode) {
-        toast.parentNode.removeChild(toast);
+        toast.parentNode.removeChild(toast)
       }
-    }, 300);
-  }, 3000);
+    }, 300)
+  }, 3000)
 }
 
 /**
@@ -329,12 +322,12 @@ function showToast(message, type = "info") {
  */
 function getToastStyle(type) {
   const styles = {
-    success: "background-color: #22c55e;",
-    error: "background-color: #ef4444;",
-    warning: "background-color: #f59e0b;",
-    info: "background-color: #3b82f6;",
-  };
-  return styles[type] || styles.info;
+    success: 'background-color: #22c55e;',
+    error: 'background-color: #ef4444;',
+    warning: 'background-color: #f59e0b;',
+    info: 'background-color: #3b82f6;'
+  }
+  return styles[type] || styles.info
 }
 
 // ============================================================================
@@ -346,8 +339,8 @@ window.formConfigs = {
   advanced: null, // Se asignará desde examples.js
   testPrograms: null,
   testLocations: null,
-  testLogging: null,
-};
+  testLogging: null
+}
 
 const templates = {
   basic: `
@@ -404,7 +397,7 @@ const academicConfig = {
 const academicForm = new FormManager("form_id", academicConfig);
 academicForm.init();`,
 
-  "custom-form": `
+  'custom-form': `
 // Configuración personalizada avanzada
 import { FormManager } from "./modules/FormManager.js";
 
@@ -455,7 +448,7 @@ const customConfig = {
 const customForm = new FormManager("form_id", customConfig);
 customForm.init();`,
 
-  "js-only": `
+  'js-only': `
 // Solo JavaScript - Para integrar en HTML existente
 import { FormManager } from "./modules/FormManager.js";
 
@@ -479,7 +472,7 @@ const config = {
 
 new FormManager("form_id", config).init();`,
 
-  "dev-config": `
+  'dev-config': `
 // Configuración optimizada para desarrollo
 import { FormManager } from "./modules/FormManager.js";
 
@@ -531,7 +524,7 @@ devForm.init().then(() => {
   window.showDevInfo = () => console.table(devForm.getFormData());
 });`,
 
-  "prod-config": `
+  'prod-config': `
 // Configuración optimizada para producción
 import { FormManager } from "./modules/FormManager.js";
 
@@ -587,11 +580,11 @@ const prodConfig = {
 const prodForm = new FormManager("form_id", prodConfig);
 prodForm.init().catch(error => {
   console.error("Error crítico inicializando formulario:", error);
-});`,
-};
+});`
+}
 
 // Exponer templates globalmente
-window.templates = templates;
+window.templates = templates
 
 // ============================================================================
 // 🚀 INICIALIZACIÓN DE LA PÁGINA
@@ -601,17 +594,17 @@ window.templates = templates;
  * Inicializar funcionalidades de la página
  */
 function initializePageFunctionality() {
-  console.log("🎨 Inicializando funcionalidades de la página de ejemplos");
+  console.log('🎨 Inicializando funcionalidades de la página de ejemplos')
 
   // Configurar event listeners globales
-  document.addEventListener("click", (e) => {
+  document.addEventListener('click', e => {
     // Cerrar modales al hacer click fuera
-    if (e.target.classList.contains("gh-modal")) {
-      e.target.style.display = "none";
+    if (e.target.classList.contains('gh-modal')) {
+      e.target.style.display = 'none'
     }
-  });
+  })
 
-  console.log("✅ Página de ejemplos inicializada");
+  console.log('✅ Página de ejemplos inicializada')
 }
 
 // ============================================================================
@@ -622,22 +615,22 @@ function initializePageFunctionality() {
  * Formatear JSON para mostrar
  */
 function formatJSON(obj) {
-  return JSON.stringify(obj, null, 2);
+  return JSON.stringify(obj, null, 2)
 }
 
 /**
  * Debounce function para optimizar eventos
  */
 function debounce(func, wait) {
-  let timeout;
+  let timeout
   return function executedFunction(...args) {
     const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+      clearTimeout(timeout)
+      func(...args)
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
 }
 
 // ============================================================================
@@ -645,10 +638,10 @@ function debounce(func, wait) {
 // ============================================================================
 
 // Inicializar cuando el DOM esté listo
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initializePageFunctionality);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializePageFunctionality)
 } else {
-  initializePageFunctionality();
+  initializePageFunctionality()
 }
 
 // Exportar funciones principales para uso externo
@@ -656,11 +649,11 @@ window.pageUtils = {
   showModal,
   showToast,
   formatJSON,
-  debounce,
-};
+  debounce
+}
 
 // ============================================================================
 // 📤 EXPORTACIONES
 // ============================================================================
 
-export { templates, showModal, showToast, formatJSON, debounce };
+export { templates, showModal, showToast, formatJSON, debounce }

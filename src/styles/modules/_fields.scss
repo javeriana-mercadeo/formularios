@@ -1,27 +1,26 @@
-// Campos de formulario
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="password"],
-input[type="url"],
-input[type="search"],
-input[type="number"] {
+// Campos de formulario - estilo underlined compacto
+input {
   width: 100%;
-  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
-  border: 0;
-  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
-  border-radius: var(--fm-input-border-radius);
-  background-color: var(--fm-input-background);
+  padding: var(--fm-space-2) var(--fm-space-1);
+  border: none;
+  border-bottom: 1px solid var(--fm-input-border-color);
+  border-radius: 0;
+  background: transparent;
   color: var(--fm-input-text-color);
+  font-size: var(--fm-font-size-sm);
+  font-weight: var(--fm-font-weight-normal);
+  line-height: 1.5;
+  box-sizing: border-box;
   outline: none;
-  appearance: none;
-  transition: var(--fm-transition-normal);
+  transition: border-bottom-color var(--fm-transition-normal);
 
   &:focus {
-    outline: none;
-    background-color: var(--fm-input-background);
-    border-bottom-width: var(--fm-input-border-width-focus);
     border-bottom-color: var(--fm-input-border-color-focus);
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
   }
 
   &:hover:not(:focus) {
@@ -30,325 +29,187 @@ input[type="number"] {
 
   &::placeholder {
     color: var(--fm-input-placeholder-color);
+    font-size: var(--fm-font-size-sm);
+    font-weight: var(--fm-font-weight-normal);
+  }
+
+  &:disabled {
+    color: var(--fm-text-disabled);
+    border-bottom-color: var(--fm-border-subtle);
+    background: transparent;
+    cursor: not-allowed;
   }
 }
 
 select {
   width: 100%;
+  padding: var(--fm-space-2) var(--fm-space-1);
+  padding-right: var(--fm-space-8);
+  border: none;
+  border-bottom: 1px solid var(--fm-input-border-color);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fm-input-text-color);
+  font-size: var(--fm-font-size-base);
+  font-weight: var(--fm-font-weight-normal);
+  line-height: var(--fm-line-height-normal);
   cursor: pointer;
   outline: none;
   appearance: none;
-  border: 0;
-  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
-  border-radius: var(--fm-input-border-radius);
-  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
-  padding-right: var(--fm-select-padding-right);
-  background-color: var(--fm-input-background);
-  color: var(--fm-input-text-color);
-  font-size: var(--fm-font-size-sm);
-  line-height: var(--fm-line-height-normal);
-  transition: var(--fm-transition-normal);
-
-  // Flecha personalizada
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23666666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.7rem center;
-  background-repeat: no-repeat;
-  background-size: 1.2em 1.2em;
+  transition: border-bottom-color var(--fm-transition-normal);
 
   &:hover:not(:focus) {
     border-bottom-color: var(--fm-input-border-color-hover);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23374151' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 
   &:focus {
-    outline: none;
-    background-color: var(--fm-input-background);
-    border-bottom-width: var(--fm-input-border-width-focus);
     border-bottom-color: var(--fm-input-border-color-focus);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    border-bottom-width: 2px;
+    outline: none;
   }
 
-  &.select-open {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14 12l-4-4-4 4'/%3e%3c/svg%3e");
-    border-bottom-width: var(--fm-input-border-width-focus);
-    border-bottom-color: var(--fm-input-border-color-focus);
+  &:focus-visible {
+    outline: none;
   }
 
   &:disabled {
     color: var(--fm-text-disabled);
     border-bottom-color: var(--fm-border-subtle);
     cursor: not-allowed;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  }
-
-  option {
-    color: var(--fm-text-primary);
-    background-color: var(--fm-surface-primary);
-    padding: var(--fm-space-2) var(--fm-space-3);
-    font-size: var(--fm-font-size-sm);
-
-    &:checked {
-      background-color: var(--fm-color-primary-50);
-      color: var(--fm-color-primary-700);
-    }
-
-    &:disabled {
-      color: var(--fm-text-disabled);
-      background-color: var(--fm-surface-disabled);
-    }
   }
 }
 
-// Select múltiple
-select[multiple] {
-  position: relative;
-  border: 0;
-  border-bottom: var(--fm-input-border-width) solid var(--fm-input-border-color);
-  border-radius: var(--fm-input-border-radius);
-  padding: var(--fm-input-padding-y) var(--fm-input-padding-x);
-  background-color: var(--fm-input-background);
-  color: var(--fm-input-text-color);
-  background-image: none;
-
-  &::before {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    height: 2px;
-    width: 0;
-    background-color: var(--fm-interactive-primary);
-    transition: var(--fm-transition-normal);
-    content: "";
-    transform: translateX(-50%);
-    z-index: 10;
-  }
+// Flecha para selects nativos
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--fm-space-1) center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
 
   &:focus {
-    outline: none;
-    border-radius: var(--fm-input-border-radius);
-    background-color: var(--fm-input-background);
-    border-bottom-color: transparent;
-
-    &::before {
-      width: 100%;
-    }
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233e72b9' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 }
 
-// Textarea
 textarea {
-  position: relative;
-  border: var(--fm-input-border-width) solid var(--fm-input-border-color);
-  border-radius: var(--fm-radius-md);
-  padding: var(--fm-space-3);
-  background-color: var(--fm-surface-primary);
+  width: 100%;
+  padding: var(--fm-space-2) var(--fm-space-1);
+  border: none;
+  border-bottom: 1px solid var(--fm-input-border-color);
+  border-radius: 0;
+  background: transparent;
   color: var(--fm-input-text-color);
-  resize: vertical;
+  font-size: var(--fm-font-size-base);
+  font-weight: var(--fm-font-weight-normal);
+  line-height: var(--fm-line-height-normal);
+  font-family: inherit;
   outline: none;
-  transition: var(--fm-transition-normal);
-
-  &::before {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    height: 2px;
-    width: 0;
-    background-color: var(--fm-interactive-primary);
-    transition: var(--fm-transition-normal);
-    content: "";
-    transform: translateX(-50%);
-    z-index: 10;
-  }
+  resize: vertical;
+  min-height: 4rem;
+  transition: border-bottom-color var(--fm-transition-normal);
 
   &:focus {
+    border-bottom-color: var(--fm-input-border-color-focus);
+    border-bottom-width: 2px;
     outline: none;
-    background-color: var(--fm-input-background);
-    border-bottom-color: transparent;
+  }
 
-    &::before {
-      width: 100%;
-    }
+  &:focus-visible {
+    outline: none;
   }
 
   &:hover:not(:focus) {
-    border-color: var(--fm-input-border-color-hover);
+    border-bottom-color: var(--fm-input-border-color-hover);
   }
 
   &::placeholder {
     color: var(--fm-input-placeholder-color);
-  }
-}
-
-// Radio buttons circulares
-input[type="radio"] {
-  appearance: none;
-  width: var(--fm-radio-size);
-  height: var(--fm-radio-size);
-  margin: 0;
-  border: var(--fm-radio-border-width) solid var(--fm-radio-border-color);
-  border-radius: 50%;
-  background-color: var(--fm-surface-primary);
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  box-sizing: border-box;
-  transition: var(--fm-transition-normal);
-
-  &:hover {
-    border-color: var(--fm-radio-border-color-hover);
-  }
-
-  &:checked {
-    border-color: var(--fm-radio-border-color-checked);
-    background-color: var(--fm-surface-primary);
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 6px;
-      height: 6px;
-      background-color: var(--fm-radio-dot-color);
-      border-radius: 50%;
-    }
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 var(--fm-focus-ring-width) var(--fm-focus-ring-color);
+    font-weight: var(--fm-font-weight-normal);
   }
 
   &:disabled {
-    border-color: var(--fm-border-subtle);
-    background-color: var(--fm-surface-disabled);
+    color: var(--fm-text-disabled);
+    border-bottom-color: var(--fm-border-subtle);
     cursor: not-allowed;
   }
 }
 
-// Checkbox
-input[type="checkbox"] {
-  width: var(--fm-checkbox-size);
-  height: var(--fm-checkbox-size);
-  border: var(--fm-checkbox-border-width) solid var(--fm-checkbox-border-color);
-  border-radius: var(--fm-checkbox-border-radius);
+// Radio buttons institucionales
+input[type='radio'] {
+  width: var(--fm-space-4);
+  height: var(--fm-space-4);
+  margin-right: var(--fm-space-2);
   accent-color: var(--fm-interactive-primary);
+  cursor: pointer;
 
-  &:checked {
-    border-color: var(--fm-interactive-primary);
-  }
-
-  &:focus {
+  &:focus-visible {
     outline: none;
-    box-shadow: none;
   }
 }
 
-// File input
-input[type="file"] {
-  border: var(--fm-file-border-width) var(--fm-file-border-style) var(--fm-input-border-color);
-  border-radius: var(--fm-radius-lg);
-  padding: var(--fm-file-padding);
-  font-size: var(--fm-font-size-sm);
+// Checkboxes institucionales
+input[type='checkbox'] {
+  width: var(--fm-space-4);
+  height: var(--fm-space-4);
+  margin-right: var(--fm-space-2);
+  accent-color: var(--fm-interactive-primary);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+// Labels con tipografía unificada
+label {
+  display: block;
+  color: var(--fm-text-primary);
+  font-size: var(--fm-font-size-base);
+  font-weight: var(--fm-font-weight-normal);
+  margin-bottom: var(--fm-space-1);
+  cursor: pointer;
+}
+
+// File inputs
+input[type='file'] {
+  width: 100%;
+  padding: var(--fm-space-2) var(--fm-space-1);
+  border: none;
+  border-bottom: 1px solid var(--fm-input-border-color);
+  background: transparent;
+  color: var(--fm-input-text-color);
+  font-size: var(--fm-font-size-base);
+  font-weight: var(--fm-font-weight-normal);
+  cursor: pointer;
+  transition: border-bottom-color var(--fm-transition-normal);
+
+  &:focus {
+    border-bottom-color: var(--fm-input-border-color-focus);
+    border-bottom-width: 2px;
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:hover:not(:focus) {
+    border-bottom-color: var(--fm-input-border-color-hover);
+  }
 
   &::file-selector-button {
-    margin-right: var(--fm-space-4);
-    padding: var(--fm-space-2) var(--fm-space-4);
-    border-radius: var(--fm-radius-full);
-    border: 0;
+    background: var(--fm-interactive-primary);
+    color: var(--fm-text-on-primary);
+    border: none;
+    border-radius: var(--fm-radius-base);
+    padding: var(--fm-space-1) var(--fm-space-3);
+    margin-right: var(--fm-space-2);
     font-size: var(--fm-font-size-sm);
-    font-weight: var(--fm-font-weight-medium);
     cursor: pointer;
-    background-color: var(--fm-file-button-background);
-    color: var(--fm-file-button-color);
-
-    &:hover {
-      background-color: var(--fm-file-button-background-hover);
-    }
+    transition: background-color var(--fm-transition-fast);
   }
 
-  &:hover {
-    border-color: var(--fm-input-border-color-hover);
+  &::file-selector-button:hover {
+    background: var(--fm-interactive-primary-hover);
   }
-
-  &:focus {
-    border-color: var(--fm-interactive-primary);
-    outline: none;
-  }
-}
-
-// Labels
-label {
-  font-size: var(--fm-font-size-sm);
-  color: var(--fm-text-primary);
-  margin-bottom: var(--fm-space-2);
-  cursor: pointer;
-  transition: var(--fm-transition-fast);
-
-  &:hover {
-    color: var(--fm-interactive-primary);
-  }
-
-  &.required::after {
-    color: var(--fm-text-error);
-    font-weight: var(--fm-font-weight-semibold);
-    content: " *";
-  }
-}
-
-// Estados de error
-input.error,
-select.error {
-  border-radius: var(--fm-input-border-radius);
-  appearance: none;
-  border-color: var(--fm-input-border-color-error);
-  background-color: var(--fm-color-error-50);
-
-  &:focus {
-    border-radius: var(--fm-input-border-radius);
-    border-color: var(--fm-input-border-color-error);
-    background-color: var(--fm-color-error-50);
-  }
-}
-
-// Estados validados
-input.validated,
-select.validated {
-  border-radius: var(--fm-input-border-radius);
-  appearance: none;
-  border-color: var(--fm-input-border-color-success);
-  background-color: var(--fm-color-success-50);
-
-  &:focus {
-    border-radius: var(--fm-input-border-radius);
-    border-color: var(--fm-input-border-color-success);
-    background-color: var(--fm-color-success-50);
-  }
-}
-
-// Label con error
-label.error {
-  color: var(--fm-text-error);
-}
-
-// Ocultar spinners en number inputs
-input[type="number"] {
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    appearance: none;
-    margin: 0;
-  }
-
-  &[type="number"] {
-    -moz-appearance: textfield;
-  }
-}
-
-// Focus global
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
 }

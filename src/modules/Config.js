@@ -8,13 +8,13 @@ export class Config {
   constructor({ config = {}, selector }) {
     const defaultConfig = {
       // DATOS DE EVENTO
-      retUrl: "https://cloud.cx.javeriana.edu.co/EVENTOS_TKY",
-      debugEmail: "",
+      retUrl: 'https://cloud.cx.javeriana.edu.co/EVENTOS_TKY',
+      debugEmail: '',
 
       // CAMPOS OCULTOS
-      authorizationSource: "",
-      requestOrigin: "",
-      leadSource: "Landing Pages",
+      authorizationSource: '',
+      requestOrigin: '',
+      leadSource: 'Landing Pages',
 
       // FILTROS
       // Ubicaciones
@@ -28,26 +28,20 @@ export class Config {
       programs: [],
 
       // Datos del evento
-      typeAttendee: [
-        "Aspirante",
-        "Padre de familia y/o acudiente",
-        "Docente y/o psicoorientador",
-        "Visitante PUJ",
-        "Administrativo PUJ",
-      ],
+      typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Docente y/o psicoorientador', 'Visitante PUJ', 'Administrativo PUJ'],
       attendanceDays: [],
       colleges: [],
       universities: [],
       companies: [],
 
       // UTMs
-      source: "",
-      subSource: "",
-      medium: "",
-      campaign: "",
-      article: "",
-      eventName: "",
-      eventDate: "", // Formato: DD/MM/YYYY HH:mm AM/PM
+      source: '',
+      subSource: '',
+      medium: '',
+      campaign: '',
+      article: '',
+      eventName: '',
+      eventDate: '', // Formato: DD/MM/YYYY HH:mm AM/PM
 
       // CONFIGURACIONES
       test: false,
@@ -56,46 +50,45 @@ export class Config {
 
       cache: {
         enabled: false,
-        expirationHours: 12,
+        expirationHours: 12
       },
 
       // URLs
       urls: {
-        locations: "",
-        prefixes: "",
-        programs: "",
-        periods: "",
+        locations: '',
+        prefixes: '',
+        programs: '',
+        periods: ''
       },
 
-      privacyPolicyUrl:
-        "https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html",
+      privacyPolicyUrl: 'https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html',
 
       // LOGGING
       logging: {
-        prefix: `${selector} | ${config.eventName || ""}` || "form-manager",
+        prefix: `${selector} | ${config.eventName || ''}` || 'form-manager',
         enabled: false,
-        level: "info",
+        level: 'info',
         showTimestamp: true,
-        showLevel: true,
+        showLevel: true
       },
 
       // UI
       ui: {
         selector: selector,
 
-        errorClass: "error",
-        validClass: "validated",
-        errorTextClass: "error_text",
-        hiddenClass: "fm-hidden",
+        errorClass: 'error',
+        validClass: 'validated',
+        errorTextClass: 'error_text',
+        hiddenClass: 'fm-hidden',
 
         // Configuración de animaciones
         animationDuration: 300,
         enableAnimations: true,
 
         // Configuración de mensajes
-        loadingText: "Cargando...",
-        successText: "Enviado correctamente",
-        errorText: "Error al procesar",
+        loadingText: 'Cargando...',
+        successText: 'Enviado correctamente',
+        errorText: 'Error al procesar'
       },
 
       // CALLBACKS
@@ -103,12 +96,12 @@ export class Config {
         onFormLoad: null,
         onFormSubmit: null,
         onFieldChange: null,
-        onValidationError: null,
-      },
-    };
+        onValidationError: null
+      }
+    }
 
-    this.config = this.deepMerge(structuredClone(defaultConfig), config);
-    this.selector = selector;
+    this.config = this.deepMerge(structuredClone(defaultConfig), config)
+    this.selector = selector
   }
 
   /**
@@ -118,13 +111,13 @@ export class Config {
    * */
   deepMerge(target, source) {
     for (const key in source) {
-      if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
-        target[key] = this.deepMerge(target[key] || {}, source[key]);
+      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        target[key] = this.deepMerge(target[key] || {}, source[key])
       } else {
-        target[key] = source[key];
+        target[key] = source[key]
       }
     }
-    return target;
+    return target
   }
 
   // ===============================
@@ -135,41 +128,41 @@ export class Config {
    * Obtener configuración completa
    */
   getConfig() {
-    return this.config;
+    return this.config
   }
 
   /**
    * Obtener configuración de logging
    */
   getLoggingConfig() {
-    return this.config.logging;
+    return this.config.logging
   }
 
   getUiConfig() {
-    return this.config.ui;
+    return this.config.ui
   }
 
   /**
    * Actualizar configuración
    */
   updateConfig(newConfig) {
-    this.config = this.deepMerge(this.config, newConfig);
-    return this.config;
+    this.config = this.deepMerge(this.config, newConfig)
+    return this.config
   }
 
   /**
    * Obtener configuración específica por clave
    */
   get(key) {
-    return this.config[key];
+    return this.config[key]
   }
 
   /**
    * Establecer configuración específica
    */
   set(key, value) {
-    this.config[key] = value;
-    return this.config[key];
+    this.config[key] = value
+    return this.config[key]
   }
 
   /**
@@ -177,6 +170,6 @@ export class Config {
    * @returns {string} - Selector del formulario
    */
   getSelector() {
-    return this.selector;
+    return this.selector
   }
 }

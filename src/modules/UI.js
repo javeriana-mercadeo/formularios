@@ -13,16 +13,16 @@
 export class Ui {
   constructor({ config = {}, logger = null } = {}) {
     // Configuración por defecto
-    this.config = config;
-    this.logger = logger;
+    this.config = config
+    this.logger = logger
 
     // Buscar el elemento del formulario usando selector CSS
-    const formElement = document.querySelector(this.config.selector);
+    const formElement = document.querySelector(this.config.selector)
     if (!formElement && this.logger) {
-      this.logger.warn(`⚠️ No se encontró el elemento con selector: ${this.config.selector}`);
+      this.logger.warn(`⚠️ No se encontró el elemento con selector: ${this.config.selector}`)
     }
 
-    this.formContext = formElement || document;
+    this.formContext = formElement || document
   }
 
   /**
@@ -30,7 +30,7 @@ export class Ui {
    * @returns {HTMLElement} - Elemento del formulario o document si no hay contexto
    */
   getFormContext() {
-    return this.formContext;
+    return this.formContext
   }
 
   /**
@@ -40,24 +40,24 @@ export class Ui {
    * @param {string} content - Contenido de texto
    * @returns {HTMLElement} - Elemento creado
    */
-  createElement(tag, attributes = {}, content = "") {
-    const element = document.createElement(tag);
+  createElement(tag, attributes = {}, content = '') {
+    const element = document.createElement(tag)
 
     Object.entries(attributes).forEach(([key, value]) => {
-      if (key === "className") {
-        element.className = value;
-      } else if (key === "innerHTML") {
-        element.innerHTML = value;
+      if (key === 'className') {
+        element.className = value
+      } else if (key === 'innerHTML') {
+        element.innerHTML = value
       } else {
-        element.setAttribute(key, value);
+        element.setAttribute(key, value)
       }
-    });
+    })
 
     if (content) {
-      element.textContent = content;
+      element.textContent = content
     }
 
-    return element;
+    return element
   }
 
   /**
@@ -68,11 +68,11 @@ export class Ui {
    */
   findElement(selector, context = null) {
     try {
-      const searchContext = context || this.formContext;
-      return searchContext.querySelector(selector);
+      const searchContext = context || this.formContext
+      return searchContext.querySelector(selector)
     } catch (error) {
-      this.logger.error(`Error al buscar elemento: ${selector}`, error);
-      return null;
+      this.logger.error(`Error al buscar elemento: ${selector}`, error)
+      return null
     }
   }
 
@@ -84,11 +84,11 @@ export class Ui {
    */
   findElements(selector, context = null) {
     try {
-      const searchContext = context || this.formContext;
-      return searchContext.querySelectorAll(selector);
+      const searchContext = context || this.formContext
+      return searchContext.querySelectorAll(selector)
     } catch (error) {
-      this.logger.error(`Error al buscar elementos: ${selector}`, error);
-      return [];
+      this.logger.error(`Error al buscar elementos: ${selector}`, error)
+      return []
     }
   }
 
@@ -99,19 +99,19 @@ export class Ui {
    */
   checkElementExists(selector) {
     if (!selector) {
-      this.logger.warn(`Selector no definido para: ${selector}`);
-      return { exists: false, element: null, selector: null };
+      this.logger.warn(`Selector no definido para: ${selector}`)
+      return { exists: false, element: null, selector: null }
     }
 
-    const element = this.findElement(selector);
-    const exists = !!element;
+    const element = this.findElement(selector)
+    const exists = !!element
 
     if (!exists) {
-      this.logger.debug(`Elemento no encontrado en DOM para: ${selector}`);
-      return { exists: false, element: null, selector: null };
+      this.logger.debug(`Elemento no encontrado en DOM para: ${selector}`)
+      return { exists: false, element: null, selector: null }
     }
 
-    return { exists, element, selector };
+    return { exists, element, selector }
   }
 
   /**
@@ -121,7 +121,7 @@ export class Ui {
    * @returns {HTMLElement|null} - Elemento encontrado o null
    */
   scopedQuery(selector) {
-    return this.findElement(selector);
+    return this.findElement(selector)
   }
 
   /**
@@ -130,7 +130,7 @@ export class Ui {
    * @returns {NodeList} - Lista de elementos encontrados
    */
   scopedQueryAll(selector) {
-    return this.findElements(selector);
+    return this.findElements(selector)
   }
 
   /**
@@ -138,7 +138,7 @@ export class Ui {
    * @returns {boolean} - True si hay un contexto específico configurado
    */
   hasValidFormContext() {
-    return this.formContext && this.formContext !== document;
+    return this.formContext && this.formContext !== document
   }
 
   /**
@@ -147,9 +147,7 @@ export class Ui {
    */
   _logContextWarning(method) {
     if (!this.hasValidFormContext()) {
-      this.logger.warn(
-        `⚠️ Método ${method} ejecutado sin contexto específico de formulario. Esto puede afectar múltiples instancias.`
-      );
+      this.logger.warn(`⚠️ Método ${method} ejecutado sin contexto específico de formulario. Esto puede afectar múltiples instancias.`)
     }
   }
 
@@ -159,18 +157,15 @@ export class Ui {
    * @returns {string} - Valor del campo
    */
   getFieldValue(elementOrSelector) {
-    this._logContextWarning("getFieldValue");
-    const element =
-      typeof elementOrSelector === "string"
-        ? this.scopedQuery(elementOrSelector)
-        : elementOrSelector;
+    this._logContextWarning('getFieldValue')
+    const element = typeof elementOrSelector === 'string' ? this.scopedQuery(elementOrSelector) : elementOrSelector
 
     if (!element) {
-      this.logger.warn(`Campo no encontrado para obtener valor: ${elementOrSelector}`);
-      return "";
+      this.logger.warn(`Campo no encontrado para obtener valor: ${elementOrSelector}`)
+      return ''
     }
 
-    return element.value || "";
+    return element.value || ''
   }
 
   /**
@@ -180,24 +175,19 @@ export class Ui {
    * @returns {boolean} - True si se estableció correctamente
    */
   setFieldValue(elementOrSelector, value) {
-    this._logContextWarning("setFieldValue");
-    const element =
-      typeof elementOrSelector === "string"
-        ? this.scopedQuery(elementOrSelector)
-        : elementOrSelector;
+    this._logContextWarning('setFieldValue')
+    const element = typeof elementOrSelector === 'string' ? this.scopedQuery(elementOrSelector) : elementOrSelector
 
     if (!element) {
-      this.logger.warn(`Campo no encontrado para establecer valor: ${elementOrSelector}`);
-      return false;
+      this.logger.warn(`Campo no encontrado para establecer valor: ${elementOrSelector}`)
+      return false
     }
 
-    const oldValue = element.value;
-    element.value = value;
+    const oldValue = element.value
+    element.value = value
 
-    this.logger.debug(
-      `Campo ${element.name || element.id || "sin-nombre"}: "${oldValue}" → "${value}"`
-    );
-    return true;
+    this.logger.debug(`Campo ${element.name || element.id || 'sin-nombre'}: "${oldValue}" → "${value}"`)
+    return true
   }
 
   /**
@@ -206,18 +196,15 @@ export class Ui {
    * @returns {string} - Texto del elemento
    */
   getFieldText(elementOrSelector) {
-    this._logContextWarning("getFieldText");
-    const element =
-      typeof elementOrSelector === "string"
-        ? this.scopedQuery(elementOrSelector)
-        : elementOrSelector;
+    this._logContextWarning('getFieldText')
+    const element = typeof elementOrSelector === 'string' ? this.scopedQuery(elementOrSelector) : elementOrSelector
 
     if (!element) {
-      this.logger.warn(`Elemento no encontrado para obtener texto: ${elementOrSelector}`);
-      return "";
+      this.logger.warn(`Elemento no encontrado para obtener texto: ${elementOrSelector}`)
+      return ''
     }
 
-    return element.textContent || "";
+    return element.textContent || ''
   }
 
   /**
@@ -227,24 +214,19 @@ export class Ui {
    * @returns {boolean} - True si se estableció correctamente
    */
   setFieldText(elementOrSelector, text) {
-    this._logContextWarning("setFieldText");
-    const element =
-      typeof elementOrSelector === "string"
-        ? this.scopedQuery(elementOrSelector)
-        : elementOrSelector;
+    this._logContextWarning('setFieldText')
+    const element = typeof elementOrSelector === 'string' ? this.scopedQuery(elementOrSelector) : elementOrSelector
 
     if (!element) {
-      this.logger.warn(`Elemento no encontrado para establecer texto: ${elementOrSelector}`);
-      return false;
+      this.logger.warn(`Elemento no encontrado para establecer texto: ${elementOrSelector}`)
+      return false
     }
 
-    const oldText = element.textContent;
-    element.textContent = text;
+    const oldText = element.textContent
+    element.textContent = text
 
-    this.logger.debug(
-      `Texto de elemento ${element.id || element.tagName}: "${oldText}" → "${text}"`
-    );
-    return true;
+    this.logger.debug(`Texto de elemento ${element.id || element.tagName}: "${oldText}" → "${text}"`)
+    return true
   }
 
   /**
@@ -253,22 +235,15 @@ export class Ui {
    * @returns {boolean} - True si el elemento es visible
    */
   isElementVisible(elementOrSelector) {
-    this._logContextWarning("isElementVisible");
-    const element =
-      typeof elementOrSelector === "string"
-        ? this.scopedQuery(elementOrSelector)
-        : elementOrSelector;
+    this._logContextWarning('isElementVisible')
+    const element = typeof elementOrSelector === 'string' ? this.scopedQuery(elementOrSelector) : elementOrSelector
 
     if (!element) {
-      return false;
+      return false
     }
 
-    const computedStyle = window.getComputedStyle(element);
-    return (
-      computedStyle.display !== "none" &&
-      computedStyle.visibility !== "hidden" &&
-      element.offsetParent !== null
-    );
+    const computedStyle = window.getComputedStyle(element)
+    return computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden' && element.offsetParent !== null
   }
 
   /**
@@ -276,19 +251,19 @@ export class Ui {
    * @param {HTMLElement} element - Elemento a mostrar
    * @param {string} display - Tipo de display CSS
    */
-  showElement(element, display = "block") {
-    if (!element) return;
+  showElement(element, display = 'block') {
+    if (!element) return
 
-    element.style.display = display;
-    element.classList.remove(this.config.hiddenClass);
+    element.style.display = display
+    element.classList.remove(this.config.hiddenClass)
 
     if (this.config.enableAnimations) {
-      element.style.opacity = "0";
-      element.style.transition = `opacity ${this.config.animationDuration}ms`;
+      element.style.opacity = '0'
+      element.style.transition = `opacity ${this.config.animationDuration}ms`
 
       setTimeout(() => {
-        element.style.opacity = "1";
-      }, 10);
+        element.style.opacity = '1'
+      }, 10)
     }
   }
 
@@ -297,19 +272,19 @@ export class Ui {
    * @param {HTMLElement} element - Elemento a ocultar
    */
   hideElement(element) {
-    if (!element) return;
+    if (!element) return
 
     if (this.config.enableAnimations) {
-      element.style.transition = `opacity ${this.config.animationDuration}ms`;
-      element.style.opacity = "0";
+      element.style.transition = `opacity ${this.config.animationDuration}ms`
+      element.style.opacity = '0'
 
       setTimeout(() => {
-        element.style.display = "none";
-        element.classList.add(this.config.hiddenClass);
-      }, this.config.animationDuration);
+        element.style.display = 'none'
+        element.classList.add(this.config.hiddenClass)
+      }, this.config.animationDuration)
     } else {
-      element.style.display = "none";
-      element.classList.add(this.config.hiddenClass);
+      element.style.display = 'none'
+      element.classList.add(this.config.hiddenClass)
     }
   }
 
@@ -319,19 +294,18 @@ export class Ui {
    * @param {boolean|null} show - Forzar mostrar/ocultar
    */
   toggleElement(element, show = null) {
-    if (!element) return;
+    if (!element) return
 
-    const isHidden =
-      element.style.display === "none" || element.classList.contains(this.config.hiddenClass);
+    const isHidden = element.style.display === 'none' || element.classList.contains(this.config.hiddenClass)
 
     if (show === null) {
-      show = isHidden;
+      show = isHidden
     }
 
     if (show) {
-      this.showElement(element);
+      this.showElement(element)
     } else {
-      this.hideElement(element);
+      this.hideElement(element)
     }
   }
 
@@ -348,105 +322,104 @@ export class Ui {
   populateSelect({ selector, options, priorityItems = null, autoHide = true }) {
     // Validación básica (el módulo que llama debe validar los datos)
     if (!Array.isArray(options) || options.length === 0) {
-      this.logger.error("Array de opciones inválido o vacío para el selector:", selector);
-      return;
+      this.logger.error('Array de opciones inválido o vacío para el selector:', selector)
+      return
     }
 
-    const selectElement = typeof selector === "string" ? this.findElement(selector) : selector;
+    const selectElement = typeof selector === 'string' ? this.findElement(selector) : selector
 
     if (!selectElement) {
-      this.logger.error(`No se encontró el elemento select con selector: ${selector}`);
-      return;
+      this.logger.error(`No se encontró el elemento select con selector: ${selector}`)
+      return
     }
 
     // Limpiar opciones existentes (excepto la primera que suele ser el placeholder)
-    const firstOption = selectElement.querySelector("option");
-    selectElement.innerHTML = "";
+    const firstOption = selectElement.querySelector('option')
+    selectElement.innerHTML = ''
 
-    if (firstOption) selectElement.appendChild(firstOption);
+    if (firstOption) selectElement.appendChild(firstOption)
 
     // Separar opciones prioritarias y normales
-    const priorityOptions = [];
-    const normalOptions = [];
+    const priorityOptions = []
+    const normalOptions = []
 
-    options.forEach((option) => {
-      let optionValue, optionText;
+    options.forEach(option => {
+      let optionValue, optionText
 
-      if (typeof option === "string") {
-        optionValue = option;
-        optionText = option;
-      } else if (typeof option === "object" && option !== null) {
-        optionValue = option.value;
-        optionText = option.text;
+      if (typeof option === 'string') {
+        optionValue = option
+        optionText = option
+      } else if (typeof option === 'object' && option !== null) {
+        optionValue = option.value
+        optionText = option.text
       }
 
       // Evitar valores undefined o null
       if (!optionValue && !optionText) {
-        this.logger.warn(`Saltando opción con valor inválido:`, { option });
-        return; // Saltar esta opción
+        this.logger.warn(`Saltando opción con valor inválido:`, { option })
+        return // Saltar esta opción
       }
 
       // Verificar si esta opción es prioritaria
       const isPriority =
         priorityItems &&
-        typeof priorityItems === "string" &&
-        (optionText.toLowerCase() === priorityItems.toLowerCase() ||
-          optionValue.toString().toLowerCase() === priorityItems.toLowerCase());
+        typeof priorityItems === 'string' &&
+        (optionText.toLowerCase() === priorityItems.toLowerCase() || optionValue.toString().toLowerCase() === priorityItems.toLowerCase())
 
       if (isPriority) {
-        priorityOptions.push(option);
+        priorityOptions.push(option)
       } else {
-        normalOptions.push(option);
+        normalOptions.push(option)
       }
-    });
+    })
 
     // Agregar opciones prioritarias primero
-    let addedCount = 0;
+    let addedCount = 0
 
     priorityOptions.forEach((option, index) => {
-      const optionElement = this.createElement("option");
+      const optionElement = this.createElement('option')
 
-      if (typeof option === "string") {
-        optionElement.value = option;
-        optionElement.textContent = option;
-      } else if (typeof option === "object") {
-        const value = option.value;
-        const text = option.text;
+      if (typeof option === 'string') {
+        optionElement.value = option
+        optionElement.textContent = option
+      } else if (typeof option === 'object') {
+        const value = option.value
+        const text = option.text
 
-        optionElement.value = value;
-        optionElement.textContent = text;
+        optionElement.value = value
+        optionElement.textContent = text
         // Destacar opciones prioritarias
-        optionElement.style.fontWeight = "bold";
+        optionElement.style.fontWeight = 'bold'
       }
 
-      selectElement.appendChild(optionElement);
-      addedCount++;
-    });
+      selectElement.appendChild(optionElement)
+      addedCount++
+    })
 
     normalOptions.forEach((option, index) => {
-      const optionElement = this.createElement("option");
+      const optionElement = this.createElement('option')
 
-      if (typeof option === "string") {
-        optionElement.value = option;
-        optionElement.textContent = option;
-      } else if (typeof option === "object") {
-        const value = option.value;
-        const text = option.text;
+      if (typeof option === 'string') {
+        optionElement.value = option
+        optionElement.textContent = option
+      } else if (typeof option === 'object') {
+        const value = option.value
+        const text = option.text
 
-        optionElement.value = value;
-        optionElement.textContent = text;
+        optionElement.value = value
+        optionElement.textContent = text
       }
 
-      selectElement.appendChild(optionElement);
-      addedCount++;
-    });
+      selectElement.appendChild(optionElement)
+      addedCount++
+    })
 
     // Auto-ocultar y preseleccionar si solo hay una opción válida
     if (autoHide) {
-      this.autoHideAndSelectSingleOption(selectElement);
+      this.autoHideAndSelectSingleOption(selectElement)
     }
 
-    this.logger.debug(`${addedCount} opciones agregadas a ${selector}`);
+    this.logger.debug(`${addedCount} opciones agregadas a ${selector}`)
   }
 
   /**
@@ -454,36 +427,32 @@ export class Ui {
    * @param {HTMLElement} selectElement - Elemento select
    */
   autoHideAndSelectSingleOption(selectElement) {
-    if (!selectElement) return;
+    if (!selectElement) return
 
     // Contar opciones válidas (excluyendo placeholder vacío)
-    const validOptions = Array.from(selectElement.options).filter(
-      (option) => option.value && option.value.trim() !== ""
-    );
+    const validOptions = Array.from(selectElement.options).filter(option => option.value && option.value.trim() !== '')
 
     if (validOptions.length === 1) {
-      const singleOption = validOptions[0];
+      const singleOption = validOptions[0]
 
       // Preseleccionar la única opción
-      selectElement.value = singleOption.value;
+      selectElement.value = singleOption.value
 
       // Ocultar el select
-      this.hideElement(selectElement);
+      this.hideElement(selectElement)
 
       // Marcar como auto-oculto para referencia
-      selectElement.dataset.autoHidden = "true";
+      selectElement.dataset.autoHidden = 'true'
 
-      this.logger.info(
-        `Select auto-ocultado y preseleccionado: ${singleOption.textContent} (${singleOption.value})`
-      );
+      this.logger.info(`Select auto-ocultado y preseleccionado: ${singleOption.textContent} (${singleOption.value})`)
 
       // Disparar evento change para que otros módulos sepan del cambio
-      const changeEvent = new Event("change", { bubbles: true });
-      selectElement.dispatchEvent(changeEvent);
+      const changeEvent = new Event('change', { bubbles: true })
+      selectElement.dispatchEvent(changeEvent)
     } else {
       // Mostrar el select si tiene múltiples opciones
-      this.showElement(selectElement);
-      selectElement.dataset.autoHidden = "false";
+      this.showElement(selectElement)
+      selectElement.dataset.autoHidden = 'false'
     }
   }
 
@@ -495,24 +464,24 @@ export class Ui {
    * @param {string} id - ID opcional del campo
    * @returns {HTMLElement|null} - Campo creado
    */
-  addHiddenField(formElement, name, value = "", info = "") {
-    if (!formElement) return null;
+  addHiddenField(formElement, name, value = '', info = '') {
+    if (!formElement) return null
 
     // Verificar si ya existe
-    let hiddenField = formElement.querySelector(`input[name="${name}"]`);
+    let hiddenField = formElement.querySelector(`input[name="${name}"]`)
 
     if (!hiddenField) {
-      hiddenField = this.createElement("input", {
-        type: "hidden",
+      hiddenField = this.createElement('input', {
+        type: 'hidden',
         name: name,
-        info: info,
-      });
+        info: info
+      })
 
-      formElement.appendChild(hiddenField);
+      formElement.appendChild(hiddenField)
     }
 
-    hiddenField.value = value;
-    return hiddenField;
+    hiddenField.value = value
+    return hiddenField
   }
 
   /**
@@ -523,15 +492,14 @@ export class Ui {
    * @returns {boolean} - True si se estableció correctamente
    */
   setHiddenFieldValue(formElement, name, value) {
-    const field =
-      formElement.querySelector(`input[name="${name}"]`) || formElement.querySelector(`#${name}`);
+    const field = formElement.querySelector(`input[name="${name}"]`) || formElement.querySelector(`#${name}`)
 
     if (field) {
-      field.value = value;
-      return true;
+      field.value = value
+      return true
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -541,43 +509,42 @@ export class Ui {
    */
   showFieldError(fieldElement, message) {
     if (!fieldElement) {
-      this.logger.warn("🚫 [UI] showFieldError: fieldElement es null");
-      return;
+      this.logger.warn('🚫 [UI] showFieldError: fieldElement es null')
+      return
     }
 
-    const fieldId = fieldElement.id || fieldElement.name;
-    this.logger.info(`🔴 [UI] MOSTRANDO ERROR para ${fieldId}: "${message}"`);
+    const fieldId = fieldElement.id || fieldElement.name
+    this.logger.info(`🔴 [UI] MOSTRANDO ERROR para ${fieldId}: "${message}"`)
 
-    let errorElement =
-      this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
+    let errorElement = this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`)
 
     // Crear elemento de error si no existe
     if (!errorElement) {
-      this.logger.debug(`📝 Creando elemento de error para: ${fieldId}`);
-      errorElement = this.createErrorElement(fieldElement);
+      this.logger.debug(`📝 Creando elemento de error para: ${fieldId}`)
+      errorElement = this.createErrorElement(fieldElement)
     }
 
     // Marcar campo como error
-    fieldElement.classList.add(this.config.errorClass);
-    fieldElement.classList.remove(this.config.validClass);
-    this.logger.debug(`✅ Clases de error aplicadas a: ${fieldId}`);
+    fieldElement.classList.add(this.config.errorClass)
+    fieldElement.classList.remove(this.config.validClass)
+    this.logger.debug(`✅ Clases de error aplicadas a: ${fieldId}`)
 
     // Mostrar mensaje de error
     if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.style.display = "block";
-      this.logger.debug(`💬 Mensaje de error mostrado: ${fieldId} -> ${message}`);
+      errorElement.textContent = message
+      errorElement.style.display = 'block'
+      this.logger.debug(`💬 Mensaje de error mostrado: ${fieldId} -> ${message}`)
 
       if (this.config.enableAnimations) {
-        errorElement.style.opacity = "0";
-        errorElement.style.transition = `opacity ${this.config.animationDuration}ms`;
+        errorElement.style.opacity = '0'
+        errorElement.style.transition = `opacity ${this.config.animationDuration}ms`
 
         setTimeout(() => {
-          errorElement.style.opacity = "1";
-        }, 10);
+          errorElement.style.opacity = '1'
+        }, 10)
       }
     } else {
-      this.logger.warn(`⚠️ No se pudo crear elemento de error para: ${fieldId}`);
+      this.logger.warn(`⚠️ No se pudo crear elemento de error para: ${fieldId}`)
     }
   }
 
@@ -586,12 +553,12 @@ export class Ui {
    * @param {string} message - Mensaje de error a mostrar
    */
   showGeneralError(message) {
-    let errorContainer = this.formContext.querySelector(".form-general-error");
+    let errorContainer = this.formContext.querySelector('.form-general-error')
 
     // Crear contenedor de error general si no existe
     if (!errorContainer) {
-      errorContainer = document.createElement("div");
-      errorContainer.className = "form-general-error error_text";
+      errorContainer = document.createElement('div')
+      errorContainer.className = 'form-general-error error_text'
       errorContainer.style.cssText = `
         background-color: #f8d7da;
         color: #721c24;
@@ -600,55 +567,55 @@ export class Ui {
         border-radius: 4px;
         margin-bottom: 15px;
         display: none;
-      `;
+      `
 
       // Insertar al inicio del formulario
-      const content = this.formContext.querySelector(".form-content") || this.formContext;
-      content.insertAdjacentElement("afterbegin", errorContainer);
-      this.logger.debug("🆕 Contenedor de error general creado y agregado al formulario");
+      const content = this.formContext.querySelector('.form-content') || this.formContext
+      content.insertAdjacentElement('afterbegin', errorContainer)
+      this.logger.debug('🆕 Contenedor de error general creado y agregado al formulario')
     }
 
     // Mostrar el mensaje
-    errorContainer.textContent = message;
-    errorContainer.style.display = "block";
+    errorContainer.textContent = message
+    errorContainer.style.display = 'block'
 
     // Animación si está habilitada
     if (this.config.enableAnimations) {
-      errorContainer.style.opacity = "0";
-      errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`;
+      errorContainer.style.opacity = '0'
+      errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`
 
       setTimeout(() => {
-        errorContainer.style.opacity = "1";
-      }, 10);
+        errorContainer.style.opacity = '1'
+      }, 10)
     }
 
     // Desplazar hasta el error
-    errorContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+    errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
     // Auto-ocultar después de 10 segundos
     setTimeout(() => {
-      this.hideGeneralError();
-    }, 10000);
+      this.hideGeneralError()
+    }, 10000)
 
-    this.logger.debug("Mensaje de error general mostrado:", message);
+    this.logger.debug('Mensaje de error general mostrado:', message)
   }
 
   /**
    * Ocultar mensaje de error general del formulario
    */
   hideGeneralError() {
-    const errorContainer = this.formContext.querySelector(".form-general-error");
+    const errorContainer = this.formContext.querySelector('.form-general-error')
 
     if (errorContainer) {
       if (this.config.enableAnimations) {
-        errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`;
-        errorContainer.style.opacity = "0";
+        errorContainer.style.transition = `opacity ${this.config.animationDuration}ms`
+        errorContainer.style.opacity = '0'
 
         setTimeout(() => {
-          errorContainer.style.display = "none";
-        }, this.config.animationDuration);
+          errorContainer.style.display = 'none'
+        }, this.config.animationDuration)
       } else {
-        errorContainer.style.display = "none";
+        errorContainer.style.display = 'none'
       }
     }
   }
@@ -660,48 +627,48 @@ export class Ui {
    */
   createErrorElement(fieldElement) {
     if (!fieldElement) {
-      this.logger.debug("🚫 createErrorElement: fieldElement es null");
-      return null;
+      this.logger.debug('🚫 createErrorElement: fieldElement es null')
+      return null
     }
 
-    const fieldId = fieldElement.id || fieldElement.name;
-    const errorId = `error_${fieldId}`;
-    this.logger.debug(`🏗️ createErrorElement para: ${fieldId} (ID: ${errorId})`);
+    const fieldId = fieldElement.id || fieldElement.name
+    const errorId = `error_${fieldId}`
+    this.logger.debug(`🏗️ createErrorElement para: ${fieldId} (ID: ${errorId})`)
 
     // Verificar si ya existe
-    this.logger.debug(`📋 Buscando en contexto: ${this.formContext.id || "document"}`);
+    this.logger.debug(`📋 Buscando en contexto: ${this.formContext.id || 'document'}`)
 
-    const existingError = this.formContext.querySelector(`#${errorId}`);
+    const existingError = this.formContext.querySelector(`#${errorId}`)
     if (existingError) {
-      this.logger.debug(`✅ Elemento de error ya existe: ${errorId}`);
-      return existingError;
+      this.logger.debug(`✅ Elemento de error ya existe: ${errorId}`)
+      return existingError
     }
 
     // Crear elemento de error
-    const errorElement = document.createElement("div");
-    errorElement.id = errorId;
-    errorElement.className = "error_text";
-    errorElement.setAttribute("data-error-for", fieldId);
-    errorElement.style.display = "none";
-    this.logger.debug(`🆕 Elemento de error creado: ${errorId}`);
+    const errorElement = document.createElement('div')
+    errorElement.id = errorId
+    errorElement.className = 'error_text'
+    errorElement.setAttribute('data-error-for', fieldId)
+    errorElement.style.display = 'none'
+    this.logger.debug(`🆕 Elemento de error creado: ${errorId}`)
 
     // Encontrar dónde insertar el elemento
-    const insertionPoint = this.findErrorInsertionPoint(fieldElement);
-    this.logger.debug(`📍 Punto de inserción encontrado:`, insertionPoint);
+    const insertionPoint = this.findErrorInsertionPoint(fieldElement)
+    this.logger.debug(`📍 Punto de inserción encontrado:`, insertionPoint)
 
     if (insertionPoint.parent && insertionPoint.nextSibling) {
-      insertionPoint.parent.insertBefore(errorElement, insertionPoint.nextSibling);
-      this.logger.debug(`✅ Error insertado antes de nextSibling`);
+      insertionPoint.parent.insertBefore(errorElement, insertionPoint.nextSibling)
+      this.logger.debug(`✅ Error insertado antes de nextSibling`)
     } else if (insertionPoint.parent) {
-      insertionPoint.parent.appendChild(errorElement);
-      this.logger.debug(`✅ Error agregado al parent`);
+      insertionPoint.parent.appendChild(errorElement)
+      this.logger.debug(`✅ Error agregado al parent`)
     } else {
       // Fallback: insertar después del campo
-      fieldElement.parentNode.insertBefore(errorElement, fieldElement.nextSibling);
-      this.logger.debug(`✅ Error insertado como fallback después del campo`);
+      fieldElement.parentNode.insertBefore(errorElement, fieldElement.nextSibling)
+      this.logger.debug(`✅ Error insertado como fallback después del campo`)
     }
 
-    return errorElement;
+    return errorElement
   }
 
   /**
@@ -711,38 +678,37 @@ export class Ui {
    */
   findErrorInsertionPoint(fieldElement) {
     // Manejo especial para radio buttons
-    if (fieldElement.type === "radio") {
+    if (fieldElement.type === 'radio') {
       // Buscar el contenedor del grupo de radio buttons
-      const radioGroupContainer =
-        fieldElement.closest(".radio-inline-group, .radio-group") || fieldElement.closest("div");
+      const radioGroupContainer = fieldElement.closest('.radio-inline-group, .radio-group') || fieldElement.closest('div')
 
       if (radioGroupContainer) {
         return {
           parent: radioGroupContainer.parentElement,
-          nextSibling: radioGroupContainer.nextSibling,
-        };
+          nextSibling: radioGroupContainer.nextSibling
+        }
       }
     }
 
     // Buscar contenedor padre más apropiado
     const fieldContainer =
       fieldElement.closest(
-        ".field-container, .form-group, .input-group, .name-field, .prefix-field, .mobile-field, .phone-row, .name-row"
-      ) || fieldElement.parentElement;
+        '.field-container, .form-group, .input-group, .name-field, .prefix-field, .mobile-field, .phone-row, .name-row'
+      ) || fieldElement.parentElement
 
     // Si el campo está en un contenedor específico, insertar al final de ese contenedor
     if (fieldContainer !== fieldElement.parentElement) {
       return {
         parent: fieldContainer,
-        nextSibling: null,
-      };
+        nextSibling: null
+      }
     }
 
     // Caso por defecto: insertar después del campo
     return {
       parent: fieldElement.parentElement,
-      nextSibling: fieldElement.nextSibling,
-    };
+      nextSibling: fieldElement.nextSibling
+    }
   }
 
   /**
@@ -750,31 +716,30 @@ export class Ui {
    * @param {HTMLElement} fieldElement - Campo a limpiar
    */
   hideFieldError(fieldElement) {
-    if (!fieldElement) return;
+    if (!fieldElement) return
 
-    const fieldId = fieldElement.id || fieldElement.name;
-    this.logger.info(`🟢 [UI] OCULTANDO ERROR para ${fieldId}`);
+    const fieldId = fieldElement.id || fieldElement.name
+    this.logger.info(`🟢 [UI] OCULTANDO ERROR para ${fieldId}`)
 
-    const errorElement =
-      this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`);
+    const errorElement = this.findElement(`[data-error-for="${fieldId}"]`) || this.findElement(`#error_${fieldId}`)
 
     // Limpiar clases de error
-    fieldElement.classList.remove(this.config.errorClass);
-    fieldElement.classList.add(this.config.validClass);
+    fieldElement.classList.remove(this.config.errorClass)
+    fieldElement.classList.add(this.config.validClass)
 
     // Ocultar mensaje de error
     if (errorElement) {
       if (this.config.enableAnimations) {
-        errorElement.style.transition = `opacity ${this.config.animationDuration}ms`;
-        errorElement.style.opacity = "0";
+        errorElement.style.transition = `opacity ${this.config.animationDuration}ms`
+        errorElement.style.opacity = '0'
 
         setTimeout(() => {
-          errorElement.style.display = "none";
-          errorElement.textContent = ""; // Limpiar contenido
-        }, this.config.animationDuration);
+          errorElement.style.display = 'none'
+          errorElement.textContent = '' // Limpiar contenido
+        }, this.config.animationDuration)
       } else {
-        errorElement.style.display = "none";
-        errorElement.textContent = ""; // Limpiar contenido
+        errorElement.style.display = 'none'
+        errorElement.textContent = '' // Limpiar contenido
       }
     }
   }
@@ -784,25 +749,25 @@ export class Ui {
    * @param {HTMLElement} formElement - Formulario a limpiar
    */
   clearAllErrors(formElement) {
-    if (!formElement) return;
+    if (!formElement) return
 
     // Limpiar clases de error de todos los campos
-    const fields = formElement.querySelectorAll("input, select, textarea");
-    fields.forEach((field) => {
-      field.classList.remove(this.config.errorClass);
-      field.classList.remove(this.config.validClass);
-    });
+    const fields = formElement.querySelectorAll('input, select, textarea')
+    fields.forEach(field => {
+      field.classList.remove(this.config.errorClass)
+      field.classList.remove(this.config.validClass)
+    })
 
     // Ocultar y limpiar todos los elementos de error
-    const errorElements = formElement.querySelectorAll(".error_text");
-    errorElements.forEach((errorElement) => {
-      errorElement.style.display = "none";
+    const errorElements = formElement.querySelectorAll('.error_text')
+    errorElements.forEach(errorElement => {
+      errorElement.style.display = 'none'
 
       // No limpiar contenido de elementos con data-puj-form que tienen contenido predefinido
-      if (!errorElement.hasAttribute("data-puj-form")) {
-        errorElement.textContent = "";
+      if (!errorElement.hasAttribute('data-puj-form')) {
+        errorElement.textContent = ''
       }
-    });
+    })
   }
 
   /**
@@ -810,10 +775,10 @@ export class Ui {
    * @param {HTMLElement} element - Elemento a deshabilitar
    */
   disableElement(element) {
-    if (!element) return;
+    if (!element) return
 
-    element.disabled = true;
-    element.classList.add("disabled");
+    element.disabled = true
+    element.classList.add('disabled')
   }
 
   /**
@@ -821,10 +786,10 @@ export class Ui {
    * @param {HTMLElement} element - Elemento a habilitar
    */
   enableElement(element) {
-    if (!element) return;
+    if (!element) return
 
-    element.disabled = false;
-    element.classList.remove("disabled");
+    element.disabled = false
+    element.classList.remove('disabled')
   }
 
   /**
@@ -832,13 +797,13 @@ export class Ui {
    * Maneja la rotación de flechas cuando los select se abren/cierran
    */
   initializeSelectArrowAnimations() {
-    const selectElements = this.scopedQueryAll("select");
+    const selectElements = this.scopedQueryAll('select')
 
-    selectElements.forEach((select) => {
-      this.setupSelectArrowAnimation(select);
-    });
+    selectElements.forEach(select => {
+      this.setupSelectArrowAnimation(select)
+    })
 
-    this.logger.debug(`Animaciones de flecha inicializadas para ${selectElements.length} selects`);
+    this.logger.debug(`Animaciones de flecha inicializadas para ${selectElements.length} selects`)
   }
 
   /**
@@ -846,95 +811,90 @@ export class Ui {
    * @param {HTMLElement} selectElement - Elemento select
    */
   setupSelectArrowAnimation(selectElement) {
-    if (!selectElement) return;
+    if (!selectElement) return
 
     // Remover listeners existentes para evitar duplicados
-    this.removeSelectArrowListeners(selectElement);
+    this.removeSelectArrowListeners(selectElement)
 
     // Variables para rastrear el estado del dropdown
-    let isOpen = false;
-    let clickCount = 0;
-    let clickTimeout = null;
+    let isOpen = false
+    let clickCount = 0
+    let clickTimeout = null
 
     // Función para actualizar la flecha
-    const updateArrow = (open) => {
+    const updateArrow = open => {
       if (open) {
-        selectElement.classList.add("select-open");
+        selectElement.classList.add('select-open')
       } else {
-        selectElement.classList.remove("select-open");
+        selectElement.classList.remove('select-open')
       }
-      isOpen = open;
-    };
+      isOpen = open
+    }
 
     // Evento click - maneja la lógica de apertura/cierre
-    const handleClick = (event) => {
-      clickCount++;
+    const handleClick = event => {
+      clickCount++
 
       // Limpiar timeout anterior
       if (clickTimeout) {
-        clearTimeout(clickTimeout);
+        clearTimeout(clickTimeout)
       }
 
       // Esperar un poco para detectar doble click
       clickTimeout = setTimeout(() => {
         if (clickCount === 1) {
           // Single click - alternar estado
-          updateArrow(!isOpen);
+          updateArrow(!isOpen)
         } else if (clickCount === 2) {
           // Double click - cerrar
-          updateArrow(false);
+          updateArrow(false)
         }
-        clickCount = 0;
-      }, 250);
-    };
+        clickCount = 0
+      }, 250)
+    }
 
     // Evento blur - cerrar cuando pierde el foco
-    const handleBlur = (event) => {
+    const handleBlur = event => {
       // Pequeño delay para permitir que el click se procese
       setTimeout(() => {
-        updateArrow(false);
-        clickCount = 0;
+        updateArrow(false)
+        clickCount = 0
         if (clickTimeout) {
-          clearTimeout(clickTimeout);
-          clickTimeout = null;
+          clearTimeout(clickTimeout)
+          clickTimeout = null
         }
-      }, 100);
-    };
+      }, 100)
+    }
 
     // Evento keydown - manejar teclas
-    const handleKeydown = (event) => {
-      if (
-        event.key === "Enter" ||
-        event.key === " " ||
-        event.key === "ArrowDown" ||
-        event.key === "ArrowUp"
-      ) {
-        updateArrow(true);
-      } else if (event.key === "Escape") {
-        updateArrow(false);
+    const handleKeydown = event => {
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        updateArrow(true)
+      } else if (event.key === 'Escape') {
+        updateArrow(false)
       }
-    };
+    }
 
     // Evento change - cerrar después de seleccionar
-    const handleChange = (event) => {
+    const handleChange = event => {
       setTimeout(() => {
-        updateArrow(false);
-      }, 100);
-    };
+        updateArrow(false)
+      }, 100)
+    }
 
     // Agregar event listeners
-    selectElement.addEventListener("click", handleClick);
-    selectElement.addEventListener("blur", handleBlur);
-    selectElement.addEventListener("keydown", handleKeydown);
-    selectElement.addEventListener("change", handleChange);
+    selectElement.addEventListener('click', handleClick)
+    selectElement.addEventListener('blur', handleBlur)
+    selectElement.addEventListener('keydown', handleKeydown)
+    selectElement.addEventListener('change', handleChange)
 
     // Guardar referencias para poder removerlos después
     selectElement._arrowListeners = {
       click: handleClick,
       blur: handleBlur,
       keydown: handleKeydown,
-      change: handleChange,
-    };
+      change: handleChange
+    }
   }
 
   /**
@@ -942,26 +902,26 @@ export class Ui {
    * @param {HTMLElement} selectElement - Elemento select
    */
   removeSelectArrowListeners(selectElement) {
-    if (!selectElement || !selectElement._arrowListeners) return;
+    if (!selectElement || !selectElement._arrowListeners) return
 
-    const listeners = selectElement._arrowListeners;
-    selectElement.removeEventListener("click", listeners.click);
-    selectElement.removeEventListener("blur", listeners.blur);
-    selectElement.removeEventListener("keydown", listeners.keydown);
-    selectElement.removeEventListener("change", listeners.change);
+    const listeners = selectElement._arrowListeners
+    selectElement.removeEventListener('click', listeners.click)
+    selectElement.removeEventListener('blur', listeners.blur)
+    selectElement.removeEventListener('keydown', listeners.keydown)
+    selectElement.removeEventListener('change', listeners.change)
 
-    delete selectElement._arrowListeners;
+    delete selectElement._arrowListeners
   }
 
   /**
    * Limpiar todas las animaciones de flechas
    */
   cleanupSelectArrowAnimations() {
-    const selectElements = this.scopedQueryAll("select");
+    const selectElements = this.scopedQueryAll('select')
 
-    selectElements.forEach((select) => {
-      this.removeSelectArrowListeners(select);
-      select.classList.remove("select-open");
-    });
+    selectElements.forEach(select => {
+      this.removeSelectArrowListeners(select)
+      select.classList.remove('select-open')
+    })
   }
 }

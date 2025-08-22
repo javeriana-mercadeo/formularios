@@ -1,40 +1,40 @@
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: {
-    "form-modules": "./src/index.js",
+    'form-modules': './src/index.js'
   },
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "[name]-script.js",
+    path: path.resolve(__dirname, 'build'),
+    filename: '[name]-script.js',
     clean: true,
     library: {
-      name: "FormModules",
-      type: "umd",
-      umdNamedDefine: true,
+      name: 'FormModules',
+      type: 'umd',
+      umdNamedDefine: true
     },
-    globalObject: "typeof self !== 'undefined' ? self : this",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
-      },
-    ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+      }
+    ]
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name]-style.css",
-    }),
+      filename: '[name]-style.css'
+    })
   ],
   resolve: {
-    extensions: [".js", ".css", ".scss", ".sass"],
+    extensions: ['.js', '.css', '.scss', '.sass']
   },
   externals: {
     // Si prefieres cargar desde CDN (opcional)
@@ -45,6 +45,6 @@ module.exports = {
   },
   optimization: {
     // Todo en un solo archivo
-    splitChunks: false,
-  },
-};
+    splitChunks: false
+  }
+}

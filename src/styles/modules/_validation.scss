@@ -1,19 +1,22 @@
-// Validación - estilos utilizados por JavaScript
+// Validación - estilos consistentes para estados y mensajes
 .error_text {
   display: flex;
   align-items: center;
   gap: var(--fm-space-2);
-  padding: var(--fm-space-2);
+  padding: var(--fm-space-1);
   margin-top: var(--fm-space-1);
   font-size: var(--fm-font-size-xs);
+  font-weight: var(--fm-font-weight-normal);
   color: var(--fm-text-error);
   background-color: var(--fm-color-error-50);
-  border-radius: var(--fm-radius-md);
-  animation: errorSlideIn var(--fm-duration-slow) var(--fm-easing-ease-out);
+  border-radius: var(--fm-radius-base);
+  border-left: 3px solid var(--fm-input-border-color-error);
+  animation: errorSlideIn var(--fm-duration-normal) var(--fm-easing-ease-out);
 
   &::before {
-    content: "⚠ ";
-    font-size: var(--fm-font-size-xs);
+    content: '⚠';
+    font-size: var(--fm-font-size-sm);
+    font-weight: var(--fm-font-weight-normal);
     flex-shrink: 0;
     color: var(--fm-text-error);
   }
@@ -22,7 +25,7 @@
 @keyframes errorSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -30,22 +33,49 @@
   }
 }
 
+// Estados de error para inputs - consistente con estilo underlined
 input.error,
 select.error {
-  border-color: var(--fm-input-border-color-error);
+  border-bottom-color: var(--fm-input-border-color-error);
   background-color: var(--fm-color-error-50);
 
   &:focus {
-    border-bottom-color: var(--fm-input-border-color-error) !important;
+    border-bottom-color: var(--fm-input-border-color-error);
+    border-bottom-width: 2px;
   }
 }
 
+// Estados validados para inputs
 input.validated,
 select.validated {
-  border-color: var(--fm-input-border-color-success);
+  border-bottom-color: var(--fm-input-border-color-success);
   background-color: var(--fm-color-success-50);
 
   &:focus {
-    border-bottom-color: var(--fm-input-border-color-success) !important;
+    border-bottom-color: var(--fm-input-border-color-success);
+    border-bottom-width: 2px;
+  }
+}
+
+// Estados de validación para campos contenedores
+.field.error {
+  .error_text {
+    margin-bottom: var(--fm-space-2);
+  }
+}
+
+.field.validated {
+  position: relative;
+
+  &::after {
+    content: '✓';
+    position: absolute;
+    right: var(--fm-space-1);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fm-input-border-color-success);
+    font-size: var(--fm-font-size-base);
+    font-weight: var(--fm-font-weight-bold);
+    pointer-events: none;
   }
 }

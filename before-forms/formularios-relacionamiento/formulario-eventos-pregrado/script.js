@@ -434,24 +434,24 @@ const Validators = {
 
     // Mapear IDs de elementos a nombres de validación
     const fieldMapping = {
-      'first_name': 'name',
-      'last_name': 'name',
-      'email': 'email',
-      'mobile': 'phone',
-      'numero_doc': 'document',
-      'nevento': 'required',
-      'fevento': 'required',
-      'tipo_doc': 'required',
-      'prefijoCel': 'required',
-      'pais': 'required',
-      'departamento': 'required',
-      'ciudad': 'required',
-      'tipo_asistente': 'required',
-      'nivelacademico': 'required',
-      'facultad': 'required',
-      'programa': 'required',
-      'periodo_esperado': 'required',
-      'colegio': 'required'
+      first_name: 'name',
+      last_name: 'name',
+      email: 'email',
+      mobile: 'phone',
+      numero_doc: 'document',
+      nevento: 'required',
+      fevento: 'required',
+      tipo_doc: 'required',
+      prefijoCel: 'required',
+      pais: 'required',
+      departamento: 'required',
+      ciudad: 'required',
+      tipo_asistente: 'required',
+      nivelacademico: 'required',
+      facultad: 'required',
+      programa: 'required',
+      periodo_esperado: 'required',
+      colegio: 'required'
     }
 
     const validationType = fieldMapping[fieldId]
@@ -506,7 +506,7 @@ const Validators = {
   showFieldError(input, message) {
     const fieldId = input.id
     const errorElement = document.getElementById(`error_${fieldId}`)
-    
+
     this.clearError(fieldId)
 
     if (message) {
@@ -525,7 +525,7 @@ const Validators = {
   clearFieldError(input) {
     const fieldId = input.id
     const errorElement = document.getElementById(`error_${fieldId}`)
-    
+
     if (errorElement) {
       errorElement.style.display = 'none'
     }
@@ -1331,7 +1331,7 @@ function setupEventListeners() {
   document.getElementById('facultad').addEventListener('blur', e => {
     Validators.validateField(e.target)
   })
-  
+
   document.getElementById('programa').addEventListener('change', e => {
     handleProgramaChange()
     Validators.validateField(e.target)
@@ -1340,7 +1340,7 @@ function setupEventListeners() {
   document.getElementById('programa').addEventListener('blur', e => {
     Validators.validateField(e.target)
   })
-  
+
   document.getElementById('periodo_esperado').addEventListener('change', e => {
     handlePeriodoChange()
     Validators.validateField(e.target)
@@ -1349,7 +1349,7 @@ function setupEventListeners() {
   document.getElementById('periodo_esperado').addEventListener('blur', e => {
     Validators.validateField(e.target)
   })
-  
+
   // Level académico (hidden but validated)
   document.getElementById('nivelacademico').addEventListener('change', e => {
     formData.nivelacademico = e.target.value

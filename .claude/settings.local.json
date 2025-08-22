@@ -19,7 +19,8 @@
       "Bash(mv:*)",
       "Bash(/dev/null)",
       "Bash(curl:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",

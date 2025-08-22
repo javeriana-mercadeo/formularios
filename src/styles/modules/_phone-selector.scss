@@ -1,5 +1,5 @@
-// Phone selector con banderas - estilos específicos
-@use "../vars" as *;
+// Phone selector con banderas - estilo compacto y alineado
+@use '../vars' as *;
 
 // Elementos con banderas
 .phone-prefix-option,
@@ -8,7 +8,10 @@
   align-items: center;
   gap: var(--fm-space-2);
   padding: var(--fm-space-1) var(--fm-space-2);
-  transition: var(--fm-transition-fast);
+  transition: background-color var(--fm-transition-fast);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   .country-flag {
     width: 18px;
@@ -19,45 +22,47 @@
   }
 
   .country-code {
-    font-weight: var(--fm-font-weight-bold);
+    font-weight: var(--fm-font-weight-normal);
     color: var(--fm-text-primary);
-    min-width: 45px;
-    font-size: var(--fm-font-size-xs);
-    display: inline-block;
+    min-width: 40px;
+    font-size: var(--fm-font-size-sm);
+    flex-shrink: 0;
   }
 
   .country-name {
-    font-size: var(--fm-font-size-xs);
+    font-size: var(--fm-font-size-select);
     color: var(--fm-text-secondary);
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
   }
 }
 
 .phone-prefix-item {
-  padding: var(--fm-space-1) var(--fm-space-2);
-  border-radius: var(--fm-radius-base);
-  background: transparent;
-
-  .country-code {
-    font-size: var(--fm-font-size-xs);
-    font-weight: var(--fm-font-weight-bold);
-    color: var(--fm-text-primary);
-  }
+  padding: 0;
+  gap: var(--fm-space-1);
 
   .country-name {
     display: none;
   }
+
+  .country-code {
+    min-width: 35px;
+    font-size: var(--fm-font-size-sm);
+  }
 }
 
+// Selector general de países (para residencia)
 .country-option,
 .country-item {
   display: flex;
   align-items: center;
   gap: var(--fm-space-3);
-  padding: var(--fm-space-2) var(--fm-space-3);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   .country-flag {
     width: 24px;
@@ -70,343 +75,225 @@
   .country-name {
     font-size: var(--fm-font-size-sm);
     color: var(--fm-text-primary);
-    font-weight: var(--fm-font-weight-medium);
+    font-weight: var(--fm-font-weight-normal) !important;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 }
 
-.country-item {
-  padding: var(--fm-space-1) var(--fm-space-2);
-  border-radius: var(--fm-radius-base);
-  background: var(--fm-surface-secondary);
-
-  .country-name {
-    font-size: var(--fm-font-size-sm);
-    font-weight: var(--fm-font-weight-semibold);
-  }
-}
-
-// Customizaciones específicas de Tom Select para phone selector
-.ts-wrapper {
-  &.phone-prefix-select,
-  &.country-select {
-    position: relative;
-
-    .ts-control {
-      .ts-placeholder {
-        color: var(--fm-input-placeholder-color);
-        font-size: var(--fm-font-size-xs);
-      }
-
-      .item {
-        padding: var(--fm-space-1);
-        margin: var(--fm-space-1) 0;
-        background: transparent;
-        border: none;
-        font-size: var(--fm-font-size-xs);
-      }
-    }
-
-    // Flecha personalizada para selectores con banderas
-    &::after {
-      content: "";
-      position: absolute;
-      right: var(--fm-space-2);
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid var(--fm-text-secondary);
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    &.dropdown-active::after {
-      border-top: none;
-      border-bottom: 5px solid var(--fm-text-secondary);
-    }
-
-    .ts-control::after {
-      display: none !important;
-    }
-
-    .phone-prefix-option,
-    .phone-prefix-item {
-      .country-code {
-        color: var(--fm-text-primary) !important;
-        font-weight: var(--fm-font-weight-bold) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-      }
-    }
-
-    .ts-dropdown {
-      .ts-control {
-        border-bottom: var(--fm-input-border-width) solid var(--fm-border-subtle) !important;
-        border-radius: var(--fm-radius-md) var(--fm-radius-md) 0 0 !important;
-        background: var(--fm-surface-secondary) !important;
-        margin: 0 !important;
-        padding: var(--fm-space-2) var(--fm-space-3) !important;
-        min-height: 38px !important;
-
-        .ts-input {
-          display: block !important;
-          border: none !important;
-          background: transparent !important;
-          font-size: var(--fm-font-size-sm) !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          width: 100% !important;
-          color: var(--fm-text-primary) !important;
-
-          &::placeholder {
-            color: var(--fm-input-placeholder-color) !important;
-            font-size: var(--fm-font-size-sm) !important;
-          }
-
-          &:focus {
-            outline: none !important;
-            box-shadow: none !important;
-          }
-        }
-      }
-
-      .ts-dropdown-content {
-        max-height: 200px;
-        overflow-y: auto;
-        padding: var(--fm-space-1) 0;
-      }
-    }
-
-    .option {
-      padding: var(--fm-space-1) var(--fm-space-2);
-      border-bottom: none;
-      cursor: pointer;
-      margin: var(--fm-space-1);
-      border-radius: var(--fm-radius-sm);
-      transition: var(--fm-transition-fast);
-
-      &:hover,
-      &.active {
-        background-color: var(--fm-color-primary-50) !important;
-        color: var(--fm-text-primary) !important;
-      }
-
-      &.selected {
-        background-color: var(--fm-interactive-primary) !important;
-        color: var(--fm-text-on-primary) !important;
-
-        .country-code,
-        .country-name {
-          color: var(--fm-text-on-primary) !important;
-        }
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
-
-// Layout para campos de teléfono combinados
+// Layout compacto para campos de teléfono - altura exacta
 .phone-field-group {
   display: flex;
-  gap: 0;
-  align-items: stretch;
-  border: var(--fm-input-border-width) solid var(--fm-border-default);
-  border-radius: var(--fm-radius-md);
-  overflow: visible;
-  transition: var(--fm-transition-fast);
+  align-items: flex-end;
+  gap: var(--fm-space-2);
   position: relative;
-  height: var(--fm-input-height);
-  background: var(--fm-surface-primary);
-
-  &:focus-within {
-    border-color: var(--fm-border-focus);
-    box-shadow: 0 0 0 var(--fm-focus-ring-width) rgba(59, 130, 246, 0.1);
-  }
+  margin-bottom: 0;
 
   .phone-prefix-field {
-    flex: 0 0 110px;
-    min-width: 110px;
-    border-right: var(--fm-input-border-width) solid var(--fm-border-subtle);
-    height: 100%;
-    position: relative;
+    flex: 0 0 100px;
+    width: 100px;
+    max-width: 100px;
 
     .ts-wrapper {
-      border: none !important;
-      border-radius: var(--fm-radius-md) 0 0 var(--fm-radius-md) !important;
-      box-shadow: none !important;
-      height: 100%;
-
       .ts-control {
-        border-radius: var(--fm-radius-md) 0 0 var(--fm-radius-md) !important;
-        height: 100% !important;
-        min-height: var(--fm-input-height);
-        background: var(--fm-surface-secondary) !important;
-        padding: 0 var(--fm-space-2) !important;
-        display: flex !important;
-        align-items: center !important;
+        padding: 10px 6px;
+        padding-right: 28px;
+        border: none;
+        border-bottom: 1px solid var(--fm-input-border-color);
+        border-radius: 0;
+        background: transparent;
+        color: var(--fm-input-text-color);
+        font-size: var(--fm-font-size-sm);
+        font-weight: var(--fm-font-weight-normal);
+        line-height: 1.5;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-bottom-color var(--fm-transition-normal);
 
         &:focus {
-          border: none !important;
-          box-shadow: none !important;
+          border-bottom-color: var(--fm-input-border-color-focus);
+          border-bottom-width: 2px;
+          outline: none;
         }
 
-        .ts-input {
-          display: none !important;
+        &:focus-visible {
+          outline: none;
         }
+      }
 
-        .ts-dropdown-toggle {
-          display: none !important;
-        }
+      &:hover:not(.focus):not(.dropdown-active) .ts-control {
+        border-bottom-color: var(--fm-input-border-color-hover);
+      }
+
+      &.focus .ts-control,
+      &.dropdown-active .ts-control {
+        border-bottom-color: var(--fm-input-border-color-focus);
+        border-bottom-width: 2px;
+      }
+
+      // Flecha visible y bien posicionada
+      &.single .ts-control::after {
+        content: '';
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 18px;
+        z-index: 1;
+      }
+
+      &.dropdown-active.single .ts-control::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233e72b9' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14 12l-4-4-4 4'/%3e%3c/svg%3e");
       }
 
       .ts-dropdown {
-        border: var(--fm-input-border-width) solid var(--fm-border-default);
+        border: 1px solid var(--fm-border-default);
         border-radius: var(--fm-radius-md);
-        box-shadow: var(--fm-shadow-md);
+        box-shadow: var(--fm-shadow-lg);
         background: var(--fm-surface-primary);
-        left: 0 !important;
-        top: calc(100% + var(--fm-space-1)) !important;
-        min-width: 280px !important;
-        width: 280px !important;
-        max-width: 320px !important;
-        z-index: 9999 !important;
-        position: absolute !important;
+        position: absolute;
+        left: 0;
+        top: 100%;
+        margin-top: 2px;
+        min-width: 300px;
+        max-width: 400px;
+        z-index: 1000;
+        overflow: visible;
 
         .ts-control {
-          border: none !important;
-          border-bottom: var(--fm-input-border-width) solid var(--fm-border-subtle) !important;
-          border-radius: var(--fm-radius-md) var(--fm-radius-md) 0 0 !important;
-          background: var(--fm-surface-secondary) !important;
-          margin: 0 !important;
-          padding: var(--fm-space-2) var(--fm-space-3) !important;
-          min-height: 36px !important;
+          border-bottom: 1px solid var(--fm-border-subtle);
+          border-radius: var(--fm-radius-md) var(--fm-radius-md) 0 0;
+          background: var(--fm-surface-secondary);
+          padding: var(--fm-space-2) var(--fm-space-3);
 
           .ts-input {
-            display: block !important;
-            border: none !important;
-            background: transparent !important;
-            font-size: var(--fm-font-size-sm) !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            width: 100% !important;
+            font-size: var(--fm-font-size-sm);
+            font-weight: var(--fm-font-weight-normal);
+            color: var(--fm-text-primary);
 
             &::placeholder {
-              color: var(--fm-input-placeholder-color) !important;
-              font-size: var(--fm-font-size-sm) !important;
-            }
-
-            &:focus {
-              outline: none !important;
-              box-shadow: none !important;
+              color: var(--fm-input-placeholder-color);
+              font-weight: var(--fm-font-weight-normal);
+              font-size: var(--fm-font-size-sm);
             }
           }
         }
 
         .ts-dropdown-content {
-          max-height: 180px;
+          max-height: 12rem;
           overflow-y: auto;
-          padding: var(--fm-space-1) 0;
+          overflow-x: hidden;
+          padding: var(--fm-space-1);
+
+          .option {
+            padding: var(--fm-space-2);
+            margin: 0 0 var(--fm-space-1) 0;
+            border-radius: var(--fm-radius-sm);
+            transition: background-color var(--fm-transition-fast);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            box-sizing: border-box;
+
+            &:hover,
+            &.active {
+              background-color: var(--fm-surface-secondary);
+            }
+
+            &.selected {
+              background-color: var(--fm-interactive-primary);
+              color: var(--fm-text-on-primary);
+              margin-left: 0;
+              margin-right: 0;
+
+              .country-code,
+              .country-name {
+                color: var(--fm-text-on-primary);
+              }
+            }
+          }
         }
       }
     }
   }
 
   .phone-number-field {
-    flex: 1;
-    height: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
 
     input {
-      height: 100%;
-      padding: 0 var(--fm-space-3);
-      border: none;
-      border-radius: 0 var(--fm-radius-md) var(--fm-radius-md) 0;
-      font-size: var(--fm-font-size-sm);
-      background: var(--fm-surface-primary);
       width: 100%;
+      padding: 10px var(--fm-space-1);
+      border: none;
+      border-bottom: 1px solid var(--fm-input-border-color);
+      border-radius: 0;
+      background: transparent;
+      color: var(--fm-input-text-color);
+      font-size: var(--fm-font-size-base);
+      font-weight: var(--fm-font-weight-normal);
+      line-height: 1.5;
+      height: 42px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-bottom-color var(--fm-transition-normal);
 
       &:focus {
-        border: none;
+        border-bottom-color: var(--fm-input-border-color-focus);
+        border-bottom-width: 2px;
         outline: none;
-        box-shadow: none;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+
+      &:hover:not(:focus) {
+        border-bottom-color: var(--fm-input-border-color-hover);
       }
 
       &::placeholder {
         color: var(--fm-input-placeholder-color);
-        font-size: var(--fm-font-size-sm);
+        font-weight: var(--fm-font-weight-normal);
       }
     }
   }
 }
 
-// Estados de validación para phone field groups
+// Estados de validación consistentes
 .field.error {
   .phone-field-group {
-    border-color: var(--fm-border-error) !important;
+    .phone-prefix-field .ts-wrapper .ts-control,
+    .phone-number-field input {
+      border-bottom-color: var(--fm-input-border-color-error);
 
-    .ts-wrapper .ts-control,
-    input {
-      border-color: transparent;
+      &:focus {
+        border-bottom-color: var(--fm-input-border-color-error);
+        border-bottom-width: 2px;
+      }
     }
-  }
-
-  .error_text {
-    position: relative;
-    z-index: 1;
-    margin-top: var(--fm-space-1);
-    margin-bottom: var(--fm-space-3);
-    padding: var(--fm-space-1) var(--fm-space-2);
-    background: var(--fm-color-error-50);
-    border: var(--fm-input-border-width) solid var(--fm-border-error);
-    border-radius: var(--fm-radius-base);
-    color: var(--fm-text-error);
-    font-size: var(--fm-font-size-xs);
-    line-height: var(--fm-line-height-tight);
-    box-shadow: var(--fm-shadow-sm);
   }
 }
 
 .field.validated {
   .phone-field-group {
-    border-color: var(--fm-border-success) !important;
+    .phone-prefix-field .ts-wrapper .ts-control,
+    .phone-number-field input {
+      border-bottom-color: var(--fm-input-border-color-success);
 
-    .ts-wrapper .ts-control,
-    input {
-      border-color: transparent;
+      &:focus {
+        border-bottom-color: var(--fm-input-border-color-success);
+        border-bottom-width: 2px;
+      }
     }
   }
-}
-
-// Espaciado para campos de teléfono
-.field:has(.phone-field-group) {
-  margin-bottom: var(--fm-space-6);
-
-  &.error {
-    margin-bottom: var(--fm-space-8);
-  }
-}
-
-.form-field-group .field:has(.phone-field-group) {
-  margin-bottom: var(--fm-space-5);
-
-  &.error {
-    margin-bottom: var(--fm-space-6);
-
-    .error_text {
-      margin-bottom: var(--fm-space-4);
-    }
-  }
-}
-
-// Animaciones
-.country-flag,
-.phone-prefix-option,
-.phone-prefix-item,
-.country-option,
-.country-item {
-  transition: var(--fm-transition-fast);
 }

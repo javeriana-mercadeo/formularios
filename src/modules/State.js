@@ -4,26 +4,26 @@
  * @version 1.0
  */
 
-import { Constants } from "./Constants.js";
+import { Constants } from './Constants.js'
 
 export class State {
   constructor({ config, event, validator, ui, formElement, logger }) {
-    this.config = config;
-    this.ui = ui;
-    this.validator = validator;
-    this.logger = logger;
-    this.formElement = formElement;
-    this.event = event;
+    this.config = config
+    this.ui = ui
+    this.validator = validator
+    this.logger = logger
+    this.formElement = formElement
+    this.event = event
 
-    this.state = this._getInitialState();
-    this.uiState = this._getInitialUiState();
-    this.validationState = this._getInitialValidationState();
-    this.systemState = this._getInitialSystemState();
+    this.state = this._getInitialState()
+    this.uiState = this._getInitialUiState()
+    this.validationState = this._getInitialValidationState()
+    this.systemState = this._getInitialSystemState()
 
     // Configuración de validación automática
     this.autoValidation = {
-      enabled: true,
-    };
+      enabled: true
+    }
   }
 
   // ===============================
@@ -36,10 +36,10 @@ export class State {
    */
   setupAutoValidation(config = {}) {
     this.autoValidation = {
-      enabled: true,
-    };
+      enabled: true
+    }
 
-    this.logger.info("🔧 Validación automática configurada:", this.autoValidation);
+    this.logger.info('🔧 Validación automática configurada:', this.autoValidation)
   }
 
   /**
@@ -47,11 +47,11 @@ export class State {
    * @param {Object} dependencies - Objetos validator, ui, formElement
    */
   setValidationDependencies(dependencies = {}) {
-    if (dependencies.validator) this.validator = dependencies.validator;
-    if (dependencies.ui) this.ui = dependencies.ui;
-    if (dependencies.formElement) this.formElement = dependencies.formElement;
+    if (dependencies.validator) this.validator = dependencies.validator
+    if (dependencies.ui) this.ui = dependencies.ui
+    if (dependencies.formElement) this.formElement = dependencies.formElement
 
-    this.logger.debug("🔗 Dependencias de validación establecidas");
+    this.logger.debug('🔗 Dependencias de validación establecidas')
   }
 
   // ===============================
@@ -66,36 +66,36 @@ export class State {
    */
   updateField(fieldName, value) {
     if (!this.state.hasOwnProperty(fieldName)) {
-      this.logger.warn(`Intento de actualizar campo inexistente: ${fieldName}`);
+      this.logger.warn(`Intento de actualizar campo inexistente: ${fieldName}`)
 
-      return false;
+      return false
     }
 
-    const previousValue = this.state[fieldName];
-    const hasChanged = previousValue !== value;
-    const isTouched = this.isFieldTouched(fieldName);
+    const previousValue = this.state[fieldName]
+    const hasChanged = previousValue !== value
+    const isTouched = this.isFieldTouched(fieldName)
 
     // Actualizar si el valor cambió
     if (hasChanged) {
-      this.state[fieldName] = value;
+      this.state[fieldName] = value
 
-      this.logger.info(`🔄 Campo actualizado: ${fieldName} "${previousValue}" → "${value}"`);
+      this.logger.info(`🔄 Campo actualizado: ${fieldName} "${previousValue}" → "${value}"`)
 
       // Emitir eventos de cambio
-      this._emitFieldChangeEvents(fieldName, previousValue, value);
+      this._emitFieldChangeEvents(fieldName, previousValue, value)
     } else {
-      this.logger.info(`⚪ Sin cambios en ${fieldName}: "${value}"`);
+      this.logger.info(`⚪ Sin cambios en ${fieldName}: "${value}"`)
     }
 
     // Validación automática si está habilitada Y el campo ha sido tocado
     // (validar incluso si no cambió el valor, para detectar errores en blur)
     if (isTouched) {
-      this.logger.info(`🔍 Ejecutando validación por campo tocado: ${fieldName}`);
+      this.logger.info(`🔍 Ejecutando validación por campo tocado: ${fieldName}`)
 
-      this._autoValidateField(fieldName);
+      this._autoValidateField(fieldName)
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -104,8 +104,8 @@ export class State {
    */
   setFields(fields) {
     Object.entries(fields).forEach(([fieldName, value]) => {
-      this.updateField(fieldName, value);
-    });
+      this.updateField(fieldName, value)
+    })
   }
 
   /**
@@ -114,7 +114,7 @@ export class State {
    * @returns {any} - Valor del campo
    */
   getField(fieldName) {
-    return this.state[fieldName];
+    return this.state[fieldName]
   }
 
   /**
@@ -122,26 +122,26 @@ export class State {
    * @returns {Object} - Copia del estado completo
    */
   getFormData() {
-    return { ...this.state };
+    return { ...this.state }
   }
 
   /**
    * Resetear formulario al estado inicial
    */
   reset() {
-    const previousState = { ...this.state };
-    this.state = this._getInitialState();
-    this.validationState = this._getInitialValidationState();
-    this.systemState.isSubmitting = false;
+    const previousState = { ...this.state }
+    this.state = this._getInitialState()
+    this.validationState = this._getInitialValidationState()
+    this.systemState.isSubmitting = false
 
-    this.logger.info("Estado del formulario reseteado");
+    this.logger.info('Estado del formulario reseteado')
 
     // Emitir evento de reset
-    this._emitEvent("stateReset", {
+    this._emitEvent('stateReset', {
       previousState,
       newState: { ...this.state },
-      timestamp: new Date().toISOString(),
-    });
+      timestamp: new Date().toISOString()
+    })
   }
 
   // ===============================
@@ -154,19 +154,19 @@ export class State {
    * @param {string} error - Mensaje de error
    */
   setValidationError(fieldName, error) {
-    this.logger.info(`📝 [STATE] ESTABLECIENDO ERROR para ${fieldName}: "${error}"`);
+    this.logger.info(`📝 [STATE] ESTABLECIENDO ERROR para ${fieldName}: "${error}"`)
 
-    const hadErrors = this.hasValidationErrors();
-    this.validationState.errors[fieldName] = error;
-    this._updateValidationState();
+    const hadErrors = this.hasValidationErrors()
+    this.validationState.errors[fieldName] = error
+    this._updateValidationState()
 
     // Emitir evento si cambió el estado de validación
     if (!hadErrors && this.hasValidationErrors()) {
-      this._emitEvent("validationStateChanged", {
+      this._emitEvent('validationStateChanged', {
         isValid: false,
         newError: { fieldName, error },
-        timestamp: new Date().toISOString(),
-      });
+        timestamp: new Date().toISOString()
+      })
     }
   }
 
@@ -175,19 +175,19 @@ export class State {
    * @param {string} fieldName - Nombre del campo
    */
   clearValidationError(fieldName) {
-    this.logger.info(`🧹 [STATE] LIMPIANDO ERROR para ${fieldName}`);
+    this.logger.info(`🧹 [STATE] LIMPIANDO ERROR para ${fieldName}`)
 
-    const hadErrors = this.hasValidationErrors();
-    delete this.validationState.errors[fieldName];
-    this._updateValidationState();
+    const hadErrors = this.hasValidationErrors()
+    delete this.validationState.errors[fieldName]
+    this._updateValidationState()
 
     // Emitir evento si cambió el estado de validación
     if (hadErrors && !this.hasValidationErrors()) {
-      this._emitEvent("validationStateChanged", {
+      this._emitEvent('validationStateChanged', {
         isValid: true,
         clearedError: fieldName,
-        timestamp: new Date().toISOString(),
-      });
+        timestamp: new Date().toISOString()
+      })
     }
   }
 
@@ -195,17 +195,17 @@ export class State {
    * Limpiar todos los errores de validación
    */
   clearValidationErrors() {
-    const hadErrors = this.hasValidationErrors();
-    this.validationState.errors = {};
-    this.validationState.touchedFields.clear();
-    this._updateValidationState();
+    const hadErrors = this.hasValidationErrors()
+    this.validationState.errors = {}
+    this.validationState.touchedFields.clear()
+    this._updateValidationState()
 
     if (hadErrors) {
-      this._emitEvent("validationStateChanged", {
+      this._emitEvent('validationStateChanged', {
         isValid: true,
         allErrorsCleared: true,
-        timestamp: new Date().toISOString(),
-      });
+        timestamp: new Date().toISOString()
+      })
     }
   }
 
@@ -215,16 +215,16 @@ export class State {
    */
   markFieldAsTouched(fieldName) {
     if (!this.validationState.touchedFields.has(fieldName)) {
-      this.logger.info(`👆 [STATE] Campo marcado como TOCADO: ${fieldName}`);
+      this.logger.info(`👆 [STATE] Campo marcado como TOCADO: ${fieldName}`)
 
-      this.validationState.touchedFields.add(fieldName);
+      this.validationState.touchedFields.add(fieldName)
 
-      this._emitEvent("fieldTouched", {
+      this._emitEvent('fieldTouched', {
         fieldName,
-        timestamp: new Date().toISOString(),
-      });
+        timestamp: new Date().toISOString()
+      })
     } else {
-      this.logger.debug(`👆 [STATE] Campo ya estaba tocado: ${fieldName}`);
+      this.logger.debug(`👆 [STATE] Campo ya estaba tocado: ${fieldName}`)
     }
   }
 
@@ -234,7 +234,7 @@ export class State {
    * @returns {boolean}
    */
   isFieldTouched(fieldName) {
-    return this.validationState.touchedFields.has(fieldName);
+    return this.validationState.touchedFields.has(fieldName)
   }
 
   /**
@@ -242,7 +242,7 @@ export class State {
    * @returns {Object} - Copia de los errores
    */
   getValidationErrors() {
-    return { ...this.validationState.errors };
+    return { ...this.validationState.errors }
   }
 
   /**
@@ -250,7 +250,7 @@ export class State {
    * @returns {boolean}
    */
   hasValidationErrors() {
-    return Object.keys(this.validationState.errors).length > 0;
+    return Object.keys(this.validationState.errors).length > 0
   }
 
   /**
@@ -258,7 +258,7 @@ export class State {
    * @returns {boolean}
    */
   isValid() {
-    return this.validationState.isValid;
+    return this.validationState.isValid
   }
 
   // ===============================
@@ -272,19 +272,19 @@ export class State {
    */
   setFieldVisibility(fieldName, visible) {
     if (this.uiState.fieldsVisible.hasOwnProperty(fieldName)) {
-      const previousValue = this.uiState.fieldsVisible[fieldName];
+      const previousValue = this.uiState.fieldsVisible[fieldName]
 
       if (previousValue !== visible) {
-        this.uiState.fieldsVisible[fieldName] = visible;
+        this.uiState.fieldsVisible[fieldName] = visible
 
-        this.logger.debug(`Visibilidad de campo ${fieldName}: ${visible}`);
+        this.logger.debug(`Visibilidad de campo ${fieldName}: ${visible}`)
 
-        this._emitEvent("fieldVisibilityChanged", {
+        this._emitEvent('fieldVisibilityChanged', {
           fieldName,
           visible,
           previousValue,
-          timestamp: new Date().toISOString(),
-        });
+          timestamp: new Date().toISOString()
+        })
       }
     }
   }
@@ -296,19 +296,19 @@ export class State {
    */
   setFieldDisabled(fieldName, disabled) {
     if (this.uiState.fieldsDisabled.hasOwnProperty(fieldName)) {
-      const previousValue = this.uiState.fieldsDisabled[fieldName];
+      const previousValue = this.uiState.fieldsDisabled[fieldName]
 
       if (previousValue !== disabled) {
-        this.uiState.fieldsDisabled[fieldName] = disabled;
+        this.uiState.fieldsDisabled[fieldName] = disabled
 
-        this.logger.debug(`Campo ${fieldName} ${disabled ? "deshabilitado" : "habilitado"}`);
+        this.logger.debug(`Campo ${fieldName} ${disabled ? 'deshabilitado' : 'habilitado'}`)
 
-        this._emitEvent("fieldDisabledChanged", {
+        this._emitEvent('fieldDisabledChanged', {
           fieldName,
           disabled,
           previousValue,
-          timestamp: new Date().toISOString(),
-        });
+          timestamp: new Date().toISOString()
+        })
       }
     }
   }
@@ -318,7 +318,7 @@ export class State {
    * @returns {Object} - Copia del estado de Ui
    */
   getUiState() {
-    return { ...this.uiState };
+    return { ...this.uiState }
   }
 
   // ===============================
@@ -332,19 +332,19 @@ export class State {
    */
   setSystemState(key, value) {
     if (this.systemState.hasOwnProperty(key)) {
-      const previousValue = this.systemState[key];
+      const previousValue = this.systemState[key]
 
       if (previousValue !== value) {
-        this.systemState[key] = value;
+        this.systemState[key] = value
 
-        this.logger.debug(`Estado del sistema actualizado: ${key} = ${value}`);
+        this.logger.debug(`Estado del sistema actualizado: ${key} = ${value}`)
 
-        this._emitEvent("systemStateChanged", {
+        this._emitEvent('systemStateChanged', {
           key,
           value,
           previousValue,
-          timestamp: new Date().toISOString(),
-        });
+          timestamp: new Date().toISOString()
+        })
       }
     }
   }
@@ -354,7 +354,7 @@ export class State {
    * @returns {Object} - Copia del estado del sistema
    */
   getSystemState() {
-    return { ...this.systemState };
+    return { ...this.systemState }
   }
 
   // ===============================
@@ -366,9 +366,9 @@ export class State {
    * @param {boolean} enabled - Si está habilitado
    */
   setDevelopmentMode(enabled) {
-    this.setSystemState("developmentMode", enabled);
+    this.setSystemState('developmentMode', enabled)
 
-    this.logger.info(`🔧 Modo desarrollo: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🔧 Modo desarrollo: ${enabled ? 'ACTIVADO' : 'DESACTIVADO'}`)
   }
 
   /**
@@ -376,9 +376,9 @@ export class State {
    * @param {boolean} enabled - Si está habilitado
    */
   setTestMode(enabled) {
-    this.setSystemState("testMode", enabled);
+    this.setSystemState('testMode', enabled)
 
-    this.logger.info(`🧪 Modo test: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🧪 Modo test: ${enabled ? 'ACTIVADO' : 'DESACTIVADO'}`)
   }
 
   /**
@@ -386,9 +386,9 @@ export class State {
    * @param {boolean} enabled - Si está habilitado
    */
   setDebugMode(enabled) {
-    this.setSystemState("debugMode", enabled);
+    this.setSystemState('debugMode', enabled)
 
-    this.logger.info(`🐛 Modo debug: ${enabled ? "ACTIVADO" : "DESACTIVADO"}`);
+    this.logger.info(`🐛 Modo debug: ${enabled ? 'ACTIVADO' : 'DESACTIVADO'}`)
   }
 
   /**
@@ -396,7 +396,7 @@ export class State {
    * @returns {boolean}
    */
   isDevMode() {
-    return this.systemState.developmentMode;
+    return this.systemState.developmentMode
   }
 
   /**
@@ -404,7 +404,7 @@ export class State {
    * @returns {boolean}
    */
   isTestMode() {
-    return this.systemState.testMode;
+    return this.systemState.testMode
   }
 
   /**
@@ -412,7 +412,7 @@ export class State {
    * @returns {boolean}
    */
   isDebugMode() {
-    return this.systemState.debugMode;
+    return this.systemState.debugMode
   }
 
   /**
@@ -420,7 +420,7 @@ export class State {
    * @param {Logger} logger - Instancia del logger
    */
   setLogger(logger) {
-    this.logger = logger;
+    this.logger = logger
   }
 
   // ===============================
@@ -432,19 +432,15 @@ export class State {
    * @returns {boolean}
    */
   isReadyToSubmit() {
-    const authField = Constants.FIELDS.DATA_AUTHORIZATION;
+    const authField = Constants.FIELDS.DATA_AUTHORIZATION
 
     // En modo desarrollo, los reqUisitos son más flexibles
     if (this.systemState.devMode) {
-      return !this.systemState.isSubmitting;
+      return !this.systemState.isSubmitting
     }
 
     // En modo normal, se reqUiere validación y autorización
-    return (
-      this.validationState.isValid &&
-      !this.systemState.isSubmitting &&
-      this.state[authField] === "1"
-    );
+    return this.validationState.isValid && !this.systemState.isSubmitting && this.state[authField] === '1'
   }
 
   /**
@@ -459,11 +455,11 @@ export class State {
         isValid: this.validationState.isValid,
         errorsCount: Object.keys(this.validationState.errors).length,
         touchedFieldsCount: this.validationState.touchedFields.size,
-        errors: this.getValidationErrors(),
+        errors: this.getValidationErrors()
       },
       systemState: this.getSystemState(),
-      isReadyToSubmit: this.isReadyToSubmit(),
-    };
+      isReadyToSubmit: this.isReadyToSubmit()
+    }
   }
 
   // ===============================
@@ -475,9 +471,9 @@ export class State {
    * @param {Event} event - Instancia del Event
    */
   setEventManager(event) {
-    this.event = event;
+    this.event = event
 
-    this.logger.debug("Event configurado en State");
+    this.logger.debug('Event configurado en State')
   }
 
   // ===============================
@@ -489,57 +485,57 @@ export class State {
    * @private
    */
   _getInitialState() {
-    const { FIELDS } = Constants;
+    const { FIELDS } = Constants
 
     return {
       // Campos ocultos
-      [FIELDS.OID]: "",
-      [FIELDS.RET_URL]: this.config.retUrl || "",
-      [FIELDS.DEBUG]: "0",
-      [FIELDS.DEBUG_EMAIL]: this.config.debugEmail || "",
+      [FIELDS.OID]: '',
+      [FIELDS.RET_URL]: this.config.retUrl || '',
+      [FIELDS.DEBUG]: '0',
+      [FIELDS.DEBUG_EMAIL]: this.config.debugEmail || '',
 
       // Campos ocultos obligatorios para el flujo en Salesforce
-      [FIELDS.AUTHORIZATION_SOURCE]: this.config.authorizationSource || "Landing Eventos",
-      [FIELDS.REQUEST_ORIGIN]: this.config.requestOrigin || "web_to_lead_eventos",
-      [FIELDS.LEAD_SOURCE]: this.config.leadSource || "Landing Pages",
+      [FIELDS.AUTHORIZATION_SOURCE]: this.config.authorizationSource || 'Landing Eventos',
+      [FIELDS.REQUEST_ORIGIN]: this.config.requestOrigin || 'web_to_lead_eventos',
+      [FIELDS.LEAD_SOURCE]: this.config.leadSource || 'Landing Pages',
 
       // Campos personales
-      [FIELDS.FIRST_NAME]: "",
-      [FIELDS.LAST_NAME]: "",
-      [FIELDS.TYPE_DOC]: "",
-      [FIELDS.DOCUMENT]: "",
-      [FIELDS.EMAIL]: "",
-      [FIELDS.PHONE_CODE]: "57",
-      [FIELDS.PHONE]: "",
+      [FIELDS.FIRST_NAME]: '',
+      [FIELDS.LAST_NAME]: '',
+      [FIELDS.TYPE_DOC]: '',
+      [FIELDS.DOCUMENT]: '',
+      [FIELDS.EMAIL]: '',
+      [FIELDS.PHONE_CODE]: '57',
+      [FIELDS.PHONE]: '',
 
       // Campos de ubicación
-      [FIELDS.COUNTRY]: "COL",
-      [FIELDS.DEPARTMENT]: "",
-      [FIELDS.CITY]: "",
+      [FIELDS.COUNTRY]: 'COL',
+      [FIELDS.DEPARTMENT]: '',
+      [FIELDS.CITY]: '',
 
       // Campos académicos
-      [FIELDS.ACADEMIC_LEVEL]: "",
-      [FIELDS.FACULTY]: "",
-      [FIELDS.PROGRAM]: "",
-      [FIELDS.ADMISSION_PERIOD]: "",
+      [FIELDS.ACADEMIC_LEVEL]: '',
+      [FIELDS.FACULTY]: '',
+      [FIELDS.PROGRAM]: '',
+      [FIELDS.ADMISSION_PERIOD]: '',
 
       // Campos del evento
-      [FIELDS.TYPE_ATTENDEE]: "Aspirante",
-      [FIELDS.ATTENDANCE_DAY]: "",
-      [FIELDS.COLLEGE]: "",
-      [FIELDS.UNIVERSITY]: "",
-      [FIELDS.COMPANY]: "NA",
-      [FIELDS.DATA_AUTHORIZATION]: "",
+      [FIELDS.TYPE_ATTENDEE]: 'Aspirante',
+      [FIELDS.ATTENDANCE_DAY]: '',
+      [FIELDS.COLLEGE]: '',
+      [FIELDS.UNIVERSITY]: '',
+      [FIELDS.COMPANY]: 'NA',
+      [FIELDS.DATA_AUTHORIZATION]: '',
 
       // Campos parámetros URL - PRIORIDAD: configuración > valores por defecto
-      [FIELDS.SOURCE]: this.config.getConfig().source || "Javeriana",
-      [FIELDS.SUB_SOURCE]: this.config.getConfig().subSource || "Organico",
-      [FIELDS.MEDIUM]: this.config.getConfig().medium || "Landing",
-      [FIELDS.CAMPAIGN]: this.config.getConfig().campaign || "",
-      [FIELDS.ARTICLE]: this.config.getConfig().article || "",
-      [FIELDS.EVENT_NAME]: this.config.getConfig().eventName || "",
-      [FIELDS.EVENT_DATE]: this.config.getConfig().eventDate || "",
-    };
+      [FIELDS.SOURCE]: this.config.getConfig().source || 'Javeriana',
+      [FIELDS.SUB_SOURCE]: this.config.getConfig().subSource || 'Organico',
+      [FIELDS.MEDIUM]: this.config.getConfig().medium || 'Landing',
+      [FIELDS.CAMPAIGN]: this.config.getConfig().campaign || '',
+      [FIELDS.ARTICLE]: this.config.getConfig().article || '',
+      [FIELDS.EVENT_NAME]: this.config.getConfig().eventName || '',
+      [FIELDS.EVENT_DATE]: this.config.getConfig().eventDate || ''
+    }
   }
 
   /**
@@ -547,7 +543,7 @@ export class State {
    * @private
    */
   _getInitialUiState() {
-    const { FIELDS } = Constants;
+    const { FIELDS } = Constants
 
     return {
       fieldsVisible: {
@@ -556,12 +552,12 @@ export class State {
         [FIELDS.ACADEMIC_LEVEL]: false,
         [FIELDS.FACULTY]: false,
         [FIELDS.PROGRAM]: false,
-        [FIELDS.ADMISSION_PERIOD]: false,
+        [FIELDS.ADMISSION_PERIOD]: false
       },
       fieldsDisabled: {
-        submit: true,
-      },
-    };
+        submit: true
+      }
+    }
   }
 
   /**
@@ -572,8 +568,8 @@ export class State {
     return {
       errors: {},
       touchedFields: new Set(),
-      isValid: false,
-    };
+      isValid: false
+    }
   }
 
   /**
@@ -587,8 +583,8 @@ export class State {
       isLoading: false,
       developmentMode: false,
       testMode: false,
-      debugMode: false,
-    };
+      debugMode: false
+    }
   }
 
   /**
@@ -596,7 +592,7 @@ export class State {
    * @private
    */
   _updateValidationState() {
-    this.validationState.isValid = !this.hasValidationErrors();
+    this.validationState.isValid = !this.hasValidationErrors()
   }
 
   /**
@@ -605,19 +601,19 @@ export class State {
    */
   _emitFieldChangeEvents(fieldName, previousValue, currentValue) {
     // Evento general de cambio de campo
-    this._emitEvent("fieldChanged", {
+    this._emitEvent('fieldChanged', {
       fieldName,
       previousValue,
       currentValue,
-      timestamp: new Date().toISOString(),
-    });
+      timestamp: new Date().toISOString()
+    })
 
     // Evento específico del campo
     this._emitEvent(`field:${fieldName}:changed`, {
       previousValue,
       currentValue,
-      timestamp: new Date().toISOString(),
-    });
+      timestamp: new Date().toISOString()
+    })
   }
 
   /**
@@ -626,7 +622,7 @@ export class State {
    */
   _emitEvent(eventName, data) {
     if (this.event) {
-      this.event.emit(eventName, data);
+      this.event.emit(eventName, data)
     }
   }
 
@@ -638,76 +634,71 @@ export class State {
   _autoValidateField(fieldName) {
     // Solo validar si está habilitado y tenemos las dependencias necesarias
     if (!this.autoValidation.enabled || !this.validator || !this.ui || !this.formElement) {
-      this.logger.debug(
-        `⚠️ Validación automática deshabilitada o faltan dependencias para: ${fieldName}`,
-        {
-          enabled: this.autoValidation.enabled,
-          hasValidator: !!this.validator,
-          hasUi: !!this.ui,
-          hasFormElement: !!this.formElement,
-        }
-      );
+      this.logger.debug(`⚠️ Validación automática deshabilitada o faltan dependencias para: ${fieldName}`, {
+        enabled: this.autoValidation.enabled,
+        hasValidator: !!this.validator,
+        hasUi: !!this.ui,
+        hasFormElement: !!this.formElement
+      })
 
-      return;
+      return
     }
 
     // Solo validar si el campo ha sido tocado por el usuario
     if (!this.isFieldTouched(fieldName)) {
-      this.logger.debug(`⚠️ Campo ${fieldName} no ha sido tocado, saltando validación`);
+      this.logger.debug(`⚠️ Campo ${fieldName} no ha sido tocado, saltando validación`)
 
-      return;
+      return
     }
 
-    this.logger.info(`🔍 Ejecutando validación automática para: ${fieldName}`);
+    this.logger.info(`🔍 Ejecutando validación automática para: ${fieldName}`)
 
     try {
       // Obtener el elemento del campo en el DOM
-      const fieldElement = this._getFieldElement(fieldName);
+      const fieldElement = this._getFieldElement(fieldName)
       if (!fieldElement) {
-        this.logger.debug(`⚠️ Elemento no encontrado para campo: ${fieldName}`);
+        this.logger.debug(`⚠️ Elemento no encontrado para campo: ${fieldName}`)
 
-        return;
+        return
       }
 
       // Realizar validación completa del formulario
-      const formData = this.getFormData();
+      const formData = this.getFormData()
 
-      this.logger.info(`📊 Datos del formulario para validación:`, formData[fieldName]);
+      this.logger.info(`📊 Datos del formulario para validación:`, formData[fieldName])
 
-      const validationResult = this.validator.validateFullForm(this.formElement, formData);
+      const validationResult = this.validator.validateFullForm(this.formElement, formData)
 
       this.logger.info(`📋 Resultado de validación para ${fieldName}:`, {
         isValid: validationResult.isValid,
         hasErrorForField: !!validationResult.errors[fieldName],
         fieldError: validationResult.errors[fieldName],
-        allErrors: Object.keys(validationResult.errors),
-      });
+        allErrors: Object.keys(validationResult.errors)
+      })
 
       // Manejar resultado de validación
       if (!validationResult.isValid && validationResult.errors[fieldName]) {
         // Hay error en este campo
-        this.setValidationError(fieldName, validationResult.errors[fieldName]);
-        this.ui.showFieldError(fieldElement, validationResult.errors[fieldName]);
+        this.setValidationError(fieldName, validationResult.errors[fieldName])
+        this.ui.showFieldError(fieldElement, validationResult.errors[fieldName])
 
-        this.logger.info(
-          `❌ Error mostrado para ${fieldName}: ${validationResult.errors[fieldName]}`
-        );
+        this.logger.info(`❌ Error mostrado para ${fieldName}: ${validationResult.errors[fieldName]}`)
       } else {
         // No hay error en este campo
 
-        this.logger.info(`✅ Campo válido, limpiando errores para: ${fieldName}`);
+        this.logger.info(`✅ Campo válido, limpiando errores para: ${fieldName}`)
         this.logger.info(`🔍 Debug - Estado antes de limpiar:`, {
           fieldName,
           fieldValue: formData[fieldName],
           allErrorsCount: Object.keys(validationResult.errors).length,
-          hasThisFieldError: !!validationResult.errors[fieldName],
-        });
+          hasThisFieldError: !!validationResult.errors[fieldName]
+        })
 
-        this.clearValidationError(fieldName);
-        this.ui.hideFieldError(fieldElement);
+        this.clearValidationError(fieldName)
+        this.ui.hideFieldError(fieldElement)
       }
     } catch (error) {
-      this.logger.error(`Error en validación automática para ${fieldName}:`, error);
+      this.logger.error(`Error en validación automática para ${fieldName}:`, error)
     }
   }
 
@@ -718,20 +709,16 @@ export class State {
    * @returns {HTMLElement|null} - Elemento del campo o null
    */
   _getFieldElement(fieldName) {
-    if (!this.formElement) return null;
+    if (!this.formElement) return null
 
     // Buscar por name, id, o selector de constantes
-    const selectors = [
-      `[name="${fieldName}"]`,
-      `#${fieldName}`,
-      Constants.SELECTORS[fieldName.toUpperCase()] || null,
-    ].filter(Boolean);
+    const selectors = [`[name="${fieldName}"]`, `#${fieldName}`, Constants.SELECTORS[fieldName.toUpperCase()] || null].filter(Boolean)
 
     for (const selector of selectors) {
-      const element = this.formElement.querySelector(selector);
-      if (element) return element;
+      const element = this.formElement.querySelector(selector)
+      if (element) return element
     }
 
-    return null;
+    return null
   }
 }

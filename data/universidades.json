@@ -1,907 +1,907 @@
 {
-"cuentasInstitucionales":[
+  "cuentasInstitucionales": [
     {
-        "ID": "001Jw00000aWQ4H",
-        "NAME": "Universidad Prueba",
-        "PUJ_EXTERNALORGID__C": "0002",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "001Jw00000aWQ4H",
+      "NAME": "Universidad Prueba",
+      "PUJ_EXTERNALORGID__C": "0002",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfY5",
-        "NAME": "Escuela de Musica Fernando Sor",
-        "PUJ_EXTERNALORGID__C": "00020103402",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYfY5",
+      "NAME": "Escuela de Musica Fernando Sor",
+      "PUJ_EXTERNALORGID__C": "00020103402",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYfYL",
-        "NAME": "Universidad No Creada",
-        "PUJ_EXTERNALORGID__C": "00020298890",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYfYL",
+      "NAME": "Universidad No Creada",
+      "PUJ_EXTERNALORGID__C": "00020298890",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpM9",
-        "NAME": "Col. May. Nra. Sra. de Rosario",
-        "PUJ_EXTERNALORGID__C": "00010015681",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpM9",
+      "NAME": "Col. May. Nra. Sra. de Rosario",
+      "PUJ_EXTERNALORGID__C": "00010015681",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpMw",
-        "NAME": "Corp. Univ. Piloto de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010015754",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpMw",
+      "NAME": "Corp. Univ. Piloto de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010015754",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpOJ",
-        "NAME": "Fund. Univ. Autonom. de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010015853",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpOJ",
+      "NAME": "Fund. Univ. Autonom. de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010015853",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpOK",
-        "NAME": "Fund. Universidad Central",
-        "PUJ_EXTERNALORGID__C": "00010015854",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpOK",
+      "NAME": "Fund. Universidad Central",
+      "PUJ_EXTERNALORGID__C": "00010015854",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpOL",
-        "NAME": "Fund. Universidad de America",
-        "PUJ_EXTERNALORGID__C": "00010015855",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpOL",
+      "NAME": "Fund. Universidad de America",
+      "PUJ_EXTERNALORGID__C": "00010015855",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpOM",
-        "NAME": "Fund. Univ. Jorge Tadeo Lozano",
-        "PUJ_EXTERNALORGID__C": "00010015856",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpOM",
+      "NAME": "Fund. Univ. Jorge Tadeo Lozano",
+      "PUJ_EXTERNALORGID__C": "00010015856",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpPL",
-        "NAME": "Pontificia Universidad Javeriana",
-        "PUJ_EXTERNALORGID__C": "00010015975",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpPL",
+      "NAME": "Pontificia Universidad Javeriana",
+      "PUJ_EXTERNALORGID__C": "00010015975",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpPT",
-        "NAME": "Universidad Antonio Nariño",
-        "PUJ_EXTERNALORGID__C": "00010015983",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpPT",
+      "NAME": "Universidad Antonio Nariño",
+      "PUJ_EXTERNALORGID__C": "00010015983",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpPZ",
-        "NAME": "Univ. Católica de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010015989",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpPZ",
+      "NAME": "Univ. Católica de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010015989",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpPm",
-        "NAME": "Universidad de la Salle",
-        "PUJ_EXTERNALORGID__C": "00010016026",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpPm",
+      "NAME": "Universidad de la Salle",
+      "PUJ_EXTERNALORGID__C": "00010016026",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpPn",
-        "NAME": "Universidad de los Andes",
-        "PUJ_EXTERNALORGID__C": "00010016028",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpPn",
+      "NAME": "Universidad de los Andes",
+      "PUJ_EXTERNALORGID__C": "00010016028",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQ2",
-        "NAME": "Univ. Dist. Francisco J. de Caldas",
-        "PUJ_EXTERNALORGID__C": "00010016069",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQ2",
+      "NAME": "Univ. Dist. Francisco J. de Caldas",
+      "PUJ_EXTERNALORGID__C": "00010016069",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQ3",
-        "NAME": "Universidad el Bosque",
-        "PUJ_EXTERNALORGID__C": "00010016074",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQ3",
+      "NAME": "Universidad el Bosque",
+      "PUJ_EXTERNALORGID__C": "00010016074",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQ5",
-        "NAME": "Universidad Externado de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010016082",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQ5",
+      "NAME": "Universidad Externado de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010016082",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQ8",
-        "NAME": "Universidad Incca de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010016096",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQ8",
+      "NAME": "Universidad Incca de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010016096",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQA",
-        "NAME": "Univ. La Gran Colombia",
-        "PUJ_EXTERNALORGID__C": "00010016103",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQA",
+      "NAME": "Univ. La Gran Colombia",
+      "PUJ_EXTERNALORGID__C": "00010016103",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQB",
-        "NAME": "Universidad Libre",
-        "PUJ_EXTERNALORGID__C": "00010016107",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQB",
+      "NAME": "Universidad Libre",
+      "PUJ_EXTERNALORGID__C": "00010016107",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQE",
-        "NAME": "Univ. Militar Nueva Granada",
-        "PUJ_EXTERNALORGID__C": "00010016114",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQE",
+      "NAME": "Univ. Militar Nueva Granada",
+      "PUJ_EXTERNALORGID__C": "00010016114",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQH",
-        "NAME": "Univ. Nacional de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010016133",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQH",
+      "NAME": "Univ. Nacional de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010016133",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQI",
-        "NAME": "Universidad Pedag. Nacional",
-        "PUJ_EXTERNALORGID__C": "00010016152",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQI",
+      "NAME": "Universidad Pedag. Nacional",
+      "PUJ_EXTERNALORGID__C": "00010016152",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQM",
-        "NAME": "Universidad Santo Tomas",
-        "PUJ_EXTERNALORGID__C": "00010016189",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQM",
+      "NAME": "Universidad Santo Tomas",
+      "PUJ_EXTERNALORGID__C": "00010016189",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQN",
-        "NAME": "Universidad Sergio Arboleda",
-        "PUJ_EXTERNALORGID__C": "00010016199",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQN",
+      "NAME": "Universidad Sergio Arboleda",
+      "PUJ_EXTERNALORGID__C": "00010016199",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYpQR",
-        "NAME": "Univ. Col. May. de Cundinamarca",
-        "PUJ_EXTERNALORGID__C": "00010016218",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYpQR",
+      "NAME": "Univ. Col. May. de Cundinamarca",
+      "PUJ_EXTERNALORGID__C": "00010016218",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYq8U",
-        "NAME": "INESCO",
-        "PUJ_EXTERNALORGID__C": "00020033426",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYq8U",
+      "NAME": "INESCO",
+      "PUJ_EXTERNALORGID__C": "00020033426",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYq8Y",
-        "NAME": "Escuela de Cocina Gato Dumas",
-        "PUJ_EXTERNALORGID__C": "00020033444",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYq8Y",
+      "NAME": "Escuela de Cocina Gato Dumas",
+      "PUJ_EXTERNALORGID__C": "00020033444",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYq8Z",
-        "NAME": "Universidad del Rosario",
-        "PUJ_EXTERNALORGID__C": "00020033446",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYq8Z",
+      "NAME": "Universidad del Rosario",
+      "PUJ_EXTERNALORGID__C": "00020033446",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYq8c",
-        "NAME": "Acuerdo UNIANDINO (CIDCA)",
-        "PUJ_EXTERNALORGID__C": "00020034202",
-        "SHIPPINGSTATE": "BOG",
-        "SHIPPINGCITY": "Bogotá D.C."
+      "ID": "0015G00002fYq8c",
+      "NAME": "Acuerdo UNIANDINO (CIDCA)",
+      "PUJ_EXTERNALORGID__C": "00020034202",
+      "SHIPPINGSTATE": "BOG",
+      "SHIPPINGCITY": "Bogotá D.C."
     },
     {
-        "ID": "0015G00002fYfYB",
-        "NAME": "Universidad Tecnológica de los Llanos",
-        "PUJ_EXTERNALORGID__C": "00020154348",
-        "SHIPPINGSTATE": "MET",
-        "SHIPPINGCITY": "Villavicencio"
+      "ID": "0015G00002fYfYB",
+      "NAME": "Universidad Tecnológica de los Llanos",
+      "PUJ_EXTERNALORGID__C": "00020154348",
+      "SHIPPINGSTATE": "MET",
+      "SHIPPINGCITY": "Villavicencio"
     },
     {
-        "ID": "0015G00002fYpPo",
-        "NAME": "Universidad de los Llanos",
-        "PUJ_EXTERNALORGID__C": "00010016030",
-        "SHIPPINGSTATE": "MET",
-        "SHIPPINGCITY": "Villavicencio"
+      "ID": "0015G00002fYpPo",
+      "NAME": "Universidad de los Llanos",
+      "PUJ_EXTERNALORGID__C": "00010016030",
+      "SHIPPINGSTATE": "MET",
+      "SHIPPINGCITY": "Villavicencio"
     },
     {
-        "ID": "0015G00002fYpPr",
-        "NAME": "Universidad de Nariño",
-        "PUJ_EXTERNALORGID__C": "00010016036",
-        "SHIPPINGSTATE": "NAR",
-        "SHIPPINGCITY": "Pasto"
+      "ID": "0015G00002fYpPr",
+      "NAME": "Universidad de Nariño",
+      "PUJ_EXTERNALORGID__C": "00010016036",
+      "SHIPPINGSTATE": "NAR",
+      "SHIPPINGCITY": "Pasto"
     },
     {
-        "ID": "0015G00002fYpQC",
-        "NAME": "Universidad Mariana",
-        "PUJ_EXTERNALORGID__C": "00010016109",
-        "SHIPPINGSTATE": "NAR",
-        "SHIPPINGCITY": "Pasto"
+      "ID": "0015G00002fYpQC",
+      "NAME": "Universidad Mariana",
+      "PUJ_EXTERNALORGID__C": "00010016109",
+      "SHIPPINGSTATE": "NAR",
+      "SHIPPINGCITY": "Pasto"
     },
     {
-        "ID": "0015G00002fYpQ6",
-        "NAME": "Univ. Franc. de Paula Santander",
-        "PUJ_EXTERNALORGID__C": "00010016085",
-        "SHIPPINGSTATE": "NSA",
-        "SHIPPINGCITY": "Cúcuta"
+      "ID": "0015G00002fYpQ6",
+      "NAME": "Univ. Franc. de Paula Santander",
+      "PUJ_EXTERNALORGID__C": "00010016085",
+      "SHIPPINGSTATE": "NSA",
+      "SHIPPINGCITY": "Cúcuta"
     },
     {
-        "ID": "0015G00002fYfYD",
-        "NAME": "Universidad Francisco de Paula Santander (Ocaña)",
-        "PUJ_EXTERNALORGID__C": "00020154359",
-        "SHIPPINGSTATE": "NSA",
-        "SHIPPINGCITY": "Ocaña"
+      "ID": "0015G00002fYfYD",
+      "NAME": "Universidad Francisco de Paula Santander (Ocaña)",
+      "PUJ_EXTERNALORGID__C": "00020154359",
+      "SHIPPINGSTATE": "NSA",
+      "SHIPPINGCITY": "Ocaña"
     },
     {
-        "ID": "0015G00002fYpPs",
-        "NAME": "Universidad de Pamplona",
-        "PUJ_EXTERNALORGID__C": "00010016039",
-        "SHIPPINGSTATE": "NSA",
-        "SHIPPINGCITY": "Pamplona"
+      "ID": "0015G00002fYpPs",
+      "NAME": "Universidad de Pamplona",
+      "PUJ_EXTERNALORGID__C": "00010016039",
+      "SHIPPINGSTATE": "NSA",
+      "SHIPPINGCITY": "Pamplona"
     },
     {
-        "ID": "0015G00002fYpPz",
-        "NAME": "Universidad del Quindio",
-        "PUJ_EXTERNALORGID__C": "00010016059",
-        "SHIPPINGSTATE": "QUI",
-        "SHIPPINGCITY": "Armenia"
+      "ID": "0015G00002fYpPz",
+      "NAME": "Universidad del Quindio",
+      "PUJ_EXTERNALORGID__C": "00010016059",
+      "SHIPPINGSTATE": "QUI",
+      "SHIPPINGCITY": "Armenia"
     },
     {
-        "ID": "0015G00002fYfYG",
-        "NAME": "Universidad Católica de Risaralda",
-        "PUJ_EXTERNALORGID__C": "00020154369",
-        "SHIPPINGSTATE": "RIS",
-        "SHIPPINGCITY": "Pereira"
+      "ID": "0015G00002fYfYG",
+      "NAME": "Universidad Católica de Risaralda",
+      "PUJ_EXTERNALORGID__C": "00020154369",
+      "SHIPPINGSTATE": "RIS",
+      "SHIPPINGCITY": "Pereira"
     },
     {
-        "ID": "0015G00002fYpQP",
-        "NAME": "Universidad Tecnol. de Pereira",
-        "PUJ_EXTERNALORGID__C": "00010016210",
-        "SHIPPINGSTATE": "RIS",
-        "SHIPPINGCITY": "Pereira"
+      "ID": "0015G00002fYpQP",
+      "NAME": "Universidad Tecnol. de Pereira",
+      "PUJ_EXTERNALORGID__C": "00010016210",
+      "SHIPPINGSTATE": "RIS",
+      "SHIPPINGCITY": "Pereira"
     },
     {
-        "ID": "0015G00002fYfY8",
-        "NAME": "Universidad Autónoma de Bucaramanga",
-        "PUJ_EXTERNALORGID__C": "00020154191",
-        "SHIPPINGSTATE": "STD",
-        "SHIPPINGCITY": "Bucaramanga"
+      "ID": "0015G00002fYfY8",
+      "NAME": "Universidad Autónoma de Bucaramanga",
+      "PUJ_EXTERNALORGID__C": "00020154191",
+      "SHIPPINGSTATE": "STD",
+      "SHIPPINGCITY": "Bucaramanga"
     },
     {
-        "ID": "0015G00002fYfYE",
-        "NAME": "Universidad de Santander",
-        "PUJ_EXTERNALORGID__C": "00020154365",
-        "SHIPPINGSTATE": "STD",
-        "SHIPPINGCITY": "Bucaramanga"
+      "ID": "0015G00002fYfYE",
+      "NAME": "Universidad de Santander",
+      "PUJ_EXTERNALORGID__C": "00020154365",
+      "SHIPPINGSTATE": "STD",
+      "SHIPPINGCITY": "Bucaramanga"
     },
     {
-        "ID": "0015G00002fYpPQ",
-        "NAME": "Unidades Tecnol. de Santander",
-        "PUJ_EXTERNALORGID__C": "00010015980",
-        "SHIPPINGSTATE": "STD",
-        "SHIPPINGCITY": "Bucaramanga"
+      "ID": "0015G00002fYpPQ",
+      "NAME": "Unidades Tecnol. de Santander",
+      "PUJ_EXTERNALORGID__C": "00010015980",
+      "SHIPPINGSTATE": "STD",
+      "SHIPPINGCITY": "Bucaramanga"
     },
     {
-        "ID": "0015G00002fYpPV",
-        "NAME": "Univ. Auton. de Bucaramanga",
-        "PUJ_EXTERNALORGID__C": "00010015985",
-        "SHIPPINGSTATE": "STD",
-        "SHIPPINGCITY": "Bucaramanga"
+      "ID": "0015G00002fYpPV",
+      "NAME": "Univ. Auton. de Bucaramanga",
+      "PUJ_EXTERNALORGID__C": "00010015985",
+      "SHIPPINGSTATE": "STD",
+      "SHIPPINGCITY": "Bucaramanga"
     },
     {
-        "ID": "0015G00002fYpQ9",
-        "NAME": "Univ. Indus. de Santander",
-        "PUJ_EXTERNALORGID__C": "00010016098",
-        "SHIPPINGSTATE": "STD",
-        "SHIPPINGCITY": "Bucaramanga"
+      "ID": "0015G00002fYpQ9",
+      "NAME": "Univ. Indus. de Santander",
+      "PUJ_EXTERNALORGID__C": "00010016098",
+      "SHIPPINGSTATE": "STD",
+      "SHIPPINGCITY": "Bucaramanga"
     },
     {
-        "ID": "0015G00002fYpPu",
-        "NAME": "Universidad de Sucre",
-        "PUJ_EXTERNALORGID__C": "00010016048",
-        "SHIPPINGSTATE": "SUC",
-        "SHIPPINGCITY": "Sincelejo"
+      "ID": "0015G00002fYpPu",
+      "NAME": "Universidad de Sucre",
+      "PUJ_EXTERNALORGID__C": "00010016048",
+      "SHIPPINGSTATE": "SUC",
+      "SHIPPINGCITY": "Sincelejo"
     },
     {
-        "ID": "0015G00002fYfYI",
-        "NAME": "Universidad de Ibague",
-        "PUJ_EXTERNALORGID__C": "00020154374",
-        "SHIPPINGSTATE": "TOL",
-        "SHIPPINGCITY": "Ibagué"
+      "ID": "0015G00002fYfYI",
+      "NAME": "Universidad de Ibague",
+      "PUJ_EXTERNALORGID__C": "00020154374",
+      "SHIPPINGSTATE": "TOL",
+      "SHIPPINGCITY": "Ibagué"
     },
     {
-        "ID": "0015G00002fYpN5",
-        "NAME": "Corp. Universitaria de Ibague",
-        "PUJ_EXTERNALORGID__C": "00010015763",
-        "SHIPPINGSTATE": "TOL",
-        "SHIPPINGCITY": "Ibagué"
+      "ID": "0015G00002fYpN5",
+      "NAME": "Corp. Universitaria de Ibague",
+      "PUJ_EXTERNALORGID__C": "00010015763",
+      "SHIPPINGSTATE": "TOL",
+      "SHIPPINGCITY": "Ibagué"
     },
     {
-        "ID": "0015G00002fYpQ0",
-        "NAME": "Universidad del Tolima",
-        "PUJ_EXTERNALORGID__C": "00010016062",
-        "SHIPPINGSTATE": "TOL",
-        "SHIPPINGCITY": "Ibagué"
+      "ID": "0015G00002fYpQ0",
+      "NAME": "Universidad del Tolima",
+      "PUJ_EXTERNALORGID__C": "00010016062",
+      "SHIPPINGSTATE": "TOL",
+      "SHIPPINGCITY": "Ibagué"
     },
     {
-        "ID": "0015G00002fYpPy",
-        "NAME": "Universidad del Pacífico",
-        "PUJ_EXTERNALORGID__C": "00010016058",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Buenaventura"
+      "ID": "0015G00002fYpPy",
+      "NAME": "Universidad del Pacífico",
+      "PUJ_EXTERNALORGID__C": "00010016058",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Buenaventura"
     },
     {
-        "ID": "0015G00002fYfY9",
-        "NAME": "Universidad Pedagógica y Tecnológica de Colombia",
-        "PUJ_EXTERNALORGID__C": "00020154344",
-        "SHIPPINGSTATE": "BOY",
-        "SHIPPINGCITY": "Tunja"
+      "ID": "0015G00002fYfY9",
+      "NAME": "Universidad Pedagógica y Tecnológica de Colombia",
+      "PUJ_EXTERNALORGID__C": "00020154344",
+      "SHIPPINGSTATE": "BOY",
+      "SHIPPINGCITY": "Tunja"
     },
     {
-        "ID": "0015G00002fYpQG",
-        "NAME": "Univ. Pedag. y Tecnol. de Col.",
-        "PUJ_EXTERNALORGID__C": "00010016120",
-        "SHIPPINGSTATE": "BOY",
-        "SHIPPINGCITY": "Tunja"
+      "ID": "0015G00002fYpQG",
+      "NAME": "Univ. Pedag. y Tecnol. de Col.",
+      "PUJ_EXTERNALORGID__C": "00010016120",
+      "SHIPPINGSTATE": "BOY",
+      "SHIPPINGCITY": "Tunja"
     },
     {
-        "ID": "0015G00002fYfYA",
-        "NAME": "Universidad Católica de Manizales",
-        "PUJ_EXTERNALORGID__C": "00020154347",
-        "SHIPPINGSTATE": "CAL",
-        "SHIPPINGCITY": "Manizales"
+      "ID": "0015G00002fYfYA",
+      "NAME": "Universidad Católica de Manizales",
+      "PUJ_EXTERNALORGID__C": "00020154347",
+      "SHIPPINGSTATE": "CAL",
+      "SHIPPINGCITY": "Manizales"
     },
     {
-        "ID": "0015G00002fYpPW",
-        "NAME": "Univ. Auton. de Manizales",
-        "PUJ_EXTERNALORGID__C": "00010015986",
-        "SHIPPINGSTATE": "CAL",
-        "SHIPPINGCITY": "Manizales"
+      "ID": "0015G00002fYpPW",
+      "NAME": "Univ. Auton. de Manizales",
+      "PUJ_EXTERNALORGID__C": "00010015986",
+      "SHIPPINGSTATE": "CAL",
+      "SHIPPINGCITY": "Manizales"
     },
     {
-        "ID": "0015G00002fYpPa",
-        "NAME": "Univ. Católica de Manizales",
-        "PUJ_EXTERNALORGID__C": "00010015990",
-        "SHIPPINGSTATE": "CAL",
-        "SHIPPINGCITY": "Manizales"
+      "ID": "0015G00002fYpPa",
+      "NAME": "Univ. Católica de Manizales",
+      "PUJ_EXTERNALORGID__C": "00010015990",
+      "SHIPPINGSTATE": "CAL",
+      "SHIPPINGCITY": "Manizales"
     },
     {
-        "ID": "0015G00002fYpPf",
-        "NAME": "Universidad de Caldas",
-        "PUJ_EXTERNALORGID__C": "00010016002",
-        "SHIPPINGSTATE": "CAL",
-        "SHIPPINGCITY": "Manizales"
+      "ID": "0015G00002fYpPf",
+      "NAME": "Universidad de Caldas",
+      "PUJ_EXTERNALORGID__C": "00010016002",
+      "SHIPPINGSTATE": "CAL",
+      "SHIPPINGCITY": "Manizales"
     },
     {
-        "ID": "0015G00002fYpPp",
-        "NAME": "Universidad de Manizales",
-        "PUJ_EXTERNALORGID__C": "00010016031",
-        "SHIPPINGSTATE": "CAL",
-        "SHIPPINGCITY": "Manizales"
+      "ID": "0015G00002fYpPp",
+      "NAME": "Universidad de Manizales",
+      "PUJ_EXTERNALORGID__C": "00010016031",
+      "SHIPPINGSTATE": "CAL",
+      "SHIPPINGCITY": "Manizales"
     },
     {
-        "ID": "0015G00002fYpPj",
-        "NAME": "Universidad de la Amazonia",
-        "PUJ_EXTERNALORGID__C": "00010016017",
-        "SHIPPINGSTATE": "CAQ",
-        "SHIPPINGCITY": "Florencia"
+      "ID": "0015G00002fYpPj",
+      "NAME": "Universidad de la Amazonia",
+      "PUJ_EXTERNALORGID__C": "00010016017",
+      "SHIPPINGSTATE": "CAQ",
+      "SHIPPINGCITY": "Florencia"
     },
     {
-        "ID": "0015G00002fYpPw",
-        "NAME": "Universidad del Cauca",
-        "PUJ_EXTERNALORGID__C": "00010016053",
-        "SHIPPINGSTATE": "CAU",
-        "SHIPPINGCITY": "Popayán"
+      "ID": "0015G00002fYpPw",
+      "NAME": "Universidad del Cauca",
+      "PUJ_EXTERNALORGID__C": "00010016053",
+      "SHIPPINGSTATE": "CAU",
+      "SHIPPINGCITY": "Popayán"
     },
     {
-        "ID": "0015G00002fYpQK",
-        "NAME": "Universidad Popular del Cesar",
-        "PUJ_EXTERNALORGID__C": "00010016171",
-        "SHIPPINGSTATE": "CES",
-        "SHIPPINGCITY": "Valledupar"
+      "ID": "0015G00002fYpQK",
+      "NAME": "Universidad Popular del Cesar",
+      "PUJ_EXTERNALORGID__C": "00010016171",
+      "SHIPPINGSTATE": "CES",
+      "SHIPPINGCITY": "Valledupar"
     },
     {
-        "ID": "0015G00002fYpQQ",
-        "NAME": "Univ. Tecnol. de Choco Diego Cordoba",
-        "PUJ_EXTERNALORGID__C": "00010016214",
-        "SHIPPINGSTATE": "CHO",
-        "SHIPPINGCITY": "Quibdó"
+      "ID": "0015G00002fYpQQ",
+      "NAME": "Univ. Tecnol. de Choco Diego Cordoba",
+      "PUJ_EXTERNALORGID__C": "00010016214",
+      "SHIPPINGSTATE": "CHO",
+      "SHIPPINGCITY": "Quibdó"
     },
     {
-        "ID": "0015G00002fYpPh",
-        "NAME": "Universidad de Cordoba",
-        "PUJ_EXTERNALORGID__C": "00010016006",
-        "SHIPPINGSTATE": "COR",
-        "SHIPPINGCITY": "Montería"
+      "ID": "0015G00002fYpPh",
+      "NAME": "Universidad de Cordoba",
+      "PUJ_EXTERNALORGID__C": "00010016006",
+      "SHIPPINGSTATE": "COR",
+      "SHIPPINGCITY": "Montería"
     },
     {
-        "ID": "0015G00002fYpPl",
-        "NAME": "Universidad de la Sabana",
-        "PUJ_EXTERNALORGID__C": "00010016023",
-        "SHIPPINGSTATE": "CUN",
-        "SHIPPINGCITY": "Chía"
+      "ID": "0015G00002fYpPl",
+      "NAME": "Universidad de la Sabana",
+      "PUJ_EXTERNALORGID__C": "00010016023",
+      "SHIPPINGSTATE": "CUN",
+      "SHIPPINGCITY": "Chía"
     },
     {
-        "ID": "0015G00002fYpPi",
-        "NAME": "Universidad de Cundinamarca",
-        "PUJ_EXTERNALORGID__C": "00010016010",
-        "SHIPPINGSTATE": "CUN",
-        "SHIPPINGCITY": "Fusagasugá"
+      "ID": "0015G00002fYpPi",
+      "NAME": "Universidad de Cundinamarca",
+      "PUJ_EXTERNALORGID__C": "00010016010",
+      "SHIPPINGSTATE": "CUN",
+      "SHIPPINGCITY": "Fusagasugá"
     },
     {
-        "ID": "0015G00002fYpMx",
-        "NAME": "Corp. Univ. Piloto Alto Magd.",
-        "PUJ_EXTERNALORGID__C": "00010015755",
-        "SHIPPINGSTATE": "CUN",
-        "SHIPPINGCITY": "Girardot"
+      "ID": "0015G00002fYpMx",
+      "NAME": "Corp. Univ. Piloto Alto Magd.",
+      "PUJ_EXTERNALORGID__C": "00010015755",
+      "SHIPPINGSTATE": "CUN",
+      "SHIPPINGCITY": "Girardot"
     },
     {
-        "ID": "0015G00002fYpPk",
-        "NAME": "Universidad de la Guajira",
-        "PUJ_EXTERNALORGID__C": "00010016020",
-        "SHIPPINGSTATE": "LAG",
-        "SHIPPINGCITY": "Riohacha"
+      "ID": "0015G00002fYpPk",
+      "NAME": "Universidad de la Guajira",
+      "PUJ_EXTERNALORGID__C": "00010016020",
+      "SHIPPINGSTATE": "LAG",
+      "SHIPPINGCITY": "Riohacha"
     },
     {
-        "ID": "0015G00002fYpQO",
-        "NAME": "Universidad Surcolombiana",
-        "PUJ_EXTERNALORGID__C": "00010016205",
-        "SHIPPINGSTATE": "HUI",
-        "SHIPPINGCITY": "Neiva"
+      "ID": "0015G00002fYpQO",
+      "NAME": "Universidad Surcolombiana",
+      "PUJ_EXTERNALORGID__C": "00010016205",
+      "SHIPPINGSTATE": "HUI",
+      "SHIPPINGCITY": "Neiva"
     },
     {
-        "ID": "0015G00002fYpPx",
-        "NAME": "Universidad del Magdalena",
-        "PUJ_EXTERNALORGID__C": "00010016055",
-        "SHIPPINGSTATE": "MAG",
-        "SHIPPINGCITY": "Santa Marta"
+      "ID": "0015G00002fYpPx",
+      "NAME": "Universidad del Magdalena",
+      "PUJ_EXTERNALORGID__C": "00010016055",
+      "SHIPPINGSTATE": "MAG",
+      "SHIPPINGCITY": "Santa Marta"
     },
     {
-        "ID": "0015G00002fYfXv",
-        "NAME": "Universidad Simón Bolívar",
-        "PUJ_EXTERNALORGID__C": "00020008071",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYfXv",
+      "NAME": "Universidad Simón Bolívar",
+      "PUJ_EXTERNALORGID__C": "00020008071",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYfYC",
-        "NAME": "Universidad del Norte",
-        "PUJ_EXTERNALORGID__C": "00020154354",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYfYC",
+      "NAME": "Universidad del Norte",
+      "PUJ_EXTERNALORGID__C": "00020154354",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYpON",
-        "NAME": "Fund. Universidad del Norte",
-        "PUJ_EXTERNALORGID__C": "00010015857",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYpON",
+      "NAME": "Fund. Universidad del Norte",
+      "PUJ_EXTERNALORGID__C": "00010015857",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYpPX",
-        "NAME": "Univ. Autónoma del Caribe",
-        "PUJ_EXTERNALORGID__C": "00010015987",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYpPX",
+      "NAME": "Univ. Autónoma del Caribe",
+      "PUJ_EXTERNALORGID__C": "00010015987",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYpPv",
-        "NAME": "Universidad de Atlántico",
-        "PUJ_EXTERNALORGID__C": "00010016051",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYpPv",
+      "NAME": "Universidad de Atlántico",
+      "PUJ_EXTERNALORGID__C": "00010016051",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYpQD",
-        "NAME": "Universidad Metropolitana",
-        "PUJ_EXTERNALORGID__C": "00010016112",
-        "SHIPPINGSTATE": "ATL",
-        "SHIPPINGCITY": "Barranquilla"
+      "ID": "0015G00002fYpQD",
+      "NAME": "Universidad Metropolitana",
+      "PUJ_EXTERNALORGID__C": "00010016112",
+      "SHIPPINGSTATE": "ATL",
+      "SHIPPINGCITY": "Barranquilla"
     },
     {
-        "ID": "0015G00002fYfYF",
-        "NAME": "Universidad Jorge Tadeo Lozano (Cartagena)",
-        "PUJ_EXTERNALORGID__C": "00020154367",
-        "SHIPPINGSTATE": "BOL",
-        "SHIPPINGCITY": "Cartagena"
+      "ID": "0015G00002fYfYF",
+      "NAME": "Universidad Jorge Tadeo Lozano (Cartagena)",
+      "PUJ_EXTERNALORGID__C": "00020154367",
+      "SHIPPINGSTATE": "BOL",
+      "SHIPPINGCITY": "Cartagena"
     },
     {
-        "ID": "0015G00002fYfYH",
-        "NAME": "Universidad Tecnológica de Bolivar",
-        "PUJ_EXTERNALORGID__C": "00020154372",
-        "SHIPPINGSTATE": "BOL",
-        "SHIPPINGCITY": "Cartagena"
+      "ID": "0015G00002fYfYH",
+      "NAME": "Universidad Tecnológica de Bolivar",
+      "PUJ_EXTERNALORGID__C": "00020154372",
+      "SHIPPINGSTATE": "BOL",
+      "SHIPPINGCITY": "Cartagena"
     },
     {
-        "ID": "0015G00002fYpNO",
-        "NAME": "Corp. Univ. Tecn. de Bolívar",
-        "PUJ_EXTERNALORGID__C": "00010015782",
-        "SHIPPINGSTATE": "BOL",
-        "SHIPPINGCITY": "Cartagena"
+      "ID": "0015G00002fYpNO",
+      "NAME": "Corp. Univ. Tecn. de Bolívar",
+      "PUJ_EXTERNALORGID__C": "00010015782",
+      "SHIPPINGSTATE": "BOL",
+      "SHIPPINGCITY": "Cartagena"
     },
     {
-        "ID": "0015G00002fYpPg",
-        "NAME": "Universidad de Cartagena",
-        "PUJ_EXTERNALORGID__C": "00010016003",
-        "SHIPPINGSTATE": "BOL",
-        "SHIPPINGCITY": "Cartagena"
+      "ID": "0015G00002fYpPg",
+      "NAME": "Universidad de Cartagena",
+      "PUJ_EXTERNALORGID__C": "00010016003",
+      "SHIPPINGSTATE": "BOL",
+      "SHIPPINGCITY": "Cartagena"
     },
     {
-        "ID": "0015G00002fYfYM",
-        "NAME": "Universidad Javeriana Cali",
-        "PUJ_EXTERNALORGID__C": "00020406013",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYfYM",
+      "NAME": "Universidad Javeriana Cali",
+      "PUJ_EXTERNALORGID__C": "00020406013",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYpPU",
-        "NAME": "Universidad Aut. de Occidente",
-        "PUJ_EXTERNALORGID__C": "00010015984",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYpPU",
+      "NAME": "Universidad Aut. de Occidente",
+      "PUJ_EXTERNALORGID__C": "00010015984",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYpPt",
-        "NAME": "Universidad de San Buenaventura",
-        "PUJ_EXTERNALORGID__C": "00010016043",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYpPt",
+      "NAME": "Universidad de San Buenaventura",
+      "PUJ_EXTERNALORGID__C": "00010016043",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYpQ1",
-        "NAME": "Universidad del Valle",
-        "PUJ_EXTERNALORGID__C": "00010016065",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYpQ1",
+      "NAME": "Universidad del Valle",
+      "PUJ_EXTERNALORGID__C": "00010016065",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYpQ7",
-        "NAME": "Universidad Icesi",
-        "PUJ_EXTERNALORGID__C": "00010016092",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYpQ7",
+      "NAME": "Universidad Icesi",
+      "PUJ_EXTERNALORGID__C": "00010016092",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYpQL",
-        "NAME": "Universidad Santiago de Cali",
-        "PUJ_EXTERNALORGID__C": "00010016181",
-        "SHIPPINGSTATE": "VAL",
-        "SHIPPINGCITY": "Cali"
+      "ID": "0015G00002fYpQL",
+      "NAME": "Universidad Santiago de Cali",
+      "PUJ_EXTERNALORGID__C": "00010016181",
+      "SHIPPINGSTATE": "VAL",
+      "SHIPPINGCITY": "Cali"
     },
     {
-        "ID": "0015G00002fYfXh",
-        "NAME": "Universidad EAFIT",
-        "PUJ_EXTERNALORGID__C": "00010134436",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYfXh",
+      "NAME": "Universidad EAFIT",
+      "PUJ_EXTERNALORGID__C": "00010134436",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpPY",
-        "NAME": "Univ. Auton. Latinoamericana",
-        "PUJ_EXTERNALORGID__C": "00010015988",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpPY",
+      "NAME": "Univ. Auton. Latinoamericana",
+      "PUJ_EXTERNALORGID__C": "00010015988",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpPd",
-        "NAME": "Univ. Cooperativa de Colombia",
-        "PUJ_EXTERNALORGID__C": "00010015993",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpPd",
+      "NAME": "Univ. Cooperativa de Colombia",
+      "PUJ_EXTERNALORGID__C": "00010015993",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpPe",
-        "NAME": "Universidad de Antioquia",
-        "PUJ_EXTERNALORGID__C": "00010015994",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpPe",
+      "NAME": "Universidad de Antioquia",
+      "PUJ_EXTERNALORGID__C": "00010015994",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpPq",
-        "NAME": "Universidad de Medellín",
-        "PUJ_EXTERNALORGID__C": "00010016032",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpPq",
+      "NAME": "Universidad de Medellín",
+      "PUJ_EXTERNALORGID__C": "00010016032",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpQ4",
-        "NAME": "Univ. Esc. de Admón. y Fin. Tecnologicas",
-        "PUJ_EXTERNALORGID__C": "00010016078",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpQ4",
+      "NAME": "Univ. Esc. de Admón. y Fin. Tecnologicas",
+      "PUJ_EXTERNALORGID__C": "00010016078",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpQJ",
-        "NAME": "Univer. Pontificia Bolivariana",
-        "PUJ_EXTERNALORGID__C": "00010016158",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Medellín"
+      "ID": "0015G00002fYpQJ",
+      "NAME": "Univer. Pontificia Bolivariana",
+      "PUJ_EXTERNALORGID__C": "00010016158",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Medellín"
     },
     {
-        "ID": "0015G00002fYpPb",
-        "NAME": "Univ. Católica de Oriente",
-        "PUJ_EXTERNALORGID__C": "00010015991",
-        "SHIPPINGSTATE": "ANT",
-        "SHIPPINGCITY": "Rionegro"
+      "ID": "0015G00002fYpPb",
+      "NAME": "Univ. Católica de Oriente",
+      "PUJ_EXTERNALORGID__C": "00010015991",
+      "SHIPPINGSTATE": "ANT",
+      "SHIPPINGCITY": "Rionegro"
     },
     {
-        "ID": "0015G00002fYfUg",
-        "NAME": "Universidad (Educación Continua)",
-        "PUJ_EXTERNALORGID__C": "00010027660",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfUg",
+      "NAME": "Universidad (Educación Continua)",
+      "PUJ_EXTERNALORGID__C": "00010027660",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfUj",
-        "NAME": "Col Univ Cooperativa de Colombia Bogotá",
-        "PUJ_EXTERNALORGID__C": "00010062883",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfUj",
+      "NAME": "Col Univ Cooperativa de Colombia Bogotá",
+      "PUJ_EXTERNALORGID__C": "00010062883",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfWh",
-        "NAME": "Universidad Extranjera",
-        "PUJ_EXTERNALORGID__C": "00010102275",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfWh",
+      "NAME": "Universidad Extranjera",
+      "PUJ_EXTERNALORGID__C": "00010102275",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYN",
-        "NAME": "Universidad Católica de Córdoba",
-        "PUJ_EXTERNALORGID__C": "00020408512",
-        "SHIPPINGSTATE": "CO",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYN",
+      "NAME": "Universidad Católica de Córdoba",
+      "PUJ_EXTERNALORGID__C": "00020408512",
+      "SHIPPINGSTATE": "CO",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYO",
-        "NAME": "Universidade do Vale do Rio dos Sinos",
-        "PUJ_EXTERNALORGID__C": "00020408514",
-        "SHIPPINGSTATE": "SP",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYO",
+      "NAME": "Universidade do Vale do Rio dos Sinos",
+      "PUJ_EXTERNALORGID__C": "00020408514",
+      "SHIPPINGSTATE": "SP",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYP",
-        "NAME": "Pontificia Universidade Católica do Rio de Janeiro",
-        "PUJ_EXTERNALORGID__C": "00020408517",
-        "SHIPPINGSTATE": "RJ",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYP",
+      "NAME": "Pontificia Universidade Católica do Rio de Janeiro",
+      "PUJ_EXTERNALORGID__C": "00020408517",
+      "SHIPPINGSTATE": "RJ",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYQ",
-        "NAME": "Universidade Católica de Pernambuco",
-        "PUJ_EXTERNALORGID__C": "00020408519",
-        "SHIPPINGSTATE": "RR",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYQ",
+      "NAME": "Universidade Católica de Pernambuco",
+      "PUJ_EXTERNALORGID__C": "00020408519",
+      "SHIPPINGSTATE": "RR",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYR",
-        "NAME": "Centro Universitário FEI",
-        "PUJ_EXTERNALORGID__C": "00020408520",
-        "SHIPPINGSTATE": "SP",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYR",
+      "NAME": "Centro Universitário FEI",
+      "PUJ_EXTERNALORGID__C": "00020408520",
+      "SHIPPINGSTATE": "SP",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYS",
-        "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
-        "PUJ_EXTERNALORGID__C": "00020408521",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYS",
+      "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
+      "PUJ_EXTERNALORGID__C": "00020408521",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYT",
-        "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
-        "PUJ_EXTERNALORGID__C": "00020408564",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYT",
+      "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
+      "PUJ_EXTERNALORGID__C": "00020408564",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYU",
-        "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
-        "PUJ_EXTERNALORGID__C": "00020408565",
-        "SHIPPINGSTATE": "RJ",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYU",
+      "NAME": "Faculdade Jesuíta de Filosofia e Teologia (Faje)",
+      "PUJ_EXTERNALORGID__C": "00020408565",
+      "SHIPPINGSTATE": "RJ",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYV",
-        "NAME": "Universidad Alberto Hurtado",
-        "PUJ_EXTERNALORGID__C": "00020408566",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYV",
+      "NAME": "Universidad Alberto Hurtado",
+      "PUJ_EXTERNALORGID__C": "00020408566",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYW",
-        "NAME": "Pontificia Universidad Católica del Ecuador",
-        "PUJ_EXTERNALORGID__C": "00020408568",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYW",
+      "NAME": "Pontificia Universidad Católica del Ecuador",
+      "PUJ_EXTERNALORGID__C": "00020408568",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYX",
-        "NAME": "Universidad Centroamericana \"\"José Simeón Cañas\"\"",
-        "PUJ_EXTERNALORGID__C": "00020408570",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYX",
+      "NAME": "Universidad Centroamericana \"\"José Simeón Cañas\"\"",
+      "PUJ_EXTERNALORGID__C": "00020408570",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYY",
-        "NAME": "Universidad Rafael Landívar",
-        "PUJ_EXTERNALORGID__C": "00020408572",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYY",
+      "NAME": "Universidad Rafael Landívar",
+      "PUJ_EXTERNALORGID__C": "00020408572",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYZ",
-        "NAME": "Universidad Iberoamericana Torreón",
-        "PUJ_EXTERNALORGID__C": "00020408573",
-        "SHIPPINGSTATE": "COAH",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYZ",
+      "NAME": "Universidad Iberoamericana Torreón",
+      "PUJ_EXTERNALORGID__C": "00020408573",
+      "SHIPPINGSTATE": "COAH",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYa",
-        "NAME": "Universidad Iberoamericana Ciudad de México",
-        "PUJ_EXTERNALORGID__C": "00020408574",
-        "SHIPPINGSTATE": "EMEX",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYa",
+      "NAME": "Universidad Iberoamericana Ciudad de México",
+      "PUJ_EXTERNALORGID__C": "00020408574",
+      "SHIPPINGSTATE": "EMEX",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYb",
-        "NAME": "Universidad Iberoamericana Puebla",
-        "PUJ_EXTERNALORGID__C": "00020408579",
-        "SHIPPINGSTATE": "PUE",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYb",
+      "NAME": "Universidad Iberoamericana Puebla",
+      "PUJ_EXTERNALORGID__C": "00020408579",
+      "SHIPPINGSTATE": "PUE",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYc",
-        "NAME": "Universidad Iberoamericana León",
-        "PUJ_EXTERNALORGID__C": "00020408581",
-        "SHIPPINGSTATE": "GTO",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYc",
+      "NAME": "Universidad Iberoamericana León",
+      "PUJ_EXTERNALORGID__C": "00020408581",
+      "SHIPPINGSTATE": "GTO",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYd",
-        "NAME": "Universidad Iberoamericana Tijuana",
-        "PUJ_EXTERNALORGID__C": "00020408582",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYd",
+      "NAME": "Universidad Iberoamericana Tijuana",
+      "PUJ_EXTERNALORGID__C": "00020408582",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYe",
-        "NAME": "ITESO Universidad Jesuita de Guadalajara",
-        "PUJ_EXTERNALORGID__C": "00020408584",
-        "SHIPPINGSTATE": "JAL",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYe",
+      "NAME": "ITESO Universidad Jesuita de Guadalajara",
+      "PUJ_EXTERNALORGID__C": "00020408584",
+      "SHIPPINGSTATE": "JAL",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYf",
-        "NAME": "ISIA-Instituto Superior Intercultural Ayuuk Oaxaca",
-        "PUJ_EXTERNALORGID__C": "00020408586",
-        "SHIPPINGSTATE": "OAX",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYf",
+      "NAME": "ISIA-Instituto Superior Intercultural Ayuuk Oaxaca",
+      "PUJ_EXTERNALORGID__C": "00020408586",
+      "SHIPPINGSTATE": "OAX",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYg",
-        "NAME": "Tecnológico Universitario del Valle de Chalco",
-        "PUJ_EXTERNALORGID__C": "00020408588",
-        "SHIPPINGSTATE": "EMEX",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYg",
+      "NAME": "Tecnológico Universitario del Valle de Chalco",
+      "PUJ_EXTERNALORGID__C": "00020408588",
+      "SHIPPINGSTATE": "EMEX",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYh",
-        "NAME": "Universidad Centroamericana, UCA Nicaragua",
-        "PUJ_EXTERNALORGID__C": "00020408594",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYh",
+      "NAME": "Universidad Centroamericana, UCA Nicaragua",
+      "PUJ_EXTERNALORGID__C": "00020408594",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYi",
-        "NAME": "Instituto Superior de Estudios Humanísticos y Filo",
-        "PUJ_EXTERNALORGID__C": "00020408596",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYi",
+      "NAME": "Instituto Superior de Estudios Humanísticos y Filo",
+      "PUJ_EXTERNALORGID__C": "00020408596",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYj",
-        "NAME": "Instituto Superior de Estudios Humanísticos y Filo",
-        "PUJ_EXTERNALORGID__C": "00020408600",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYj",
+      "NAME": "Instituto Superior de Estudios Humanísticos y Filo",
+      "PUJ_EXTERNALORGID__C": "00020408600",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYk",
-        "NAME": "Universidad del Pacífico",
-        "PUJ_EXTERNALORGID__C": "00020408604",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYk",
+      "NAME": "Universidad del Pacífico",
+      "PUJ_EXTERNALORGID__C": "00020408604",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYl",
-        "NAME": "Universidad Antonio Ruiz de Montoya",
-        "PUJ_EXTERNALORGID__C": "00020408607",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYl",
+      "NAME": "Universidad Antonio Ruiz de Montoya",
+      "PUJ_EXTERNALORGID__C": "00020408607",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYm",
-        "NAME": "Instituto Superior Pedro Francisco Bonó",
-        "PUJ_EXTERNALORGID__C": "00020408609",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYm",
+      "NAME": "Instituto Superior Pedro Francisco Bonó",
+      "PUJ_EXTERNALORGID__C": "00020408609",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYn",
-        "NAME": "Instituto Superior Pedro Francisco Bonó",
-        "PUJ_EXTERNALORGID__C": "00020408610",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYn",
+      "NAME": "Instituto Superior Pedro Francisco Bonó",
+      "PUJ_EXTERNALORGID__C": "00020408610",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYo",
-        "NAME": "Instituto Superior Pedro Francisco Bonó",
-        "PUJ_EXTERNALORGID__C": "00020408612",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYo",
+      "NAME": "Instituto Superior Pedro Francisco Bonó",
+      "PUJ_EXTERNALORGID__C": "00020408612",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYp",
-        "NAME": "Instituto Especializado de Estudios Superiores Loy",
-        "PUJ_EXTERNALORGID__C": "00020408617",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYp",
+      "NAME": "Instituto Especializado de Estudios Superiores Loy",
+      "PUJ_EXTERNALORGID__C": "00020408617",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYq",
-        "NAME": "Universidad Católica del Uruguay",
-        "PUJ_EXTERNALORGID__C": "00020408618",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYq",
+      "NAME": "Universidad Católica del Uruguay",
+      "PUJ_EXTERNALORGID__C": "00020408618",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYr",
-        "NAME": "Universidad Católica del Táchira",
-        "PUJ_EXTERNALORGID__C": "00020408621",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYr",
+      "NAME": "Universidad Católica del Táchira",
+      "PUJ_EXTERNALORGID__C": "00020408621",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYs",
-        "NAME": "Universidad Católica Andrés Bello",
-        "PUJ_EXTERNALORGID__C": "00020408623",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYs",
+      "NAME": "Universidad Católica Andrés Bello",
+      "PUJ_EXTERNALORGID__C": "00020408623",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYfYt",
-        "NAME": "Instituto Universitario Jesús Obrero",
-        "PUJ_EXTERNALORGID__C": "00020408631",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYfYt",
+      "NAME": "Instituto Universitario Jesús Obrero",
+      "PUJ_EXTERNALORGID__C": "00020408631",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     },
     {
-        "ID": "0015G00002fYq8d",
-        "NAME": "University of Illinois at Urbana-Champaign, USA",
-        "PUJ_EXTERNALORGID__C": "00020041104",
-        "SHIPPINGSTATE": "",
-        "SHIPPINGCITY": ""
+      "ID": "0015G00002fYq8d",
+      "NAME": "University of Illinois at Urbana-Champaign, USA",
+      "PUJ_EXTERNALORGID__C": "00020041104",
+      "SHIPPINGSTATE": "",
+      "SHIPPINGCITY": ""
     }
-]
+  ]
 }

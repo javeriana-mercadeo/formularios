@@ -35,7 +35,7 @@
       align-items: center;
       gap: var(--fm-form-radio-option-gap);
 
-      input[type="radio"] {
+      input[type='radio'] {
         width: var(--fm-form-radio-size);
         height: var(--fm-form-radio-size);
         flex-shrink: 0;
@@ -86,14 +86,5 @@
     color: var(--fm-text-muted);
     font-size: var(--fm-font-size-sm);
     border-radius: var(--fm-form-prefix-border-radius-left) 0 0 var(--fm-form-prefix-border-radius-left);
-  }
-
-  input {
-    border-radius: 0 var(--fm-input-border-radius) var(--fm-input-border-radius) 0;
-    border-left: none;
-
-    &:focus {
-      border-left: none;
-    }
   }
 }

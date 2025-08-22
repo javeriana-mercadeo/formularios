@@ -450,24 +450,24 @@ const Validators = {
 
     // Mapear IDs de elementos a nombres de validación
     const fieldMapping = {
-      'first_name': 'name',
-      'last_name': 'name',
-      'email': 'email',
-      'mobile': 'phone',
-      'numero_doc': 'document',
-      'nevento': 'required',
-      'fevento': 'required',
-      'tipo_doc': 'required',
-      'prefijoCel': 'required',
-      'pais': 'required',
-      'departamento': 'required',
-      'ciudad': 'required',
-      'tipo_asistente': 'required',
-      'nivelacademico': 'required',
-      'facultad': 'required',
-      'programa': 'required',
-      'periodo_esperado': 'required',
-      'colegio': 'required'
+      first_name: 'name',
+      last_name: 'name',
+      email: 'email',
+      mobile: 'phone',
+      numero_doc: 'document',
+      nevento: 'required',
+      fevento: 'required',
+      tipo_doc: 'required',
+      prefijoCel: 'required',
+      pais: 'required',
+      departamento: 'required',
+      ciudad: 'required',
+      tipo_asistente: 'required',
+      nivelacademico: 'required',
+      facultad: 'required',
+      programa: 'required',
+      periodo_esperado: 'required',
+      colegio: 'required'
     }
 
     const validationType = fieldMapping[fieldId]
@@ -522,7 +522,7 @@ const Validators = {
   showFieldError(input, message) {
     const fieldId = input.id
     const errorElement = document.getElementById(`error_${fieldId}`)
-    
+
     this.clearError(fieldId)
 
     if (message) {
@@ -541,7 +541,7 @@ const Validators = {
   clearFieldError(input) {
     const fieldId = input.id
     const errorElement = document.getElementById(`error_${fieldId}`)
-    
+
     if (errorElement) {
       errorElement.style.display = 'none'
     }
@@ -779,7 +779,7 @@ async function loadColegios(nivelAcademico = 'PREG') {
   } else {
     url = FormConfig.URLS.DATA_SOURCES.COLLEGES
   }
-  
+
   const data = await loadData(url)
   if (data && data.cuentasInstitucionales) {
     colegios = data.cuentasInstitucionales
@@ -940,20 +940,20 @@ function handleNivelAcademicoChange() {
   const nivelSelect = document.getElementById('nivelacademico')
   const colegioSection = document.getElementById('colegio_section')
   const colegioTitle = colegioSection.querySelector('h5')
-  
+
   formData.nivelacademico = nivelSelect.value
-  
+
   // Reset dependent fields
   formData.facultad = ''
   formData.programa = ''
   formData.periodo_esperado = ''
   formData.colegio = ''
-  
+
   // Clear search terms
   if (document.getElementById('searchTerm')) document.getElementById('searchTerm').value = ''
   if (document.getElementById('selectedDepartment')) document.getElementById('selectedDepartment').value = ''
   if (document.getElementById('selectedCity')) document.getElementById('selectedCity').value = ''
-  
+
   if (formData.nivelacademico) {
     // Update college section title based on academic level
     if (formData.nivelacademico === 'GRAD' || formData.nivelacademico === 'ECLE') {
@@ -961,19 +961,19 @@ function handleNivelAcademicoChange() {
     } else {
       if (colegioTitle) colegioTitle.textContent = 'Selecciona tu colegio:'
     }
-    
+
     // Load appropriate colegios/universidades
     loadColegios(formData.nivelacademico)
-    
+
     // Load periods for selected level
     if (periodos[formData.nivelacademico]) {
       periodoSel = periodos[formData.nivelacademico]
     }
-    
+
     // Load faculties for selected level
     loadFacultades()
   }
-  
+
   deleteInvalid('nivelacademico')
 }
 
@@ -1010,7 +1010,11 @@ function handleFacultadChange() {
     // Populate programs
     programaSelect.innerHTML = '<option value="">*Selecciona el programa</option><option value="NOAP" style="display: none;">NOAP</option>'
 
-    if (programas[formData.nivelacademico] && programas[formData.nivelacademico][formData.facultad] && programas[formData.nivelacademico][formData.facultad].Programas) {
+    if (
+      programas[formData.nivelacademico] &&
+      programas[formData.nivelacademico][formData.facultad] &&
+      programas[formData.nivelacademico][formData.facultad].Programas
+    ) {
       programas[formData.nivelacademico][formData.facultad].Programas.forEach(prog => {
         const option = document.createElement('option')
         option.value = prog.Codigo
@@ -1066,9 +1070,9 @@ function handlePeriodoChange() {
 function filterCities() {
   const selectedDepSelect = document.getElementById('selectedDepartment')
   const selectedCitySelect = document.getElementById('selectedCity')
-  
+
   if (!selectedDepSelect || !selectedCitySelect) return
-  
+
   const selectedDepartment = selectedDepSelect.value
 
   if (selectedDepartment && ubicaciones.COL) {
@@ -1109,9 +1113,9 @@ function filterColegios() {
   const searchTermElement = document.getElementById('searchTerm')
   const selectedCityElement = document.getElementById('selectedCity')
   const colegiosList = document.getElementById('colegios_list')
-  
+
   if (!searchTermElement || !selectedCityElement || !colegiosList) return
-  
+
   const searchTerm = searchTermElement.value
   const selectedCity = selectedCityElement.value
 
@@ -1157,7 +1161,7 @@ function filterColegios() {
 
 function selectColegio(externalId, nombreColegio) {
   formData.colegio = externalId
-  
+
   // Set the appropriate hidden field based on academic level
   if (formData.nivelacademico === 'PREG' || formData.nivelacademico === 'ETDH') {
     const colegioField = document.getElementById('colegio')
@@ -1170,7 +1174,7 @@ function selectColegio(externalId, nombreColegio) {
     if (universidadField) universidadField.value = externalId
     if (colegioField) colegioField.value = ''
   }
-  
+
   if (document.getElementById('searchTerm')) document.getElementById('searchTerm').value = nombreColegio
   colegioSeleccionado = true
   if (document.getElementById('colegios_list')) document.getElementById('colegios_list').style.display = 'none'
@@ -1428,7 +1432,7 @@ function setupEventListeners() {
   document.getElementById('facultad').addEventListener('blur', e => {
     Validators.validateField(e.target)
   })
-  
+
   document.getElementById('programa').addEventListener('change', e => {
     handleProgramaChange()
     Validators.validateField(e.target)
@@ -1437,7 +1441,7 @@ function setupEventListeners() {
   document.getElementById('programa').addEventListener('blur', e => {
     Validators.validateField(e.target)
   })
-  
+
   document.getElementById('periodo_esperado').addEventListener('change', e => {
     handlePeriodoChange()
     Validators.validateField(e.target)
@@ -1451,7 +1455,7 @@ function setupEventListeners() {
   const selectedDepartmentElement = document.getElementById('selectedDepartment')
   const selectedCityElement = document.getElementById('selectedCity')
   const searchTermElement = document.getElementById('searchTerm')
-  
+
   if (selectedDepartmentElement) selectedDepartmentElement.addEventListener('change', filterCities)
   if (selectedCityElement) selectedCityElement.addEventListener('change', filterColegios)
   if (searchTermElement) searchTermElement.addEventListener('input', filterColegios)

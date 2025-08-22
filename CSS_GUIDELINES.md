@@ -60,7 +60,7 @@ form-modules:root {
 El sistema usa un selector con prefijo para aislamiento:
 
 ```scss
-$selector-prefix: "form-modules";
+$selector-prefix: 'form-modules';
 
 .#{$selector-prefix} {
   // Todos los estilos están contenidos aquí
@@ -206,28 +206,28 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: "#fdf2f8",
-          500: "#e91e63", // Tu color personalizado
-          600: "#c2185b",
-          700: "#ad1457",
-        },
-      },
-    },
-  },
-};
+          50: '#fdf2f8',
+          500: '#e91e63', // Tu color personalizado
+          600: '#c2185b',
+          700: '#ad1457'
+        }
+      }
+    }
+  }
+}
 ```
 
 ### Personalización JavaScript Runtime
 
 ```javascript
 // Cambiar variables CSS dinámicamente
-const formContainer = document.querySelector(".form-modules");
-formContainer.style.setProperty("--form-modules-primary", "#ff5722");
-formContainer.style.setProperty("--form-modules-primary-600", "#e64a19");
-formContainer.style.setProperty("--form-modules-primary-700", "#d84315");
+const formContainer = document.querySelector('.form-modules')
+formContainer.style.setProperty('--form-modules-primary', '#ff5722')
+formContainer.style.setProperty('--form-modules-primary-600', '#e64a19')
+formContainer.style.setProperty('--form-modules-primary-700', '#d84315')
 
 // Actualizar transparencias también
-formContainer.style.setProperty("--form-modules-primary-500-30", "rgba(255, 87, 34, 0.3)");
+formContainer.style.setProperty('--form-modules-primary-500-30', 'rgba(255, 87, 34, 0.3)')
 ```
 
 ### Estructura HTML Real
@@ -261,12 +261,12 @@ formContainer.style.setProperty("--form-modules-primary-500-30", "rgba(255, 87, 
 ```scss
 // Variables de breakpoints
 $breakpoints: (
-  "xs": 0,
-  "sm": 576px,
-  "md": 768px,
-  "lg": 992px,
-  "xl": 1200px,
-  "xxl": 1400px,
+  'xs': 0,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
 );
 
 // Mixins para media queries
@@ -292,14 +292,14 @@ $breakpoints: (
   padding: var(--form-padding);
 
   // Tablet
-  @include media-down("md") {
+  @include media-down('md') {
     width: 100%;
     max-width: 90%;
     padding: var(--spacing-lg);
   }
 
   // Móvil
-  @include media-down("sm") {
+  @include media-down('sm') {
     padding: var(--spacing-md);
     border-radius: calc(var(--form-border-radius) * 0.75);
 
@@ -425,16 +425,16 @@ El sistema combina:
 
 ```javascript
 // Verificar variables CSS del sistema
-const formElement = document.querySelector(".form-modules");
-const styles = getComputedStyle(formElement);
+const formElement = document.querySelector('.form-modules')
+const styles = getComputedStyle(formElement)
 
 // Variables disponibles en form-modules:root
-console.log("Primary:", styles.getPropertyValue("--form-modules-primary"));
-console.log("Primary 600:", styles.getPropertyValue("--form-modules-primary-600"));
-console.log("Primary transparent:", styles.getPropertyValue("--form-modules-primary-500-30"));
+console.log('Primary:', styles.getPropertyValue('--form-modules-primary'))
+console.log('Primary 600:', styles.getPropertyValue('--form-modules-primary-600'))
+console.log('Primary transparent:', styles.getPropertyValue('--form-modules-primary-500-30'))
 
 // Verificar clases Tailwind aplicadas
-console.log("Clases aplicadas:", formElement.classList);
+console.log('Clases aplicadas:', formElement.classList)
 ```
 
 ### Problemas Comunes y Soluciones
@@ -473,10 +473,10 @@ form-modules:root {
 // Verificar que tailwind.config.js incluya los archivos correctos
 module.exports = {
   content: [
-    "./examples/**/*.html", // ← Importante
-    "./src/**/*.js", // ← Importante
-  ],
-};
+    './examples/**/*.html', // ← Importante
+    './src/**/*.js' // ← Importante
+  ]
+}
 ```
 
 #### 4. Clases no disponibles
@@ -485,12 +485,12 @@ module.exports = {
 // Verificar que las clases estén compiladas en build/
 // Solo estas clases específicas están disponibles:
 const availableClasses = [
-  "fm-hidden",
-  "form-general-error",
-  "field-container",
-  "radio-group",
-  "phone-row",
-  "submit-button",
+  'fm-hidden',
+  'form-general-error',
+  'field-container',
+  'radio-group',
+  'phone-row',
+  'submit-button'
   // etc...
-];
+]
 ```

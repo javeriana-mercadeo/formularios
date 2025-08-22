@@ -23,28 +23,28 @@
 
 export const configMiniOld = {
   // DATOS DEL EVENTO
-  campaign: "Mercadeo",
-  eventName: "Open Day Técnico 2024",
-  eventDate: "23/01/2025 12:00 PM", // Formato: DD/MM/YYYY HH:mm AM/PM
+  campaign: 'Mercadeo',
+  eventName: 'Open Day Técnico 2024',
+  eventDate: '23/01/2025 12:00 PM', // Formato: DD/MM/YYYY HH:mm AM/PM
 
   // CONFIGURACIÓN BÁSICA DE EVENTO
-  typeAttendee: ["Aspirante"], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
+  typeAttendee: ['Aspirante'], // ⭐ AUTO-SELECCIÓN: Solo "Aspirante" → se oculta el campo y aparecen automáticamente los campos académicos
 
   // 🎯 FILTRO PARA PROBAR CASO 1-1-1: Solo nivel ETDH (Técnico)
   /* academicLevels: [{ code: "ETDH", name: "Técnico" }], */
 
-  attendanceDays: ["Jueves 15 de febrero de 2024"],
+  attendanceDays: ['Jueves 15 de febrero de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co',
 
   // Logging detallado
   logging: {
-    enabled: true,
-  },
+    enabled: true
+  }
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ⭐ AUTO-SELECCIÓN ASPIRANTE: Como solo hay "Aspirante", se auto-selecciona y aparecen los campos académicos automáticamente
@@ -53,38 +53,35 @@ export const configMiniOld = {
   // ✅ Comportamiento optimizado para formularios dirigidos específicamente a aspirantes
   // ✅ Sin restricciones geográficas (países/departamentos/ciudades)
   // ✅ Formulario completo con todas las opciones académicas disponibles
-};
+}
 
 const configMini = {
-  campaign: "MERCA_JaverianaAlCaribe",
-  eventName: "Javeriana al Caribe",
-  eventDate: "02/09/2025 12:00 PM",
-  retUrl: "https://www.javeriana.edu.co/info-prg/typ-javeriana-caribe",
+  campaign: 'MERCA_JaverianaAlCaribe',
+  eventName: 'Javeriana al Caribe',
+  eventDate: '02/09/2025 12:00 PM',
+  retUrl: 'https://www.javeriana.edu.co/info-prg/typ-javeriana-caribe',
 
   // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
-  countries: ["Colombia"],
-  departments: ["Atlántico", "Bolívar", "Magdalena"],
-  cities: ["Barranquilla", "Cartagena", "Santa Marta"],
+  countries: ['Colombia'],
+  departments: ['Atlántico', 'Bolívar', 'Magdalena'],
+  cities: ['Barranquilla', 'Cartagena', 'Santa Marta'],
 
   // CONFIGURACIÓN DEL EVENTO
-  attendanceDays: [
-    "Martes 2 de septiembre - Cartagena",
-    "Miércoles 3 de septiembre - Barranquilla",
-  ],
+  attendanceDays: ['Martes 2 de septiembre - Cartagena', 'Miércoles 3 de septiembre - Barranquilla'],
 
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Docente y/o psicoorientador"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Docente y/o psicoorientador'],
 
   // CONFIGURACIONES TÉCNICAS
   test: false,
   debug: false,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co',
 
   // Logging detallado
   logging: {
-    enabled: true,
-  },
-};
+    enabled: true
+  }
+}
 
 // ============================================================================
 // 🎓 PRUEBA 2: FILTRO POR NIVEL ACADÉMICO
@@ -94,25 +91,25 @@ const configMini = {
 
 export const configAcademicLevel = {
   // DATOS DEL EVENTO
-  eventName: "Open Day Pregrado 2024",
-  eventDate: "2024-03-20",
-  campaign: "PREGRADO_ONLY_2024",
-  article: "evento_pregrado",
-  source: "landing_pregrado",
-  medium: "web",
+  eventName: 'Open Day Pregrado 2024',
+  eventDate: '2024-03-20',
+  campaign: 'PREGRADO_ONLY_2024',
+  article: 'evento_pregrado',
+  source: 'landing_pregrado',
+  medium: 'web',
 
   // 🎯 FILTRO PRINCIPAL: Solo nivel de Pregrado
-  academicLevels: [{ code: "PREG", name: "Pregrado" }],
+  academicLevels: [{ code: 'PREG', name: 'Pregrado' }],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
-  attendanceDays: ["Miércoles 20 de marzo de 2024"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente'],
+  attendanceDays: ['Miércoles 20 de marzo de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Nivel académico: Oculto y preseleccionado automáticamente (Pregrado)
@@ -120,7 +117,7 @@ export const configAcademicLevel = {
   // ✅ Programas: Solo programas de pregrado disponibles
   // ✅ Al seleccionar "Aspirante" → Aparecen campos académicos filtrados
   // ✅ Optimizado para aspirantes a programas de pregrado
-};
+}
 
 // ============================================================================
 // 🏛️ PRUEBA 3: FILTRO POR FACULTAD(ES)
@@ -130,25 +127,25 @@ export const configAcademicLevel = {
 
 export const configFaculty = {
   // DATOS DEL EVENTO
-  eventName: "Feria de Ingenierías 2024",
-  eventDate: "2024-04-10",
-  campaign: "INGENIERIA_2024",
-  article: "evento_ingenieria",
-  source: "email_especializado",
-  medium: "email",
+  eventName: 'Feria de Ingenierías 2024',
+  eventDate: '2024-04-10',
+  campaign: 'INGENIERIA_2024',
+  article: 'evento_ingenieria',
+  source: 'email_especializado',
+  medium: 'email',
 
   // 🎯 FILTRO PRINCIPAL: Solo Facultad de Ingeniería
-  faculties: ["Ingeniería"],
+  faculties: ['Ingeniería'],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado"],
-  attendanceDays: ["Miércoles 10 de abril de 2024"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Graduado'],
+  attendanceDays: ['Miércoles 10 de abril de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Nivel académico: Oculto y preseleccionado (Pregrado)
@@ -156,7 +153,7 @@ export const configFaculty = {
   // ✅ Programas: Solo programas de Ingeniería disponibles
   // ✅ Al seleccionar "Aspirante" → Solo aparece selector de programas de ingeniería
   // ✅ Enfoque específico en programas de la Facultad de Ingeniería
-};
+}
 
 // ============================================================================
 // 📚 PRUEBA 4: FILTRO POR PROGRAMA(S)
@@ -166,39 +163,36 @@ export const configFaculty = {
 
 export const configPrograms = {
   // DATOS DEL EVENTO
-  eventName: "Feria Interdisciplinaria 2024",
-  eventDate: "2024-05-15",
-  campaign: "INTERDISCIPLINARIA_2024",
-  article: "evento_multifacultad",
-  source: "redes_sociales",
-  medium: "social",
+  eventName: 'Feria Interdisciplinaria 2024',
+  eventDate: '2024-05-15',
+  campaign: 'INTERDISCIPLINARIA_2024',
+  article: 'evento_multifacultad',
+  source: 'redes_sociales',
+  medium: 'social',
 
   // 🎯 FILTRO PRINCIPAL: Programas específicos de diferentes facultades
   programs: [
-    "MEDIC", // Medicina
-    "DRCHO", // Derecho
-    "PSICO", // Psicología
-    "IINDS", // Ingeniería Industrial
+    'MEDIC', // Medicina
+    'DRCHO', // Derecho
+    'PSICO', // Psicología
+    'IINDS' // Ingeniería Industrial
     //"COMSC", // Comunicación Social
   ],
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
-    "Aspirante",
+    'Aspirante'
     //"Padre de familia y/o acudiente",
     //"Graduado",
     //"Docente y/o psicoorientador",
   ],
-  attendanceDays: [
-    "Miércoles 15 de mayo - Sesión Mañana (9:00-12:00)",
-    "Miércoles 15 de mayo - Sesión Tarde (14:00-17:00)",
-  ],
+  attendanceDays: ['Miércoles 15 de mayo - Sesión Mañana (9:00-12:00)', 'Miércoles 15 de mayo - Sesión Tarde (14:00-17:00)'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: true,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Nivel académico: Oculto y preseleccionado (Pregrado)
@@ -206,7 +200,7 @@ export const configPrograms = {
   // ✅ Programas: Solo los 5 programas configurados
   // ✅ Al cambiar facultad → Solo aparecen programas de esa facultad
   // ✅ Demuestra selección inteligente entre múltiples facultades
-};
+}
 
 // ============================================================================
 // 🌍 PRUEBA 5: FILTRO POR PAÍSES
@@ -216,25 +210,25 @@ export const configPrograms = {
 
 export const configCountries = {
   // DATOS DEL EVENTO
-  eventName: "Feria Internacional Javeriana 2024",
-  eventDate: "2024-06-20",
-  campaign: "INTERNACIONAL_2024",
-  article: "evento_internacional",
-  source: "internacional",
-  medium: "digital",
+  eventName: 'Feria Internacional Javeriana 2024',
+  eventDate: '2024-06-20',
+  campaign: 'INTERNACIONAL_2024',
+  article: 'evento_internacional',
+  source: 'internacional',
+  medium: 'digital',
 
   // 🎯 FILTRO PRINCIPAL: Solo países específicos
-  countries: ["Colombia", "México", "Ecuador", "Perú", "Estados Unidos"],
+  countries: ['Colombia', 'México', 'Ecuador', 'Perú', 'Estados Unidos'],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado", "Estudiante actual"],
-  attendanceDays: ["Jueves 20 de junio de 2024"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Graduado', 'Estudiante actual'],
+  attendanceDays: ['Jueves 20 de junio de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Países: Solo los 5 países configurados disponibles
@@ -242,7 +236,7 @@ export const configCountries = {
   // ✅ Al seleccionar otros países → Sin campos adicionales de ubicación
   // ✅ Enfoque en audiencia internacional específica
   // ✅ Optimizado para estudiantes internacionales
-};
+}
 
 // ============================================================================
 // 🏛️ PRUEBA 6: FILTRO POR DEPARTAMENTOS
@@ -252,25 +246,25 @@ export const configCountries = {
 
 export const configDepartments = {
   // DATOS DEL EVENTO
-  eventName: "Encuentro Regional Colombia 2024",
-  eventDate: "2024-07-25",
-  campaign: "REGIONAL_COLOMBIA_2024",
-  article: "evento_regional",
-  source: "campaña_regional",
-  medium: "mixto",
+  eventName: 'Encuentro Regional Colombia 2024',
+  eventDate: '2024-07-25',
+  campaign: 'REGIONAL_COLOMBIA_2024',
+  article: 'evento_regional',
+  source: 'campaña_regional',
+  medium: 'mixto',
 
   // 🎯 FILTRO PRINCIPAL: Solo departamentos específicos
-  departments: ["Cundinamarca", "Antioquia", "Valle del Cauca", "Atlántico", "Santander"],
+  departments: ['Cundinamarca', 'Antioquia', 'Valle del Cauca', 'Atlántico', 'Santander'],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente", "Graduado"],
-  attendanceDays: ["Jueves 25 de julio de 2024", "Viernes 26 de julio de 2024"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Graduado'],
+  attendanceDays: ['Jueves 25 de julio de 2024', 'Viernes 26 de julio de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Países: Solo Colombia disponible (implícito)
@@ -278,7 +272,7 @@ export const configDepartments = {
   // ✅ Ciudades: Solo ciudades de los departamentos configurados
   // ✅ Enfoque en regiones específicas de Colombia
   // ✅ Optimizado para audiencia regional colombiana
-};
+}
 
 // ============================================================================
 // 🏙️ PRUEBA 7: FILTRO POR CIUDADES
@@ -288,27 +282,27 @@ export const configDepartments = {
 
 export const configCities = {
   // DATOS DEL EVENTO
-  eventName: "Open Day Filtrado Jerárquico 2024",
-  eventDate: "2024-08-30",
-  campaign: "JERARQUICO_TEST_2024",
-  article: "evento_jerarquico",
-  source: "enfoque_jerarquico",
-  medium: "digital",
+  eventName: 'Open Day Filtrado Jerárquico 2024',
+  eventDate: '2024-08-30',
+  campaign: 'JERARQUICO_TEST_2024',
+  article: 'evento_jerarquico',
+  source: 'enfoque_jerarquico',
+  medium: 'digital',
 
   // 🎯 FILTRO JERÁRQUICO DE PRUEBA - Caso del usuario
-  countries: ["Colombia"],
-  departments: ["Atlántico", "Bolívar", "Magdalena"],
-  cities: ["Barranquilla", "Cartagena", "Santa Marta"],
+  countries: ['Colombia'],
+  departments: ['Atlántico', 'Bolívar', 'Magdalena'],
+  cities: ['Barranquilla', 'Cartagena', 'Santa Marta'],
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: ["Aspirante", "Padre de familia y/o acudiente"],
-  attendanceDays: ["Viernes 30 de agosto de 2024"],
+  typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente'],
+  attendanceDays: ['Viernes 30 de agosto de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: true,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO JERÁRQUICO:
   // 🔥 FILTRADO EN CASCADA: País -> Departamento -> Ciudad
@@ -324,7 +318,7 @@ export const configCities = {
   // - Si ciudad no pertenece al departamento configurado → NO se muestra
   // - Solo se muestran ciudades que están en departamentos válidos
   // - Prioridad: departamentos configurados filtran las ciudades configuradas
-};
+}
 
 // ============================================================================
 // 🎯 PRUEBA 8: CONFIGURACIÓN ADICIONAL - DÍAS MÚLTIPLES
@@ -334,44 +328,44 @@ export const configCities = {
 
 export const configMultipleDays = {
   // DATOS DEL EVENTO
-  eventName: "Semana Universitaria Javeriana 2024",
-  eventDate: "2024-09-02",
-  campaign: "SEMANA_UNIVERSITARIA_2024",
-  article: "evento_multiple_dias",
-  source: "institucional",
-  medium: "omnicanal",
+  eventName: 'Semana Universitaria Javeriana 2024',
+  eventDate: '2024-09-02',
+  campaign: 'SEMANA_UNIVERSITARIA_2024',
+  article: 'evento_multiple_dias',
+  source: 'institucional',
+  medium: 'omnicanal',
 
   // CONFIGURACIÓN DE DÍAS MÚLTIPLES
   attendanceDays: [
-    "Lunes 2 de septiembre - Inauguración (18:00-20:00)",
-    "Martes 3 de septiembre - Jornada Académica (8:00-17:00)",
-    "Miércoles 4 de septiembre - Feria de Programas (9:00-18:00)",
-    "Jueves 5 de septiembre - Encuentro Alumni (19:00-22:00)",
-    "Viernes 6 de septiembre - Clausura y Networking (16:00-20:00)",
+    'Lunes 2 de septiembre - Inauguración (18:00-20:00)',
+    'Martes 3 de septiembre - Jornada Académica (8:00-17:00)',
+    'Miércoles 4 de septiembre - Feria de Programas (9:00-18:00)',
+    'Jueves 5 de septiembre - Encuentro Alumni (19:00-22:00)',
+    'Viernes 6 de septiembre - Clausura y Networking (16:00-20:00)'
   ],
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
-    "Aspirante",
-    "Padre de familia y/o acudiente",
-    "Graduado",
-    "Estudiante actual",
-    "Docente y/o psicoorientador",
-    "Administrativo PUJ",
+    'Aspirante',
+    'Padre de familia y/o acudiente',
+    'Graduado',
+    'Estudiante actual',
+    'Docente y/o psicoorientador',
+    'Administrativo PUJ'
   ],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Días de asistencia: 5 opciones con horarios específicos
   // ✅ Tipos de asistente: Amplia variedad para diferentes audiencias
   // ✅ Sin filtros académicos o geográficos - evento general
   // ✅ Configuración completa para evento institucional grande
-};
+}
 
 // ============================================================================
 // 🎓 PRUEBA 9: CONFIGURACIÓN ADICIONAL - UNIVERSIDADES Y FILTROS
@@ -381,45 +375,40 @@ export const configMultipleDays = {
 
 export const configUniversities = {
   // DATOS DEL EVENTO
-  eventName: "Encuentro Interuniversitario 2024",
-  eventDate: "2024-10-15",
-  campaign: "INTERUNIVERSITARIO_2024",
-  article: "evento_universidades",
-  source: "alianzas_academicas",
-  medium: "referido",
+  eventName: 'Encuentro Interuniversitario 2024',
+  eventDate: '2024-10-15',
+  campaign: 'INTERUNIVERSITARIO_2024',
+  article: 'evento_universidades',
+  source: 'alianzas_academicas',
+  medium: 'referido',
 
   // CONFIGURACIÓN DEL EVENTO
-  typeAttendee: [
-    "Graduado",
-    "Estudiante actual",
-    "Docente y/o psicoorientador",
-    "Administrativo PUJ",
-  ],
-  attendanceDays: ["Martes 15 de octubre de 2024"],
+  typeAttendee: ['Graduado', 'Estudiante actual', 'Docente y/o psicoorientador', 'Administrativo PUJ'],
+  attendanceDays: ['Martes 15 de octubre de 2024'],
 
   universities: [
-    "Universidad Prueba",
-    "Univ. Nacional de Colombia",
-    "Universidad de los Andes",
-    "Universidad del Rosario",
-    "Universidad Externado de Colombia",
-    "Universidad de la Sabana",
-    "Universidad Santo Tomas",
-    "Univ. Católica de Colombia",
+    'Universidad Prueba',
+    'Univ. Nacional de Colombia',
+    'Universidad de los Andes',
+    'Universidad del Rosario',
+    'Universidad Externado de Colombia',
+    'Universidad de la Sabana',
+    'Universidad Santo Tomas',
+    'Univ. Católica de Colombia'
   ],
 
   // CONFIGURACIONES TÉCNICAS
   test: true,
   debug: true,
   development: false,
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO:
   // ✅ Campo Universidad: Visible con lista completa de universidades del JSON
   // ✅ Enfoque en red de universidades aliadas
   // ✅ Tipos de asistente: Orientado a comunidad académica
   // ✅ Para eventos de intercambio académico y colaboración
-};
+}
 
 // ============================================================================
 // 🏢 PRUEBA 10: CONFIGURACIÓN ADICIONAL - EMPRESAS Y COLEGIOS
@@ -429,23 +418,23 @@ export const configUniversities = {
 
 export const configCompaniesSchools = {
   // DATOS DEL EVENTO
-  eventName: "Encuentro Empresarial y Colegios 2024",
-  eventDate: "2024-11-20",
-  campaign: "EMPRESARIAL_COLEGIOS_2024",
-  article: "evento_convenios",
-  source: "convenios_institucionales",
-  medium: "invitacion",
+  eventName: 'Encuentro Empresarial y Colegios 2024',
+  eventDate: '2024-11-20',
+  campaign: 'EMPRESARIAL_COLEGIOS_2024',
+  article: 'evento_convenios',
+  source: 'convenios_institucionales',
+  medium: 'invitacion',
 
   // CONFIGURACIÓN DE EMPRESAS DE CONVENIO
   company: [
-    "Grupo Bancolombia",
-    "ECOPETROL",
-    "Grupo Nutresa",
-    "Bavaria - AB InBev",
-    "Grupo Argos",
-    "ETB",
-    "Microsoft Colombia",
-    "Google Colombia",
+    'Grupo Bancolombia',
+    'ECOPETROL',
+    'Grupo Nutresa',
+    'Bavaria - AB InBev',
+    'Grupo Argos',
+    'ETB',
+    'Microsoft Colombia',
+    'Google Colombia'
   ],
 
   // ✅ CASO 1: CONFIGURACIÓN CON COLEGIOS ESPECÍFICOS (COMENTADO)
@@ -478,20 +467,20 @@ export const configCompaniesSchools = {
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
-    "Empresario",
-    "Graduado",
-    "Docente y/o psicoorientador",
-    "Administrativo PUJ",
-    "Aspirante",
-    "Padre de familia y/o acudiente",
+    'Empresario',
+    'Graduado',
+    'Docente y/o psicoorientador',
+    'Administrativo PUJ',
+    'Aspirante',
+    'Padre de familia y/o acudiente'
   ],
-  attendanceDays: ["Miércoles 20 de noviembre de 2024"],
+  attendanceDays: ['Miércoles 20 de noviembre de 2024'],
 
   // CONFIGURACIONES TÉCNICAS
   test: true, //Sandbox
   debug: true, // Envio de emails de prueba
   development: false, // No se envia a ningún endpoint
-  debugEmail: "gavilanm-j@javeriana.edu.co",
+  debugEmail: 'gavilanm-j@javeriana.edu.co'
 
   // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):
   // ✅ Campo Empresa: Visible con 8 empresas de convenio específicas
@@ -511,71 +500,71 @@ export const configCompaniesSchools = {
   // - CASO 3: Filtro por ciudad - ej: citySchool: "Bogotá D.C."
   // - CASO 4: Filtro por calendario - ej: calendarSchool: "Calendario A"
   // - CASO 5: Combinación múltiple de filtros
-};
+}
 
 // ============================================================================
 // 🚀 AUTO-INICIALIZACIÓN DE FORMULARIOS DE PRUEBA
 // ============================================================================
 // Inicializa automáticamente todos los formularios cuando se carga la página
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   // 📝 Prueba 1: Configuración Base
-  if (document.getElementById("formMini")) {
-    const formMini = new FormModules("#formMini", configMini);
-    formMini.initialize();
+  if (document.getElementById('formMini')) {
+    const formMini = new FormModules('#formMini', configMini)
+    formMini.initialize()
   }
 
   // 🎓 Prueba 2: Filtro por Nivel Académico
-  if (document.getElementById("formAcademicLevel")) {
-    const formAcademicLevel = new FormModules("#formAcademicLevel", configAcademicLevel);
-    formAcademicLevel.initialize();
+  if (document.getElementById('formAcademicLevel')) {
+    const formAcademicLevel = new FormModules('#formAcademicLevel', configAcademicLevel)
+    formAcademicLevel.initialize()
   }
 
   // 🏛️ Prueba 3: Filtro por Facultad
-  if (document.getElementById("formFaculty")) {
-    const formFaculty = new FormModules("#formFaculty", configFaculty);
-    formFaculty.initialize();
+  if (document.getElementById('formFaculty')) {
+    const formFaculty = new FormModules('#formFaculty', configFaculty)
+    formFaculty.initialize()
   }
 
   // 📚 Prueba 4: Filtro por Programas
-  if (document.getElementById("formPrograms")) {
-    const formPrograms = new FormModules("#formPrograms", configPrograms);
-    formPrograms.initialize();
+  if (document.getElementById('formPrograms')) {
+    const formPrograms = new FormModules('#formPrograms', configPrograms)
+    formPrograms.initialize()
   }
 
   // 🌍 Prueba 5: Filtro por Países
-  if (document.getElementById("formCountries")) {
-    const formCountries = new FormModules("#formCountries", configCountries);
-    formCountries.initialize();
+  if (document.getElementById('formCountries')) {
+    const formCountries = new FormModules('#formCountries', configCountries)
+    formCountries.initialize()
   }
 
   // 🏛️ Prueba 6: Filtro por Departamentos
-  if (document.getElementById("formDepartments")) {
-    const formDepartments = new FormModules("#formDepartments", configDepartments);
-    formDepartments.initialize();
+  if (document.getElementById('formDepartments')) {
+    const formDepartments = new FormModules('#formDepartments', configDepartments)
+    formDepartments.initialize()
   }
 
   // 🏙️ Prueba 7: Filtro por Ciudades
-  if (document.getElementById("formCities")) {
-    const formCities = new FormModules("#formCities", configCities);
-    formCities.initialize();
+  if (document.getElementById('formCities')) {
+    const formCities = new FormModules('#formCities', configCities)
+    formCities.initialize()
   }
 
   // 🎯 Prueba 8: Días Múltiples
-  if (document.getElementById("formMultipleDays")) {
-    const formMultipleDays = new FormModules("#formMultipleDays", configMultipleDays);
-    formMultipleDays.initialize();
+  if (document.getElementById('formMultipleDays')) {
+    const formMultipleDays = new FormModules('#formMultipleDays', configMultipleDays)
+    formMultipleDays.initialize()
   }
 
   // 🎓 Prueba 9: Universidades
-  if (document.getElementById("formUniversities")) {
-    const formUniversities = new FormModules("#formUniversities", configUniversities);
-    formUniversities.initialize();
+  if (document.getElementById('formUniversities')) {
+    const formUniversities = new FormModules('#formUniversities', configUniversities)
+    formUniversities.initialize()
   }
 
   // 🏢 Prueba 10: Empresas y Colegios
-  if (document.getElementById("formCompaniesSchools")) {
-    const formCompaniesSchools = new FormModules("#formCompaniesSchools", configCompaniesSchools);
-    formCompaniesSchools.initialize();
+  if (document.getElementById('formCompaniesSchools')) {
+    const formCompaniesSchools = new FormModules('#formCompaniesSchools', configCompaniesSchools)
+    formCompaniesSchools.initialize()
   }
-});
+})

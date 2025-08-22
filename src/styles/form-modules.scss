@@ -1,5 +1,5 @@
-@use "sass:meta";
-@use "./vars" as *;
+@use 'sass:meta';
+@use './vars' as *;
 
 // ==========================================
 // PREFIJO PARA AISLAMIENTO DEL CSS
@@ -8,10 +8,14 @@
   // ==========================================
   // ESTILOS GENERALES DEL MÓDULO
   // ==========================================
-  
+
   // Tipografía base
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-  
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
   // Layout principal
   background-color: var(--fm-container-background);
   border-radius: var(--fm-container-border-radius);
@@ -24,39 +28,38 @@
   max-height: 90vh;
   overflow-y: auto;
   box-sizing: border-box;
-  
+
   // Sombra usando tokens del sistema
   box-shadow: var(--fm-container-shadow);
 
   // ==========================================
   // BASE - RESET Y TIPOGRAFÍA
   // ==========================================
-  @include meta.load-css("modules/base");
+  @include meta.load-css('modules/base');
 
   // ==========================================
   // LAYOUT - CONTENEDORES Y GRID
   // ==========================================
-  @include meta.load-css("modules/layout");
+  @include meta.load-css('modules/layout');
 
   // ==========================================
   // COMPONENTES - FORMULARIOS Y CAMPOS
   // ==========================================
-  @include meta.load-css("modules/forms");
-  @include meta.load-css("modules/fields");
-  @include meta.load-css("modules/buttons");
-  @include meta.load-css("modules/validation");
-  @include meta.load-css("modules/tom-select");
-  @include meta.load-css("modules/phone-selector");
-  @include meta.load-css("modules/college-selector");
+  @include meta.load-css('modules/forms');
+  @include meta.load-css('modules/fields');
+  @include meta.load-css('modules/buttons');
+  @include meta.load-css('modules/validation');
+  @include meta.load-css('modules/tom-select');
+  @include meta.load-css('modules/phone-selector');
+  @include meta.load-css('modules/college-selector');
 
   // ==========================================
   // UTILIDADES - ESPACIADO Y DISPLAY
   // ==========================================
-  @include meta.load-css("modules/utilities");
-
+  @include meta.load-css('modules/utilities');
 }
 
 // ==========================================
 // TEMAS - VARIACIONES INDEPENDIENTES
 // ==========================================
-@include meta.load-css("modules/themes");
+@include meta.load-css('modules/themes');

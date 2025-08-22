@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURACIÓN DE LA LIBRERÍA
 // ==========================================
-$selector-prefix: "form-modules" !default;
+$selector-prefix: 'form-modules' !default;
 
 // ==========================================
 // TOKENS DE DISEÑO - CAPA PRIMITIVA
@@ -11,7 +11,7 @@ $selector-prefix: "form-modules" !default;
   // ==========================================
   // TOKENS PRIMITIVOS - PALETA DE COLORES
   // ==========================================
-  
+
   // Colores primarios de marca - Configurables por usuarios de la librería
   --fm-color-primary-50: #f3f6fc;
   --fm-color-primary-100: #e7edf7;
@@ -42,15 +42,15 @@ $selector-prefix: "form-modules" !default;
   --fm-color-success-50: #f0fdf4;
   --fm-color-success-500: #16a34a;
   --fm-color-success-600: #059669;
-  
+
   --fm-color-error-50: #fef2f2;
   --fm-color-error-500: #ef4444;
   --fm-color-error-600: #dc2626;
-  
+
   --fm-color-warning-50: #fffbeb;
   --fm-color-warning-500: #f59e0b;
   --fm-color-warning-600: #d97706;
-  
+
   --fm-color-info-50: #eff6ff;
   --fm-color-info-500: #3b82f6;
   --fm-color-info-600: #2563eb;
@@ -59,27 +59,28 @@ $selector-prefix: "form-modules" !default;
   // TOKENS PRIMITIVOS - ESCALA DE ESPACIADO
   // ==========================================
   --fm-space-0: 0;
-  --fm-space-1: 0.25rem;   // 4px
-  --fm-space-2: 0.5rem;    // 8px
-  --fm-space-3: 0.75rem;   // 12px
-  --fm-space-4: 1rem;      // 16px
-  --fm-space-5: 1.25rem;   // 20px
-  --fm-space-6: 1.5rem;    // 24px
-  --fm-space-8: 2rem;      // 32px
-  --fm-space-10: 2.5rem;   // 40px
-  --fm-space-12: 3rem;     // 48px
-  --fm-space-16: 4rem;     // 64px
-  --fm-space-32: 8rem;     // 128px
+  --fm-space-1: 0.25rem; // 4px
+  --fm-space-2: 0.5rem; // 8px
+  --fm-space-3: 0.75rem; // 12px
+  --fm-space-4: 1rem; // 16px
+  --fm-space-5: 1.25rem; // 20px
+  --fm-space-6: 1.5rem; // 24px
+  --fm-space-8: 2rem; // 32px
+  --fm-space-10: 2.5rem; // 40px
+  --fm-space-12: 3rem; // 48px
+  --fm-space-16: 4rem; // 64px
+  --fm-space-32: 8rem; // 128px
 
   // ==========================================
   // TOKENS PRIMITIVOS - ESCALA TIPOGRÁFICA
   // ==========================================
-  --fm-font-size-xs: 0.75rem;    // 12px
-  --fm-font-size-sm: 0.875rem;   // 14px
-  --fm-font-size-base: 1rem;     // 16px
-  --fm-font-size-lg: 1.125rem;   // 18px
-  --fm-font-size-xl: 1.25rem;    // 20px
-  --fm-font-size-2xl: 1.5rem;    // 24px
+  --fm-font-size-xs: 0.75rem; // 12px
+  --fm-font-size-sm: 0.875rem; // 14px - Tamaño para inputs
+  --fm-font-size-select: 0.8125rem; // 13px - Tamaño para listas de select
+  --fm-font-size-base: 1rem; // 16px
+  --fm-font-size-lg: 1.125rem; // 18px
+  --fm-font-size-xl: 1.25rem; // 20px
+  --fm-font-size-2xl: 1.5rem; // 24px
 
   --fm-font-weight-normal: 400;
   --fm-font-weight-medium: 500;
@@ -94,12 +95,12 @@ $selector-prefix: "form-modules" !default;
   // TOKENS PRIMITIVOS - RADIO DE BORDES
   // ==========================================
   --fm-radius-none: 0;
-  --fm-radius-sm: 0.125rem;   // 2px
-  --fm-radius-base: 0.25rem;  // 4px
-  --fm-radius-md: 0.375rem;   // 6px
-  --fm-radius-lg: 0.5rem;     // 8px
-  --fm-radius-xl: 0.75rem;    // 12px
-  --fm-radius-2xl: 1rem;      // 16px
+  --fm-radius-sm: 0.125rem; // 2px
+  --fm-radius-base: 0.25rem; // 4px
+  --fm-radius-md: 0.375rem; // 6px
+  --fm-radius-lg: 0.5rem; // 8px
+  --fm-radius-xl: 0.75rem; // 12px
+  --fm-radius-2xl: 1rem; // 16px
   --fm-radius-full: 9999px;
 
   // ==========================================
@@ -186,7 +187,7 @@ $selector-prefix: "form-modules" !default;
   --fm-container-max-width: 32rem;
   --fm-container-background: var(--fm-surface-primary);
   --fm-container-border-radius: var(--fm-radius-2xl);
-  --fm-container-padding: var(--fm-space-6);
+  --fm-container-padding: var(--fm-space-4);
   --fm-container-shadow: var(--fm-shadow-lg);
 
   // ==========================================
@@ -207,13 +208,13 @@ $selector-prefix: "form-modules" !default;
   --fm-input-border-width-focus: 2px;
   --fm-input-placeholder-color: var(--fm-color-neutral-400);
   --fm-input-text-color: var(--fm-text-primary);
-  
+
   // Select específicos
   --fm-select-arrow-color: #666666;
   --fm-select-arrow-color-hover: var(--fm-text-primary);
   --fm-select-arrow-color-focus: var(--fm-interactive-primary);
   --fm-select-padding-right: var(--fm-space-10);
-  
+
   // Radio y checkbox
   --fm-radio-size: 1rem;
   --fm-radio-border-width: 2px;
@@ -221,12 +222,12 @@ $selector-prefix: "form-modules" !default;
   --fm-radio-border-color-hover: var(--fm-color-neutral-600);
   --fm-radio-border-color-checked: var(--fm-interactive-primary);
   --fm-radio-dot-color: var(--fm-interactive-primary);
-  
+
   --fm-checkbox-size: 1rem;
   --fm-checkbox-border-width: 2px;
   --fm-checkbox-border-color: var(--fm-border-default);
   --fm-checkbox-border-radius: var(--fm-radius-base);
-  
+
   // File input
   --fm-file-border-style: dashed;
   --fm-file-border-width: 2px;
@@ -248,8 +249,8 @@ $selector-prefix: "form-modules" !default;
   // TOKENS DE COMPONENTE - LAYOUT
   // ==========================================
   --fm-layout-header-padding: var(--fm-space-2);
-  --fm-layout-content-padding-x: var(--fm-space-5);
-  --fm-layout-content-padding-y: var(--fm-space-4);
+  --fm-layout-content-padding-x: var(--fm-space-3);
+  --fm-layout-content-padding-y: var(--fm-space-3);
   --fm-layout-fields-padding-x: var(--fm-space-6);
   --fm-layout-fields-padding-y: var(--fm-space-4);
   --fm-layout-footer-padding: var(--fm-space-2);
@@ -260,7 +261,7 @@ $selector-prefix: "form-modules" !default;
   // ==========================================
   // TOKENS DE COMPONENTE - FORMULARIOS
   // ==========================================
-  --fm-form-field-margin-bottom: var(--fm-space-4);
+  --fm-form-field-margin-bottom: var(--fm-space-3);
   --fm-form-label-margin-bottom: var(--fm-space-1);
   --fm-form-authorization-padding: var(--fm-space-3);
   --fm-form-authorization-background: var(--fm-surface-secondary);

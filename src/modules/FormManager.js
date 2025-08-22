@@ -4,33 +4,33 @@
  * @version 1.0
  */
 
-import { Validation } from "./Validation.js";
-import { Data } from "./Data.js";
-import { Service } from "./Service.js";
-import { Ui } from "./UI.js";
-import { Logger } from "./Logger.js";
-import { Config } from "./Config.js";
-import { State } from "./State.js";
-import { Event } from "./Event.js";
-import { Academic } from "./Academic.js";
-import { Locations } from "./Locations.js";
-import { University } from "./University.js";
-import { College } from "./College.js";
-import { TomSelect } from "./TomSelect.js";
-import { UtmParameters } from "./UtmParameters.js";
-import { Constants } from "./Constants.js";
+import { Validation } from './Validation.js'
+import { Data } from './Data.js'
+import { Service } from './Service.js'
+import { Ui } from './UI.js'
+import { Logger } from './Logger.js'
+import { Config } from './Config.js'
+import { State } from './State.js'
+import { Event } from './Event.js'
+import { Academic } from './Academic.js'
+import { Locations } from './Locations.js'
+import { University } from './University.js'
+import { College } from './College.js'
+import { TomSelect } from './TomSelect.js'
+import { UtmParameters } from './UtmParameters.js'
+import { Constants } from './Constants.js'
 
 export class FormManager {
   constructor(selector, config = {}) {
-    this.selector = selector;
-    this.isInitialized = false;
-    this.isSubmitting = false;
+    this.selector = selector
+    this.isInitialized = false
+    this.isSubmitting = false
 
     // Módulos
-    this.config = new Config({ config, selector });
-    this.logger = new Logger({ config: this.config.getLoggingConfig() });
-    this.ui = new Ui({ config: this.config.getUiConfig(), logger: this.logger });
-    this.validator = new Validation({ logger: this.logger });
+    this.config = new Config({ config, selector })
+    this.logger = new Logger({ config: this.config.getLoggingConfig() })
+    this.ui = new Ui({ config: this.config.getUiConfig(), logger: this.logger })
+    this.validator = new Validation({ logger: this.logger })
 
     this.state = new State({
       config: this.config,
@@ -38,33 +38,33 @@ export class FormManager {
       validator: this.validator,
       logger: this.logger,
       formElement: this.ui.getFormContext(),
-      event: null, // Se asignará después de crear el Event
-    });
+      event: null // Se asignará después de crear el Event
+    })
 
     this.event = new Event({
       formElement: this.ui.getFormContext(),
       state: this.state,
       ui: this.ui,
-      logger: this.logger,
-    });
+      logger: this.logger
+    })
 
-    this.state.setEventManager(this.event); // Configurar Event en State
+    this.state.setEventManager(this.event) // Configurar Event en State
 
     this.data = new Data({
       cache: this.config.getConfig().cache,
       urls: this.config.getConfig().urls,
-      logger: this.logger,
-    });
+      logger: this.logger
+    })
 
     // Inicializar TomSelect para campos adicionales
-    this.tomSelect = new TomSelect(this.logger);
+    this.tomSelect = new TomSelect(this.logger)
 
     this.service = new Service({
       config: this.config,
-      logger: this.logger,
-    });
+      logger: this.logger
+    })
 
-    this.formElement = this.ui.getFormContext();
+    this.formElement = this.ui.getFormContext()
   }
 
   // ===============================
@@ -76,24 +76,22 @@ export class FormManager {
    */
   async initialize() {
     try {
-      this.logger.info(
-        `Inicializando FormManager para: ${this.selector} (${this.config.getConfig().eventName})`
-      );
+      this.logger.info(`Inicializando FormManager para: ${this.selector} (${this.config.getConfig().eventName})`)
 
-      await this._loadData();
-      await this._setupModules();
-      await this._configureForm();
+      await this._loadData()
+      await this._setupModules()
+      await this._configureForm()
 
-      this.isInitialized = true;
-      this.logger.info("FormManager inicializado correctamente");
+      this.isInitialized = true
+      this.logger.info('FormManager inicializado correctamente')
 
       // Callback personalizado
       if (this.config.callbacks?.onFormLoad) {
-        this.config.callbacks.onFormLoad(this);
+        this.config.callbacks.onFormLoad(this)
       }
     } catch (error) {
-      this.logger.error("Error al inicializar FormManager:", error);
-      throw error;
+      this.logger.error('Error al inicializar FormManager:', error)
+      throw error
     }
   }
 
@@ -102,18 +100,18 @@ export class FormManager {
    */
   destroy() {
     if (this.event) {
-      this.event.destroy();
+      this.event.destroy()
     }
 
     // Limpiar animaciones de flechas
-    if (this.ui && typeof this.ui.cleanupSelectArrowAnimations === "function") {
-      this.ui.cleanupSelectArrowAnimations();
+    if (this.ui && typeof this.ui.cleanupSelectArrowAnimations === 'function') {
+      this.ui.cleanupSelectArrowAnimations()
     }
 
-    this.formElement = null;
-    this.isInitialized = false;
+    this.formElement = null
+    this.isInitialized = false
 
-    Logger.info("FormManager destrUido");
+    Logger.info('FormManager destrUido')
   }
 
   // ===============================
@@ -124,25 +122,25 @@ export class FormManager {
    * Obtener datos del formulario
    */
   getFormData() {
-    return this.state.getFormData();
+    return this.state.getFormData()
   }
 
   /**
    * Obtener configuración actual
    */
   getConfig() {
-    return Config.getConfig();
+    return Config.getConfig()
   }
 
   /**
    * Actualizar configuración
    */
   updateConfig(newConfig) {
-    Config.updateConfig(newConfig);
-    this.config = Config.getConfig();
+    Config.updateConfig(newConfig)
+    this.config = Config.getConfig()
 
     if (this.isInitialized) {
-      this._configureForm();
+      this._configureForm()
     }
   }
 
@@ -150,11 +148,11 @@ export class FormManager {
    * Limpiar formulario y resetear estado
    */
   reset() {
-    this.formElement.reset();
-    this.state.reset();
-    this.isSubmitting = false;
-    this.ui.clearAllErrors(this.formElement);
-    this._setInitialFormValues();
+    this.formElement.reset()
+    this.state.reset()
+    this.isSubmitting = false
+    this.ui.clearAllErrors(this.formElement)
+    this._setInitialFormValues()
   }
 
   // ===============================
@@ -165,18 +163,16 @@ export class FormManager {
    * Alternar estado del botón de envío
    */
   toggleSubmitButton(enabled) {
-    const { exists, element: submitBtn } = this.ui.checkElementExists(
-      Constants.SELECTORS.SUBMIT_BUTTON
-    );
+    const { exists, element: submitBtn } = this.ui.checkElementExists(Constants.SELECTORS.SUBMIT_BUTTON)
     if (exists && submitBtn) {
       // No permitir habilitar el botón si está en proceso de envío
       if (enabled && this.isSubmitting) {
-        this.logger.warn("⚠️ No se puede habilitar el botón de submit - envío en progreso");
-        return;
+        this.logger.warn('⚠️ No se puede habilitar el botón de submit - envío en progreso')
+        return
       }
-      
-      submitBtn.disabled = !enabled;
-      this.state.setFieldDisabled("submit", !enabled);
+
+      submitBtn.disabled = !enabled
+      this.state.setFieldDisabled('submit', !enabled)
     }
   }
 
@@ -184,32 +180,32 @@ export class FormManager {
    * Manejar envío del formulario
    */
   async handleSubmit(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
+    e.preventDefault()
+    e.stopImmediatePropagation()
 
     if (this.isSubmitting) {
-      this.logger.warn("⚠️ Envío ya en progreso, ignorando intento adicional");
-      return false;
+      this.logger.warn('⚠️ Envío ya en progreso, ignorando intento adicional')
+      return false
     }
 
-    this.logger.info("🚀 Iniciando proceso de envío del formulario");
+    this.logger.info('🚀 Iniciando proceso de envío del formulario')
 
     // Validación completa del formulario
-    const rawFormData = this.state.getFormData();
-    const validationResult = this.validator.validateFormComplete(this.formElement, rawFormData);
+    const rawFormData = this.state.getFormData()
+    const validationResult = this.validator.validateFormComplete(this.formElement, rawFormData)
 
     if (!validationResult.isValid) {
-      this._handleMissingRequiredFields(validationResult.missingFields);
-      this._handleValidationErrors(validationResult.errors);
-      this.ui.showGeneralError("Por favor completa todos los campos requeridos");
-      return;
+      this._handleMissingRequiredFields(validationResult.missingFields)
+      this._handleValidationErrors(validationResult.errors)
+      this.ui.showGeneralError('Por favor completa todos los campos requeridos')
+      return
     }
 
     // 3. Filtrar campos vacíos antes del envío
-    const formData = this._filterEmptyFields(rawFormData);
-    console.log(formData);
+    const formData = this._filterEmptyFields(rawFormData)
+    console.log(formData)
 
-    await this._processFormSubmission(formData);
+    await this._processFormSubmission(formData)
   }
 
   // ===============================
@@ -220,26 +216,26 @@ export class FormManager {
    * Cambiar modo de depuración
    */
   setDebugMode(enabled) {
-    this.state.setDebugMode(enabled);
-    this.config = Config.getConfig();
-    this._addHiddenFields();
+    this.state.setDebugMode(enabled)
+    this.config = Config.getConfig()
+    this._addHiddenFields()
   }
 
   /**
    * Cambiar modo de desarrollo
    */
   setDevelopmentMode(enabled) {
-    this.state.setDevelopmentMode(enabled);
-    this.config = Config.getConfig();
+    this.state.setDevelopmentMode(enabled)
+    this.config = Config.getConfig()
   }
 
   /**
    * Cambiar modo sandbox
    */
   setTestMode(enabled) {
-    this.state.setTestMode(enabled);
-    this.config = Config.getConfig();
-    this._addHiddenFields();
+    this.state.setTestMode(enabled)
+    this.config = Config.getConfig()
+    this._addHiddenFields()
   }
 
   // ===============================
@@ -251,7 +247,7 @@ export class FormManager {
    * @returns {Object} - Resumen del procesamiento
    */
   refreshUtmParameters() {
-    return this.utmParameters.processUrlParameters();
+    return this.utmParameters.processUrlParameters()
   }
 
   /**
@@ -260,7 +256,7 @@ export class FormManager {
    * @returns {string|null} - Valor del parámetro
    */
   getUtmParameter(paramName) {
-    return this.utmParameters.getUtmParameter(paramName);
+    return this.utmParameters.getUtmParameter(paramName)
   }
 
   /**
@@ -268,7 +264,7 @@ export class FormManager {
    * @returns {Object} - Objeto con todos los parámetros UTM
    */
   getAllUtmParameters() {
-    return this.utmParameters.getAllUtmParameters();
+    return this.utmParameters.getAllUtmParameters()
   }
 
   /**
@@ -276,7 +272,7 @@ export class FormManager {
    * @returns {boolean} - True si hay parámetros UTM
    */
   hasUtmParameters() {
-    return this.utmParameters.hasUtmParameters();
+    return this.utmParameters.hasUtmParameters()
   }
 
   /**
@@ -285,7 +281,7 @@ export class FormManager {
    * @returns {string} - URL con parámetros UTM
    */
   generateUtmUrl(baseUrl = null) {
-    return this.utmParameters.generateUtmUrl(baseUrl);
+    return this.utmParameters.generateUtmUrl(baseUrl)
   }
 
   // ===============================
@@ -293,22 +289,22 @@ export class FormManager {
   // ===============================
 
   enableLogging() {
-    this.logger.enable();
+    this.logger.enable()
   }
   disableLogging() {
-    this.logger.disable();
+    this.logger.disable()
   }
   toggleLogging() {
-    this.logger.toggle();
+    this.logger.toggle()
   }
   setLogLevel(level) {
-    this.logger.setLevel(level);
+    this.logger.setLevel(level)
   }
   getLoggingConfig() {
-    return this.logger.getLoggingConfig();
+    return this.logger.getLoggingConfig()
   }
   addLogListener(callback) {
-    this.logger.addListener(callback);
+    this.logger.addListener(callback)
   }
 
   // ===============================
@@ -320,40 +316,40 @@ export class FormManager {
    * @private
    */
   async _loadData() {
-    const { DATA_FILES } = Constants;
-    const reqUiredData = this._detectReqUiredDataSources();
-    this.logger.info(`🎯 Cargando solo los datos necesarios: ${reqUiredData.join(", ")}`);
+    const { DATA_FILES } = Constants
+    const reqUiredData = this._detectReqUiredDataSources()
+    this.logger.info(`🎯 Cargando solo los datos necesarios: ${reqUiredData.join(', ')}`)
 
     // DEBUG: Forzar carga de colegios para debug
     if (!reqUiredData.includes(DATA_FILES.COLLEGES)) {
-      this.logger.warn("⚠️ Colegios no detectados automáticamente - forzando carga para debug");
-      reqUiredData.push(DATA_FILES.COLLEGES);
+      this.logger.warn('⚠️ Colegios no detectados automáticamente - forzando carga para debug')
+      reqUiredData.push(DATA_FILES.COLLEGES)
     }
 
-    const loadPromises = [];
+    const loadPromises = []
 
     // Cargar datos basándose en campos detectados
     if (reqUiredData.includes(DATA_FILES.LOCATIONS)) {
-      loadPromises.push(this.data.loadLocations());
+      loadPromises.push(this.data.loadLocations())
     }
     if (reqUiredData.includes(DATA_FILES.PREFIXES)) {
-      loadPromises.push(this.data.loadPrefixes());
+      loadPromises.push(this.data.loadPrefixes())
     }
     if (reqUiredData.includes(DATA_FILES.PROGRAMS)) {
-      loadPromises.push(this.data.loadPrograms());
+      loadPromises.push(this.data.loadPrograms())
     }
     if (reqUiredData.includes(DATA_FILES.PERIODS)) {
-      loadPromises.push(this.data.loadPeriods());
+      loadPromises.push(this.data.loadPeriods())
     }
     if (reqUiredData.includes(DATA_FILES.UNIVERSITIES)) {
-      loadPromises.push(this.data.loadUniversity());
+      loadPromises.push(this.data.loadUniversity())
     }
     if (reqUiredData.includes(DATA_FILES.COLLEGES)) {
-      loadPromises.push(this.data.loadCollege());
+      loadPromises.push(this.data.loadCollege())
     }
 
     // Cargar todos los datos requeridos en paralelo
-    await Promise.allSettled(loadPromises);
+    await Promise.allSettled(loadPromises)
   }
 
   /**
@@ -362,8 +358,8 @@ export class FormManager {
    * @returns {Array<string>} - Lista de fuentes de datos requeridas
    */
   _detectReqUiredDataSources() {
-    const reqUiredData = [];
-    const { DATA_FILES } = Constants;
+    const reqUiredData = []
+    const { DATA_FILES } = Constants
 
     // Mapeo de campos del formulario a fuentes de datos
     const fieldToDataMapping = {
@@ -387,23 +383,23 @@ export class FormManager {
       [Constants.SELECTORS.UNIVERSITY]: DATA_FILES.UNIVERSITIES,
 
       // Colegio
-      [Constants.SELECTORS.COLLEGE]: DATA_FILES.COLLEGES,
-    };
+      [Constants.SELECTORS.COLLEGE]: DATA_FILES.COLLEGES
+    }
 
     // Verificar qué campos existen en el formulario HTML
     Object.entries(fieldToDataMapping).forEach(([selector, dataSource]) => {
-      const { exists } = this.ui.checkElementExists(selector);
+      const { exists } = this.ui.checkElementExists(selector)
       if (exists && !reqUiredData.includes(dataSource)) {
-        reqUiredData.push(dataSource);
+        reqUiredData.push(dataSource)
       }
-    });
+    })
 
     // Si no se detectaron fuentes de datos, cargar las básicas por defecto
     if (reqUiredData.length === 0) {
-      this.logger.warn("⚠️ No se detectaron campos específicos");
+      this.logger.warn('⚠️ No se detectaron campos específicos')
     }
 
-    return reqUiredData;
+    return reqUiredData
   }
 
   /**
@@ -412,22 +408,22 @@ export class FormManager {
    */
   async _setupModules() {
     // Módulo académico - IMPORTANTE: pasar configuración para filtros
-    this.academic = new Academic(this.data, this.ui, this.state, this.logger, this.config);
+    this.academic = new Academic(this.data, this.ui, this.state, this.logger, this.config)
 
     // Módulo de ubicaciones - IMPORTANTE: pasar configuración para filtros
-    this.locations = new Locations(this.data, this.ui, this.state, this.logger, this.config);
+    this.locations = new Locations(this.data, this.ui, this.state, this.logger, this.config)
 
     // Módulo de universidades - IMPORTANTE: pasar configuración para filtros
-    this.university = new University(this.data, this.ui, this.state, this.logger, this.config);
+    this.university = new University(this.data, this.ui, this.state, this.logger, this.config)
 
     // Módulo de colegios - IMPORTANTE: pasar configuración para filtros
-    this.college = new College(this.data, this.ui, this.state, this.logger, this.config);
+    this.college = new College(this.data, this.ui, this.state, this.logger, this.config)
 
     // Módulo de parámetros UTM
-    this.utmParameters = new UtmParameters(this.formElement, this.state, this.ui, this.logger);
+    this.utmParameters = new UtmParameters(this.formElement, this.state, this.ui, this.logger)
 
     // Registrar callbacks y handlers
-    this._registerEventHandlers();
+    this._registerEventHandlers()
   }
 
   /**
@@ -435,29 +431,29 @@ export class FormManager {
    * @private
    */
   async _configureForm() {
-    this._initializeModes();
-    this._addHiddenFields();
-    await this._initializeFormHiddenFields();
-    this.academic.initializeAcademicFields();
-    this.locations.initializeLocationFields();
-    this.university.initializeUniversityField();
-    this.college.initializeCollegeField();
+    this._initializeModes()
+    this._addHiddenFields()
+    await this._initializeFormHiddenFields()
+    this.academic.initializeAcademicFields()
+    this.locations.initializeLocationFields()
+    this.university.initializeUniversityField()
+    this.college.initializeCollegeField()
     // Establecer valores iniciales DESPUÉS de que se hayan poblado los selects
-    this._setInitialFormValues();
-    this.event.setupAllEvents();
-    this._setupStateValidation();
-    this._processUrlParameters();
-    this._initializeSelectArrowAnimations();
+    this._setInitialFormValues()
+    this.event.setupAllEvents()
+    this._setupStateValidation()
+    this._processUrlParameters()
+    this._initializeSelectArrowAnimations()
 
     // Configurar form action con la URL correcta según el modo
-    const isSandboxMode = this.state.isTestMode();
-    const salesforceUrl = this._getSalesforceUrl(isSandboxMode);
-    this.formElement.action = salesforceUrl;
-    this.formElement.method = "POST";
-    this.formElement.enctype = "multipart/form-data";
+    const isSandboxMode = this.state.isTestMode()
+    const salesforceUrl = this._getSalesforceUrl(isSandboxMode)
+    this.formElement.action = salesforceUrl
+    this.formElement.method = 'POST'
+    this.formElement.enctype = 'multipart/form-data'
 
-    this.logger.info(`🔗 Form action configurado: ${salesforceUrl}`);
-    this.logger.info(`📝 Modo sandbox: ${isSandboxMode ? "SÍ" : "NO"}`);
+    this.logger.info(`🔗 Form action configurado: ${salesforceUrl}`)
+    this.logger.info(`📝 Modo sandbox: ${isSandboxMode ? 'SÍ' : 'NO'}`)
   }
 
   // ===============================
@@ -469,28 +465,28 @@ export class FormManager {
    * @private
    */
   _initializeModes() {
-    const config = this.config.getConfig();
+    const config = this.config.getConfig()
 
     if (config.development) {
-      this.state.setDevelopmentMode(config.development);
-      this.logger.info(`development configurado: ${config.development}`);
-      this.logger.warn("ADVERTENCIA: development está ACTIVO - Los formularios NO se enviarán");
+      this.state.setDevelopmentMode(config.development)
+      this.logger.info(`development configurado: ${config.development}`)
+      this.logger.warn('ADVERTENCIA: development está ACTIVO - Los formularios NO se enviarán')
     }
 
     if (config.debug) {
-      this.state.setDebugMode(config.debug);
-      this.logger.info(`DebugMode configurado: ${config.debug}`);
+      this.state.setDebugMode(config.debug)
+      this.logger.info(`DebugMode configurado: ${config.debug}`)
     }
 
     if (config.test !== undefined) {
-      this.state.setTestMode(config.test);
-      this.logger.info(`TestMode configurado: ${config.test}`);
+      this.state.setTestMode(config.test)
+      this.logger.info(`TestMode configurado: ${config.test}`)
     }
 
     // Log final del estado de modos
     this.logger.info(
       `🔍 Estado final de modos - Desarrollo: ${this.state.isDevMode()}, Test: ${this.state.isTestMode()}, Debug: ${this.state.isDebugMode()}`
-    );
+    )
   }
 
   /**
@@ -498,103 +494,103 @@ export class FormManager {
    * @private
    */
   _addHiddenFields() {
-    const { FIELDS, FIELD_MAPPING } = Constants;
-    const config = this.config.getConfig();
+    const { FIELDS, FIELD_MAPPING } = Constants
+    const config = this.config.getConfig()
 
     // Skip adding hidden fields if disabled in config (useful for debugging)
     if (config.disableHiddenFields) {
-      this.logger.info("🚫 Campos ocultos desactivados por configuración de debug");
-      return;
+      this.logger.info('🚫 Campos ocultos desactivados por configuración de debug')
+      return
     }
 
     const fields = [
       {
         info: FIELD_MAPPING.OID.name,
         name: FIELD_MAPPING.OID.field,
-        value: this.state.isTestMode() ? "00D7j0000004eQD" : "00Df4000003l8Bf",
+        value: this.state.isTestMode() ? '00D7j0000004eQD' : '00Df4000003l8Bf'
       },
       {
         info: FIELD_MAPPING.RET_URL.name,
         name: FIELD_MAPPING.RET_URL.field,
-        value: config.retUrl,
+        value: config.retUrl
       },
       {
         info: FIELD_MAPPING.DEBUG.name,
         name: FIELD_MAPPING.DEBUG.field,
-        value: this.state.isDebugMode() ? "1" : "0",
+        value: this.state.isDebugMode() ? '1' : '0'
       },
       {
         info: FIELD_MAPPING.DEBUG_EMAIL.name,
         name: FIELD_MAPPING.DEBUG_EMAIL.field,
-        value: this.state.isDebugMode() ? config.debugEmail : "",
+        value: this.state.isDebugMode() ? config.debugEmail : ''
       },
       {
         info: FIELD_MAPPING.AUTHORIZATION_SOURCE.name,
         name: FIELD_MAPPING.AUTHORIZATION_SOURCE.field,
-        value: this.state.getField(FIELDS.AUTHORIZATION_SOURCE),
+        value: this.state.getField(FIELDS.AUTHORIZATION_SOURCE)
       },
       {
         info: FIELD_MAPPING.REQUEST_ORIGIN.name,
         name: FIELD_MAPPING.REQUEST_ORIGIN.field,
-        value: this.state.getField(FIELDS.REQUEST_ORIGIN),
+        value: this.state.getField(FIELDS.REQUEST_ORIGIN)
       },
       {
         info: FIELD_MAPPING.LEAD_SOURCE.name,
         name: FIELD_MAPPING.LEAD_SOURCE.field,
-        value: this.state.getField(FIELDS.LEAD_SOURCE),
+        value: this.state.getField(FIELDS.LEAD_SOURCE)
       },
       {
         info: FIELD_MAPPING.COMPANY.name,
         name: FIELD_MAPPING.COMPANY.field,
-        value: this.state.getField(FIELDS.COMPANY),
+        value: this.state.getField(FIELDS.COMPANY)
       },
 
       // Campos que dependen de la configuración
       {
         info: FIELD_MAPPING.SOURCE.name,
         name: FIELD_MAPPING.SOURCE.field,
-        value: this.state.getField(FIELDS.SOURCE),
+        value: this.state.getField(FIELDS.SOURCE)
       },
       {
         info: FIELD_MAPPING.SUB_SOURCE.name,
         name: FIELD_MAPPING.SUB_SOURCE.field,
-        value: this.state.getField(FIELDS.SUB_SOURCE),
+        value: this.state.getField(FIELDS.SUB_SOURCE)
       },
       {
         info: FIELD_MAPPING.MEDIUM.name,
         name: FIELD_MAPPING.MEDIUM.field,
-        value: this.state.getField(FIELDS.MEDIUM),
+        value: this.state.getField(FIELDS.MEDIUM)
       },
       {
         info: FIELD_MAPPING.CAMPAIGN.name,
         name: FIELD_MAPPING.CAMPAIGN.field,
-        value: this.state.getField(FIELDS.CAMPAIGN),
+        value: this.state.getField(FIELDS.CAMPAIGN)
       },
       {
         info: FIELD_MAPPING.ARTICLE.name,
         name: FIELD_MAPPING.ARTICLE.field,
-        value: this.state.getField(FIELDS.ARTICLE),
+        value: this.state.getField(FIELDS.ARTICLE)
       },
       {
         info: FIELD_MAPPING.EVENT_NAME.name,
         name: FIELD_MAPPING.EVENT_NAME.field,
-        value: this.state.getField(FIELDS.EVENT_NAME),
+        value: this.state.getField(FIELDS.EVENT_NAME)
       },
       {
         info: FIELD_MAPPING.EVENT_DATE.name,
         name: FIELD_MAPPING.EVENT_DATE.field,
-        value: this.state.getField(FIELDS.EVENT_DATE),
-      },
-    ];
+        value: this.state.getField(FIELDS.EVENT_DATE)
+      }
+    ]
 
     fields
-      .filter((field) => field.value)
-      .forEach((field) => {
+      .filter(field => field.value)
+      .forEach(field => {
         if (field) {
-          this.ui.addHiddenField(this.formElement, field.name, field.value, field.info);
-          this.state.updateField(field.name, field.value);
+          this.ui.addHiddenField(this.formElement, field.name, field.value, field.info)
+          this.state.updateField(field.name, field.value)
         }
-      });
+      })
   }
 
   /**
@@ -602,28 +598,28 @@ export class FormManager {
    * @private
    */
   _setInitialFormValues() {
-    const initialState = this.state.getFormData();
-    const allInputs = this.formElement.querySelectorAll("input, select, textarea");
-    let appliedCount = 0;
-    const fieldsToValidate = {};
+    const initialState = this.state.getFormData()
+    const allInputs = this.formElement.querySelectorAll('input, select, textarea')
+    let appliedCount = 0
+    const fieldsToValidate = {}
 
     // Aplicar valores iniciales a los campos
-    allInputs.forEach((element) => {
-      const elementName = element.name || element.id;
+    allInputs.forEach(element => {
+      const elementName = element.name || element.id
       if (elementName && initialState.hasOwnProperty(elementName)) {
-        const defaultValue = initialState[elementName];
+        const defaultValue = initialState[elementName]
         if (defaultValue || defaultValue === 0) {
-          this.ui.setFieldValue(element, defaultValue);
-          appliedCount++;
+          this.ui.setFieldValue(element, defaultValue)
+          appliedCount++
 
           // Recopilar para validación
           fieldsToValidate[elementName] = {
             element: element,
-            value: defaultValue,
-          };
+            value: defaultValue
+          }
         }
       }
-    });
+    })
 
     // Delegar validación completa al Validation
     this.validator.validateInitialValues(fieldsToValidate, {
@@ -631,8 +627,8 @@ export class FormManager {
       updateState: true,
       stateManager: this.state,
       Ui: this.ui,
-      appliedCount: appliedCount,
-    });
+      appliedCount: appliedCount
+    })
   }
 
   /**
@@ -640,49 +636,49 @@ export class FormManager {
    * @private
    */
   async _initializeFormHiddenFields() {
-    const { config } = this.config;
+    const { config } = this.config
     const fieldConfigs = [
       {
         selector: Constants.SELECTORS.PHONE_CODE,
         priorityItem: this.state.getField(Constants.FIELDS.PHONE_CODE),
-        options: this.data.getPrefixes().map((prefix) => ({
+        options: this.data.getPrefixes().map(prefix => ({
           value: prefix.phoneCode,
-          text: `${prefix.phoneCode} - ${prefix.phoneName}`,
-        })),
+          text: `${prefix.phoneCode} - ${prefix.phoneName}`
+        }))
       },
       {
         selector: Constants.SELECTORS.COUNTRY,
         priorityItem: this.state.getField(Constants.FIELDS.COUNTRY),
-        options: this.locations.getFilteredCountries(),
+        options: this.locations.getFilteredCountries()
       },
       {
         selector: Constants.SELECTORS.TYPE_ATTENDEE,
         priorityItem: this.state.getField(Constants.FIELDS.TYPE_ATTENDEE),
-        options: config.typeAttendee,
+        options: config.typeAttendee
       },
       {
         selector: Constants.SELECTORS.ATTENDANCE_DAY,
         priorityItem: this.state.getField(Constants.FIELDS.ATTENDANCE_DAY),
-        options: config.attendanceDays,
-      },
-    ];
+        options: config.attendanceDays
+      }
+    ]
 
-    fieldConfigs.forEach((config) => {
+    fieldConfigs.forEach(config => {
       this.ui.populateSelect({
         selector: config.selector,
         priorityItems: config.priorityItem,
-        options: config.options,
-      });
-    });
+        options: config.options
+      })
+    })
 
-    // Poblar campos adicionales (empresas)  
-    await this._initializeAdditionalFields();
+    // Poblar campos adicionales (empresas)
+    await this._initializeAdditionalFields()
 
     // Inicializar campos de evento con valores de configuración
-    this._initializeEventFields();
+    this._initializeEventFields()
 
     // Manejar auto-selección de tipo de asistente "Aspirante"
-    this._handleTypeAttendeeAutoSelection();
+    this._handleTypeAttendeeAutoSelection()
   }
 
   /**
@@ -690,43 +686,42 @@ export class FormManager {
    * @private
    */
   async _initializeAdditionalFields() {
-    const { config } = this.config;
+    const { config } = this.config
 
     // Poblar empresas con TomSelect
-    await this._populateCompanies(config.company);
+    await this._populateCompanies(config.company)
   }
-
 
   /**
    * Poblar select de empresas usando TomSelect
    * @private
    */
   async _populateCompanies(configCompanies) {
-    const companyElement = this.ui.scopedQuery(Constants.SELECTORS.COMPANY);
-    if (!companyElement) return;
+    const companyElement = this.ui.scopedQuery(Constants.SELECTORS.COMPANY)
+    if (!companyElement) return
 
     if (configCompanies && Array.isArray(configCompanies) && configCompanies.length > 0) {
       const options = configCompanies.map(company => ({
         value: company,
         text: company
-      }));
+      }))
 
       try {
         // Usar TomSelect para empresas
-        await this._setupTomSelectForCompany(companyElement, options);
-        this.logger.info(`🏢 Campo empresa configurado con TomSelect (${options.length} opciones)`);
+        await this._setupTomSelectForCompany(companyElement, options)
+        this.logger.info(`🏢 Campo empresa configurado con TomSelect (${options.length} opciones)`)
       } catch (error) {
-        this.logger.error(`❌ Error configurando TomSelect para empresa: ${error.message}`);
+        this.logger.error(`❌ Error configurando TomSelect para empresa: ${error.message}`)
         // Fallback a método nativo
         this.ui.populateSelect({
           selector: Constants.SELECTORS.COMPANY,
-          options: options,
-        });
+          options: options
+        })
       }
 
-      this.logger.info(`🏢 Poblando empresas con lista específica (${configCompanies.length} empresas)`);
+      this.logger.info(`🏢 Poblando empresas con lista específica (${configCompanies.length} empresas)`)
     } else {
-      this.logger.info("🏢 No hay configuración de empresas - campo se mantiene vacío");
+      this.logger.info('🏢 No hay configuración de empresas - campo se mantiene vacío')
     }
   }
 
@@ -736,28 +731,27 @@ export class FormManager {
    */
   async _setupTomSelectForCompany(companyElement, options) {
     try {
-      this.logger?.info(`🎯 Configurando TomSelect para empresa con ${options.length} opciones`);
+      this.logger?.info(`🎯 Configurando TomSelect para empresa con ${options.length} opciones`)
 
       // Configuración para empresa
       const config = {
-        placeholder: companyElement.getAttribute("data-placeholder-text") || 'Buscar empresa...',
+        placeholder: companyElement.getAttribute('data-placeholder-text') || 'Buscar empresa...',
         searchEnabled: true,
         clearable: true,
         closeAfterSelect: true,
         maxItems: 1,
         required: companyElement.hasAttribute('required') || companyElement.hasAttribute('data-validation')
-      };
+      }
 
       // Inicializar TomSelect usando el módulo reutilizable
-      const instance = await this.tomSelect.initialize(companyElement, options, config);
+      const instance = await this.tomSelect.initialize(companyElement, options, config)
 
-      this.logger?.info(`✅ TomSelect configurado para empresa: ${options.length} opciones`);
-      
-      return instance;
+      this.logger?.info(`✅ TomSelect configurado para empresa: ${options.length} opciones`)
 
+      return instance
     } catch (error) {
-      this.logger?.error('❌ Error configurando TomSelect para empresa:', error);
-      throw error;
+      this.logger?.error('❌ Error configurando TomSelect para empresa:', error)
+      throw error
     }
   }
 
@@ -767,50 +761,30 @@ export class FormManager {
    * @private
    */
   _initializeEventFields() {
-    const eventNameValue = this.state.getField(Constants.FIELDS.EVENT_NAME);
-    const eventDateValue = this.state.getField(Constants.FIELDS.EVENT_DATE);
+    const eventNameValue = this.state.getField(Constants.FIELDS.EVENT_NAME)
+    const eventDateValue = this.state.getField(Constants.FIELDS.EVENT_DATE)
 
     // Crear campo EVENT_NAME si tiene valor de configuración
     if (eventNameValue) {
-      this.ui.addHiddenField(
-        this.formElement,
-        Constants.FIELDS.EVENT_NAME,
-        eventNameValue,
-        "Nombre del evento desde configuración"
-      );
-      this.logger?.info(`✅ Campo EVENT_NAME inicializado: "${eventNameValue}"`);
+      this.ui.addHiddenField(this.formElement, Constants.FIELDS.EVENT_NAME, eventNameValue, 'Nombre del evento desde configuración')
+      this.logger?.info(`✅ Campo EVENT_NAME inicializado: "${eventNameValue}"`)
     }
 
     // Crear campo EVENT_DATE si tiene valor de configuración
     if (eventDateValue) {
-      this.ui.addHiddenField(
-        this.formElement,
-        Constants.FIELDS.EVENT_DATE,
-        eventDateValue,
-        "Fecha del evento desde configuración"
-      );
-      this.logger?.info(`✅ Campo EVENT_DATE inicializado: "${eventDateValue}"`);
+      this.ui.addHiddenField(this.formElement, Constants.FIELDS.EVENT_DATE, eventDateValue, 'Fecha del evento desde configuración')
+      this.logger?.info(`✅ Campo EVENT_DATE inicializado: "${eventDateValue}"`)
     }
 
     // Si no hay valores de configuración, crear campos vacíos para que UTM los pueda llenar
     if (!eventNameValue) {
-      this.ui.addHiddenField(
-        this.formElement,
-        Constants.FIELDS.EVENT_NAME,
-        "",
-        "Nombre del evento (vacío, listo para UTM)"
-      );
-      this.logger?.info(`✅ Campo EVENT_NAME creado vacío para UTM`);
+      this.ui.addHiddenField(this.formElement, Constants.FIELDS.EVENT_NAME, '', 'Nombre del evento (vacío, listo para UTM)')
+      this.logger?.info(`✅ Campo EVENT_NAME creado vacío para UTM`)
     }
 
     if (!eventDateValue) {
-      this.ui.addHiddenField(
-        this.formElement,
-        Constants.FIELDS.EVENT_DATE,
-        "",
-        "Fecha del evento (vacío, listo para UTM)"
-      );
-      this.logger?.info(`✅ Campo EVENT_DATE creado vacío para UTM`);
+      this.ui.addHiddenField(this.formElement, Constants.FIELDS.EVENT_DATE, '', 'Fecha del evento (vacío, listo para UTM)')
+      this.logger?.info(`✅ Campo EVENT_DATE creado vacío para UTM`)
     }
   }
 
@@ -819,35 +793,32 @@ export class FormManager {
    * @private
    */
   _handleTypeAttendeeAutoSelection() {
-    const { config } = this.config;
-    const typeAttendeeOptions = config.typeAttendee || [];
+    const { config } = this.config
+    const typeAttendeeOptions = config.typeAttendee || []
 
     // Verificar si solo hay "Aspirante" como opción
-    const aspiranteValue = Constants.ATTENDEE_TYPES.APPLICANT;
-    const hasOnlyAspiranteOption =
-      typeAttendeeOptions.length === 1 && typeAttendeeOptions.includes(aspiranteValue);
+    const aspiranteValue = Constants.ATTENDEE_TYPES.APPLICANT
+    const hasOnlyAspiranteOption = typeAttendeeOptions.length === 1 && typeAttendeeOptions.includes(aspiranteValue)
 
     if (hasOnlyAspiranteOption) {
-      this.logger.info(`🔧 Auto-seleccionando único tipo de asistente: ${aspiranteValue}`);
+      this.logger.info(`🔧 Auto-seleccionando único tipo de asistente: ${aspiranteValue}`)
 
       // Actualizar el estado con "Aspirante"
-      this.state.updateField(Constants.FIELDS.TYPE_ATTENDEE, aspiranteValue);
+      this.state.updateField(Constants.FIELDS.TYPE_ATTENDEE, aspiranteValue)
 
       // Ocultar el campo de tipo de asistente si existe
-      const typeAttendeeElement = this.ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
+      const typeAttendeeElement = this.ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE)
       if (typeAttendeeElement) {
-        this.ui.setFieldValue(typeAttendeeElement, aspiranteValue);
-        this.state.setFieldVisibility(Constants.FIELDS.TYPE_ATTENDEE, false);
-        this.logger.info(`👁️ Campo tipo de asistente ocultado y preseleccionado`);
+        this.ui.setFieldValue(typeAttendeeElement, aspiranteValue)
+        this.state.setFieldVisibility(Constants.FIELDS.TYPE_ATTENDEE, false)
+        this.logger.info(`👁️ Campo tipo de asistente ocultado y preseleccionado`)
       }
 
       // Mostrar automáticamente los campos académicos
-      this.logger.info(`🎓 Mostrando automáticamente campos académicos para Aspirante`);
-      this.academic.handleTypeAttendeeChange(aspiranteValue);
+      this.logger.info(`🎓 Mostrando automáticamente campos académicos para Aspirante`)
+      this.academic.handleTypeAttendeeChange(aspiranteValue)
     } else {
-      this.logger.info(
-        `📋 Múltiples tipos de asistente disponibles (${typeAttendeeOptions.length}), mostrando selector normal`
-      );
+      this.logger.info(`📋 Múltiples tipos de asistente disponibles (${typeAttendeeOptions.length}), mostrando selector normal`)
     }
   }
 
@@ -860,13 +831,13 @@ export class FormManager {
     this.state.setValidationDependencies({
       validator: this.validator,
       ui: this.ui,
-      formElement: this.formElement,
-    });
+      formElement: this.formElement
+    })
 
     // Configurar validación automática
-    this.state.setupAutoValidation(this.config.validation || {});
+    this.state.setupAutoValidation(this.config.validation || {})
 
-    this.logger.info("🔧 Validación automática configurada en State:", this.config.validation);
+    this.logger.info('🔧 Validación automática configurada en State:', this.config.validation)
   }
 
   /**
@@ -874,17 +845,17 @@ export class FormManager {
    * @private
    */
   _processUrlParameters() {
-    this.logger.info("🔗 Procesando parámetros URL con módulo UTM");
+    this.logger.info('🔗 Procesando parámetros URL con módulo UTM')
 
     // Usar el módulo UTM para procesar todos los parámetros
-    const summary = this.utmParameters.processUrlParameters();
+    const summary = this.utmParameters.processUrlParameters()
 
     // Log del resumen
     if (summary.updated > 0) {
-      this.logger.info(`✅ ${summary.updated} parámetros UTM aplicados al formulario`);
+      this.logger.info(`✅ ${summary.updated} parámetros UTM aplicados al formulario`)
     }
 
-    return summary;
+    return summary
   }
 
   /**
@@ -892,14 +863,12 @@ export class FormManager {
    * @private
    */
   _initializeSelectArrowAnimations() {
-    this.logger.info("🎯 Inicializando animaciones de flechas para elementos select");
+    this.logger.info('🎯 Inicializando animaciones de flechas para elementos select')
 
-    if (this.ui && typeof this.ui.initializeSelectArrowAnimations === "function") {
-      this.ui.initializeSelectArrowAnimations();
+    if (this.ui && typeof this.ui.initializeSelectArrowAnimations === 'function') {
+      this.ui.initializeSelectArrowAnimations()
     } else {
-      this.logger.warn(
-        "⚠️ UI module no disponible o método initializeSelectArrowAnimations no encontrado"
-      );
+      this.logger.warn('⚠️ UI module no disponible o método initializeSelectArrowAnimations no encontrado')
     }
   }
 
@@ -913,66 +882,52 @@ export class FormManager {
    */
   _registerEventHandlers() {
     const handlers = [
-      [
-        Constants.HANDLER_TYPES.COUNTRY_CHANGE,
-        this.locations.handleCountryChange.bind(this.locations),
-      ],
-      [
-        Constants.HANDLER_TYPES.DEPARTMENT_CHANGE,
-        this.locations.handleDepartmentChange.bind(this.locations),
-      ],
-      [
-        Constants.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE,
-        this.academic.handleTypeAttendeeChange.bind(this.academic),
-      ],
-      [
-        Constants.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE,
-        this.academic.handleAcademicLevelChange.bind(this.academic),
-      ],
-      [
-        Constants.HANDLER_TYPES.FACULTY_CHANGE,
-        this.academic.handleFacultyChange.bind(this.academic),
-      ],
-      [
-        Constants.HANDLER_TYPES.PROGRAM_CHANGE,
-        this.academic.handleProgramChange.bind(this.academic),
-      ],
+      [Constants.HANDLER_TYPES.COUNTRY_CHANGE, this.locations.handleCountryChange.bind(this.locations)],
+      [Constants.HANDLER_TYPES.DEPARTMENT_CHANGE, this.locations.handleDepartmentChange.bind(this.locations)],
+      [Constants.HANDLER_TYPES.TYPE_ATTENDEE_CHANGE, this.academic.handleTypeAttendeeChange.bind(this.academic)],
+      [Constants.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE, this.academic.handleAcademicLevelChange.bind(this.academic)],
+      [Constants.HANDLER_TYPES.FACULTY_CHANGE, this.academic.handleFacultyChange.bind(this.academic)],
+      [Constants.HANDLER_TYPES.PROGRAM_CHANGE, this.academic.handleProgramChange.bind(this.academic)],
       [
         Constants.HANDLER_TYPES.AUTHORIZATION_CHANGE,
-        (value) => {
-          this.toggleSubmitButton(value === "1");
-          this._handleAuthorizationUi(value);
-        },
+        value => {
+          this.toggleSubmitButton(value === '1')
+          this._handleAuthorizationUi(value)
+        }
       ],
-      [Constants.HANDLER_TYPES.FORM_SUBMIT, this.handleSubmit.bind(this)],
-    ];
+      [Constants.HANDLER_TYPES.FORM_SUBMIT, this.handleSubmit.bind(this)]
+    ]
 
     handlers.forEach(([type, handler]) => {
-      this.event.registerHandler(type, handler);
-    });
-    
+      this.event.registerHandler(type, handler)
+    })
+
     // Agregar protección adicional específica para el botón de submit
-    this._addSubmitButtonProtection();
+    this._addSubmitButtonProtection()
   }
-  
+
   /**
    * Agregar protección adicional contra múltiples clicks en el botón de submit
    * @private
    */
   _addSubmitButtonProtection() {
-    const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON);
+    const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON)
     if (submitBtn) {
       // Agregar listener para capturar clicks directos en el botón
-      submitBtn.addEventListener('click', (e) => {
-        if (this.isSubmitting) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          this.logger.warn("🚫 Click en botón de submit bloqueado - envío en progreso");
-          return false;
-        }
-      }, { capture: true }); // Usar capture para interceptar antes que otros listeners
-      
-      this.logger.info("🛡️ Protección adicional contra múltiples clicks agregada al botón de submit");
+      submitBtn.addEventListener(
+        'click',
+        e => {
+          if (this.isSubmitting) {
+            e.preventDefault()
+            e.stopImmediatePropagation()
+            this.logger.warn('🚫 Click en botón de submit bloqueado - envío en progreso')
+            return false
+          }
+        },
+        { capture: true }
+      ) // Usar capture para interceptar antes que otros listeners
+
+      this.logger.info('🛡️ Protección adicional contra múltiples clicks agregada al botón de submit')
     }
   }
 
@@ -985,14 +940,14 @@ export class FormManager {
    * @private
    */
   _handleAuthorizationUi(value) {
-    const errorAuthElement = this.ui.scopedQuery('[data-puj-form="error_auth"]');
+    const errorAuthElement = this.ui.scopedQuery('[data-puj-form="error_auth"]')
     if (errorAuthElement) {
-      if (value === "0") {
-        this.ui.showElement(errorAuthElement);
+      if (value === '0') {
+        this.ui.showElement(errorAuthElement)
       } else {
-        this.ui.hideElement(errorAuthElement);
+        this.ui.hideElement(errorAuthElement)
       }
-      this.logger.info(`${value === "0" ? "Showing" : "Hiding"} authorization error message`);
+      this.logger.info(`${value === '0' ? 'Showing' : 'Hiding'} authorization error message`)
     }
   }
 
@@ -1001,23 +956,21 @@ export class FormManager {
    * @private
    */
   _handleValidationErrors(errors) {
-    this.logger.error(`❌ Formulario inválido. Errores: ${Object.keys(errors).length}`);
+    this.logger.error(`❌ Formulario inválido. Errores: ${Object.keys(errors).length}`)
 
     Object.entries(errors).forEach(([fieldName, errorMessage]) => {
-      console.log(fieldName);
+      console.log(fieldName)
 
-      const { exists, element: field } = this.ui.checkElementExists(
-        `[name="${fieldName}"], [id="${fieldName}"]`
-      );
+      const { exists, element: field } = this.ui.checkElementExists(`[name="${fieldName}"], [id="${fieldName}"]`)
 
       if (exists && field) {
-        this.state.markFieldAsTouched(fieldName);
-        this.state.setValidationError(fieldName, errorMessage);
-        this.ui.showFieldError(field, errorMessage);
+        this.state.markFieldAsTouched(fieldName)
+        this.state.setValidationError(fieldName, errorMessage)
+        this.ui.showFieldError(field, errorMessage)
       } else {
-        this.logger.warn(`Campo con error no encontrado en DOM: ${fieldName}`);
+        this.logger.warn(`Campo con error no encontrado en DOM: ${fieldName}`)
       }
-    });
+    })
   }
 
   /**
@@ -1026,16 +979,16 @@ export class FormManager {
    * @param {Array} missingFields - Lista de campos faltantes del módulo Validation
    */
   _handleMissingRequiredFields(missingFields) {
-    missingFields.forEach((fieldInfo) => {
-      const { name, element, message } = fieldInfo;
+    missingFields.forEach(fieldInfo => {
+      const { name, element, message } = fieldInfo
 
       // Marcar el campo como tocado y mostrar error
-      this.state.markFieldAsTouched(name);
-      this.state.setValidationError(name, message);
-      this.ui.showFieldError(element, message);
+      this.state.markFieldAsTouched(name)
+      this.state.setValidationError(name, message)
+      this.ui.showFieldError(element, message)
 
-      this.logger.debug(`Campo requerido faltante: ${name} - ${message}`);
-    });
+      this.logger.debug(`Campo requerido faltante: ${name} - ${message}`)
+    })
   }
 
   /**
@@ -1045,62 +998,54 @@ export class FormManager {
    * @returns {Object} - Datos del formulario filtrados
    */
   _filterEmptyFields(formData) {
-    const filteredData = {};
-    let filteredCount = 0;
-    const originalCount = Object.keys(formData).length;
+    const filteredData = {}
+    let filteredCount = 0
+    const originalCount = Object.keys(formData).length
 
     // Verificar si el tipo de asistente no es "Aspirante"
-    const typeAttendee = formData[Constants.FIELDS.TYPE_ATTENDEE];
-    const isNotAspirant = typeAttendee && typeAttendee !== Constants.ATTENDEE_TYPES.APPLICANT;
+    const typeAttendee = formData[Constants.FIELDS.TYPE_ATTENDEE]
+    const isNotAspirant = typeAttendee && typeAttendee !== Constants.ATTENDEE_TYPES.APPLICANT
 
     Object.entries(formData).forEach(([fieldName, fieldValue]) => {
       // Lógica especial para asistentes que NO son aspirantes
       if (isNotAspirant) {
         // Para asistentes que NO son aspirantes, EXCLUIR nivel académico y facultad
         if (fieldName === Constants.FIELDS.ACADEMIC_LEVEL || fieldName === Constants.FIELDS.FACULTY) {
-          filteredCount++;
-          this.logger.debug(`Campo académico excluido para no-aspirante: ${fieldName} = "${fieldValue}"`);
-          return; // No incluir este campo
+          filteredCount++
+          this.logger.debug(`Campo académico excluido para no-aspirante: ${fieldName} = "${fieldValue}"`)
+          return // No incluir este campo
         }
-        
+
         // Para el programa, solo incluir si tiene valor "NOAP"
         if (fieldName === Constants.FIELDS.PROGRAM) {
-          if (fieldValue === "NOAP") {
-            filteredData[fieldName] = fieldValue;
-            this.logger.debug(`Campo programa incluido con NOAP para no-aspirante: ${fieldName} = "${fieldValue}"`);
+          if (fieldValue === 'NOAP') {
+            filteredData[fieldName] = fieldValue
+            this.logger.debug(`Campo programa incluido con NOAP para no-aspirante: ${fieldName} = "${fieldValue}"`)
           } else {
             // Si no es NOAP, establecer NOAP
-            filteredData[fieldName] = "NOAP";
-            this.logger.debug(`Campo programa corregido a NOAP para no-aspirante: ${fieldName} = "NOAP"`);
+            filteredData[fieldName] = 'NOAP'
+            this.logger.debug(`Campo programa corregido a NOAP para no-aspirante: ${fieldName} = "NOAP"`)
           }
-          return;
+          return
         }
       }
 
       // Lógica normal para otros campos o aspirantes
       const isValidValue =
-        fieldValue !== null &&
-        fieldValue !== undefined &&
-        fieldValue !== "" &&
-        (typeof fieldValue !== "string" || fieldValue.trim() !== "");
+        fieldValue !== null && fieldValue !== undefined && fieldValue !== '' && (typeof fieldValue !== 'string' || fieldValue.trim() !== '')
 
       if (isValidValue) {
-        filteredData[fieldName] = fieldValue;
+        filteredData[fieldName] = fieldValue
       } else {
-        filteredCount++;
-        this.logger.debug(`Campo filtrado (vacío): ${fieldName} = "${fieldValue}"`);
+        filteredCount++
+        this.logger.debug(`Campo filtrado (vacío): ${fieldName} = "${fieldValue}"`)
       }
-    });
+    })
 
-    this.logger.info(
-      `🧹 Campos filtrados: ${filteredCount} campos vacíos removidos de ${originalCount} total`
-    );
-    this.logger.debug(
-      `📊 Campos que se enviarán: ${Object.keys(filteredData).length}`,
-      Object.keys(filteredData)
-    );
+    this.logger.info(`🧹 Campos filtrados: ${filteredCount} campos vacíos removidos de ${originalCount} total`)
+    this.logger.debug(`📊 Campos que se enviarán: ${Object.keys(filteredData).length}`, Object.keys(filteredData))
 
-    return filteredData;
+    return filteredData
   }
 
   /**
@@ -1111,74 +1056,70 @@ export class FormManager {
    */
   _logFormSubmissionDetails(formData, mode) {
     // Preparar datos del formulario (solo datos enviados)
-    const formTableData = [];
+    const formTableData = []
 
     // Agregar campos del formulario
     Object.entries(formData).forEach(([fieldName, fieldValue]) => {
-      const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`);
-      const fieldLabel = this._getFieldLabel(fieldName, fieldElement);
-      const fieldId = fieldElement ? fieldElement.id || fieldName : fieldName;
-      
+      const fieldElement = this.formElement.querySelector(`[name="${fieldName}"]`)
+      const fieldLabel = this._getFieldLabel(fieldName, fieldElement)
+      const fieldId = fieldElement ? fieldElement.id || fieldName : fieldName
+
       // Para modo dev, mostrar el name del FIELD_MAPPING en lugar del fieldName
-      let displayName = fieldName;
+      let displayName = fieldName
       if (this.state.isDevMode()) {
         // Buscar el name en FIELD_MAPPING
-        const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-          (mapping) => {
-            // Buscar por field
-            if (mapping.field === fieldName) return true;
-            // Buscar por ID
-            if (typeof mapping.id === 'string' && mapping.id === fieldName) return true;
-            if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
-              return mapping.id.test === fieldName || mapping.id.prod === fieldName;
-            }
-            return false;
+        const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(mapping => {
+          // Buscar por field
+          if (mapping.field === fieldName) return true
+          // Buscar por ID
+          if (typeof mapping.id === 'string' && mapping.id === fieldName) return true
+          if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
+            return mapping.id.test === fieldName || mapping.id.prod === fieldName
           }
-        );
-        
+          return false
+        })
+
         if (fieldMapping && fieldMapping.name) {
-          displayName = fieldMapping.name;
+          displayName = fieldMapping.name
         }
       }
 
       formTableData.push({
-        "Campo (Label)": fieldLabel,
-        "Campo (Name)": displayName,
-        "Campo (ID)": fieldId,
-        Valor: fieldValue,
-      });
-    });
+        'Campo (Label)': fieldLabel,
+        'Campo (Name)': displayName,
+        'Campo (ID)': fieldId,
+        Valor: fieldValue
+      })
+    })
 
     // Preparar datos del estado
-    const stateTableData = [];
+    const stateTableData = []
     const metadata = {
-      "Modo de envío": mode,
+      'Modo de envío': mode,
       Timestamp: new Date().toISOString(),
-      "Total de campos": Object.keys(formData).length,
-      "Form ID": this.formElement.id || "N/A",
-      "Form Action": this.formElement.action || "N/A",
-      "Modo Dev": this.state.isDevMode(),
-      "Modo Sandbox": this.state.isTestMode(),
-    };
+      'Total de campos': Object.keys(formData).length,
+      'Form ID': this.formElement.id || 'N/A',
+      'Form Action': this.formElement.action || 'N/A',
+      'Modo Dev': this.state.isDevMode(),
+      'Modo Sandbox': this.state.isTestMode()
+    }
 
     // Agregar metadatos del estado
     Object.entries(metadata).forEach(([key, value]) => {
       stateTableData.push({
         Propiedad: key,
-        Valor: value,
-      });
-    });
+        Valor: value
+      })
+    })
 
     // Mostrar tabla de datos del formulario
-    this.logger.table("📋 Datos enviados del formulario", formTableData);
+    this.logger.table('📋 Datos enviados del formulario', formTableData)
 
     // Mostrar tabla de datos del estado
-    this.logger.table("⚙️ Estado del sistema", stateTableData);
+    this.logger.table('⚙️ Estado del sistema', stateTableData)
 
     // Log adicional con resumen
-    this.logger.debug(
-      `📊 Resumen: ${Object.keys(formData).length} campos enviados en modo ${mode}`
-    );
+    this.logger.debug(`📊 Resumen: ${Object.keys(formData).length} campos enviados en modo ${mode}`)
   }
 
   /**
@@ -1189,22 +1130,20 @@ export class FormManager {
    */
   _getFieldId(fieldName) {
     // Buscar el campo en FIELD_MAPPING por su field value
-    const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-      (mapping) => mapping.field === fieldName
-    );
+    const fieldMapping = Object.values(Constants.FIELD_MAPPING).find(mapping => mapping.field === fieldName)
 
     if (!fieldMapping) {
-      return fieldName; // Si no se encuentra en el mapeo, devolver el nombre original
+      return fieldName // Si no se encuentra en el mapeo, devolver el nombre original
     }
 
     // Si el ID es un objeto con test/prod, usar el ambiente apropiado
-    if (typeof fieldMapping.id === "object" && fieldMapping.id.test && fieldMapping.id.prod) {
-      const isSandbox = this.state.isTestMode();
-      return isSandbox ? fieldMapping.id.test : fieldMapping.id.prod;
+    if (typeof fieldMapping.id === 'object' && fieldMapping.id.test && fieldMapping.id.prod) {
+      const isSandbox = this.state.isTestMode()
+      return isSandbox ? fieldMapping.id.test : fieldMapping.id.prod
     }
 
     // Si es un string simple, devolverlo
-    return fieldMapping.id;
+    return fieldMapping.id
   }
 
   /**
@@ -1216,68 +1155,64 @@ export class FormManager {
    */
   _getFieldLabel(fieldName, fieldElement) {
     // Primero intentar obtener el nombre del FIELD_MAPPING por el campo (field)
-    let fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-      (mapping) => mapping.field === fieldName
-    );
+    let fieldMapping = Object.values(Constants.FIELD_MAPPING).find(mapping => mapping.field === fieldName)
 
     // Si no se encuentra por field, intentar buscar por ID
     if (!fieldMapping) {
-      fieldMapping = Object.values(Constants.FIELD_MAPPING).find(
-        (mapping) => {
-          // Verificar si el ID es un string simple
-          if (typeof mapping.id === 'string') {
-            return mapping.id === fieldName;
-          }
-          // Verificar si el ID es un objeto con test/prod
-          if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
-            return mapping.id.test === fieldName || mapping.id.prod === fieldName;
-          }
-          return false;
+      fieldMapping = Object.values(Constants.FIELD_MAPPING).find(mapping => {
+        // Verificar si el ID es un string simple
+        if (typeof mapping.id === 'string') {
+          return mapping.id === fieldName
         }
-      );
+        // Verificar si el ID es un objeto con test/prod
+        if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
+          return mapping.id.test === fieldName || mapping.id.prod === fieldName
+        }
+        return false
+      })
     }
 
     if (fieldMapping && fieldMapping.name) {
-      return fieldMapping.name;
+      return fieldMapping.name
     }
 
     // Mapeo de respaldo para campos que no estén en FIELD_MAPPING
     const fieldLabels = {
       // Campos UTM que pueden no estar en FIELD_MAPPING
-      utm_source: "UTM Source",
-      utm_subsource: "UTM Subsource",
-      utm_medium: "UTM Medium",
-      utm_campaign: "UTM Campaign",
-      utm_article: "UTM Article",
-      utm_eventname: "UTM Event Name",
-      utm_eventdate: "UTM Event Date",
-    };
+      utm_source: 'UTM Source',
+      utm_subsource: 'UTM Subsource',
+      utm_medium: 'UTM Medium',
+      utm_campaign: 'UTM Campaign',
+      utm_article: 'UTM Article',
+      utm_eventname: 'UTM Event Name',
+      utm_eventdate: 'UTM Event Date'
+    }
 
     // Intentar obtener la etiqueta del mapeo de respaldo
     if (fieldLabels[fieldName]) {
-      return fieldLabels[fieldName];
+      return fieldLabels[fieldName]
     }
 
     // Intentar obtener el label asociado desde el DOM
     if (fieldElement) {
-      const labelElement = this.formElement.querySelector(`label[for="${fieldElement.id}"]`);
+      const labelElement = this.formElement.querySelector(`label[for="${fieldElement.id}"]`)
       if (labelElement && labelElement.textContent.trim()) {
-        return labelElement.textContent.trim().replace("*", "").trim();
+        return labelElement.textContent.trim().replace('*', '').trim()
       }
 
       // Verificar si el campo tiene un placeholder descriptivo
       if (fieldElement.placeholder && fieldElement.placeholder.trim()) {
-        return fieldElement.placeholder.trim();
+        return fieldElement.placeholder.trim()
       }
     }
 
     // Fallback: convertir el nombre del campo a título
     return fieldName
-      .replace(/_/g, " ")
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      .replace(/_/g, ' ')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
   }
 
   /**
@@ -1287,9 +1222,7 @@ export class FormManager {
    * @private
    */
   _getSalesforceUrl(isSandboxMode) {
-    return isSandboxMode
-      ? Constants.SALESFORCE_SUBMIT_URLS.test
-      : Constants.SALESFORCE_SUBMIT_URLS.prod;
+    return isSandboxMode ? Constants.SALESFORCE_SUBMIT_URLS.test : Constants.SALESFORCE_SUBMIT_URLS.prod
   }
 
   /**
@@ -1300,45 +1233,39 @@ export class FormManager {
    * @private
    */
   _prepareFormDataForEnvironment(formData, isSandboxMode) {
-    const { FIELD_MAPPING } = Constants;
-    const preparedData = {};
+    const { FIELD_MAPPING } = Constants
+    const preparedData = {}
 
-    this.logger.info(
-      `🔧 Preparando datos para entorno: ${isSandboxMode ? "SANDBOX" : "PRODUCTION"}`
-    );
+    this.logger.info(`🔧 Preparando datos para entorno: ${isSandboxMode ? 'SANDBOX' : 'PRODUCTION'}`)
 
     // Iterar sobre los datos del formulario
     Object.entries(formData).forEach(([fieldName, value]) => {
       // Buscar el mapping correspondiente
-      const mapping = Object.values(FIELD_MAPPING).find((m) => m.field === fieldName);
+      const mapping = Object.values(FIELD_MAPPING).find(m => m.field === fieldName)
 
       if (mapping && mapping.id) {
-        let correctId;
+        let correctId
 
-        if (typeof mapping.id === "object" && mapping.id.test && mapping.id.prod) {
+        if (typeof mapping.id === 'object' && mapping.id.test && mapping.id.prod) {
           // Mapping con diferentes IDs para test/prod
-          correctId = isSandboxMode ? mapping.id.test : mapping.id.prod;
-          this.logger.debug(
-            `📝 Campo mapeado (${
-              isSandboxMode ? "test" : "prod"
-            }): ${fieldName} -> ${correctId} = ${value}`
-          );
+          correctId = isSandboxMode ? mapping.id.test : mapping.id.prod
+          this.logger.debug(`📝 Campo mapeado (${isSandboxMode ? 'test' : 'prod'}): ${fieldName} -> ${correctId} = ${value}`)
         } else {
           // Mapping con ID único (string)
-          correctId = mapping.id;
-          this.logger.debug(`📝 Campo mapeado (único): ${fieldName} -> ${correctId} = ${value}`);
+          correctId = mapping.id
+          this.logger.debug(`📝 Campo mapeado (único): ${fieldName} -> ${correctId} = ${value}`)
         }
 
-        preparedData[correctId] = value;
+        preparedData[correctId] = value
       } else {
         // Si no hay mapping específico, usar el nombre original
-        preparedData[fieldName] = value;
-        this.logger.debug(`📝 Campo sin mapeo: ${fieldName} = ${value}`);
+        preparedData[fieldName] = value
+        this.logger.debug(`📝 Campo sin mapeo: ${fieldName} = ${value}`)
       }
-    });
+    })
 
-    this.logger.info(`✅ Datos preparados: ${Object.keys(preparedData).length} campos`);
-    return preparedData;
+    this.logger.info(`✅ Datos preparados: ${Object.keys(preparedData).length} campos`)
+    return preparedData
   }
 
   /**
@@ -1349,32 +1276,30 @@ export class FormManager {
    */
   _configureFormForNativeSubmit(preparedData, salesforceUrl) {
     // Configurar action del formulario
-    this.formElement.action = salesforceUrl;
-    this.formElement.method = "POST";
-    this.formElement.enctype = "multipart/form-data";
+    this.formElement.action = salesforceUrl
+    this.formElement.method = 'POST'
+    this.formElement.enctype = 'multipart/form-data'
 
     // PASO 1: Remover todos los campos existentes (para evitar duplicados)
-    const existingFields = this.formElement.querySelectorAll("input, select, textarea");
-    existingFields.forEach((field) => {
+    const existingFields = this.formElement.querySelectorAll('input, select, textarea')
+    existingFields.forEach(field => {
       // Deshabilitar el campo en lugar de eliminarlo (para no romper la UI)
-      field.disabled = true;
-      field.name = ""; // Limpiar name para que no se envíe
-    });
+      field.disabled = true
+      field.name = '' // Limpiar name para que no se envíe
+    })
 
     // PASO 2: Crear nuevos campos hidden con los datos preparados
     Object.entries(preparedData).forEach(([key, value]) => {
-      const hiddenField = document.createElement("input");
-      hiddenField.type = "hidden";
-      hiddenField.name = key;
-      hiddenField.value = value;
-      this.formElement.appendChild(hiddenField);
+      const hiddenField = document.createElement('input')
+      hiddenField.type = 'hidden'
+      hiddenField.name = key
+      hiddenField.value = value
+      this.formElement.appendChild(hiddenField)
 
-      this.logger.debug(`Campo agregado para envío: ${key} = ${value}`);
-    });
+      this.logger.debug(`Campo agregado para envío: ${key} = ${value}`)
+    })
 
-    this.logger.debug(
-      `🔧 Formulario configurado para envío nativo: ${Object.keys(preparedData).length} campos`
-    );
+    this.logger.debug(`🔧 Formulario configurado para envío nativo: ${Object.keys(preparedData).length} campos`)
   }
 
   /**
@@ -1382,106 +1307,106 @@ export class FormManager {
    * @private
    */
   async _processFormSubmission(formData) {
-    this.isSubmitting = true;
-    this.state.setSystemState("isSubmitting", true);
+    this.isSubmitting = true
+    this.state.setSystemState('isSubmitting', true)
 
-    const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON);
+    const submitBtn = this.ui.scopedQuery(Constants.SELECTORS.SUBMIT_BUTTON)
     if (submitBtn) {
       // Guardar el texto original antes de cambiarlo
       if (!submitBtn.dataset.originalText) {
-        submitBtn.dataset.originalText = submitBtn.textContent || submitBtn.value || "Enviar";
+        submitBtn.dataset.originalText = submitBtn.textContent || submitBtn.value || 'Enviar'
       }
-      this.ui.disableElement(submitBtn);
-      submitBtn.classList.add('is-submitting');
-      this.ui.setFieldText(submitBtn, submitBtn.dataset.loadingText || "Enviando...");
+      this.ui.disableElement(submitBtn)
+      submitBtn.classList.add('is-submitting')
+      this.ui.setFieldText(submitBtn, submitBtn.dataset.loadingText || 'Enviando...')
     }
 
     try {
       // Callback pre-envío
       if (this.config.callbacks?.onFormSubmit) {
-        const shouldContinue = await this.config.callbacks.onFormSubmit(formData, this);
+        const shouldContinue = await this.config.callbacks.onFormSubmit(formData, this)
         if (!shouldContinue) {
-          this.logger.info("Envío cancelado por callback personalizado");
-          return;
+          this.logger.info('Envío cancelado por callback personalizado')
+          return
         }
       }
 
       // Verificar estado de modos antes del envío
-      const isDevelopmentMode = this.state.isDevMode();
-      const isTestMode = this.state.isTestMode();
+      const isDevelopmentMode = this.state.isDevMode()
+      const isTestMode = this.state.isTestMode()
 
       // MODO DESARROLLO: Solo imprime en consola, NO envía
       if (isDevelopmentMode) {
-        this.logger.info("DEV_MODE: Datos del formulario - NO SE ENVIARÁ");
-        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode);
-        this._logFormSubmissionDetails(preparedData, "DEV_MODE");
-        this.logger.warn("FORMULARIO NO ENVIADO - MODO DESARROLLO ACTIVO");
-        return;
+        this.logger.info('DEV_MODE: Datos del formulario - NO SE ENVIARÁ')
+        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode)
+        this._logFormSubmissionDetails(preparedData, 'DEV_MODE')
+        this.logger.warn('FORMULARIO NO ENVIADO - MODO DESARROLLO ACTIVO')
+        return
       } else {
         // MODO PRODUCCIÓN o SANDBOX: Envío real
-        const targetEnv = isTestMode ? "SANDBOX" : "PRODUCCIÓN";
-        this.logger.info(`Enviando formulario a ${targetEnv}...`);
-        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode);
-        const salesforceUrl = this._getSalesforceUrl(isTestMode);
-        
+        const targetEnv = isTestMode ? 'SANDBOX' : 'PRODUCCIÓN'
+        this.logger.info(`Enviando formulario a ${targetEnv}...`)
+        const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode)
+        const salesforceUrl = this._getSalesforceUrl(isTestMode)
+
         // Crear formulario temporal con los datos preparados
-        const tempForm = document.createElement('form');
-        tempForm.method = 'POST';
-        tempForm.action = salesforceUrl;
-        tempForm.style.display = 'none';
-        
+        const tempForm = document.createElement('form')
+        tempForm.method = 'POST'
+        tempForm.action = salesforceUrl
+        tempForm.style.display = 'none'
+
         // Agregar todos los campos como inputs hidden
         Object.entries(preparedData).forEach(([key, value]) => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value;
-          tempForm.appendChild(input);
-        });
-        
-        // Agregar al DOM, enviar y remover
-        document.body.appendChild(tempForm);
-        tempForm.submit();
-        document.body.removeChild(tempForm);
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = key
+          input.value = value
+          tempForm.appendChild(input)
+        })
 
-        this.logger.info(`✅ Formulario enviado exitosamente a ${targetEnv}: ${salesforceUrl}`);
-        
+        // Agregar al DOM, enviar y remover
+        document.body.appendChild(tempForm)
+        tempForm.submit()
+        document.body.removeChild(tempForm)
+
+        this.logger.info(`✅ Formulario enviado exitosamente a ${targetEnv}: ${salesforceUrl}`)
+
         // En producción, mantener el botón deshabilitado más tiempo para evitar reenvíos
         if (submitBtn) {
-          this.ui.setFieldText(submitBtn, "Enviado ✓");
+          this.ui.setFieldText(submitBtn, 'Enviado ✓')
           setTimeout(() => {
-            this.ui.setFieldText(submitBtn, "Redirigiendo...");
-          }, 2000);
+            this.ui.setFieldText(submitBtn, 'Redirigiendo...')
+          }, 2000)
         }
-        return;
+        return
       }
     } catch (error) {
-      this.logger.error("❌ Error durante el envío:", error);
-      this.ui.showGeneralError("Error al enviar el formulario. Por favor, intente nuevamente.");
-      
+      this.logger.error('❌ Error durante el envío:', error)
+      this.ui.showGeneralError('Error al enviar el formulario. Por favor, intente nuevamente.')
+
       // Solo en caso de error, restaurar el botón para permitir reintento
       if (submitBtn) {
-        this.ui.enableElement(submitBtn);
-        submitBtn.classList.remove('is-submitting');
-        this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || "Enviar");
+        this.ui.enableElement(submitBtn)
+        submitBtn.classList.remove('is-submitting')
+        this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || 'Enviar')
       }
     } finally {
       // Solo restaurar el estado interno en modo desarrollo
-      const isDevelopmentMode = this.state.isDevMode();
-      
+      const isDevelopmentMode = this.state.isDevMode()
+
       if (isDevelopmentMode) {
-        this.isSubmitting = false;
-        this.state.setSystemState("isSubmitting", false);
-        
+        this.isSubmitting = false
+        this.state.setSystemState('isSubmitting', false)
+
         if (submitBtn) {
-          this.ui.enableElement(submitBtn);
-          submitBtn.classList.remove('is-submitting');
-          this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || "Enviar");
+          this.ui.enableElement(submitBtn)
+          submitBtn.classList.remove('is-submitting')
+          this.ui.setFieldText(submitBtn, submitBtn.dataset.originalText || 'Enviar')
         }
       } else {
         // En producción, mantener el estado de "enviando" para evitar reenvíos accidentales
         // El usuario será redirigido por Salesforce, por lo que no necesita interactuar más con el formulario
-        this.logger.info("🔒 Formulario enviado en producción - manteniendo botón deshabilitado para evitar reenvíos");
+        this.logger.info('🔒 Formulario enviado en producción - manteniendo botón deshabilitado para evitar reenvíos')
       }
     }
   }
