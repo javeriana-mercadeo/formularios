@@ -42,8 +42,36 @@ export class College {
     // Configurar listener para cambios en tipo de asistente
     this._setupTypeAttendeeListener();
     
-    // Verificar inicialmente si debe mostrar el campo
-    this._checkAndToggleCollegeVisibility();
+    // Verificar inicialmente si debe mostrar el campo (incluye casos de preselección)
+    this._initializeCollegeVisibility();
+  }
+
+  /**
+   * Inicializar estado de campo colegio basado en tipo de asistente actual
+   * Similar a Academic.initializeAcademicFields()
+   */
+  _initializeCollegeVisibility() {
+    this.logger.info("🏫 🔍 Verificando estado inicial del tipo de asistente...");
+    
+    // Verificar si hay un tipo de asistente ya seleccionado en el state
+    const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
+    this.logger.info(`🏫 📋 Tipo de asistente en state: "${currentTypeAttendee}"`);
+    
+    // También verificar el valor del DOM por si acaso
+    const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
+    const domValue = typeAttendeeElement?.value || "";
+    this.logger.info(`🏫 📋 Tipo de asistente en DOM: "${domValue}"`);
+    
+    // Usar el valor que esté disponible
+    const selectedValue = currentTypeAttendee || domValue;
+    
+    if (selectedValue) {
+      this.logger.info(`🏫 ⚡ Tipo de asistente ya seleccionado: "${selectedValue}" - verificando visibilidad`);
+      this._checkAndToggleCollegeVisibility();
+    } else {
+      this.logger.info("🏫 ➡️ No hay tipo de asistente seleccionado inicialmente - campo colegio oculto");
+      this._hideCollegeField();
+    }
   }
 
   /**
@@ -143,13 +171,13 @@ export class College {
         return;
       }
 
-      // Usar el módulo TomSelect reutilizable
-      this.logger.info(`🏫 Configurando TomSelect para ${uniqueOptions.length} colegios`);
-      await this._setupTomSelectModular(collegeElement, uniqueOptions);
+      // Usar selector normal (sin TomSelect)
+      this.logger.info(`🏫 Configurando selector normal para ${uniqueOptions.length} colegios`);
+      this._setupNormalSelect(collegeElement, uniqueOptions);
 
       this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, true);
       this._showCollegeFieldInDOM();
-      this.logger.info(`🏫 Campo colegios configurado con TomSelect modular (${uniqueOptions.length} opciones)`);
+      this.logger.info(`🏫 Campo colegios configurado como selector normal (${uniqueOptions.length} opciones)`);
     } catch (error) {
       this.logger.error(`❌ Error configurando campo colegios: ${error.message}`);
       this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, false);
@@ -609,29 +637,33 @@ export class College {
   _checkAndToggleCollegeVisibility() {
     this.logger.info("🏫 Verificando visibilidad del campo colegio...");
     
-    const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
-    if (!typeAttendeeElement) {
-      this.logger.warn("⚠️ Elemento tipo de asistente no encontrado - mostrando campo colegio por defecto");
-      // Si no hay campo tipo de asistente, mostrar colegios por defecto
-      this._populateCollegeField().catch(error => {
-        this.logger.error("❌ Error poblando colegios:", error);
-      });
-      return;
+    // Obtener valor del tipo de asistente desde múltiples fuentes
+    let selectedValue = "";
+    
+    // 1. Intentar obtener desde el state primero
+    const stateValue = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
+    if (stateValue) {
+      selectedValue = stateValue;
+      this.logger.info(`🏫 📊 Valor obtenido desde state: "${selectedValue}"`);
+    } else {
+      // 2. Si no está en state, obtener desde DOM
+      const typeAttendeeElement = this.Ui.scopedQuery(Constants.SELECTORS.TYPE_ATTENDEE);
+      if (typeAttendeeElement) {
+        selectedValue = typeAttendeeElement.value || "";
+        this.logger.info(`🏫 🌐 Valor obtenido desde DOM: "${selectedValue}"`);
+      } else {
+        this.logger.warn("⚠️ Elemento tipo de asistente no encontrado - ocultando campo colegio por defecto");
+        this._hideCollegeField();
+        return;
+      }
     }
 
-    const selectedValue = typeAttendeeElement.value;
     const shouldShow = selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador";
 
-    this.logger.info(`🏫 Tipo de asistente seleccionado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`);
+    this.logger.info(`🏫 Tipo de asistente detectado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`);
 
     if (shouldShow) {
       this.logger.info("🏫 Iniciando población del campo colegio...");
-      this._populateCollegeField().catch(error => {
-        this.logger.error("❌ Error poblando colegios:", error);
-      });
-    } else if (selectedValue === "") {
-      // Si no hay valor seleccionado, mostrar colegios por defecto
-      this.logger.info("🏫 No hay tipo de asistente seleccionado - mostrando colegios por defecto");
       this._populateCollegeField().catch(error => {
         this.logger.error("❌ Error poblando colegios:", error);
       });
@@ -640,7 +672,7 @@ export class College {
       this._hideCollegeField();
     }
 
-    this.logger.info(`🏫 Campo colegio ${shouldShow || selectedValue === "" ? 'mostrado' : 'oculto'} para tipo: "${selectedValue}"`);
+    this.logger.info(`🏫 Campo colegio ${shouldShow ? 'mostrado' : 'oculto'} para tipo: "${selectedValue}"`);
   }
 
   /**
@@ -651,19 +683,18 @@ export class College {
     this.state.setFieldVisibility(Constants.FIELDS.COLLEGE, false);
     this._hideCollegeFieldInDOM();
     
-    // Destruir usando el módulo TomSelect
+    // Limpiar el selector normal
     const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
     if (collegeElement) {
-      const instanceKey = collegeElement.name || collegeElement.id;
-      this.tomSelect.destroy(instanceKey);
+      collegeElement.innerHTML = '';
+      collegeElement.value = '';
     }
     
-    this.tomSelectInstance = null;
-    this.logger.info("🏫 TomSelect destruido");
+    this.logger.info("🏫 Selector de colegio limpiado y ocultado");
   }
 
   /**
-   * Validar campo de colegio usando TomSelect
+   * Validar campo de colegio (selector normal)
    * @returns {boolean} - True si es válido
    */
   validateField() {
@@ -671,8 +702,8 @@ export class College {
       const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
       if (!collegeElement) return true;
 
-      const instanceKey = collegeElement.name || collegeElement.id || 'college';
-      return this.tomSelect.validateField(instanceKey);
+      // Como no es requerido, siempre es válido
+      return true;
     } catch (error) {
       this.logger?.warn('⚠️ Error validando campo colegio:', error);
       return true;
@@ -725,7 +756,47 @@ export class College {
   }
 
   // ===============================
-  // MÉTODOS PRIVADOS - TOMSELECT MODULAR
+  // MÉTODOS PRIVADOS - SELECTOR NORMAL
+  // ===============================
+
+  /**
+   * Configurar selector normal (sin TomSelect)
+   * @private
+   */
+  _setupNormalSelect(selectElement, options) {
+    try {
+      this.logger.info(`🏫 📋 Configurando selector normal con ${options.length} opciones`);
+
+      // Limpiar opciones existentes
+      selectElement.innerHTML = '';
+
+      // Agregar opción vacía
+      const emptyOption = document.createElement('option');
+      emptyOption.value = '';
+      emptyOption.textContent = 'Colegio de origen';
+      selectElement.appendChild(emptyOption);
+
+      // Agregar todas las opciones
+      options.forEach(option => {
+        const optElement = document.createElement('option');
+        optElement.value = option.value;
+        optElement.textContent = option.text;
+        selectElement.appendChild(optElement);
+      });
+
+      // No marcar como requerido por ahora
+      selectElement.removeAttribute('required');
+
+      this.logger.info(`🏫 ✅ Selector normal configurado con ${options.length} colegios`);
+      
+    } catch (error) {
+      this.logger.error('❌ Error configurando selector normal:', error);
+      throw error;
+    }
+  }
+
+  // ===============================
+  // MÉTODOS PRIVADOS - TOMSELECT MODULAR (DESACTIVADOS)
   // ===============================
 
   /**

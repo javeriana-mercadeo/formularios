@@ -11,7 +11,8 @@
       "Bash(npm install:*)",
       "WebFetch(domain:tom-select.js.org)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(start test.html)"
     ],
     "deny": []
   }

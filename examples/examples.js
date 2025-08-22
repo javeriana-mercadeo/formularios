@@ -436,18 +436,6 @@ export const configCompaniesSchools = {
   source: "convenios_institucionales",
   medium: "invitacion",
 
-  // CONFIGURACIÓN DE EMPRESAS DE CONVENIO
-  company: [
-    "Grupo Bancolombia",
-    "ECOPETROL",
-    "Grupo Nutresa",
-    "Bavaria - AB InBev",
-    "Grupo Argos",
-    "ETB",
-    "Microsoft Colombia",
-    "Google Colombia",
-  ],
-
   // ✅ CASO 1: CONFIGURACIÓN CON COLEGIOS ESPECÍFICOS (COMENTADO)
   /* school: [
      "Colegio San Patricio",
@@ -478,19 +466,17 @@ export const configCompaniesSchools = {
 
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
-    "Empresario",
-    "Graduado",
-    "Docente y/o psicoorientador",
-    "Administrativo PUJ",
     "Aspirante",
-    "Padre de familia y/o acudiente",
+    "Padre de familia y/o acudiente", 
+    "Docente y/o psicoorientador",
+    "Visitante PUJ",
   ],
   attendanceDays: ["Miércoles 20 de noviembre de 2024"],
 
   // CONFIGURACIONES TÉCNICAS
   test: true, //Sandbox
   debug: true, // Envio de emails de prueba
-  development: false, // No se envia a ningún endpoint
+  development: true, // No se envia a ningún endpoint
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):
