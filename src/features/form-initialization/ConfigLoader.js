@@ -7,14 +7,10 @@
 export class Config {
   constructor({ config = {}, selector }) {
     const defaultConfig = {
-      // DATOS DE EVENTO
-      retUrl: 'https://cloud.cx.javeriana.edu.co/EVENTOS_TKY',
-      debugEmail: '',
-
       // CAMPOS OCULTOS
-      authorizationSource: '',
-      requestOrigin: '',
-      leadSource: 'Landing Pages',
+      authorizationSource: '', // Fuente de autorización
+      requestOrigin: '', // Origen de la solicitud
+      leadSource: 'Landing Pages', // Fuente de leads
 
       // FILTROS
       // Ubicaciones
@@ -27,12 +23,18 @@ export class Config {
       faculties: [],
       programs: [],
 
+      // Colegios
+      colleges: [],
+      locationsColleges: [],
+
+      // Universidades
+      universities: [],
+      locationsUniversities: [],
+
       // Datos del evento
       typeAttendee: ['Aspirante', 'Padre de familia y/o acudiente', 'Docente y/o psicoorientador', 'Visitante PUJ', 'Administrativo PUJ'],
       attendanceDays: [],
-      colleges: [],
-      universities: [],
-      companies: [],
+      companies: [], // TODO: Campo pendiente
 
       // UTMs
       source: '',
@@ -47,6 +49,8 @@ export class Config {
       test: false,
       debug: false,
       development: false,
+      debugEmail: '',
+      retUrl: 'https://cloud.cx.javeriana.edu.co/EVENTOS_TKY',
 
       cache: {
         enabled: false,
@@ -60,8 +64,6 @@ export class Config {
         programs: '',
         periods: ''
       },
-
-      privacyPolicyUrl: 'https://cloud.cx.javeriana.edu.co/tratamiento_Datos_Javeriana_Eventos.html',
 
       // LOGGING
       logging: {
