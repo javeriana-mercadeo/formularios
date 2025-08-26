@@ -61,7 +61,6 @@ const configMini = {
   eventDate: "02/09/2025 12:00 PM",
   retUrl: "https://www.javeriana.edu.co/info-prg/typ-javeriana-caribe",
   requestOrigin: "Web to Lead",
-  authorizationSource: "Digital",
 
   // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
   countries: ["Colombia"],
@@ -78,9 +77,15 @@ const configMini = {
 
   // CONFIGURACIONES TÉCNICAS
   test: false,
-  debug: false,
-  development: true,
+  debug: true,
+  development: false,
   debugEmail: "gavilanm-j@javeriana.edu.co",
+
+  // ⭐ SISTEMA DE ENVÍO MEJORADO
+  submission: {
+    useValidatedSubmission: true, // true = nuevo sistema con validación, false = sistema tradicional
+    fallbackToTraditional: true, // Usar sistema tradicional si el validado falla
+  },
 
   // Logging detallado
   logging: {

@@ -17,6 +17,7 @@ import { UtmParameters } from "./modules/UtmParameters.js";
 import { Constants } from "./modules/Constants.js";
 import { Cache } from "./modules/Cache.js";
 import { TomSelect } from "./modules/TomSelect.js";
+import { ValidatedFormSubmission } from "./modules/ValidatedFormSubmission.js";
 
 // Export main FormManager as default
 export default FormManager;
@@ -38,4 +39,5 @@ export {
   Constants,
   Cache,
   TomSelect,
+  ValidatedFormSubmission,
 };

@@ -19,6 +19,7 @@ import { College } from "./College.js";
 import { TomSelect } from "./TomSelect.js";
 import { UtmParameters } from "./UtmParameters.js";
 import { Constants } from "./Constants.js";
+import { ValidatedFormSubmission } from "./ValidatedFormSubmission.js";
 
 export class FormManager {
   constructor(selector, config = {}) {
@@ -61,6 +62,11 @@ export class FormManager {
 
     this.service = new Service({
       config: this.config,
+      logger: this.logger,
+    });
+
+    // ⭐ Nuevo sistema de envío con validación automática
+    this.validatedSubmission = new ValidatedFormSubmission({
       logger: this.logger,
     });
 
@@ -1420,31 +1426,42 @@ export class FormManager {
       } else {
         // MODO PRODUCCIÓN o SANDBOX: Envío real
         const targetEnv = isTestMode ? "SANDBOX" : "PRODUCCIÓN";
-        this.logger.info(`Enviando formulario a ${targetEnv}...`);
+        this.logger.info(`🚀 Enviando formulario a ${targetEnv}...`);
         const preparedData = this._prepareFormDataForEnvironment(formData, isTestMode);
         const salesforceUrl = this._getSalesforceUrl(isTestMode);
         
-        // Crear formulario temporal con los datos preparados
-        const tempForm = document.createElement('form');
-        tempForm.method = 'POST';
-        tempForm.action = salesforceUrl;
-        tempForm.style.display = 'none';
+        // ⭐ SELECCIÓN DE SISTEMA DE ENVÍO
+        const useValidatedSubmission = this.config.getConfig().submission?.useValidatedSubmission ?? true;
+        const allowFallback = this.config.getConfig().submission?.fallbackToTraditional ?? true;
         
-        // Agregar todos los campos como inputs hidden
-        Object.entries(preparedData).forEach(([key, value]) => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value;
-          tempForm.appendChild(input);
-        });
-        
-        // Agregar al DOM, enviar y remover
-        document.body.appendChild(tempForm);
-        tempForm.submit();
-        document.body.removeChild(tempForm);
-
-        this.logger.info(`✅ Formulario enviado exitosamente a ${targetEnv}: ${salesforceUrl}`);
+        if (useValidatedSubmission) {
+          try {
+            // 🎯 SISTEMA NUEVO: Envío con validación automática
+            this.logger.info(`🔍 Usando sistema de envío validado para ${targetEnv}`);
+            const result = await this.validatedSubmission.submitWithValidation(preparedData, salesforceUrl);
+            
+            if (result.correctionApplied) {
+              this.logger.info(`🔧 Envío completado con correcciones automáticas aplicadas`);
+            }
+            
+            this.logger.info(`✅ Formulario enviado exitosamente con validación a ${targetEnv}: ${salesforceUrl}`);
+            
+          } catch (validatedError) {
+            this.logger.error(`❌ Error en sistema validado:`, validatedError);
+            
+            if (allowFallback) {
+              // 🔄 FALLBACK: Sistema tradicional
+              this.logger.warn(`🔄 Ejecutando fallback a sistema tradicional...`);
+              await this._submitWithTraditionalMethod(preparedData, salesforceUrl, targetEnv);
+            } else {
+              throw validatedError;
+            }
+          }
+        } else {
+          // 📝 SISTEMA TRADICIONAL: Mantener comportamiento original
+          this.logger.info(`📝 Usando sistema de envío tradicional para ${targetEnv}`);
+          await this._submitWithTraditionalMethod(preparedData, salesforceUrl, targetEnv);
+        }
         
         // En producción, mantener el botón deshabilitado más tiempo para evitar reenvíos
         if (submitBtn) {
@@ -1484,5 +1501,45 @@ export class FormManager {
         this.logger.info("🔒 Formulario enviado en producción - manteniendo botón deshabilitado para evitar reenvíos");
       }
     }
+  }
+
+  /**
+   * ⚙️ SISTEMA TRADICIONAL: Método de envío original (fallback)
+   * Mantiene la lógica original para compatibilidad y fallback
+   * @private
+   */
+  async _submitWithTraditionalMethod(preparedData, salesforceUrl, targetEnv) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.logger.info(`📝 [TRADICIONAL] Ejecutando envío a ${targetEnv}: ${salesforceUrl}`);
+        
+        // Crear formulario temporal con los datos preparados (método original)
+        const tempForm = document.createElement('form');
+        tempForm.method = 'POST';
+        tempForm.action = salesforceUrl;
+        tempForm.style.display = 'none';
+        
+        // Agregar todos los campos como inputs hidden
+        Object.entries(preparedData).forEach(([key, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          tempForm.appendChild(input);
+        });
+        
+        // Agregar al DOM, enviar y remover (método original)
+        document.body.appendChild(tempForm);
+        tempForm.submit();
+        document.body.removeChild(tempForm);
+
+        this.logger.info(`✅ [TRADICIONAL] Formulario enviado exitosamente a ${targetEnv}`);
+        resolve({ method: 'traditional', status: 'success' });
+        
+      } catch (error) {
+        this.logger.error(`❌ [TRADICIONAL] Error en envío:`, error);
+        reject(error);
+      }
+    });
   }
 }

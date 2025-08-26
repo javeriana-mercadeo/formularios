@@ -54,6 +54,12 @@ export class Config {
       debug: false,
       development: false,
 
+      // ⭐ SISTEMA DE ENVÍO
+      submission: {
+        useValidatedSubmission: true, // true = nuevo sistema con validación, false = sistema tradicional
+        fallbackToTraditional: true, // Usar sistema tradicional si el validado falla
+      },
+
       cache: {
         enabled: false,
         expirationHours: 12,
