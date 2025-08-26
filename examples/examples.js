@@ -60,6 +60,8 @@ const configMini = {
   eventName: "Javeriana al Caribe",
   eventDate: "02/09/2025 12:00 PM",
   retUrl: "https://www.javeriana.edu.co/info-prg/typ-javeriana-caribe",
+  requestOrigin: "Web to Lead",
+  authorizationSource: "Digital",
 
   // 🎯 FILTRO PRINCIPAL: Solo ciudades específicas
   countries: ["Colombia"],
@@ -77,12 +79,12 @@ const configMini = {
   // CONFIGURACIONES TÉCNICAS
   test: false,
   debug: false,
-  development: false,
+  development: true,
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   // Logging detallado
   logging: {
-    enabled: false,
+    enabled: true,
   },
 };
 
@@ -467,7 +469,7 @@ export const configCompaniesSchools = {
   // CONFIGURACIÓN DEL EVENTO
   typeAttendee: [
     "Aspirante",
-    "Padre de familia y/o acudiente", 
+    "Padre de familia y/o acudiente",
     "Docente y/o psicoorientador",
     "Visitante PUJ",
   ],
@@ -480,7 +482,7 @@ export const configCompaniesSchools = {
   debugEmail: "gavilanm-j@javeriana.edu.co",
 
   logging: {
-    enabled: true,
+    enabled: false,
   },
 
   // 💡 COMPORTAMIENTO ESPERADO (CASO ACTUAL - SIN FILTROS DE COLEGIOS):

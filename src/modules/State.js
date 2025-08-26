@@ -494,14 +494,14 @@ export class State {
     return {
       // Campos ocultos
       [FIELDS.OID]: "",
-      [FIELDS.RET_URL]: this.config.retUrl || "",
+      [FIELDS.RET_URL]: this.config.getConfig().retUrl || "",
       [FIELDS.DEBUG]: "0",
-      [FIELDS.DEBUG_EMAIL]: this.config.debugEmail || "",
+      [FIELDS.DEBUG_EMAIL]: this.config.getConfig().debugEmail || "",
 
       // Campos ocultos obligatorios para el flujo en Salesforce
-      [FIELDS.AUTHORIZATION_SOURCE]: this.config.authorizationSource || "Landing Eventos",
-      [FIELDS.REQUEST_ORIGIN]: this.config.requestOrigin || "web_to_lead_eventos",
-      [FIELDS.LEAD_SOURCE]: this.config.leadSource || "Landing Pages",
+      [FIELDS.AUTHORIZATION_SOURCE]: this.config.getConfig().authorizationSource || "Landing Eventos",
+      [FIELDS.REQUEST_ORIGIN]: this.config.getConfig().requestOrigin || "web_to_lead_eventos",
+      [FIELDS.LEAD_SOURCE]: this.config.getConfig().leadSource || "Landing Pages",
 
       // Campos personales
       [FIELDS.FIRST_NAME]: "",
