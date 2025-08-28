@@ -42,6 +42,9 @@ export class FormManager {
       event: null, // Se asignará después de crear el Event
     });
 
+    // ✅ Pasar referencia del state a UI para auto-selección
+    this.ui.state = this.state;
+
     this.event = new Event({
       formElement: this.ui.getFormContext(),
       state: this.state,
@@ -444,13 +447,17 @@ export class FormManager {
     this._initializeModes();
     this._addHiddenFields();
     await this._initializeFormHiddenFields();
+    
+    // ✅ CONFIGURAR EVENT LISTENERS PRIMERO - antes de poblar selects
+    // Esto asegura que los eventos 'change' de auto-selección sean capturados
+    this.event.setupAllEvents();
+    
     this.academic.initializeAcademicFields();
     this.locations.initializeLocationFields();
     this.university.initializeUniversityField();
     this.college.initializeCollegeField();
     // Establecer valores iniciales DESPUÉS de que se hayan poblado los selects
     this._setInitialFormValues();
-    this.event.setupAllEvents();
     this._setupStateValidation();
     this._processUrlParameters();
     this._initializeSelectArrowAnimations();

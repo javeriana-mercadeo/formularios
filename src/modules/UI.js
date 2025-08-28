@@ -467,14 +467,22 @@ export class Ui {
       // Preseleccionar la única opción
       selectElement.value = singleOption.value;
 
-      // Ocultar el select
+      // ✅ SOLUCIÓN DEFINITIVA: Usar la misma lógica que el campo país
+      // Actualizar el estado directamente (como hace Locations.js)
+      const fieldName = selectElement.name;
+      if (fieldName && this.state) {
+        this.state.updateField(fieldName, singleOption.value);
+        this.logger.info(`🎯 Estado actualizado directamente: ${fieldName} = ${singleOption.value}`);
+      }
+
+      // Ocultar el select visualmente
       this.hideElement(selectElement);
 
       // Marcar como auto-oculto para referencia
       selectElement.dataset.autoHidden = "true";
 
       this.logger.info(
-        `Select auto-ocultado y preseleccionado: ${singleOption.textContent} (${singleOption.value})`
+        `✅ Select auto-ocultado con estado actualizado: ${singleOption.textContent} (${singleOption.value})`
       );
 
       // Disparar evento change para que otros módulos sepan del cambio
