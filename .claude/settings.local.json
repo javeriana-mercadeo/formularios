@@ -12,7 +12,9 @@
       "WebFetch(domain:tom-select.js.org)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(start test.html)"
+      "Bash(start test.html)",
+      "Read(c:\\Users\\Amaro\\Imágenes\\Screenshots/**)",
+      "Read(c:\\Users\\Amaro\\Imágenes\\Screenshots/**)"
     ],
     "deny": []
   }

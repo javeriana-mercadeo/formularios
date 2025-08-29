@@ -214,6 +214,18 @@ export class FormManager {
       return;
     }
 
+    // Validación adicional específica para colegios
+    if (!this._validateCollegeSelection()) {
+      this.ui.showGeneralError("Por favor selecciona tu colegio antes de enviar el formulario");
+      return;
+    }
+
+    // Validación adicional específica para universidades
+    if (!this._validateUniversitySelection()) {
+      this.ui.showGeneralError("Por favor selecciona tu universidad antes de enviar el formulario");
+      return;
+    }
+
     // 3. Filtrar campos vacíos antes del envío
     const formData = this._filterEmptyFields(rawFormData);
     console.log(formData);
@@ -940,7 +952,13 @@ export class FormManager {
       ],
       [
         Constants.HANDLER_TYPES.ACADEMIC_LEVEL_CHANGE,
-        this.academic.handleAcademicLevelChange.bind(this.academic),
+        (value) => {
+          // Procesar cambio en el módulo Academic
+          this.academic.handleAcademicLevelChange(value);
+          
+          // Notificar a módulos College y University para que reevalúen visibilidad
+          this._handleAcademicLevelChangeForCollegeAndUniversity();
+        },
       ],
       [
         Constants.HANDLER_TYPES.FACULTY_CHANGE,
@@ -966,6 +984,43 @@ export class FormManager {
     
     // Agregar protección adicional específica para el botón de submit
     this._addSubmitButtonProtection();
+  }
+
+  /**
+   * Manejar cambios de nivel académico para módulos College y University
+   * @private
+   */
+  _handleAcademicLevelChangeForCollegeAndUniversity() {
+    // Obtener el tipo de asistente actual
+    const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
+    
+    if (currentTypeAttendee) {
+      // Notificar a ambos módulos para que reevalúen su visibilidad
+      // basándose en el nuevo nivel académico + tipo de asistente actual
+      
+      // College: reevaluar si debe mostrar filtros de colegios
+      if (this.college && typeof this.college._checkAndToggleCollegeVisibility === 'function') {
+        this.college._checkAndToggleCollegeVisibility(currentTypeAttendee);
+      }
+      
+      // University: reevaluar si debe mostrar filtros de universidades  
+      if (this.university && typeof this.university._checkAndToggleUniversityVisibility === 'function') {
+        this.university._checkAndToggleUniversityVisibility(currentTypeAttendee);
+      }
+      
+      this.logger.info(`🔄 Reevaluación de visibilidad completada para nivel académico + tipo: "${currentTypeAttendee}"`);
+    } else {
+      this.logger.info("🔄 No hay tipo de asistente seleccionado - ocultando colegios y universidades");
+      
+      // Si no hay tipo de asistente, ocultar ambos
+      if (this.college && typeof this.college._hideCollegeField === 'function') {
+        this.college._hideCollegeField();
+      }
+      
+      if (this.university && typeof this.university._hideUniversityField === 'function') {
+        this.university._hideUniversityField();
+      }
+    }
   }
   
   /**
@@ -1045,9 +1100,26 @@ export class FormManager {
       // Marcar el campo como tocado y mostrar error
       this.state.markFieldAsTouched(name);
       this.state.setValidationError(name, message);
-      this.ui.showFieldError(element, message);
-
-      this.logger.debug(`Campo requerido faltante: ${name} - ${message}`);
+      
+      // Manejo especial para el campo colegio
+      const isCollegeField = name === 'school' || name === Constants.FIELDS.COLLEGE;
+      
+      // Manejo especial para el campo universidad
+      const isUniversityField = name === 'university' || name === Constants.FIELDS.UNIVERSITY;
+      
+      if (isCollegeField && this.college) {
+        // Usar el método personalizado para mostrar error del colegio
+        this.college.showValidationError(message);
+        this.logger.debug(`Campo colegio faltante: ${name} - ${message} (usando UI personalizada)`);
+      } else if (isUniversityField && this.university) {
+        // Usar el método personalizado para mostrar error de la universidad
+        this.university.showValidationError(message);
+        this.logger.debug(`Campo universidad faltante: ${name} - ${message} (usando UI personalizada)`);
+      } else {
+        // Usar el método estándar para otros campos
+        this.ui.showFieldError(element, message);
+        this.logger.debug(`Campo requerido faltante: ${name} - ${message}`);
+      }
     });
   }
 
@@ -1507,6 +1579,163 @@ export class FormManager {
         // El usuario será redirigido por Salesforce, por lo que no necesita interactuar más con el formulario
         this.logger.info("🔒 Formulario enviado en producción - manteniendo botón deshabilitado para evitar reenvíos");
       }
+    }
+  }
+
+  /**
+   * Validar selección de colegio cuando el formulario tiene estructura de colegios
+   * @private
+   * @returns {boolean} true si el colegio está seleccionado o no es requerido
+   */
+  _validateCollegeSelection() {
+    try {
+      // Verificar si el formulario tiene la estructura de colegios
+      const collegeContainer = this.formElement.querySelector('.college-filters-container');
+      if (!collegeContainer) {
+        this.logger.info("🏫 No hay estructura de colegios en el formulario");
+        return true; // No hay estructura de colegios, validación pasada
+      }
+
+      this.logger.info("🏫 Estructura de colegios encontrada, validando selección...");
+
+      // Verificar si el container está visible (display no es 'none')
+      const containerStyle = window.getComputedStyle(collegeContainer);
+      const isContainerVisible = containerStyle.display !== 'none';
+
+      if (!isContainerVisible) {
+        this.logger.info("🏫 Container de colegios no visible, no se requiere validación");
+        return true; // Container no visible, no se requiere validación
+      }
+
+      // El container está visible, verificar si hay un colegio seleccionado
+      // Opción 1: Verificar campo hidden
+      const collegeField = this.formElement.querySelector('input[name="college"]');
+      const collegeValueFromField = collegeField?.value?.trim();
+
+      // Opción 2: Verificar estado del formulario
+      const collegeValueFromState = this.state.getField(Constants.FIELDS.COLLEGE)?.trim();
+
+      // Opción 3: Verificar si hay un display de selección visible
+      const selectedDisplay = this.formElement.querySelector('#college-selected-display');
+      const isSelectionDisplayVisible = selectedDisplay && 
+        window.getComputedStyle(selectedDisplay).display !== 'none';
+
+      const hasCollegeSelected = collegeValueFromField || collegeValueFromState || isSelectionDisplayVisible;
+
+      this.logger.info("🏫 Estado de validación de colegio:", {
+        containerVisible: isContainerVisible,
+        collegeValueFromField,
+        collegeValueFromState,
+        isSelectionDisplayVisible,
+        hasCollegeSelected
+      });
+
+      if (!hasCollegeSelected) {
+        this.logger.warn("🏫 ❌ Colegio requerido pero no seleccionado");
+        
+        // Mostrar el container si está oculto para que el usuario pueda seleccionar
+        if (collegeContainer.style.display === 'none') {
+          collegeContainer.style.display = 'block';
+        }
+        
+        return false;
+      }
+
+      this.logger.info("🏫 ✅ Validación de colegio exitosa");
+      return true;
+
+    } catch (error) {
+      this.logger.error("❌ Error al validar selección de colegio:", error);
+      // En caso de error, permitir continuar para no bloquear el envío
+      return true;
+    }
+  }
+
+  /**
+   * Validar selección de universidad cuando el formulario tiene estructura de universidades
+   * @private
+   * @returns {boolean} true si la universidad está seleccionada o no es requerida
+   */
+  _validateUniversitySelection() {
+    try {
+      // Verificar si el formulario tiene la estructura de universidades
+      const universityContainer = this.formElement.querySelector('.university-filters-container');
+      if (!universityContainer) {
+        this.logger.info("🎓 No hay estructura de universidades en el formulario");
+        return true; // No hay estructura de universidades, validación pasada
+      }
+
+      this.logger.info("🎓 Estructura de universidades encontrada, validando selección...");
+
+      // Verificar si el container está visible (display no es 'none')
+      const containerStyle = window.getComputedStyle(universityContainer);
+      const isContainerVisible = containerStyle.display !== 'none';
+
+      if (!isContainerVisible) {
+        this.logger.info("🎓 Container de universidades no visible, no se requiere validación");
+        return true; // Container no visible, no se requiere validación
+      }
+
+      // El container está visible, usar el método validateField del módulo University.js
+      if (this.university && typeof this.university.validateField === 'function') {
+        const isValid = this.university.validateField();
+        
+        if (!isValid) {
+          this.logger.warn("🎓 ❌ Universidad requerida pero no seleccionada (usando validateField del módulo)");
+          
+          // Mostrar error usando el método del módulo
+          this.university.showValidationError("Por favor selecciona tu universidad");
+          
+          // Mostrar el container si está oculto para que el usuario pueda seleccionar
+          if (universityContainer.style.display === 'none') {
+            universityContainer.style.display = 'block';
+          }
+          
+          return false;
+        }
+      } else {
+        // Fallback: usar validación manual como antes
+        // Opción 1: Verificar campo hidden
+        const universityField = this.formElement.querySelector('input[name="university"]');
+        const universityValueFromField = universityField?.value?.trim();
+
+        // Opción 2: Verificar estado del formulario
+        const universityValueFromState = this.state.getField(Constants.FIELDS.UNIVERSITY)?.trim();
+
+        // Opción 3: Verificar si hay un display de selección visible
+        const selectedDisplay = this.formElement.querySelector('#university-selected-display');
+        const isSelectionDisplayVisible = selectedDisplay && 
+          window.getComputedStyle(selectedDisplay).display !== 'none';
+
+        const hasUniversitySelected = universityValueFromField || universityValueFromState || isSelectionDisplayVisible;
+
+        this.logger.info("🎓 Estado de validación de universidad:", {
+          containerVisible: isContainerVisible,
+          universityValueFromField,
+          universityValueFromState,
+          isSelectionDisplayVisible,
+          hasUniversitySelected
+        });
+
+        if (!hasUniversitySelected) {
+          this.logger.warn("🎓 ❌ Universidad requerida pero no seleccionada");
+          
+          // Mostrar el container si está oculto para que el usuario pueda seleccionar
+          if (universityContainer.style.display === 'none') {
+            universityContainer.style.display = 'block';
+          }
+          
+          return false;
+        }
+      }
+
+      this.logger.info("🎓 ✅ Validación de universidad exitosa");
+      return true;
+
+    } catch (error) {
+      this.logger.error("❌ Error al validar selección de universidad:", error);
+      // En caso de error, permitir continuar para no bloquear el envío
+      return true;
     }
   }
 

@@ -44,6 +44,9 @@ export class College {
     // Configurar listener para cambios en tipo de asistente
     this._setupTypeAttendeeListener();
 
+    // Configurar listener para cambios en nivel académico
+    this._setupAcademicLevelListener();
+
     // Verificar inicialmente si debe mostrar el campo (incluye casos de preselección)
     this._initializeCollegeVisibility();
   }
@@ -71,7 +74,7 @@ export class College {
       this.logger.info(
         `🏫 ⚡ Tipo de asistente ya seleccionado: "${selectedValue}" - verificando visibilidad`
       );
-      this._checkAndToggleCollegeVisibility();
+      this._checkAndToggleCollegeVisibility(selectedValue);
     } else {
       this.logger.info(
         "🏫 ➡️ No hay tipo de asistente seleccionado inicialmente - campo colegio oculto"
@@ -403,34 +406,72 @@ export class College {
   }
 
   /**
+   * Configurar listener para cambios en nivel académico
+   * @private
+   */
+  _setupAcademicLevelListener() {
+    this.logger.info("🏫 🎧 Configurando listener para nivel académico...");
+
+    const academicLevelElement = this.Ui.scopedQuery(Constants.SELECTORS.ACADEMIC_LEVEL);
+    if (!academicLevelElement) {
+      this.logger.warn(`❌ Campo nivel académico no encontrado. Selector: ${Constants.SELECTORS.ACADEMIC_LEVEL}`);
+      return;
+    }
+
+    academicLevelElement.addEventListener("change", (event) => {
+      this.logger.info(`🏫 🔄 Cambio detectado en nivel académico: "${event.target.value}"`);
+      
+      // Reevaluar visibilidad con el tipo de asistente actual
+      const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
+      if (currentTypeAttendee) {
+        this._checkAndToggleCollegeVisibility(currentTypeAttendee);
+      }
+    });
+  }
+
+  /**
    * Verificar y alternar visibilidad del campo colegio
    * @private
    */
   _checkAndToggleCollegeVisibility(selectedValue) {
     this.logger.info("🏫 Verificando visibilidad del campo colegio...");
 
-    // Lógica simple: solo los casos donde SÍ debe aparecer
-    const shouldShow =
-      selectedValue === "Aspirante" || selectedValue === "Docente y/o psicoorientador";
+    // Obtener el nivel académico actual
+    const currentAcademicLevel = this.state.getField(Constants.FIELDS.ACADEMIC_LEVEL);
+    this.logger.info(`🏫 Nivel académico actual: "${currentAcademicLevel}"`);
 
-    this.logger.info(
-      `🏫 Tipo de asistente detectado: "${selectedValue}" - Mostrar colegio: ${shouldShow}`
-    );
+    // Lógica nueva: colegios solo aparecen si:
+    // 1. Nivel académico es "Pregrado" Y
+    // 2. Tipo de asistente es "Aspirante" o "Padre de familia y/o acudiente"
+    const isValidTypeAttendee = 
+      selectedValue === "Aspirante" || selectedValue === "Padre de familia y/o acudiente";
+    
+    // Verificar si es un nivel de pregrado (códigos correctos: PREG o ETDH)
+    const isValidAcademicLevel = 
+      currentAcademicLevel === "PREG" || currentAcademicLevel === "ETDH";
 
-    this.logger.info(`🏫 🔧 DECISIÓN: shouldShow=${shouldShow} para "${selectedValue}"`);
+    const shouldShow = isValidTypeAttendee && isValidAcademicLevel;
+
+    this.logger.info(`🏫 Validaciones:`, {
+      typeAttendee: selectedValue,
+      academicLevel: currentAcademicLevel,
+      isValidTypeAttendee,
+      isValidAcademicLevel,
+      shouldShow
+    });
 
     if (shouldShow) {
-      this.logger.info("🏫 ✅ MOSTRANDO campo colegio (Aspirante o Docente)");
+      this.logger.info("🏫 ✅ MOSTRANDO campo colegio (Pregrado + Aspirante/Padre)");
       this._populateCollegeField().catch((error) => {
         this.logger.error("❌ Error poblando colegios:", error);
       });
     } else {
-      this.logger.info("🏫 ❌ OCULTANDO campo colegio (Padre, Visitante u otro)");
+      this.logger.info("🏫 ❌ OCULTANDO campo colegio (no cumple condiciones)");
       this._hideCollegeField();
     }
 
     this.logger.info(
-      `🏫 Campo colegio ${shouldShow ? "mostrado" : "oculto"} para tipo: "${selectedValue}"`
+      `🏫 Campo colegio ${shouldShow ? "mostrado" : "oculto"} para tipo: "${selectedValue}" y nivel: "${currentAcademicLevel}"`
     );
   }
 
@@ -452,11 +493,14 @@ export class College {
     // Limpiar también del state para que no se envíe al backend
     this.state.updateField(Constants.FIELDS.COLLEGE, "");
 
+    // Ocultar errores de validación al ocultar el campo
+    this.hideValidationError();
+
     this.logger.info("🏫 Selector de colegio limpiado y ocultado");
   }
 
   /**
-   * Validar campo de colegio (selector normal)
+   * Validar campo de colegio cuando está disponible
    * @returns {boolean} - True si es válido
    */
   validateField() {
@@ -464,11 +508,29 @@ export class College {
       const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
       if (!collegeElement) return true;
 
-      // Como no es requerido, siempre es válido
+      // Verificar si el campo colegio debe estar disponible (cuando tipo de asistente es Aspirante o Docente)
+      const currentTypeAttendee = this.state.getField(Constants.FIELDS.TYPE_ATTENDEE);
+      const shouldShowCollege = currentTypeAttendee === "Aspirante" || currentTypeAttendee === "Docente y/o psicoorientador";
+      
+      if (!shouldShowCollege) {
+        // Si no debe mostrarse el colegio para este tipo de asistente, es válido
+        this.logger?.debug("🏫 Campo colegio no requerido para este tipo de asistente");
+        return true;
+      }
+
+      // Si debe mostrarse, verificar que tenga valor
+      const hasValue = collegeElement.value && collegeElement.value.trim() !== '';
+      
+      if (!hasValue) {
+        this.logger?.warn("🏫 ❌ Campo colegio requerido pero sin valor");
+        return false;
+      }
+
+      this.logger?.debug("🏫 ✅ Campo colegio válido:", collegeElement.value);
       return true;
     } catch (error) {
       this.logger?.warn("⚠️ Error validando campo colegio:", error);
-      return true;
+      return false;
     }
   }
 
@@ -610,8 +672,8 @@ export class College {
         selectElement.appendChild(optElement);
       });
 
-      // No marcar como requerido por ahora
-      selectElement.removeAttribute("required");
+      // Marcar como requerido cuando está disponible
+      selectElement.setAttribute("required", "required");
 
       this.logger.info(`🏫 ✅ Selector normal configurado con ${options.length} colegios`);
     } catch (error) {
@@ -936,6 +998,7 @@ export class College {
       
       // Limpiar errores de validación al seleccionar
       this._clearValidationErrors();
+      this.hideValidationError();
     }
 
     // Mostrar selección usando clases CSS
@@ -953,6 +1016,87 @@ export class College {
     }
 
     this.logger.info(`🏫 ✅ Colegio seleccionado: ${college.NAME}`);
+  }
+
+  /**
+   * Mostrar error de validación en la UI del sistema de filtros
+   * @param {string} errorMessage - Mensaje de error a mostrar
+   */
+  showValidationError(errorMessage = "Debes seleccionar un colegio") {
+    this.logger?.debug("🏫 ⚠️ Mostrando error de validación del colegio");
+    
+    // Buscar o crear elemento de error específico para el sistema de filtros
+    let errorElement = document.querySelector('#college-validation-error');
+    
+    if (!errorElement) {
+      // Crear elemento de error si no existe
+      errorElement = document.createElement('div');
+      errorElement.id = 'college-validation-error';
+      errorElement.className = 'error_text college-error';
+      errorElement.style.cssText = `
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: block;
+        opacity: 1;
+      `;
+      
+      // Insertar después del contenedor de filtros
+      const filtersContainer = document.querySelector('.college-filters-container');
+      if (filtersContainer) {
+        filtersContainer.insertAdjacentElement('afterend', errorElement);
+      } else {
+        // Fallback: insertar después del campo college
+        const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+        if (collegeElement && collegeElement.parentNode) {
+          collegeElement.parentNode.insertAdjacentElement('afterend', errorElement);
+        }
+      }
+    }
+    
+    errorElement.textContent = errorMessage;
+    errorElement.style.display = 'block';
+    errorElement.style.opacity = '1';
+    
+    // También marcar el campo original como inválido para compatibilidad
+    const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+    if (collegeElement) {
+      collegeElement.classList.add('error');
+    }
+    
+    // Resaltar el input de búsqueda si existe
+    const searchInput = document.getElementById('college-search-input');
+    if (searchInput) {
+      searchInput.classList.add('error');
+    }
+    
+    this.logger?.info("🏫 ❌ Error de validación mostrado en UI");
+  }
+
+  /**
+   * Ocultar error de validación en la UI
+   */
+  hideValidationError() {
+    this.logger?.debug("🏫 ✅ Ocultando error de validación del colegio");
+    
+    // Ocultar elemento de error específico
+    const errorElement = document.querySelector('#college-validation-error');
+    if (errorElement) {
+      errorElement.style.display = 'none';
+      errorElement.style.opacity = '0';
+    }
+    
+    // Quitar clases de error del campo original
+    const collegeElement = this.Ui.scopedQuery(Constants.SELECTORS.COLLEGE);
+    if (collegeElement) {
+      collegeElement.classList.remove('error');
+    }
+    
+    // Quitar clases de error del input de búsqueda
+    const searchInput = document.getElementById('college-search-input');
+    if (searchInput) {
+      searchInput.classList.remove('error');
+    }
   }
 
   /**

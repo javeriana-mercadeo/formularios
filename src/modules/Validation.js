@@ -46,6 +46,24 @@ export class Validation {
 
     // Buscar TODOS los campos de entrada en el formulario
     const allFields = formElement.querySelectorAll("input, select, textarea");
+    
+    // Debug: Buscar específicamente el campo colegio
+    const collegeByName = formElement.querySelector('[name="college"]');
+    const collegeById = formElement.querySelector('#college');
+    const schoolByName = formElement.querySelector('[name="school"]');
+    const schoolById = formElement.querySelector('#school');
+    
+    this.logger.info(`🏫 COLLEGE FIELD SEARCH DEBUG:`, {
+      totalFields: allFields.length,
+      collegeByName: !!collegeByName,
+      collegeById: !!collegeById,
+      schoolByName: !!schoolByName,
+      schoolById: !!schoolById,
+      collegeNameValue: collegeByName?.value,
+      collegeIdValue: collegeById?.value,
+      schoolNameValue: schoolByName?.value,
+      schoolIdValue: schoolById?.value
+    });
 
     // Filtrar campos que NO deben ser validados usando constantes
     const fieldsToValidate = Array.from(allFields).filter((field) => {
@@ -74,10 +92,29 @@ export class Validation {
       }
 
       // Excluir campos que no están visibles (display: none)
+      // EXCEPCIÓN: El campo colegio (school) siempre debe validarse cuando existe, aunque esté oculto
       const computedStyle = window.getComputedStyle(field);
       if (computedStyle.display === "none") {
+        // Verificar si es el campo colegio
+        const isCollegeField = fieldName === 'school' || field.id === 'school' || 
+                               field.name === Constants.FIELDS.COLLEGE || 
+                               field.id === Constants.FIELDS.COLLEGE;
+        
+        if (isCollegeField) {
+          this.logger.info(`🏫 COLLEGE FIELD DETECTED - incluido en validación aunque esté oculto: ${fieldName}`);
+          this.logger.info(`🏫 COLLEGE FIELD DEBUG:`, {
+            fieldName: fieldName,
+            fieldId: field.id,
+            fieldType: field.type,
+            fieldValue: field.value,
+            hasName: !!field.name,
+            hasId: !!field.id,
+            isVisible: computedStyle.display !== 'none'
+          });
+          return true; // Incluir el campo colegio aunque esté oculto
+        }
+        
         this.logger.debug(`👁️ Campo excluido por visibilidad (display: none): ${fieldName}`);
-
         return false;
       }
 
@@ -106,6 +143,23 @@ export class Validation {
       `🔍 Campos en el DOM: ${totalFields} total, ${visibleFields} visibles, ${hiddenFields} ocultos/excluidos`
     );
 
+    // Debug: Lista de todos los campos que se van a validar
+    const fieldsToValidateNames = fieldsToValidate.map(f => ({
+      name: f.name || f.id || 'sin-nombre',
+      id: f.id,
+      type: f.type,
+      tagName: f.tagName.toLowerCase(),
+      value: f.value
+    }));
+    
+    this.logger.info(`🏫 FIELDS TO VALIDATE LIST:`, fieldsToValidateNames);
+    
+    // Verificar específicamente si el campo colegio está en la lista
+    const collegeInList = fieldsToValidateNames.find(f => 
+      f.name === 'college' || f.id === 'college' || f.name === 'school' || f.id === 'school'
+    );
+    this.logger.info(`🏫 COLLEGE IN VALIDATION LIST:`, collegeInList || 'NOT FOUND');
+
     // Validar cada campo presente en el DOM
     fieldsToValidate.forEach((field) => {
       const fieldName = field.name || field.id;
@@ -131,6 +185,19 @@ export class Validation {
         const fieldValue = this._getFieldValue(field);
         isEmpty = !fieldValue || fieldValue === "";
         errorMessage = Validation.ERROR_MESSAGES.SELECT;
+        
+        // Debug específico para campo colegio
+        const isCollegeField = fieldName === 'school' || fieldName === 'college' || 
+                               field.id === 'school' || field.id === 'college';
+        if (isCollegeField) {
+          this.logger.info(`🏫 COLLEGE SELECT VALIDATION:`, {
+            fieldName: fieldName,
+            fieldId: field.id,
+            fieldValue: fieldValue,
+            isEmpty: isEmpty,
+            errorMessage: errorMessage
+          });
+        }
       } else {
         // Para inputs de texto, email, etc.
         const fieldValue = this._getFieldValue(field);
@@ -177,7 +244,14 @@ export class Validation {
           message: errorMessage,
         });
 
-        this.logger.debug(`❌ Campo faltante agregado: ${fieldName}`);
+        // Log especial para campo colegio
+        const isCollegeField = fieldName === 'school' || fieldName === 'college' || 
+                               field.id === 'school' || field.id === 'college';
+        if (isCollegeField) {
+          this.logger.info(`🏫 COLLEGE FIELD ADDED TO MISSING: ${fieldName} - ${errorMessage}`);
+        } else {
+          this.logger.debug(`❌ Campo faltante agregado: ${fieldName}`);
+        }
       }
     });
 

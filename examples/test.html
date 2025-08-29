@@ -118,6 +118,90 @@
             </select>
           </div>
 
+          <!-- Colegio con filtros -->
+          <div class="college-filters-container" style="display: none">
+            <p>Selecciona tu colegio</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="college-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="college-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="college-search-input"
+                placeholder="Buscar colegio por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="college-results-list" class="college-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="college-selected-display" class="college-selected-display">
+              <span><strong>✓</strong> <span id="college-selected-name"></span></span>
+              <button type="button" id="college-clear-selection" class="college-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="college" value="" />
+          </div>
+
+          <!-- Universidad con filtros -->
+          <div class="university-filters-container" style="display: none">
+            <p>Selecciona tu universidad</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="university-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="university-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="university-search-input"
+                placeholder="Buscar universidad por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="university-results-list" class="university-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="university-selected-display" class="university-selected-display">
+              <span><strong>✓</strong> <span id="university-selected-name"></span></span>
+              <button type="button" id="university-clear-selection" class="university-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="university" value="" />
+          </div>
+
           <!-- Facultad -->
           <div class="field">
             <select name="faculty" style="display: none">
@@ -1276,18 +1360,53 @@
             </select>
           </div>
 
-          <!-- Universidad -->
-          <div class="field">
-            <select name="university">
-              <option value="">Universidad de origen (opcional)</option>
-            </select>
-          </div>
-
           <!-- Nivel académico -->
           <div class="field">
             <select name="academic_level" style="display: none">
               <option value="">*Nivel académico</option>
             </select>
+          </div>
+
+          <!-- Universidad con filtros -->
+          <div class="university-filters-container" style="display: none">
+            <p>Selecciona tu universidad</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="university-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="university-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="university-search-input"
+                placeholder="Buscar universidad por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="university-results-list" class="university-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="university-selected-display" class="university-selected-display">
+              <span><strong>✓</strong> <span id="university-selected-name"></span></span>
+              <button type="button" id="university-clear-selection" class="university-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="university" value="" />
           </div>
 
           <!-- Facultad -->
@@ -1425,6 +1544,13 @@
             </select>
           </div>
 
+          <!-- Nivel académico -->
+          <div class="field">
+            <select name="academic_level" style="display: none">
+              <option value="">*Nivel académico</option>
+            </select>
+          </div>
+
           <!-- Colegio con filtros -->
           <div class="college-filters-container" style="display: none">
             <p>Selecciona tu colegio</p>
@@ -1465,13 +1591,6 @@
 
             <!-- Campo hidden original -->
             <input type="hidden" name="college" value="" />
-          </div>
-
-          <!-- Nivel académico -->
-          <div class="field">
-            <select name="academic_level" style="display: none">
-              <option value="">*Nivel académico</option>
-            </select>
           </div>
 
           <!-- Facultad -->
@@ -1531,6 +1650,228 @@
           <li>Tipos de asistente: Incluye empresarios y comunidad educativa</li>
           <li>Para eventos de networking empresarial y alianzas educativas</li>
           <li>Configuración completa para relaciones institucionales</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- PRUEBA 11: EJEMPLO HÍBRIDO - COLEGIOS Y UNIVERSIDADES -->
+    <!-- ============================================== -->
+    <div>
+      <h3>Prueba 11: Ejemplo Híbrido - Colegios y Universidades</h3>
+
+      <form class="form-modules" id="formHybrid" novalidate aria-label="Prueba 11">
+        <!-- HEADER: Título fijo -->
+        <div class="form-header">
+          <h2>Formulario Híbrido - Pregrado y Posgrado</h2>
+          <p>Prueba de funcionamiento de colegios y universidades según nivel académico</p>
+        </div>
+
+        <!-- FIELDS: Área con scroll -->
+        <div class="form-fields">
+          <!-- Nombres y apellidos -->
+          <div class="field-group">
+            <div class="field">
+              <input type="text" placeholder="*Nombre(s)" name="first_name" />
+            </div>
+            <div class="field">
+              <input type="text" placeholder="*Apellidos" name="last_name" />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <input type="email" placeholder="*Email" name="email" />
+          </div>
+
+          <!-- Teléfono -->
+          <div class="field-group">
+            <div class="field">
+              <select name="phone_code">
+                <option value="">(+) Indicativo</option>
+              </select>
+            </div>
+            <div class="field">
+              <input type="text" placeholder="*Teléfono celular" name="mobile" />
+            </div>
+          </div>
+
+          <!-- Ubicación -->
+          <div class="field">
+            <select name="country">
+              <option value="">*País de residencia</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select name="department" style="display: none">
+              <option value="">*Selecciona el departamento</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select name="city" style="display: none">
+              <option value="">*Selecciona la Ciudad</option>
+            </select>
+          </div>
+
+          <!-- Día de asistencia -->
+          <div class="field">
+            <select name="attendance_day">
+              <option value="">*Día de asistencia</option>
+            </select>
+          </div>
+
+          <!-- Tipo de asistente -->
+          <div class="field">
+            <select name="type_attendee">
+              <option value="">*Tipo de asistente</option>
+            </select>
+          </div>
+
+          <!-- Nivel académico -->
+          <div class="field">
+            <select name="academic_level" style="display: none">
+              <option value="">*Nivel académico</option>
+            </select>
+          </div>
+
+          <!-- Colegio con filtros -->
+          <div class="college-filters-container" style="display: none">
+            <p>Selecciona tu colegio</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="college-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="college-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="college-search-input"
+                placeholder="Buscar colegio por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="college-results-list" class="college-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="college-selected-display" class="college-selected-display">
+              <span><strong>✓</strong> <span id="college-selected-name"></span></span>
+              <button type="button" id="college-clear-selection" class="college-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="college" value="" />
+          </div>
+
+          <!-- Universidad con filtros -->
+          <div class="university-filters-container" style="display: none">
+            <p>Selecciona tu universidad</p>
+
+            <!-- Filtros usando estructura existente -->
+            <div class="field-group">
+              <div class="field">
+                <select id="university-department-filter">
+                  <option value="">Departamento</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="university-city-filter">
+                  <option value="">Ciudad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="field">
+              <input
+                type="text"
+                id="university-search-input"
+                placeholder="Buscar universidad por nombre"
+              />
+            </div>
+
+            <!-- Lista de resultados -->
+            <ul id="university-results-list" class="university-results-list"></ul>
+
+            <!-- Campo seleccionado -->
+            <div id="university-selected-display" class="university-selected-display">
+              <span><strong>✓</strong> <span id="university-selected-name"></span></span>
+              <button type="button" id="university-clear-selection" class="university-clear-button">
+                Cambiar
+              </button>
+            </div>
+
+            <!-- Campo hidden original -->
+            <input type="hidden" name="university" value="" />
+          </div>
+
+          <!-- Facultad -->
+          <div class="field">
+            <select name="faculty" style="display: none">
+              <option value="">*Facultad de interés</option>
+            </select>
+          </div>
+
+          <!-- Programa -->
+          <div class="field">
+            <select name="program" style="display: none">
+              <option value="">*Programa académico</option>
+            </select>
+          </div>
+
+          <!-- Período de ingreso -->
+          <div class="field">
+            <select name="admission_period" style="display: none">
+              <option value="">*Período de ingreso</option>
+            </select>
+          </div>
+
+          <!-- Autorización -->
+          <p class="authorization-text">
+            ¿Autorizas el tratamiento de tus datos personales para enviarte información académica >?
+          </p>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="auth_si_11" name="authorization_data" value="1" />
+              <label for="auth_si_11">Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="auth_no_11" name="authorization_data" value="0" />
+              <label for="auth_no_11">No</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUTTON: Área fija -->
+        <div class="form-button">
+          <button type="submit" disabled>Enviar información</button>
+        </div>
+      </form>
+
+      <div class="test-info test-additional">
+        <strong>💡 Comportamiento esperado (Caso Híbrido):</strong>
+        <ul>
+          <li><strong>Si Pregrado (PREG) + Aspirante/Padre:</strong> Solo aparecen colegios</li>
+          <li><strong>Si Técnico (ETDH) + Aspirante/Padre:</strong> Solo aparecen colegios</li>
+          <li><strong>Si Posgrado (GRAD) + Aspirante:</strong> Solo aparecen universidades</li>
+          <li><strong>Nunca aparecen ambos campos simultáneamente</strong></li>
+          <li>Los campos reaccionan a cambios en nivel académico y tipo de asistente</li>
+          <li>Validación impide envío sin selección cuando campo está visible</li>
         </ul>
       </div>
     </div>
